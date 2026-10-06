@@ -4,441 +4,186 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#6c5ce7">
-<link rel="manifest" href="manifest.json">
 <title>Poll Pulse</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-  font-family:Arial,sans-serif
-}
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#f5f3ff;color:#181824}
+.app{max-width:520px;margin:auto;min-height:100vh;padding-bottom:90px}
+.hidden{display:none!important}
 
-body{
-  margin:0;
-  background:#f5f3ff;
-  color:#181824
-}
-
-.app{
-  max-width:520px;
-  margin:auto;
-  min-height:100vh;
-  padding-bottom:90px
-}
-
-.hidden{
-  display:none!important
-}
-
-.auth{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  padding:20px
-}
-
-.box{
-  width:100%;
-  background:#fff;
-  padding:28px;
-  border-radius:28px;
-  box-shadow:0 15px 40px #0001
-}
-
-.logo{
-  text-align:center;
-  font-size:34px;
-  font-weight:800;
-  color:#6c5ce7
-}
-
-.sub{
-  text-align:center;
-  color:#777;
-  margin:8px 0 25px
-}
+.auth{min-height:100vh;display:flex;align-items:center;padding:20px}
+.box{width:100%;background:#fff;padding:28px;border-radius:28px;box-shadow:0 15px 40px #0001}
+.logo{text-align:center;font-size:34px;font-weight:800;color:#6c5ce7}
+.sub{text-align:center;color:#777;margin:8px 0 25px}
 
 input,textarea{
-  width:100%;
-  padding:14px;
-  margin:6px 0;
-  border:1px solid #ddd;
-  border-radius:14px;
-  outline:none;
-  font-size:15px
+width:100%;padding:14px;margin:6px 0;border:1px solid #ddd;
+border-radius:14px;outline:none;font-size:15px
 }
 
-textarea{
-  min-height:90px;
-  resize:none
-}
-
-button{
-  cursor:pointer
-}
-
-button:disabled{
-  opacity:.6;
-  cursor:not-allowed
-}
+button{cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
 
 .btn{
-  border:0;
-  border-radius:14px;
-  padding:12px 15px;
-  background:#6c5ce7;
-  color:white;
-  font-weight:bold
+border:0;border-radius:14px;padding:12px 15px;
+background:#6c5ce7;color:white;font-weight:bold
 }
 
-.wide{
-  width:100%;
-  margin-top:8px
-}
-
+.wide{width:100%;margin-top:8px}
 .link{
-  width:100%;
-  border:0;
-  background:none;
-  color:#6c5ce7;
-  font-weight:bold;
-  margin-top:13px
+width:100%;border:0;background:none;color:#6c5ce7;
+font-weight:bold;margin-top:13px
 }
 
-.msg{
-  text-align:center;
-  min-height:20px;
-  margin-top:12px;
-  color:#e74c3c;
-  font-size:14px
-}
+.msg{text-align:center;min-height:20px;margin-top:12px;color:#e74c3c;font-size:14px}
 
 header{
-  padding:24px 18px;
-  color:white;
-  background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
-  border-radius:0 0 28px 28px
+padding:24px 18px;color:white;
+background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
+border-radius:0 0 28px 28px
 }
 
-header h1{
-  margin:0;
-  font-size:29px
-}
-
-header p{
-  margin:7px 0 0
-}
-
-.content{
-  padding:16px
-}
+header h1{margin:0;font-size:29px}
+header p{margin:7px 0 0}
+.content{padding:16px}
 
 .card{
-  background:white;
-  padding:17px;
-  margin-bottom:14px;
-  border-radius:21px;
-  box-shadow:0 6px 20px #0001
+background:white;padding:17px;margin-bottom:14px;
+border-radius:21px;box-shadow:0 6px 20px #0001
 }
 
-.row{
-  display:flex;
-  align-items:center;
-  gap:10px
-}
-
-.grow{
-  flex:1;
-  min-width:0
-}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1;min-width:0}
 
 .avatar{
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
-  color:white;
-  font-weight:bold;
-  flex:none
+width:46px;height:46px;border-radius:50%;
+display:grid;place-items:center;
+background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
+color:white;font-weight:bold;flex:none
 }
 
-.small{
-  color:#777;
-  font-size:12px
-}
+.small{color:#777;font-size:12px}
+.tiny{color:#888;font-size:11px;word-break:break-all}
 
-.tiny{
-  color:#888;
-  font-size:11px;
-  word-break:break-all
-}
+.poll-title{font-size:18px;font-weight:800;margin-bottom:8px}
 
-.poll-title{
-  font-size:18px;
-  font-weight:800;
-  margin-bottom:8px
-}
-
-.creator{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:12px
-}
+.creator{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 
 .creator-avatar{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:#6c5ce7;
-  color:white;
-  display:grid;
-  place-items:center;
-  font-size:13px;
-  font-weight:bold;
-  flex:none
+width:34px;height:34px;border-radius:50%;
+background:#6c5ce7;color:white;display:grid;
+place-items:center;font-size:13px;font-weight:bold;flex:none
 }
 
 .option{
-  width:100%;
-  padding:13px;
-  margin:5px 0;
-  border:0;
-  border-radius:13px;
-  background:#eeeafe;
-  color:#5145b5;
-  font-weight:bold;
-  text-align:left
-}
-
-.option:hover{
-  background:#e3defc
+width:100%;padding:13px;margin:5px 0;border:0;
+border-radius:13px;background:#eeeafe;color:#5145b5;
+font-weight:bold;text-align:left
 }
 
 .resultbar{
-  height:7px;
-  background:#eee;
-  border-radius:8px;
-  overflow:hidden;
-  margin-bottom:6px
+height:7px;background:#eee;border-radius:8px;
+overflow:hidden;margin-bottom:6px
 }
 
 .resultbar i{
-  display:block;
-  height:100%;
-  background:linear-gradient(90deg,#6c5ce7,#ff4f8b)
+display:block;height:100%;
+background:linear-gradient(90deg,#6c5ce7,#ff4f8b)
 }
 
 .bottom{
-  position:fixed;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(520px,100%);
-  height:72px;
-  background:white;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  box-shadow:0 -5px 20px #0002;
-  z-index:100;
-  border-radius:20px 20px 0 0
+position:fixed;bottom:0;left:50%;
+transform:translateX(-50%);
+width:min(520px,100%);height:72px;background:white;
+display:flex;justify-content:space-around;align-items:center;
+box-shadow:0 -5px 20px #0002;z-index:100;
+border-radius:20px 20px 0 0
 }
 
 .nav{
-  border:0;
-  background:none;
-  color:#777;
-  font-size:21px;
-  position:relative
+border:0;background:none;color:#777;font-size:21px;
+position:relative
 }
 
-.nav b{
-  display:block;
-  font-size:10px;
-  margin-top:3px
-}
-
-.nav.active{
-  color:#6c5ce7
-}
-
-.create{
-  font-size:29px;
-  color:#6c5ce7
-}
+.nav b{display:block;font-size:10px;margin-top:3px}
+.nav.active{color:#6c5ce7}
+.create{font-size:29px;color:#6c5ce7}
 
 .badge{
-  position:absolute;
-  top:-6px;
-  right:-8px;
-  background:#e74c3c;
-  color:white;
-  border-radius:20px;
-  padding:2px 6px;
-  font-size:9px
+position:absolute;top:-6px;right:-8px;
+background:#e74c3c;color:white;border-radius:20px;
+padding:2px 6px;font-size:9px
 }
 
 .suggestion{
-  background:linear-gradient(135deg,#f0edff,#fff);
-  border:1px solid #e2ddff;
-  padding:15px;
-  border-radius:19px;
-  margin-bottom:14px
+background:linear-gradient(135deg,#f0edff,#fff);
+border:1px solid #e2ddff;padding:15px;
+border-radius:19px;margin-bottom:14px
 }
 
-.suggestion h3{
-  margin:0 0 5px
-}
+.suggestion h3{margin:0 0 5px}
+.user{padding:11px 0;border-bottom:1px solid #eee}
+.user:last-child{border-bottom:0}
 
-.user{
-  padding:11px 0;
-  border-bottom:1px solid #eee
-}
+.follow{background:#6c5ce7;padding:8px 12px;white-space:nowrap}
+.following{background:#19a974}
 
-.user:last-child{
-  border-bottom:0
-}
+.profile-stat{text-align:center;flex:1}
+.profile-stat strong{display:block;font-size:20px}
+.profile-stat span{font-size:11px;color:#777}
 
-.follow{
-  background:#6c5ce7;
-  padding:8px 12px;
-  white-space:nowrap
-}
-
-.following{
-  background:#19a974
-}
-
-.profile-stat{
-  text-align:center;
-  flex:1
-}
-
-.profile-stat strong{
-  display:block;
-  font-size:20px
-}
-
-.profile-stat span{
-  font-size:11px;
-  color:#777
-}
-
-.tabs{
-  display:flex;
-  gap:7px;
-  overflow:auto;
-  margin:14px 0
-}
-
+.tabs{display:flex;gap:7px;overflow:auto;margin:14px 0}
 .tabs button{
-  border:0;
-  border-radius:18px;
-  padding:9px 13px;
-  background:#eee;
-  white-space:nowrap
+border:0;border-radius:18px;padding:9px 13px;
+background:#eee;white-space:nowrap
 }
-
-.tabs button.active{
-  background:#6c5ce7;
-  color:white
-}
-
-/* CHAT */
+.tabs button.active{background:#6c5ce7;color:white}
 
 .chat-header{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 0 14px;
-  border-bottom:1px solid #eee;
-  margin-bottom:10px
+display:flex;align-items:center;gap:10px;
+padding:8px 0 14px;border-bottom:1px solid #eee;
+margin-bottom:10px
 }
 
-.chat-header-info{
-  flex:1;
-  min-width:0
-}
-
-.chat-header-name{
-  font-size:16px;
-  font-weight:800
-}
-
-.chat-header-status{
-  font-size:11px;
-  color:#777;
-  margin-top:3px
-}
+.chat-header-info{flex:1;min-width:0}
+.chat-header-name{font-size:16px;font-weight:800}
+.chat-header-status{font-size:11px;color:#777;margin-top:3px}
 
 .chat-user{
-  padding:12px 4px;
-  border-bottom:1px solid #eee;
-  cursor:pointer
+padding:12px 4px;border-bottom:1px solid #eee;cursor:pointer
 }
 
-.chat-user:hover{
-  background:#f7f5ff;
-  border-radius:12px
-}
+.chat-user:hover{background:#f7f5ff;border-radius:12px}
 
 .chat-preview{
-  font-size:12px;
-  color:#777;
-  margin-top:3px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis
+font-size:12px;color:#777;margin-top:3px;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis
 }
 
 .chatbox{
-  height:320px;
-  overflow:auto;
-  background:#f5f3ff;
-  border-radius:15px;
-  padding:10px
+height:320px;overflow:auto;background:#f5f3ff;
+border-radius:15px;padding:10px
 }
 
 .bubble{
-  max-width:78%;
-  padding:10px 13px;
-  background:white;
-  border-radius:15px;
-  margin:7px 0;
-  word-break:break-word
+max-width:78%;padding:10px 13px;background:white;
+border-radius:15px;margin:7px 0;word-break:break-word
 }
 
-.mine{
-  margin-left:auto;
-  background:#6c5ce7;
-  color:white
-}
+.mine{margin-left:auto;background:#6c5ce7;color:white}
 
 .notice{
-  padding:12px;
-  background:#f6f5ff;
-  border-radius:14px;
-  margin:7px 0
+padding:12px;background:#f6f5ff;border-radius:14px;margin:7px 0
 }
 
 .toast{
-  display:none;
-  position:fixed;
-  top:15px;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(450px,92%);
-  background:#181824;
-  color:white;
-  padding:14px;
-  border-radius:15px;
-  z-index:1000;
-  text-align:center
+display:none;position:fixed;top:15px;left:50%;
+transform:translateX(-50%);width:min(450px,92%);
+background:#181824;color:white;padding:14px;
+border-radius:15px;z-index:1000;text-align:center
 }
 </style>
 </head>
@@ -446,444 +191,278 @@ header p{
 <body>
 
 <!-- AUTH -->
+
 <div id="authScreen" class="app">
+<div class="auth">
+<div class="box">
 
-  <div class="auth">
+<div class="logo">Poll Pulse</div>
+<div class="sub">Everyone has an opinion.</div>
 
-    <div class="box">
+<input id="email" type="email" placeholder="Email" autocomplete="email">
 
-      <div class="logo">Poll Pulse</div>
+<input id="password" type="password" placeholder="Password" autocomplete="current-password">
 
-      <div class="sub">
-        Everyone has an opinion.
-      </div>
+<input id="username" class="hidden" placeholder="Username" autocomplete="username">
 
-      <input
-        id="email"
-        type="email"
-        placeholder="Email"
-        autocomplete="email">
+<button id="loginBtn" class="btn wide" onclick="login()">
+Login
+</button>
 
-      <input
-        id="password"
-        type="password"
-        placeholder="Password"
-        autocomplete="current-password">
+<button id="signupBtn" class="btn wide hidden" onclick="signup()">
+Create Account
+</button>
 
-      <input
-        id="username"
-        class="hidden"
-        placeholder="Username"
-        autocomplete="username">
+<button class="link" onclick="toggleAuth()">
+Create new account
+</button>
 
-      <button
-        id="loginBtn"
-        class="btn wide"
-        onclick="login()">
-        Login
-      </button>
+<button class="link" onclick="resetPassword()">
+Forgot password?
+</button>
 
-      <button
-        id="signupBtn"
-        class="btn wide hidden"
-        onclick="signup()">
-        Create Account
-      </button>
+<div id="authMsg" class="msg"></div>
 
-      <button
-        id="toggleAuthBtn"
-        class="link"
-        onclick="toggleAuth()">
-        Create new account
-      </button>
-
-      <button
-        class="link"
-        onclick="resetPassword()">
-        Forgot password?
-      </button>
-
-      <div id="authMsg" class="msg"></div>
-
-    </div>
-
-  </div>
-
+</div>
+</div>
 </div>
 
 
 <!-- APP -->
+
 <div id="homeScreen" class="app hidden">
 
 <header>
-
-  <h1>Poll Pulse</h1>
-
-  <p id="hello">
-    Welcome 👋
-  </p>
-
+<h1>Poll Pulse</h1>
+<p id="hello">Welcome 👋</p>
 </header>
 
 <main class="content">
 
-<!-- HOME -->
 <section id="homePage">
 
-  <div class="card">
+<div class="card">
+<h2 style="margin-top:0">🔥 Poll Feed</h2>
+<p>Vote, discover people and follow interesting users.</p>
+</div>
 
-    <h2 style="margin-top:0">
-      🔥 Poll Feed
-    </h2>
-
-    <p>
-      Vote, discover people and follow interesting users.
-    </p>
-
-  </div>
-
-  <div id="polls">
-    Loading...
-  </div>
+<div id="polls">Loading...</div>
 
 </section>
 
 
-<!-- SEARCH -->
 <section id="searchPage" class="hidden">
 
-  <div class="card">
+<div class="card">
+<h2>🔎 Search</h2>
 
-    <h2>🔎 Search</h2>
+<input
+id="searchInput"
+placeholder="Search username or poll..."
+oninput="searchAll()">
 
-    <input
-      id="searchInput"
-      placeholder="Search username or poll..."
-      oninput="searchAll()">
+<div id="searchResults">Search something...</div>
 
-    <div id="searchResults">
-      Search something...
-    </div>
-
-  </div>
+</div>
 
 </section>
 
 
-<!-- CREATE -->
 <section id="createPage" class="hidden">
 
-  <div class="card">
+<div class="card">
 
-    <h2>➕ Create Poll</h2>
+<h2>➕ Create Poll</h2>
 
-    <input
-      id="question"
-      placeholder="Ask your question...">
+<input id="question" placeholder="Ask your question...">
+<input id="option1" placeholder="Option 1">
+<input id="option2" placeholder="Option 2">
+<input id="option3" placeholder="Option 3 (optional)">
+<input id="option4" placeholder="Option 4 (optional)">
 
-    <input
-      id="option1"
-      placeholder="Option 1">
+<button class="btn wide" onclick="createPoll()">
+Publish Poll
+</button>
 
-    <input
-      id="option2"
-      placeholder="Option 2">
-
-    <input
-      id="option3"
-      placeholder="Option 3 (optional)">
-
-    <input
-      id="option4"
-      placeholder="Option 4 (optional)">
-
-    <button
-      class="btn wide"
-      onclick="createPoll()">
-      Publish Poll
-    </button>
-
-  </div>
+</div>
 
 </section>
 
 
-<!-- CHAT -->
 <section id="chatPage" class="hidden">
 
-  <div class="card">
+<div class="card">
 
-    <h2>💬 Chats</h2>
+<h2>💬 Chats</h2>
 
-    <input
-      id="chatSearch"
-      placeholder="Search username..."
-      oninput="searchChatUsers()">
+<input
+id="chatSearch"
+placeholder="Search username..."
+oninput="searchChatUsers()">
 
-    <div id="chatUsers">
-      Search a user to start chatting.
-    </div>
+<div id="chatUsers">
+Search a user to start chatting.
+</div>
 
-    <div id="chatArea" class="hidden">
+<div id="chatArea" class="hidden">
 
-      <div class="chat-header">
+<div class="chat-header">
 
-        <button
-          class="btn"
-          onclick="closeChat()">
-          ←
-        </button>
+<button class="btn" onclick="closeChat()">←</button>
 
-        <div
-          id="chatAvatar"
-          class="avatar">
-          U
-        </div>
+<div id="chatAvatar" class="avatar">U</div>
 
-        <div class="chat-header-info">
+<div class="chat-header-info">
 
-          <div
-            id="chatTitle"
-            class="chat-header-name">
-            User
-          </div>
+<div id="chatTitle" class="chat-header-name">User</div>
 
-          <div
-            id="chatStatus"
-            class="chat-header-status">
-            Chat
-          </div>
+<div id="chatStatus" class="chat-header-status">Chat</div>
 
-        </div>
+</div>
 
-      </div>
+</div>
 
-      <div
-        id="messages"
-        class="chatbox">
-      </div>
+<div id="messages" class="chatbox"></div>
 
-      <div class="row">
+<div class="row">
 
-        <input
-          id="chatInput"
-          class="grow"
-          placeholder="Message..."
-          onkeydown="handleChatEnter(event)">
+<input
+id="chatInput"
+class="grow"
+placeholder="Message..."
+onkeydown="handleChatEnter(event)">
 
-        <button
-          class="btn"
-          onclick="sendMessage()">
-          Send
-        </button>
+<button class="btn" onclick="sendMessage()">
+Send
+</button>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
 </section>
 
 
-<!-- PROFILE -->
 <section id="profilePage" class="hidden">
 
-  <div class="card">
+<div class="card">
 
-    <div class="row">
+<div class="row">
 
-      <div
-        id="avatar"
-        class="avatar">
-        U
-      </div>
+<div id="avatar" class="avatar">U</div>
 
-      <div>
+<div>
+<h2 id="profileName" style="margin:0">User</h2>
+<div id="profileUsername" class="small"></div>
+</div>
 
-        <h2
-          id="profileName"
-          style="margin:0">
-          User
-        </h2>
+</div>
 
-        <div
-          id="profileUsername"
-          class="small">
-        </div>
+<br>
 
-      </div>
+<div class="row">
 
-    </div>
+<div class="profile-stat">
+<strong id="followersCount">0</strong>
+<span>Followers</span>
+</div>
 
-    <br>
+<div class="profile-stat">
+<strong id="followingCount">0</strong>
+<span>Following</span>
+</div>
 
-    <div class="row">
+<div class="profile-stat">
+<strong id="myPollCount">0</strong>
+<span>Polls</span>
+</div>
 
-      <div class="profile-stat">
+</div>
 
-        <strong id="followersCount">
-          0
-        </strong>
+<br>
 
-        <span>Followers</span>
+<div class="notice">
+<b>🆔 My User ID</b>
+<div id="profileId" class="tiny"></div>
+</div>
 
-      </div>
+<div class="tabs">
 
-      <div class="profile-stat">
+<button class="active" onclick="profileTab('polls',this)">
+My Polls
+</button>
 
-        <strong id="followingCount">
-          0
-        </strong>
+<button onclick="profileTab('votes',this)">
+My Votes
+</button>
 
-        <span>Following</span>
+<button onclick="profileTab('followers',this)">
+Followers
+</button>
 
-      </div>
+<button onclick="profileTab('following',this)">
+Following
+</button>
 
-      <div class="profile-stat">
+</div>
 
-        <strong id="myPollCount">
-          0
-        </strong>
+<div id="profileContent"></div>
 
-        <span>Polls</span>
-
-      </div>
-
-    </div>
-
-    <br>
-
-    <div class="notice">
-
-      <b>🆔 My User ID</b>
-
-      <div
-        id="profileId"
-        class="tiny">
-      </div>
-
-    </div>
-
-    <div class="tabs">
-
-      <button
-        class="active"
-        onclick="profileTab('polls',this)">
-        My Polls
-      </button>
-
-      <button
-        onclick="profileTab('votes',this)">
-        My Votes
-      </button>
-
-      <button
-        onclick="profileTab('followers',this)">
-        Followers
-      </button>
-
-      <button
-        onclick="profileTab('following',this)">
-        Following
-      </button>
-
-    </div>
-
-    <div id="profileContent"></div>
-
-  </div>
+</div>
 
 
-  <div class="card">
+<div class="card">
 
-    <h3>🔔 Notifications</h3>
+<h3>🔔 Notifications</h3>
 
-    <div id="notifications">
-      Loading...
-    </div>
+<div id="notifications">
+Loading...
+</div>
 
-  </div>
+</div>
 
 
-  <button
-    class="btn wide"
-    style="background:#e74c3c"
-    onclick="logout()">
-    Logout
-  </button>
+<button
+class="btn wide"
+style="background:#e74c3c"
+onclick="logout()">
+Logout
+</button>
 
 </section>
 
 </main>
 
 
-<!-- NAV -->
 <nav class="bottom">
 
-  <button
-    id="navHome"
-    class="nav active"
-    onclick="showPage('home')">
+<button id="navHome" class="nav active" onclick="showPage('home')">
+🏠
+<b>Home</b>
+</button>
 
-    🏠
-    <b>Home</b>
+<button id="navSearch" class="nav" onclick="showPage('search')">
+🔎
+<b>Search</b>
+</button>
 
-  </button>
+<button class="nav create" onclick="showPage('create')">
+＋
+</button>
 
+<button id="navChat" class="nav" onclick="showPage('chat')">
+💬
+<b>Chat</b>
+<span id="chatBadge" class="badge hidden">0</span>
+</button>
 
-  <button
-    id="navSearch"
-    class="nav"
-    onclick="showPage('search')">
-
-    🔎
-    <b>Search</b>
-
-  </button>
-
-
-  <button
-    class="nav create"
-    onclick="showPage('create')">
-
-    ＋
-
-  </button>
-
-
-  <button
-    id="navChat"
-    class="nav"
-    onclick="showPage('chat')">
-
-    💬
-    <b>Chat</b>
-
-    <span
-      id="chatBadge"
-      class="badge hidden">
-      0
-    </span>
-
-  </button>
-
-
-  <button
-    id="navProfile"
-    class="nav"
-    onclick="showPage('profile')">
-
-    👤
-    <b>Profile</b>
-
-    <span
-      id="notificationBadge"
-      class="badge hidden">
-      0
-    </span>
-
-  </button>
+<button id="navProfile" class="nav" onclick="showPage('profile')">
+👤
+<b>Profile</b>
+<span id="notificationBadge" class="badge hidden">0</span>
+</button>
 
 </nav>
 
@@ -900,21 +479,19 @@ header p{
 ========================= */
 
 const SUPABASE_URL =
-  "https://dbpbkvfaxgifjeveijqf.supabase.co";
+"https://dbpbkvfaxgifjeveijqf.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
+"sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
 
 const sb =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 let currentUser = null;
 let currentChatUser = null;
-
 let searchTimer = null;
 let chatTimer = null;
 
@@ -924,98 +501,75 @@ let chatTimer = null;
 ========================= */
 
 function esc(text){
-
-  return String(text || "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
+return String(text || "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 }
-
 
 function toast(text){
 
-  const t =
-    document.getElementById("toast");
+const t=document.getElementById("toast");
 
-  t.textContent = text;
-  t.style.display = "block";
+t.textContent=text;
+t.style.display="block";
 
-  clearTimeout(window.toastTimer);
+clearTimeout(window.toastTimer);
 
-  window.toastTimer =
-    setTimeout(function(){
-
-      t.style.display = "none";
-
-    },3000);
+window.toastTimer=setTimeout(()=>{
+t.style.display="none";
+},3000);
 
 }
-
 
 function authMessage(text){
 
-  document
-    .getElementById("authMsg")
-    .textContent = text;
+document.getElementById("authMsg").textContent=text;
 
 }
 
-
 function getInitial(name){
 
-  return (
-    String(name || "U")
-      .charAt(0)
-      .toUpperCase()
-  );
+return String(name || "U")
+.charAt(0)
+.toUpperCase();
 
 }
 
 
 /* =========================
-   AUTH TOGGLE
+   AUTH MODE
 ========================= */
 
 function toggleAuth(){
 
-  const username =
-    document.getElementById("username");
+const username =
+document.getElementById("username");
 
-  const loginBtn =
-    document.getElementById("loginBtn");
+const loginBtn =
+document.getElementById("loginBtn");
 
-  const signupBtn =
-    document.getElementById("signupBtn");
+const signupBtn =
+document.getElementById("signupBtn");
 
-  const toggleBtn =
-    document.getElementById("toggleAuthBtn");
+const createLink =
+document.querySelector(".link");
 
-  const signupMode =
-    !username.classList.contains("hidden");
+const isSignup =
+!username.classList.contains("hidden");
 
-  username.classList.toggle("hidden");
+username.classList.toggle("hidden");
+loginBtn.classList.toggle("hidden");
+signupBtn.classList.toggle("hidden");
 
-  loginBtn.classList.toggle("hidden");
+createLink.textContent =
+isSignup
+? "Create new account"
+: "Already have an account? Login";
 
-  signupBtn.classList.toggle("hidden");
-
-
-  if(signupMode){
-
-    toggleBtn.textContent =
-      "Create new account";
-
-  }else{
-
-    toggleBtn.textContent =
-      "Already have an account? Login";
-
-  }
-
-  authMessage("");
+authMessage("");
 
 }
 
@@ -1026,175 +580,142 @@ function toggleAuth(){
 
 async function signup(){
 
-  const email =
-    document
-      .getElementById("email")
-      .value
-      .trim()
-      .toLowerCase();
+const email =
+document.getElementById("email")
+.value
+.trim()
+.toLowerCase();
 
-  const password =
-    document
-      .getElementById("password")
-      .value;
+const password =
+document.getElementById("password")
+.value;
 
-  const username =
-    document
-      .getElementById("username")
-      .value
-      .trim()
-      .toLowerCase();
+const username =
+document.getElementById("username")
+.value
+.trim()
+.toLowerCase();
 
+if(!email || !password || !username){
 
-  if(!email || !password || !username){
+authMessage(
+"Email, password aur username required hai."
+);
 
-    authMessage(
-      "Email, password aur username required hai."
-    );
+return;
+}
 
-    return;
+if(password.length < 6){
 
-  }
+authMessage(
+"Password minimum 6 characters."
+);
 
+return;
+}
 
-  if(password.length < 6){
+if(!/^[a-z0-9_]{3,25}$/.test(username)){
 
-    authMessage(
-      "Password minimum 6 characters."
-    );
+authMessage(
+"Username 3-25 characters ka ho."
+);
 
-    return;
+return;
+}
 
-  }
+authMessage("Creating account...");
 
+const signupBtn =
+document.getElementById("signupBtn");
 
-  if(!/^[a-z0-9_]{3,25}$/.test(username)){
+signupBtn.disabled=true;
 
-    authMessage(
-      "Username 3-25 characters ka ho."
-    );
+try{
 
-    return;
+const {data,error} =
+await sb.auth.signUp({
 
-  }
+email:email,
+password:password,
 
+options:{
+data:{
+username:username,
+display_name:username
+}
+}
 
-  const btn =
-    document.getElementById("signupBtn");
+});
 
-  btn.disabled = true;
-  btn.textContent = "Creating...";
+if(error){
 
-  authMessage("");
+console.error("SIGNUP ERROR:",error);
 
+authMessage(error.message);
 
-  try{
+return;
+}
 
-    const {data,error} =
-      await sb.auth.signUp({
+if(!data.user){
 
-        email,
-        password,
+authMessage(
+"Account create nahi hua. Please try again."
+);
 
-        options:{
-          data:{
-            username
-          }
-        }
+return;
+}
 
-      });
+/*
+  Profile creation ko login se separate rakha hai.
+  Agar profile RLS issue ho, auth fail nahi hoga.
+*/
 
+if(data.session){
 
-    if(error){
+try{
 
-      authMessage(
-        "❌ " + error.message
-      );
+await sb
+.from("profiles")
+.upsert({
+id:data.user.id,
+email:email,
+username:username,
+display_name:username
+});
 
-      return;
+}catch(profileError){
 
-    }
+console.error(
+"PROFILE ERROR:",
+profileError
+);
 
+}
 
-    if(!data?.user){
+await openApp(data.user);
 
-      authMessage(
-        "❌ Account create nahi hua."
-      );
+}else{
 
-      return;
+authMessage(
+"Account created. Email verify karo, phir Login karo."
+);
 
-    }
+}
 
+}catch(error){
 
-    /*
-      Profile insert separately.
-      Agar email confirmation ON hai,
-      session null ho sakta hai.
-    */
+console.error("SIGNUP ERROR:",error);
 
-    const {error:profileError} =
-      await sb
-        .from("profiles")
-        .upsert({
+authMessage(
+error?.message ||
+"Signup failed."
+);
 
-          id:data.user.id,
-          email:email,
-          username:username,
-          display_name:username
+}finally{
 
-        });
+signupBtn.disabled=false;
 
-
-    if(profileError){
-
-      console.error(
-        "PROFILE CREATE ERROR:",
-        profileError
-      );
-
-      /*
-        Account ban chuka hai, isliye
-        profile error ko signup failure
-        mat samjho.
-      */
-
-    }
-
-
-    if(data.session){
-
-      await openApp(data.user);
-
-    }else{
-
-      authMessage(
-        "✅ Account created. Email verify karke login karo."
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "SIGNUP ERROR:",
-      error
-    );
-
-    authMessage(
-      "❌ " +
-      (
-        error.message ||
-        "Signup failed."
-      )
-    );
-
-  }finally{
-
-    btn.disabled = false;
-    btn.textContent = "Create Account";
-
-  }
+}
 
 }
 
@@ -1205,114 +726,85 @@ async function signup(){
 
 async function login(){
 
-  const email =
-    document
-      .getElementById("email")
-      .value
-      .trim()
-      .toLowerCase();
+const email =
+document.getElementById("email")
+.value
+.trim()
+.toLowerCase();
 
-  const password =
-    document
-      .getElementById("password")
-      .value;
+const password =
+document.getElementById("password")
+.value;
 
+if(!email){
 
-  if(!email || !password){
+authMessage("Email enter karo.");
+return;
 
-    authMessage(
-      "Email aur password enter karo."
-    );
+}
 
-    return;
+if(!password){
 
-  }
+authMessage("Password enter karo.");
+return;
 
+}
 
-  const btn =
-    document.getElementById("loginBtn");
+authMessage("Logging in...");
 
-  btn.disabled = true;
-  btn.textContent = "Logging in...";
+const loginBtn =
+document.getElementById("loginBtn");
 
-  authMessage("");
+loginBtn.disabled=true;
 
+try{
 
-  try{
+const {data,error} =
+await sb.auth.signInWithPassword({
 
-    const {data,error} =
-      await sb.auth.signInWithPassword({
+email:email,
+password:password
 
-        email:email,
-        password:password
+});
 
-      });
+if(error){
 
+console.error("LOGIN ERROR:",error);
 
-    if(error){
+authMessage(error.message);
 
-      console.error(
-        "LOGIN ERROR:",
-        error
-      );
+return;
 
-      authMessage(
-        "❌ " + error.message
-      );
+}
 
-      return;
+if(!data?.user){
 
-    }
+authMessage(
+"Login failed. User session nahi mili."
+);
 
+return;
 
-    if(!data?.user){
+}
 
-      authMessage(
-        "❌ Login successful nahi hua."
-      );
+authMessage("");
 
-      return;
+await openApp(data.user);
 
-    }
+}catch(error){
 
+console.error("LOGIN ERROR:",error);
 
-    console.log(
-      "LOGIN SUCCESS:",
-      data.user.id
-    );
+authMessage(
+error?.message ||
+"Login failed."
+);
 
+}finally{
 
-    /*
-      Authentication successful hai.
-      Ab app open kar do.
-    */
+loginBtn.disabled=false;
 
-    await openApp(
-      data.user
-    );
-
-
-  }catch(error){
-
-    console.error(
-      "LOGIN CRASH:",
-      error
-    );
-
-    authMessage(
-      "❌ " +
-      (
-        error.message ||
-        "Login failed."
-      )
-    );
-
-  }finally{
-
-    btn.disabled = false;
-    btn.textContent = "Login";
-
-  }
+}
 
 }
 
@@ -1323,62 +815,68 @@ async function login(){
 
 async function resetPassword(){
 
-  const email =
-    document
-      .getElementById("email")
-      .value
-      .trim()
-      .toLowerCase();
+const email =
+document.getElementById("email")
+.value
+.trim()
+.toLowerCase();
 
+if(!email){
 
-  if(!email){
+authMessage(
+"Password reset ke liye email enter karo."
+);
 
-    authMessage(
-      "Pehle email enter karo."
-    );
+return;
 
-    return;
+}
 
-  }
+authMessage("Sending reset email...");
 
+try{
 
-  try{
+const redirectUrl =
+window.location.origin +
+window.location.pathname;
 
-    const {error} =
-      await sb.auth.resetPasswordForEmail(
-        email,
-        {
-          redirectTo:
-            window.location.href
-        }
-      );
+const {error} =
+await sb.auth.resetPasswordForEmail(
+email,
+{
+redirectTo:redirectUrl
+}
+);
 
+if(error){
 
-    if(error){
+console.error(
+"RESET ERROR:",
+error
+);
 
-      authMessage(
-        "❌ " + error.message
-      );
+authMessage(error.message);
 
-    }else{
+return;
 
-      authMessage(
-        "✅ Password reset email sent."
-      );
+}
 
-    }
+authMessage(
+"Reset email bhej diya. Inbox/spam check karo."
+);
 
-  }catch(error){
+}catch(error){
 
-    authMessage(
-      "❌ " +
-      (
-        error.message ||
-        "Reset failed."
-      )
-    );
+console.error(
+"RESET ERROR:",
+error
+);
 
-  }
+authMessage(
+error?.message ||
+"Password reset failed."
+);
+
+}
 
 }
 
@@ -1389,128 +887,95 @@ async function resetPassword(){
 
 async function getProfile(id){
 
-  if(!id){
-    return null;
-  }
+if(!id){
+return null;
+}
 
+const {data,error} =
+await sb
+.from("profiles")
+.select("id,username,display_name")
+.eq("id",id)
+.maybeSingle();
 
-  try{
+if(error){
 
-    const {data,error} =
-      await sb
-        .from("profiles")
-        .select(
-          "id,username,display_name"
-        )
-        .eq("id",id)
-        .maybeSingle();
+console.error(
+"PROFILE READ ERROR:",
+error
+);
 
+return null;
 
-    if(error){
+}
 
-      console.error(
-        "PROFILE ERROR:",
-        error
-      );
-
-      return null;
-
-    }
-
-
-    return data || null;
-
-  }catch(error){
-
-    console.error(
-      "PROFILE CRASH:",
-      error
-    );
-
-    return null;
-
-  }
+return data || null;
 
 }
 
 
 async function ensureProfile(user){
 
-  if(!user){
-    return null;
-  }
+let profile =
+await getProfile(user.id);
 
+if(profile){
+return profile;
+}
 
-  let profile =
-    await getProfile(
-      user.id
-    );
+let username =
+user.user_metadata?.username ||
+(
+user.email
+?
+user.email.split("@")[0]
+:
+"user"
+);
 
+username =
+username
+.replace(/[^a-zA-Z0-9_]/g,"")
+.slice(0,25);
 
-  if(profile){
-    return profile;
-  }
+if(username.length < 3){
 
+username =
+"user" +
+user.id.replace(/-/g,"").slice(0,8);
 
-  let username =
-    user.user_metadata?.username ||
-    (
-      user.email
-      ?
-      user.email.split("@")[0]
-      :
-      "user"
-    );
+}
 
+const {error} =
+await sb
+.from("profiles")
+.upsert({
 
-  username =
-    username
-      .replace(
-        /[^a-zA-Z0-9_]/g,
-        ""
-      )
-      .slice(0,25);
+id:user.id,
+email:user.email || "",
+username:username,
+display_name:
+user.user_metadata?.display_name ||
+username
 
+});
 
-  if(username.length < 3){
+if(error){
 
-    username =
-      "user" +
-      user.id
-        .replace(/-/g,"")
-        .slice(0,8);
+console.error(
+"PROFILE CREATE ERROR:",
+error
+);
 
-  }
+return {
+id:user.id,
+username:username,
+display_name:username
+};
 
+}
 
-  const {error} =
-    await sb
-      .from("profiles")
-      .upsert({
-
-        id:user.id,
-        email:user.email || "",
-        username:username,
-        display_name:username
-
-      });
-
-
-  if(error){
-
-    console.error(
-      "PROFILE CREATE ERROR:",
-      error
-    );
-
-    return null;
-
-  }
-
-
-  return await getProfile(
-    user.id
-  );
+return await getProfile(user.id);
 
 }
 
@@ -1521,127 +986,94 @@ async function ensureProfile(user){
 
 async function openApp(user){
 
-  if(!user){
-    return;
-  }
+if(!user){
+return;
+}
 
+currentUser=user;
 
-  currentUser =
-    user;
+document
+.getElementById("authScreen")
+.classList.add("hidden");
 
+document
+.getElementById("homeScreen")
+.classList.remove("hidden");
 
-  document
-    .getElementById("authScreen")
-    .classList
-    .add("hidden");
+let profile=null;
 
+try{
 
-  document
-    .getElementById("homeScreen")
-    .classList
-    .remove("hidden");
+profile=await ensureProfile(user);
 
+}catch(error){
 
-  /*
-    Profile failure se login fail
-    nahi hoga.
-  */
+console.error(
+"OPEN PROFILE ERROR:",
+error
+);
 
-  try{
+}
 
-    const profile =
-      await ensureProfile(user);
+const username =
+profile?.username ||
+user.user_metadata?.username ||
+(
+user.email
+?
+user.email.split("@")[0]
+:
+"user"
+);
 
+const displayName =
+profile?.display_name ||
+username;
 
-    document
-      .getElementById("hello")
-      .textContent =
-      "@" +
-      (
-        profile?.username ||
-        (
-          user.email
-          ?
-          user.email.split("@")[0]
-          :
-          "user"
-        )
-      );
+document.getElementById("hello")
+.textContent="@"+username;
 
+document.getElementById("profileName")
+.textContent=displayName;
 
-    document
-      .getElementById("profileName")
-      .textContent =
-      profile?.display_name ||
-      profile?.username ||
-      "User";
+document.getElementById("profileUsername")
+.textContent="@"+username;
 
+document.getElementById("profileId")
+.textContent=user.id;
 
-    document
-      .getElementById("profileUsername")
-      .textContent =
-      "@" +
-      (
-        profile?.username ||
-        "user"
-      );
+document.getElementById("avatar")
+.textContent=getInitial(username);
 
+/*
+  Important:
+  Login successful hone ke baad
+  feed/profile errors login ko break nahi karenge.
+*/
 
-    document
-      .getElementById("profileId")
-      .textContent =
-      user.id;
+try{
+await updateProfileStats();
+}catch(e){
+console.error(e);
+}
 
+try{
+await loadPolls();
+}catch(e){
+console.error(e);
+}
 
-    document
-      .getElementById("avatar")
-      .textContent =
-      getInitial(
-        profile?.username
-      );
+try{
+await loadNotifications();
+}catch(e){
+console.error(e);
+}
 
-  }catch(error){
-
-    console.error(
-      "PROFILE LOAD ERROR:",
-      error
-    );
-
-  }
-
-
-  /*
-    Baaki features independent hain.
-    Kisi ek feature ke error se login
-    block nahi hoga.
-  */
-
-  try{
-    await updateProfileStats();
-  }catch(error){
-    console.error("STATS ERROR:",error);
-  }
-
-
-  try{
-    await loadPolls();
-  }catch(error){
-    console.error("POLLS ERROR:",error);
-  }
-
-
-  try{
-    await loadNotifications();
-  }catch(error){
-    console.error("NOTIFICATIONS ERROR:",error);
-  }
-
-
-  try{
-    await updateChatBadge();
-  }catch(error){
-    console.error("CHAT BADGE ERROR:",error);
-  }
+try{
+await updateChatBadge();
+}catch(e){
+console.error(e);
+}
 
 }
 
@@ -1652,608 +1084,345 @@ async function openApp(user){
 
 async function updateProfileStats(){
 
-  if(!currentUser){
-    return;
-  }
+if(!currentUser){
+return;
+}
 
+const followers =
+await sb
+.from("follows")
+.select("id",{count:"exact",head:true})
+.eq("following_id",currentUser.id);
 
-  try{
+const following =
+await sb
+.from("follows")
+.select("id",{count:"exact",head:true})
+.eq("follower_id",currentUser.id);
 
-    const followers =
-      await sb
-        .from("follows")
-        .select(
-          "id",
-          {
-            count:"exact",
-            head:true
-          }
-        )
-        .eq(
-          "following_id",
-          currentUser.id
-        );
+const polls =
+await sb
+.from("polls")
+.select("id",{count:"exact",head:true})
+.eq("user_id",currentUser.id);
 
+document.getElementById("followersCount")
+.textContent=followers.count || 0;
 
-    const following =
-      await sb
-        .from("follows")
-        .select(
-          "id",
-          {
-            count:"exact",
-            head:true
-          }
-        )
-        .eq(
-          "follower_id",
-          currentUser.id
-        );
+document.getElementById("followingCount")
+.textContent=following.count || 0;
 
-
-    const polls =
-      await sb
-        .from("polls")
-        .select(
-          "id",
-          {
-            count:"exact",
-            head:true
-          }
-        )
-        .eq(
-          "user_id",
-          currentUser.id
-        );
-
-
-    document
-      .getElementById("followersCount")
-      .textContent =
-      followers.count || 0;
-
-
-    document
-      .getElementById("followingCount")
-      .textContent =
-      following.count || 0;
-
-
-    document
-      .getElementById("myPollCount")
-      .textContent =
-      polls.count || 0;
-
-  }catch(error){
-
-    console.error(
-      "STATS ERROR:",
-      error
-    );
-
-  }
+document.getElementById("myPollCount")
+.textContent=polls.count || 0;
 
 }
 
 
 /* =========================
-   NAVIGATION
+   NAV
 ========================= */
 
 function showPage(page){
 
-  [
-    "homePage",
-    "searchPage",
-    "createPage",
-    "chatPage",
-    "profilePage"
-  ].forEach(function(id){
+[
+"homePage",
+"searchPage",
+"createPage",
+"chatPage",
+"profilePage"
+].forEach(id=>{
+document.getElementById(id)
+.classList.add("hidden");
+});
 
-    document
-      .getElementById(id)
-      .classList
-      .add("hidden");
+[
+"navHome",
+"navSearch",
+"navChat",
+"navProfile"
+].forEach(id=>{
+document.getElementById(id)
+.classList.remove("active");
+});
 
-  });
+if(page==="home"){
 
+document.getElementById("homePage")
+.classList.remove("hidden");
 
-  [
-    "navHome",
-    "navSearch",
-    "navChat",
-    "navProfile"
-  ].forEach(function(id){
+document.getElementById("navHome")
+.classList.add("active");
 
-    document
-      .getElementById(id)
-      .classList
-      .remove("active");
+loadPolls();
 
-  });
+}
 
+if(page==="search"){
 
-  if(page === "home"){
+document.getElementById("searchPage")
+.classList.remove("hidden");
 
-    document
-      .getElementById("homePage")
-      .classList
-      .remove("hidden");
+document.getElementById("navSearch")
+.classList.add("active");
 
+}
 
-    document
-      .getElementById("navHome")
-      .classList
-      .add("active");
+if(page==="create"){
 
+document.getElementById("createPage")
+.classList.remove("hidden");
 
-    loadPolls();
+}
 
-  }
+if(page==="chat"){
 
+document.getElementById("chatPage")
+.classList.remove("hidden");
 
-  if(page === "search"){
+document.getElementById("navChat")
+.classList.add("active");
 
-    document
-      .getElementById("searchPage")
-      .classList
-      .remove("hidden");
+updateChatBadge();
 
+}
 
-    document
-      .getElementById("navSearch")
-      .classList
-      .add("active");
+if(page==="profile"){
 
-  }
+document.getElementById("profilePage")
+.classList.remove("hidden");
 
+document.getElementById("navProfile")
+.classList.add("active");
 
-  if(page === "create"){
+updateProfileStats();
+loadNotifications();
 
-    document
-      .getElementById("createPage")
-      .classList
-      .remove("hidden");
+const firstTab =
+document.querySelector(".tabs button");
 
-  }
+profileTab("polls",firstTab);
 
-
-  if(page === "chat"){
-
-    document
-      .getElementById("chatPage")
-      .classList
-      .remove("hidden");
-
-
-    document
-      .getElementById("navChat")
-      .classList
-      .add("active");
-
-
-    updateChatBadge();
-
-  }
-
-
-  if(page === "profile"){
-
-    document
-      .getElementById("profilePage")
-      .classList
-      .remove("hidden");
-
-
-    document
-      .getElementById("navProfile")
-      .classList
-      .add("active");
-
-
-    updateProfileStats();
-
-    loadNotifications();
-
-
-    const firstTab =
-      document.querySelector(
-        ".tabs button"
-      );
-
-
-    profileTab(
-      "polls",
-      firstTab
-    );
-
-  }
+}
 
 }
 
 
 /* =========================
-   FOLLOW HELPERS
+   FOLLOW
 ========================= */
 
 async function getFollowingIds(){
 
-  if(!currentUser){
-    return [];
-  }
+if(!currentUser){
+return [];
+}
 
+const {data,error} =
+await sb
+.from("follows")
+.select("following_id")
+.eq("follower_id",currentUser.id);
 
-  const {data,error} =
-    await sb
-      .from("follows")
-      .select(
-        "following_id"
-      )
-      .eq(
-        "follower_id",
-        currentUser.id
-      );
+if(error){
 
+console.error(
+"FOLLOWING ERROR:",
+error
+);
 
-  if(error){
+return [];
+}
 
-    console.error(
-      "FOLLOWING IDS ERROR:",
-      error
-    );
-
-    return [];
-
-  }
-
-
-  return (
-    data || []
-  ).map(function(item){
-
-    return item.following_id;
-
-  });
+return (data || [])
+.map(x=>x.following_id);
 
 }
 
 
 async function isFollowing(userId){
 
-  if(
-    !currentUser ||
-    !userId
-  ){
+if(!currentUser || !userId){
+return false;
+}
 
-    return false;
+const {data,error} =
+await sb
+.from("follows")
+.select("id")
+.eq("follower_id",currentUser.id)
+.eq("following_id",userId)
+.limit(1);
 
-  }
+if(error){
 
+console.error(
+"FOLLOW CHECK ERROR:",
+error
+);
 
-  const {data,error} =
-    await sb
-      .from("follows")
-      .select("id")
-      .eq(
-        "follower_id",
-        currentUser.id
-      )
-      .eq(
-        "following_id",
-        userId
-      )
-      .limit(1);
+return false;
+}
 
-
-  if(error){
-
-    console.error(
-      "IS FOLLOWING ERROR:",
-      error
-    );
-
-    return false;
-
-  }
-
-
-  return (
-    data &&
-    data.length > 0
-  );
+return !!(data && data.length);
 
 }
 
 
-/* =========================
-   FOLLOW / UNFOLLOW
-========================= */
+async function followUser(userId,button){
 
-async function followUser(
-  userId,
-  button
+if(!currentUser){
+
+toast("Please login first.");
+return;
+
+}
+
+if(!userId){
+
+toast("Invalid user.");
+return;
+
+}
+
+if(userId===currentUser.id){
+
+toast("You cannot follow yourself.");
+return;
+
+}
+
+if(button){
+
+button.disabled=true;
+button.textContent="Loading...";
+
+}
+
+try{
+
+const {
+data:existing,
+error:checkError
+} =
+await sb
+.from("follows")
+.select("id")
+.eq("follower_id",currentUser.id)
+.eq("following_id",userId)
+.limit(1);
+
+if(checkError){
+
+throw new Error(
+"Follow check failed: "+
+checkError.message
+);
+
+}
+
+if(existing?.length){
+
+const {error} =
+await sb
+.from("follows")
+.delete()
+.eq("follower_id",currentUser.id)
+.eq("following_id",userId);
+
+if(error){
+
+throw new Error(
+"Unfollow failed: "+
+error.message
+);
+
+}
+
+if(button){
+
+button.textContent="Follow";
+button.classList.remove("following");
+
+}
+
+toast("Unfollowed");
+
+}else{
+
+const {error} =
+await sb
+.from("follows")
+.insert({
+
+follower_id:currentUser.id,
+following_id:userId
+
+});
+
+if(error){
+
+throw new Error(
+"Follow failed: "+
+error.message
+);
+
+}
+
+if(button){
+
+button.textContent="Following";
+button.classList.add("following");
+
+}
+
+await createNotification(
+userId,
+"started following you"
+);
+
+toast("✅ Following!");
+
+}
+
+await updateProfileStats();
+
+if(
+!document
+.getElementById("homePage")
+.classList
+.contains("hidden")
 ){
 
-  if(!currentUser){
+await loadPolls();
 
-    toast(
-      "Please login first."
-    );
+}
 
-    return;
+}catch(error){
 
-  }
+console.error(
+"FOLLOW ERROR:",
+error
+);
 
+if(button){
 
-  if(!userId){
+button.textContent="Follow";
+button.classList.remove("following");
 
-    toast(
-      "Invalid user."
-    );
+}
 
-    return;
+toast(
+"❌ "+
+(error.message || "Follow failed")
+);
 
-  }
+}finally{
 
+if(button){
+button.disabled=false;
+}
 
-  if(
-    userId ===
-    currentUser.id
-  ){
-
-    toast(
-      "You cannot follow yourself."
-    );
-
-    return;
-
-  }
-
-
-  if(button){
-
-    button.disabled = true;
-    button.textContent = "Loading...";
-
-  }
-
-
-  try{
-
-    /*
-      Check relationship.
-      limit(1) is intentionally used
-      instead of maybeSingle().
-    */
-
-    const {
-      data:existing,
-      error:checkError
-    } =
-      await sb
-        .from("follows")
-        .select("id")
-        .eq(
-          "follower_id",
-          currentUser.id
-        )
-        .eq(
-          "following_id",
-          userId
-        )
-        .limit(1);
-
-
-    if(checkError){
-
-      throw new Error(
-        "Follow check: " +
-        checkError.message
-      );
-
-    }
-
-
-    /*
-      UNFOLLOW
-    */
-
-    if(
-      existing &&
-      existing.length > 0
-    ){
-
-      const {error} =
-        await sb
-          .from("follows")
-          .delete()
-          .eq(
-            "follower_id",
-            currentUser.id
-          )
-          .eq(
-            "following_id",
-            userId
-          );
-
-
-      if(error){
-
-        throw new Error(
-          "Unfollow: " +
-          error.message
-        );
-
-      }
-
-
-      if(button){
-
-        button.textContent =
-          "Follow";
-
-        button.classList
-          .remove("following");
-
-      }
-
-
-      toast(
-        "Unfollowed"
-      );
-
-    }
-
-    /*
-      FOLLOW
-    */
-
-    else{
-
-      const {error} =
-        await sb
-          .from("follows")
-          .insert({
-
-            follower_id:
-              currentUser.id,
-
-            following_id:
-              userId
-
-          });
-
-
-      if(error){
-
-        /*
-          Duplicate follow ko error
-          nahi banayenge.
-        */
-
-        if(
-          error.code === "23505"
-        ){
-
-          if(button){
-
-            button.textContent =
-              "Following";
-
-            button.classList
-              .add("following");
-
-          }
-
-          toast(
-            "Already following"
-          );
-
-        }else{
-
-          throw new Error(
-            "Follow: " +
-            error.message
-          );
-
-        }
-
-      }else{
-
-        if(button){
-
-          button.textContent =
-            "Following";
-
-          button.classList
-            .add("following");
-
-        }
-
-
-        /*
-          Notification failure se
-          follow fail nahi hoga.
-        */
-
-        try{
-
-          await createNotification(
-            userId,
-            "started following you"
-          );
-
-        }catch(error){
-
-          console.error(
-            "FOLLOW NOTIFICATION ERROR:",
-            error
-          );
-
-        }
-
-
-        toast(
-          "✅ Following!"
-        );
-
-      }
-
-    }
-
-
-    await updateProfileStats();
-
-
-    const homeVisible =
-      !document
-        .getElementById("homePage")
-        .classList
-        .contains("hidden");
-
-
-    if(homeVisible){
-
-      await loadPolls();
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "FOLLOW ERROR:",
-      error
-    );
-
-
-    if(button){
-
-      button.textContent =
-        "Follow";
-
-      button.classList
-        .remove("following");
-
-    }
-
-
-    toast(
-      "❌ " +
-      (
-        error.message ||
-        "Follow failed"
-      )
-    );
-
-  }finally{
-
-    if(button){
-
-      button.disabled = false;
-
-    }
-
-  }
+}
 
 }
 
@@ -2264,156 +1433,83 @@ async function followUser(
 
 async function loadSuggestions(){
 
-  if(!currentUser){
-    return null;
-  }
+if(!currentUser){
+return null;
+}
 
+const {data:users,error} =
+await sb
+.from("profiles")
+.select("id,username,display_name")
+.neq("id",currentUser.id)
+.order("username",{ascending:true})
+.limit(50);
 
-  const {
-    data:users,
-    error
-  } =
-    await sb
-      .from("profiles")
-      .select(
-        "id,username,display_name"
-      )
-      .neq(
-        "id",
-        currentUser.id
-      )
-      .order(
-        "username",
-        {
-          ascending:true
-        }
-      )
-      .limit(50);
+if(error){
 
+console.error(error);
+return null;
 
-  if(error){
+}
 
-    console.error(
-      "SUGGESTION ERROR:",
-      error
-    );
+const followingIds =
+await getFollowingIds();
 
-    return null;
+const candidates =
+(users || [])
+.filter(user =>
+!followingIds.includes(user.id)
+)
+.slice(0,5);
 
-  }
+if(!candidates.length){
+return null;
+}
 
+const box=document.createElement("div");
 
-  const followingIds =
-    await getFollowingIds();
+box.className="suggestion";
 
+box.innerHTML=
+"<h3>👥 Follow Suggestions</h3>"+
+"<div class='small'>People you may want to follow</div>";
 
-  const candidates =
-    (
-      users || []
-    )
-    .filter(function(user){
+for(const user of candidates){
 
-      return (
-        user.id !== currentUser.id &&
-        !followingIds.includes(
-          user.id
-        )
-      );
+const row=document.createElement("div");
+row.className="row user";
 
-    })
-    .slice(0,5);
+const av=document.createElement("div");
+av.className="avatar";
+av.textContent=getInitial(user.username);
 
+const info=document.createElement("div");
+info.className="grow";
 
-  if(!candidates.length){
-    return null;
-  }
+info.innerHTML=
+"<b>@"+esc(user.username)+"</b>"+
+"<div class='small'>"+
+esc(user.display_name || "")+
+"</div>";
 
+const button=document.createElement("button");
 
-  const box =
-    document.createElement("div");
+button.className="btn follow";
+button.textContent="Follow";
 
-  box.className =
-    "suggestion";
+button.onclick=()=>{
+followUser(user.id,button);
+};
 
+row.appendChild(av);
+row.appendChild(info);
+row.appendChild(button);
 
-  box.innerHTML =
-    "<h3>👥 Follow Suggestions</h3>" +
-    "<div class='small'>" +
-    "People you may want to follow" +
-    "</div>";
+box.appendChild(row);
 
+}
 
-  for(
-    const user of candidates
-  ){
-
-    const row =
-      document.createElement("div");
-
-    row.className =
-      "row user";
-
-
-    const av =
-      document.createElement("div");
-
-    av.className =
-      "avatar";
-
-    av.textContent =
-      getInitial(
-        user.username
-      );
-
-
-    const info =
-      document.createElement("div");
-
-    info.className =
-      "grow";
-
-    info.innerHTML =
-      "<b>@" +
-      esc(user.username) +
-      "</b>" +
-      "<div class='small'>" +
-      esc(
-        user.display_name || ""
-      ) +
-      "</div>";
-
-
-    const button =
-      document.createElement("button");
-
-    button.className =
-      "btn follow";
-
-    button.textContent =
-      "Follow";
-
-
-    button.onclick =
-      async function(){
-
-        await followUser(
-          user.id,
-          button
-        );
-
-      };
-
-
-    row.appendChild(av);
-    row.appendChild(info);
-    row.appendChild(button);
-
-    box.appendChild(row);
-
-  }
-
-
-  return box;
+return box;
 
 }
 
@@ -2424,439 +1520,210 @@ async function loadSuggestions(){
 
 async function loadPolls(){
 
-  if(!currentUser){
-    return;
-  }
+if(!currentUser){
+return;
+}
 
+const box=document.getElementById("polls");
 
-  const box =
-    document.getElementById("polls");
+box.innerHTML="Loading...";
 
+const suggestion=await loadSuggestions();
 
-  box.innerHTML =
-    "Loading...";
+box.innerHTML="";
 
+if(suggestion){
+box.appendChild(suggestion);
+}
 
-  try{
+const {data:polls,error} =
+await sb
+.from("polls")
+.select("*")
+.order("created_at",{ascending:false});
 
-    const suggestion =
-      await loadSuggestions();
+if(error){
 
+box.innerHTML=
+"<div class='card'>"+
+esc(error.message)+
+"</div>";
 
-    box.innerHTML = "";
+return;
 
+}
 
-    if(suggestion){
+if(!polls?.length){
 
-      box.appendChild(
-        suggestion
-      );
+box.innerHTML+=
+"<div class='card'>"+
+"No polls yet. Create the first poll! 🎉"+
+"</div>";
 
-    }
+return;
 
+}
 
-    const {
-      data:polls,
-      error
-    } =
-      await sb
-        .from("polls")
-        .select("*")
-        .order(
-          "created_at",
-          {
-            ascending:false
-          }
-        );
+const ids=polls.map(p=>p.id);
 
+const {data:votes} =
+await sb
+.from("votes")
+.select("poll_id,user_id,option")
+.in("poll_id",ids);
 
-    if(error){
+const profileMap={};
 
-      box.innerHTML +=
-        "<div class='card'>" +
-        esc(error.message) +
-        "</div>";
+for(const poll of polls){
 
-      return;
+if(poll.user_id){
 
-    }
+profileMap[poll.user_id]=
+await getProfile(poll.user_id);
 
+}
 
-    if(!polls?.length){
+}
 
-      box.innerHTML +=
-        "<div class='card'>" +
-        "No polls yet. Create the first poll! 🎉" +
-        "</div>";
+for(const poll of polls){
 
-      return;
+const profile=profileMap[poll.user_id];
 
-    }
+let options=poll.options;
 
+if(typeof options==="string"){
 
-    const ids =
-      polls.map(function(p){
-        return p.id;
-      });
+try{
+options=JSON.parse(options);
+}catch{
+options=[];
+}
 
+}
 
-    const {
-      data:votes,
-      error:votesError
-    } =
-      await sb
-        .from("votes")
-        .select(
-          "poll_id,user_id,option"
-        )
-        .in(
-          "poll_id",
-          ids
-        );
+if(!Array.isArray(options)){
+options=[];
+}
 
+const pollVotes=
+(votes || []).filter(
+v=>v.poll_id===poll.id
+);
 
-    if(votesError){
+const myVote=
+pollVotes.find(
+v=>v.user_id===currentUser.id
+);
 
-      console.error(
-        "VOTES LOAD ERROR:",
-        votesError
-      );
+const counts={};
 
-    }
+options.forEach(
+option=>counts[option]=0
+);
 
+pollVotes.forEach(v=>{
+counts[v.option]=(counts[v.option] || 0)+1;
+});
 
-    const profileMap = {};
+const total=pollVotes.length;
 
+const card=document.createElement("div");
+card.className="card";
 
-    for(
-      const poll of polls
-    ){
+const creator=document.createElement("div");
+creator.className="creator";
 
-      if(poll.user_id){
+const ca=document.createElement("div");
+ca.className="creator-avatar";
+ca.textContent=getInitial(profile?.username);
 
-        profileMap[poll.user_id] =
-          await getProfile(
-            poll.user_id
-          );
+const ci=document.createElement("div");
 
-      }
+ci.innerHTML=
+"<b>@"+
+esc(profile?.username || "user")+
+"</b>";
 
-    }
+creator.appendChild(ca);
+creator.appendChild(ci);
+card.appendChild(creator);
 
+const title=document.createElement("div");
 
-    for(
-      const poll of polls
-    ){
+title.className="poll-title";
+title.textContent=poll.question || "Untitled poll";
 
-      const profile =
-        profileMap[
-          poll.user_id
-        ];
+card.appendChild(title);
 
+options.forEach(option=>{
 
-      let options =
-        poll.options;
+const button=document.createElement("button");
 
+button.className="option";
 
-      if(
-        typeof options ===
-        "string"
-      ){
+button.textContent=
+(myVote?.option===option ? "✓ " : "")+
+option+
+" — "+
+(counts[option] || 0);
 
-        try{
+button.onclick=async()=>{
 
-          options =
-            JSON.parse(
-              options
-            );
+button.disabled=true;
 
-        }catch{
+await vote(poll.id,option);
 
-          options = [];
+button.disabled=false;
 
-        }
+};
 
-      }
+card.appendChild(button);
 
+const bar=document.createElement("div");
+bar.className="resultbar";
 
-      if(
-        !Array.isArray(options)
-      ){
+const fill=document.createElement("i");
 
-        options = [];
+fill.style.width=
+(
+total
+?
+counts[option]/total*100
+:
+0
+)+"%";
 
-      }
+bar.appendChild(fill);
+card.appendChild(bar);
 
+});
 
-      const pollVotes =
-        (
-          votes || []
-        ).filter(function(v){
+const info=document.createElement("div");
 
-          return (
-            v.poll_id ===
-            poll.id
-          );
+info.className="small";
 
-        });
+info.textContent=
+total+
+" votes"+
+(myVote ? " • You voted" : "");
 
+card.appendChild(info);
 
-      const myVote =
-        pollVotes.find(function(v){
+const like=document.createElement("button");
 
-          return (
-            v.user_id ===
-            currentUser.id
-          );
+like.className="link";
+like.style.textAlign="left";
+like.textContent="❤️ Like";
 
-        });
+like.onclick=()=>{
+likePoll(poll.id);
+};
 
+card.appendChild(like);
 
-      const counts = {};
+box.appendChild(card);
 
-
-      options.forEach(function(option){
-
-        counts[option] = 0;
-
-      });
-
-
-      pollVotes.forEach(function(v){
-
-        counts[v.option] =
-          (
-            counts[v.option] ||
-            0
-          ) + 1;
-
-      });
-
-
-      const total =
-        pollVotes.length;
-
-
-      const card =
-        document.createElement("div");
-
-      card.className =
-        "card";
-
-
-      const creator =
-        document.createElement("div");
-
-      creator.className =
-        "creator";
-
-
-      const ca =
-        document.createElement("div");
-
-      ca.className =
-        "creator-avatar";
-
-      ca.textContent =
-        getInitial(
-          profile?.username
-        );
-
-
-      const ci =
-        document.createElement("div");
-
-      ci.innerHTML =
-        "<b>@" +
-        esc(
-          profile?.username ||
-          "user"
-        ) +
-        "</b>";
-
-
-      creator.appendChild(ca);
-      creator.appendChild(ci);
-
-      card.appendChild(
-        creator
-      );
-
-
-      const title =
-        document.createElement("div");
-
-      title.className =
-        "poll-title";
-
-      title.textContent =
-        poll.question ||
-        "Untitled poll";
-
-      card.appendChild(
-        title
-      );
-
-
-      options.forEach(function(option){
-
-        const button =
-          document.createElement(
-            "button"
-          );
-
-        button.className =
-          "option";
-
-        button.textContent =
-          (
-            myVote?.option === option
-            ?
-            "✓ "
-            :
-            ""
-          ) +
-          option +
-          " — " +
-          (
-            counts[option] ||
-            0
-          );
-
-
-        button.onclick =
-          async function(){
-
-            button.disabled = true;
-
-            await vote(
-              poll.id,
-              option
-            );
-
-            button.disabled = false;
-
-          };
-
-
-        card.appendChild(
-          button
-        );
-
-
-        const bar =
-          document.createElement(
-            "div"
-          );
-
-        bar.className =
-          "resultbar";
-
-
-        const fill =
-          document.createElement(
-            "i"
-          );
-
-
-        fill.style.width =
-          (
-            total
-            ?
-            (
-              counts[option] /
-              total *
-              100
-            )
-            :
-            0
-          ) +
-          "%";
-
-
-        bar.appendChild(fill);
-        card.appendChild(bar);
-
-      });
-
-
-      const info =
-        document.createElement(
-          "div"
-        );
-
-      info.className =
-        "small";
-
-      info.textContent =
-        total +
-        " votes" +
-        (
-          myVote
-          ?
-          " • You voted"
-          :
-          ""
-        );
-
-
-      card.appendChild(
-        info
-      );
-
-
-      const like =
-        document.createElement(
-          "button"
-        );
-
-      like.className =
-        "link";
-
-      like.style.textAlign =
-        "left";
-
-      like.textContent =
-        "❤️ Like";
-
-
-      like.onclick =
-        async function(){
-
-          await likePoll(
-            poll.id
-          );
-
-        };
-
-
-      card.appendChild(
-        like
-      );
-
-
-      box.appendChild(
-        card
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "LOAD POLLS ERROR:",
-      error
-    );
-
-    box.innerHTML =
-      "<div class='card'>" +
-      esc(
-        error.message ||
-        "Could not load polls."
-      ) +
-      "</div>";
-
-  }
+}
 
 }
 
@@ -2865,108 +1732,70 @@ async function loadPolls(){
    VOTE
 ========================= */
 
-async function vote(
-  pollId,
-  option
-){
+async function vote(pollId,option){
 
-  if(!currentUser){
+if(!currentUser){
 
-    toast(
-      "Please login first."
-    );
+toast("Please login first.");
+return;
 
-    return;
+}
 
-  }
+const {data:old,error:oldError} =
+await sb
+.from("votes")
+.select("id")
+.eq("poll_id",pollId)
+.eq("user_id",currentUser.id)
+.limit(1);
 
+if(oldError){
 
-  const {
-    data:old,
-    error:oldError
-  } =
-    await sb
-      .from("votes")
-      .select("id")
-      .eq(
-        "poll_id",
-        pollId
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .limit(1);
+toast(oldError.message);
+return;
 
+}
 
-  if(oldError){
+if(old?.length){
 
-    toast(
-      oldError.message
-    );
+const {error} =
+await sb
+.from("votes")
+.update({option:option})
+.eq("id",old[0].id);
 
-    return;
+if(error){
 
-  }
+toast(error.message);
+return;
 
+}
 
-  if(old?.length){
+}else{
 
-    const {error} =
-      await sb
-        .from("votes")
-        .update({
-          option:option
-        })
-        .eq(
-          "id",
-          old[0].id
-        );
+const {error} =
+await sb
+.from("votes")
+.insert({
 
+poll_id:pollId,
+user_id:currentUser.id,
+option:option
 
-    if(error){
+});
 
-      toast(
-        error.message
-      );
+if(error){
 
-      return;
+toast(error.message);
+return;
 
-    }
+}
 
-  }else{
+}
 
-    const {error} =
-      await sb
-        .from("votes")
-        .insert({
+toast("✅ Vote saved!");
 
-          poll_id:pollId,
-          user_id:currentUser.id,
-          option:option
-
-        });
-
-
-    if(error){
-
-      toast(
-        error.message
-      );
-
-      return;
-
-    }
-
-  }
-
-
-  toast(
-    "✅ Vote saved!"
-  );
-
-
-  await loadPolls();
+await loadPolls();
 
 }
 
@@ -2977,123 +1806,82 @@ async function vote(
 
 async function createPoll(){
 
-  if(!currentUser){
+if(!currentUser){
 
-    toast(
-      "Please login first."
-    );
+toast("Please login first.");
+return;
 
-    return;
+}
 
-  }
+const question=
+document.getElementById("question")
+.value.trim();
 
+const options=[
+"option1",
+"option2",
+"option3",
+"option4"
+]
+.map(id=>
+document.getElementById(id).value.trim()
+)
+.filter(Boolean);
 
-  const question =
-    document
-      .getElementById("question")
-      .value
-      .trim();
+if(!question){
 
+toast("Question enter karo.");
+return;
 
-  const options = [
-    "option1",
-    "option2",
-    "option3",
-    "option4"
-  ]
-  .map(function(id){
+}
 
-    return document
-      .getElementById(id)
-      .value
-      .trim();
+if(options.length<2){
 
-  })
-  .filter(Boolean);
+toast("At least 2 options chahiye.");
+return;
 
+}
 
-  if(!question){
+if(options.length!==new Set(options).size){
 
-    toast(
-      "Question enter karo."
-    );
+toast("Options same nahi hone chahiye.");
+return;
 
-    return;
+}
 
-  }
+const {error} =
+await sb
+.from("polls")
+.insert({
 
+question,
+options,
+user_id:currentUser.id
 
-  if(options.length < 2){
+});
 
-    toast(
-      "At least 2 options chahiye."
-    );
+if(error){
 
-    return;
+toast(error.message);
+return;
 
-  }
+}
 
+[
+"question",
+"option1",
+"option2",
+"option3",
+"option4"
+].forEach(id=>{
+document.getElementById(id).value="";
+});
 
-  if(
-    options.length !==
-    new Set(options).size
-  ){
+toast("🎉 Poll published!");
 
-    toast(
-      "Options same nahi hone chahiye."
-    );
+await updateProfileStats();
 
-    return;
-
-  }
-
-
-  const {error} =
-    await sb
-      .from("polls")
-      .insert({
-
-        question:question,
-        options:options,
-        user_id:currentUser.id
-
-      });
-
-
-  if(error){
-
-    toast(
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  [
-    "question",
-    "option1",
-    "option2",
-    "option3",
-    "option4"
-  ].forEach(function(id){
-
-    document
-      .getElementById(id)
-      .value = "";
-
-  });
-
-
-  toast(
-    "🎉 Poll published!"
-  );
-
-
-  await updateProfileStats();
-
-  showPage("home");
+showPage("home");
 
 }
 
@@ -3104,244 +1892,120 @@ async function createPoll(){
 
 function searchAll(){
 
-  clearTimeout(
-    searchTimer
-  );
+clearTimeout(searchTimer);
 
-
-  searchTimer =
-    setTimeout(
-      runSearch,
-      300
-    );
+searchTimer=setTimeout(runSearch,300);
 
 }
 
-
 async function runSearch(){
 
-  if(!currentUser){
-    return;
-  }
+if(!currentUser){
+return;
+}
 
+const q=
+document.getElementById("searchInput")
+.value.trim();
 
-  const q =
-    document
-      .getElementById("searchInput")
-      .value
-      .trim();
+const box=
+document.getElementById("searchResults");
 
+if(!q){
 
-  const box =
-    document
-      .getElementById("searchResults");
+box.textContent="Search users or polls.";
+return;
 
+}
 
-  if(!q){
+const {data:users} =
+await sb
+.from("profiles")
+.select("id,username,display_name")
+.ilike("username","%"+q+"%")
+.limit(20);
 
-    box.textContent =
-      "Search users or polls.";
+const {data:polls} =
+await sb
+.from("polls")
+.select("id,question,user_id")
+.ilike("question","%"+q+"%")
+.limit(20);
 
-    return;
+box.innerHTML="<h3>👤 Users</h3>";
 
-  }
+for(const user of users || []){
 
+const row=document.createElement("div");
+row.className="row user";
 
-  const {
-    data:users,
-    error:userError
-  } =
-    await sb
-      .from("profiles")
-      .select(
-        "id,username,display_name"
-      )
-      .ilike(
-        "username",
-        "%" + q + "%"
-      )
-      .limit(20);
+const av=document.createElement("div");
+av.className="avatar";
+av.textContent=getInitial(user.username);
 
+const info=document.createElement("div");
+info.className="grow";
 
-  const {
-    data:polls,
-    error:pollError
-  } =
-    await sb
-      .from("polls")
-      .select(
-        "id,question,user_id"
-      )
-      .ilike(
-        "question",
-        "%" + q + "%"
-      )
-      .limit(20);
+info.innerHTML=
+"<b>@"+esc(user.username)+"</b>"+
+"<div class='small'>"+
+esc(user.display_name || "")+
+"</div>";
 
+const button=document.createElement("button");
 
-  if(userError){
+button.className="btn follow";
 
-    console.error(
-      "SEARCH USER ERROR:",
-      userError
-    );
+if(user.id===currentUser.id){
 
-  }
+button.textContent="You";
+button.disabled=true;
 
+}else{
 
-  if(pollError){
+const following=
+await isFollowing(user.id);
 
-    console.error(
-      "SEARCH POLL ERROR:",
-      pollError
-    );
+button.textContent=
+following ? "Following" : "Follow";
 
-  }
+if(following){
+button.classList.add("following");
+}
 
+button.onclick=()=>{
+followUser(user.id,button);
+};
 
-  box.innerHTML =
-    "<h3>👤 Users</h3>";
+}
 
+row.appendChild(av);
+row.appendChild(info);
+row.appendChild(button);
 
-  for(
-    const user of users || []
-  ){
+box.appendChild(row);
 
-    const row =
-      document.createElement("div");
+}
 
-    row.className =
-      "row user";
+box.innerHTML+="<h3>🗳️ Polls</h3>";
 
+for(const poll of polls || []){
 
-    const av =
-      document.createElement("div");
+const div=document.createElement("div");
 
-    av.className =
-      "avatar";
+div.className="notice";
+div.textContent=poll.question;
 
-    av.textContent =
-      getInitial(
-        user.username
-      );
+box.appendChild(div);
 
+}
 
-    const info =
-      document.createElement("div");
+if(!users?.length && !polls?.length){
 
-    info.className =
-      "grow";
+box.innerHTML+=
+"<div class='small'>No results found.</div>";
 
-    info.innerHTML =
-      "<b>@" +
-      esc(user.username) +
-      "</b>" +
-      "<div class='small'>" +
-      esc(
-        user.display_name || ""
-      ) +
-      "</div>";
-
-
-    const button =
-      document.createElement("button");
-
-    button.className =
-      "btn follow";
-
-
-    if(
-      user.id ===
-      currentUser.id
-    ){
-
-      button.textContent =
-        "You";
-
-      button.disabled =
-        true;
-
-    }else{
-
-      const following =
-        await isFollowing(
-          user.id
-        );
-
-
-      button.textContent =
-        following
-        ?
-        "Following"
-        :
-        "Follow";
-
-
-      if(following){
-
-        button.classList
-          .add("following");
-
-      }
-
-
-      button.onclick =
-        async function(){
-
-          await followUser(
-            user.id,
-            button
-          );
-
-        };
-
-    }
-
-
-    row.appendChild(av);
-    row.appendChild(info);
-    row.appendChild(button);
-
-    box.appendChild(row);
-
-  }
-
-
-  box.innerHTML +=
-    "<h3>🗳️ Polls</h3>";
-
-
-  for(
-    const poll of polls || []
-  ){
-
-    const div =
-      document.createElement(
-        "div"
-      );
-
-    div.className =
-      "notice";
-
-    div.textContent =
-      poll.question;
-
-    box.appendChild(div);
-
-  }
-
-
-  if(
-    !users?.length &&
-    !polls?.length
-  ){
-
-    box.innerHTML +=
-      "<div class='small'>" +
-      "No results found." +
-      "</div>";
-
-  }
+}
 
 }
 
@@ -3350,478 +2014,242 @@ async function runSearch(){
    PROFILE TABS
 ========================= */
 
-async function profileTab(
-  tab,
-  button
-){
+async function profileTab(tab,button){
 
-  document
-    .querySelectorAll(
-      ".tabs button"
-    )
-    .forEach(function(b){
+document
+.querySelectorAll(".tabs button")
+.forEach(b=>b.classList.remove("active"));
 
-      b.classList
-        .remove("active");
+if(button){
+button.classList.add("active");
+}
 
-    });
+const box=
+document.getElementById("profileContent");
 
+box.innerHTML="Loading...";
 
-  if(button){
+if(tab==="polls"){
 
-    button.classList
-      .add("active");
+const {data,error} =
+await sb
+.from("polls")
+.select("id,question,created_at")
+.eq("user_id",currentUser.id)
+.order("created_at",{ascending:false});
 
-  }
+if(error){
 
+box.innerHTML=
+"<div class='notice'>"+
+esc(error.message)+
+"</div>";
 
-  const box =
-    document.getElementById(
-      "profileContent"
-    );
+return;
 
+}
 
-  box.innerHTML =
-    "Loading...";
+box.innerHTML="";
 
+(data || []).forEach(poll=>{
 
-  if(!currentUser){
-    return;
-  }
+const div=document.createElement("div");
 
+div.className="notice";
+div.textContent=poll.question;
 
-  /* MY POLLS */
+box.appendChild(div);
 
-  if(tab === "polls"){
+});
 
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from("polls")
-        .select(
-          "id,question,created_at"
-        )
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .order(
-          "created_at",
-          {
-            ascending:false
-          }
-        );
+if(!data?.length){
+box.textContent="No polls yet.";
+}
 
+}
 
-    if(error){
+if(tab==="votes"){
 
-      box.innerHTML =
-        "<div class='notice'>" +
-        esc(error.message) +
-        "</div>";
+const {data,error} =
+await sb
+.from("votes")
+.select("option,polls(question)")
+.eq("user_id",currentUser.id);
 
-      return;
+if(error){
 
-    }
+box.innerHTML=
+"<div class='notice'>"+
+esc(error.message)+
+"</div>";
 
+return;
 
-    box.innerHTML = "";
+}
 
+box.innerHTML="";
 
-    (data || []).forEach(function(poll){
+(data || []).forEach(v=>{
 
-      const div =
-        document.createElement(
-          "div"
-        );
+const div=document.createElement("div");
 
-      div.className =
-        "notice";
+div.className="notice";
 
-      div.textContent =
-        poll.question;
+div.innerHTML=
+"<b>"+
+esc(v.polls?.question || "Poll")+
+"</b><br>✓ "+
+esc(v.option);
 
-      box.appendChild(div);
+box.appendChild(div);
 
-    });
+});
 
+if(!data?.length){
+box.textContent="No votes yet.";
+}
 
-    if(!data?.length){
+}
 
-      box.textContent =
-        "No polls yet.";
+if(tab==="followers"){
 
-    }
+const {data,error} =
+await sb
+.from("follows")
+.select("follower_id")
+.eq("following_id",currentUser.id);
 
-  }
+if(error){
 
+box.innerHTML=
+"<div class='notice'>"+
+esc(error.message)+
+"</div>";
 
-  /* MY VOTES */
+return;
 
-  if(tab === "votes"){
+}
 
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from("votes")
-        .select(
-          "option,polls(question)"
-        )
-        .eq(
-          "user_id",
-          currentUser.id
-        );
+box.innerHTML="";
 
+for(const item of data || []){
 
-    if(error){
+const user=
+await getProfile(item.follower_id);
 
-      box.innerHTML =
-        "<div class='notice'>" +
-        esc(error.message) +
-        "</div>";
+if(!user)continue;
 
-      return;
+const row=document.createElement("div");
+row.className="row user";
 
-    }
+const av=document.createElement("div");
+av.className="avatar";
+av.textContent=getInitial(user.username);
 
+const info=document.createElement("div");
+info.className="grow";
+info.innerHTML="<b>@"+esc(user.username)+"</b>";
 
-    box.innerHTML = "";
+const button=document.createElement("button");
 
+button.className="btn follow";
 
-    (data || []).forEach(function(voteItem){
+if(user.id===currentUser.id){
 
-      const div =
-        document.createElement(
-          "div"
-        );
+button.textContent="You";
+button.disabled=true;
 
-      div.className =
-        "notice";
+}else{
 
-      div.innerHTML =
-        "<b>" +
-        esc(
-          voteItem.polls?.question ||
-          "Poll"
-        ) +
-        "</b>" +
-        "<br>✓ " +
-        esc(
-          voteItem.option
-        );
+const following=
+await isFollowing(user.id);
 
+button.textContent=
+following ? "Following" : "Follow";
 
-      box.appendChild(div);
+if(following){
+button.classList.add("following");
+}
 
-    });
+button.onclick=()=>{
+followUser(user.id,button);
+};
 
+}
 
-    if(!data?.length){
+row.appendChild(av);
+row.appendChild(info);
+row.appendChild(button);
 
-      box.textContent =
-        "No votes yet.";
+box.appendChild(row);
 
-    }
+}
 
-  }
+if(!data?.length){
+box.textContent="No followers yet.";
+}
 
+}
 
-  /* FOLLOWERS */
+if(tab==="following"){
 
-  if(tab === "followers"){
+const {data,error} =
+await sb
+.from("follows")
+.select("following_id")
+.eq("follower_id",currentUser.id);
 
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from("follows")
-        .select(
-          "follower_id"
-        )
-        .eq(
-          "following_id",
-          currentUser.id
-        );
+if(error){
 
+box.innerHTML=
+"<div class='notice'>"+
+esc(error.message)+
+"</div>";
 
-    if(error){
+return;
 
-      box.innerHTML =
-        "<div class='notice'>" +
-        esc(error.message) +
-        "</div>";
+}
 
-      return;
+box.innerHTML="";
 
-    }
+for(const item of data || []){
 
+const user=
+await getProfile(item.following_id);
 
-    box.innerHTML = "";
+if(!user)continue;
 
+const row=document.createElement("div");
+row.className="row user";
 
-    for(
-      const item of data || []
-    ){
+const av=document.createElement("div");
+av.className="avatar";
+av.textContent=getInitial(user.username);
 
-      const user =
-        await getProfile(
-          item.follower_id
-        );
+const info=document.createElement("div");
+info.className="grow";
+info.innerHTML="<b>@"+esc(user.username)+"</b>";
 
+const button=document.createElement("button");
 
-      if(!user){
-        continue;
-      }
+button.className="btn following";
+button.textContent="Following";
 
+button.onclick=()=>{
+followUser(user.id,button);
+};
 
-      const row =
-        document.createElement(
-          "div"
-        );
+row.appendChild(av);
+row.appendChild(info);
+row.appendChild(button);
 
-      row.className =
-        "row user";
+box.appendChild(row);
 
+}
 
-      const av =
-        document.createElement(
-          "div"
-        );
-
-      av.className =
-        "avatar";
-
-      av.textContent =
-        getInitial(
-          user.username
-        );
-
-
-      const info =
-        document.createElement(
-          "div"
-        );
-
-      info.className =
-        "grow";
-
-      info.innerHTML =
-        "<b>@" +
-        esc(
-          user.username
-        ) +
-        "</b>";
-
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.className =
-        "btn follow";
-
-
-      if(
-        user.id ===
-        currentUser.id
-      ){
-
-        button.textContent =
-          "You";
-
-        button.disabled =
-          true;
-
-      }else{
-
-        const following =
-          await isFollowing(
-            user.id
-          );
-
-
-        button.textContent =
-          following
-          ?
-          "Following"
-          :
-          "Follow";
-
-
-        if(following){
-
-          button.classList
-            .add("following");
-
-        }
-
-
-        button.onclick =
-          async function(){
-
-            await followUser(
-              user.id,
-              button
-            );
-
-          };
-
-      }
-
-
-      row.appendChild(av);
-      row.appendChild(info);
-      row.appendChild(button);
-
-      box.appendChild(row);
-
-    }
-
-
-    if(!data?.length){
-
-      box.textContent =
-        "No followers yet.";
-
-    }
-
-  }
-
-
-  /* FOLLOWING */
-
-  if(tab === "following"){
-
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from("follows")
-        .select(
-          "following_id"
-        )
-        .eq(
-          "follower_id",
-          currentUser.id
-        );
-
-
-    if(error){
-
-      box.innerHTML =
-        "<div class='notice'>" +
-        esc(error.message) +
-        "</div>";
-
-      return;
-
-    }
-
-
-    box.innerHTML = "";
-
-
-    for(
-      const item of data || []
-    ){
-
-      const user =
-        await getProfile(
-          item.following_id
-        );
-
-
-      if(!user){
-        continue;
-      }
-
-
-      const row =
-        document.createElement(
-          "div"
-        );
-
-      row.className =
-        "row user";
-
-
-      const av =
-        document.createElement(
-          "div"
-        );
-
-      av.className =
-        "avatar";
-
-      av.textContent =
-        getInitial(
-          user.username
-        );
-
-
-      const info =
-        document.createElement(
-          "div"
-        );
-
-      info.className =
-        "grow";
-
-      info.innerHTML =
-        "<b>@" +
-        esc(
-          user.username
-        ) +
-        "</b>";
-
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.className =
-        "btn following";
-
-      button.textContent =
-        "Following";
-
-
-      button.onclick =
-        async function(){
-
-          await followUser(
-            user.id,
-            button
-          );
-
-        };
-
-
-      row.appendChild(av);
-      row.appendChild(info);
-      row.appendChild(button);
-
-      box.appendChild(row);
-
-    }
-
-
-    if(!data?.length){
-
-      box.textContent =
-        "Not following anyone yet.";
-
-    }
-
-  }
+if(!data?.length){
+box.textContent="Not following anyone yet.";
+}
 
 }
 
@@ -3830,164 +2258,101 @@ async function profileTab(
    NOTIFICATIONS
 ========================= */
 
-async function createNotification(
-  userId,
-  message
-){
+async function createNotification(userId,message){
 
-  if(
-    !currentUser ||
-    userId === currentUser.id
-  ){
+if(!currentUser || userId===currentUser.id){
+return;
+}
 
-    return;
+const {error} =
+await sb
+.from("notifications")
+.insert({
 
-  }
+user_id:userId,
+actor_id:currentUser.id,
+type:"activity",
+message:message
 
+});
 
-  const {error} =
-    await sb
-      .from("notifications")
-      .insert({
-
-        user_id:userId,
-        actor_id:currentUser.id,
-        type:"activity",
-        message:message
-
-      });
-
-
-  if(error){
-
-    console.error(
-      "NOTIFICATION ERROR:",
-      error
-    );
-
-  }
+if(error){
+console.error("Notification error:",error);
+}
 
 }
 
-
 async function loadNotifications(){
 
-  if(!currentUser){
-    return;
-  }
+if(!currentUser){
+return;
+}
 
+const {data,error} =
+await sb
+.from("notifications")
+.select("*")
+.eq("user_id",currentUser.id)
+.order("created_at",{ascending:false})
+.limit(50);
 
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from("notifications")
-      .select("*")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(50);
+const box=
+document.getElementById("notifications");
 
+if(error){
 
-  const box =
-    document.getElementById(
-      "notifications"
-    );
+box.innerHTML=
+"<div class='notice'>"+
+esc(error.message)+
+"</div>";
 
+return;
 
-  if(error){
+}
 
-    console.error(
-      "NOTIFICATION LOAD ERROR:",
-      error
-    );
+box.innerHTML="";
 
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
-      "</div>";
+if(!data?.length){
 
-    return;
+box.textContent="No notifications yet.";
 
-  }
+}else{
 
+data.forEach(n=>{
 
-  box.innerHTML = "";
+const div=document.createElement("div");
 
+div.className="notice";
 
-  if(!data?.length){
+div.textContent=
+(n.message || "Activity")+
+" • "+
+(
+n.created_at
+?
+new Date(n.created_at).toLocaleString()
+:
+""
+);
 
-    box.textContent =
-      "No notifications yet.";
+box.appendChild(div);
 
-  }else{
+});
 
-    data.forEach(function(n){
+}
 
-      const div =
-        document.createElement(
-          "div"
-        );
+const unread=
+(data || []).filter(n=>!n.read).length;
 
-      div.className =
-        "notice";
+const badge=
+document.getElementById("notificationBadge");
 
-      div.textContent =
-        (
-          n.message ||
-          "Activity"
-        ) +
-        " • " +
-        (
-          n.created_at
-          ?
-          new Date(
-            n.created_at
-          ).toLocaleString()
-          :
-          ""
-        );
+badge.textContent=unread;
 
-
-      box.appendChild(div);
-
-    });
-
-  }
-
-
-  const unread =
-    (
-      data || []
-    ).filter(function(n){
-
-      return !n.read;
-
-    }).length;
-
-
-  const badge =
-    document.getElementById(
-      "notificationBadge"
-    );
-
-
-  badge.textContent =
-    unread;
-
-
-  badge.classList.toggle(
-    "hidden",
-    unread === 0
-  );
+badge.classList.toggle(
+"hidden",
+unread===0
+);
 
 }
 
@@ -3996,619 +2361,367 @@ async function loadNotifications(){
    LIKE
 ========================= */
 
-async function likePoll(
-  pollId
-){
+async function likePoll(pollId){
 
-  if(!currentUser){
+if(!currentUser){
 
-    toast(
-      "Please login first."
-    );
+toast("Please login first.");
+return;
 
-    return;
+}
 
-  }
+const {data,error} =
+await sb
+.from("likes")
+.select("id")
+.eq("user_id",currentUser.id)
+.eq("poll_id",pollId)
+.limit(1);
 
+if(error){
 
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from("likes")
-      .select("id")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .eq(
-        "poll_id",
-        pollId
-      )
-      .limit(1);
+toast(error.message);
+return;
 
+}
 
-  if(error){
+if(data?.length){
 
-    toast(
-      error.message
-    );
+const {error} =
+await sb
+.from("likes")
+.delete()
+.eq("id",data[0].id);
 
-    return;
+if(error){
 
-  }
+toast(error.message);
+return;
 
+}
 
-  if(data?.length){
+toast("Like removed");
 
-    const {error} =
-      await sb
-        .from("likes")
-        .delete()
-        .eq(
-          "id",
-          data[0].id
-        );
+}else{
 
+const {error} =
+await sb
+.from("likes")
+.insert({
 
-    if(error){
+user_id:currentUser.id,
+poll_id:pollId
 
-      toast(
-        error.message
-      );
+});
 
-      return;
+if(error){
 
-    }
+toast(error.message);
+return;
 
+}
 
-    toast(
-      "Like removed"
-    );
+toast("❤️ Liked");
 
-  }else{
-
-    const {error} =
-      await sb
-        .from("likes")
-        .insert({
-
-          user_id:
-            currentUser.id,
-
-          poll_id:
-            pollId
-
-        });
-
-
-    if(error){
-
-      toast(
-        error.message
-      );
-
-      return;
-
-    }
-
-
-    toast(
-      "❤️ Liked"
-    );
-
-  }
+}
 
 }
 
 
 /* =========================
-   CHAT SEARCH
+   CHAT
 ========================= */
 
 function searchChatUsers(){
 
-  clearTimeout(
-    chatTimer
-  );
+clearTimeout(chatTimer);
 
-
-  chatTimer =
-    setTimeout(
-      runChatSearch,
-      300
-    );
+chatTimer=setTimeout(
+runChatSearch,
+300
+);
 
 }
-
 
 async function runChatSearch(){
 
-  if(!currentUser){
-    return;
-  }
+if(!currentUser){
+return;
+}
 
+const q=
+document.getElementById("chatSearch")
+.value.trim();
 
-  const q =
-    document
-      .getElementById("chatSearch")
-      .value
-      .trim();
+const box=
+document.getElementById("chatUsers");
 
+if(!q){
 
-  const box =
-    document
-      .getElementById("chatUsers");
+box.textContent=
+"Search a username to start chatting.";
 
-
-  if(!q){
-
-    box.textContent =
-      "Search a username to start chatting.";
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from("profiles")
-      .select(
-        "id,username,display_name"
-      )
-      .ilike(
-        "username",
-        "%" + q + "%"
-      )
-      .neq(
-        "id",
-        currentUser.id
-      )
-      .limit(10);
-
-
-  if(error){
-
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
-      "</div>";
-
-    return;
-
-  }
-
-
-  box.innerHTML = "";
-
-
-  if(!data?.length){
-
-    box.textContent =
-      "No users found.";
-
-    return;
-
-  }
-
-
-  data.forEach(function(user){
-
-    const row =
-      document.createElement(
-        "div"
-      );
-
-    row.className =
-      "row chat-user";
-
-
-    const av =
-      document.createElement(
-        "div"
-      );
-
-    av.className =
-      "avatar";
-
-    av.textContent =
-      getInitial(
-        user.username
-      );
-
-
-    const info =
-      document.createElement(
-        "div"
-      );
-
-    info.className =
-      "grow";
-
-    info.innerHTML =
-      "<b>@" +
-      esc(user.username) +
-      "</b>" +
-      "<div class='chat-preview'>" +
-      esc(
-        user.display_name ||
-        "Start chatting"
-      ) +
-      "</div>";
-
-
-    row.appendChild(av);
-    row.appendChild(info);
-
-
-    row.onclick =
-      function(){
-
-        openChat(
-          user
-        );
-
-      };
-
-
-    box.appendChild(row);
-
-  });
+return;
 
 }
 
+const {data,error} =
+await sb
+.from("profiles")
+.select("id,username,display_name")
+.ilike("username","%"+q+"%")
+.neq("id",currentUser.id)
+.limit(10);
 
-/* =========================
-   OPEN CHAT
-========================= */
+if(error){
+
+box.innerHTML=
+"<div class='notice'>"+
+esc(error.message)+
+"</div>";
+
+return;
+
+}
+
+box.innerHTML="";
+
+if(!data?.length){
+
+box.textContent="No users found.";
+return;
+
+}
+
+data.forEach(user=>{
+
+const row=document.createElement("div");
+row.className="row chat-user";
+
+const av=document.createElement("div");
+av.className="avatar";
+av.textContent=getInitial(user.username);
+
+const info=document.createElement("div");
+info.className="grow";
+
+info.innerHTML=
+"<b>@"+esc(user.username)+"</b>"+
+"<div class='chat-preview'>"+
+esc(user.display_name || "Start chatting")+
+"</div>";
+
+row.appendChild(av);
+row.appendChild(info);
+
+row.onclick=()=>{
+openChat(user);
+};
+
+box.appendChild(row);
+
+});
+
+}
+
 
 async function openChat(user){
 
-  if(
-    !user ||
-    !currentUser
-  ){
-
-    return;
-
-  }
-
-
-  currentChatUser =
-    user;
-
-
-  document
-    .getElementById("chatArea")
-    .classList
-    .remove("hidden");
-
-
-  document
-    .getElementById("chatTitle")
-    .textContent =
-    "@" +
-    (
-      user.username ||
-      "user"
-    );
-
-
-  document
-    .getElementById("chatStatus")
-    .textContent =
-    user.display_name ||
-    "Poll Pulse user";
-
-
-  document
-    .getElementById("chatAvatar")
-    .textContent =
-    getInitial(
-      user.username
-    );
-
-
-  await loadMessages();
-
+if(!user || !currentUser){
+return;
 }
 
+currentChatUser=user;
 
-/* =========================
-   CLOSE CHAT
-========================= */
+document
+.getElementById("chatArea")
+.classList
+.remove("hidden");
+
+document.getElementById("chatTitle")
+.textContent="@"+(user.username || "user");
+
+document.getElementById("chatStatus")
+.textContent=
+user.display_name || "Poll Pulse user";
+
+document.getElementById("chatAvatar")
+.textContent=
+getInitial(user.username);
+
+await loadMessages();
+
+}
 
 function closeChat(){
 
-  currentChatUser =
-    null;
+currentChatUser=null;
 
-
-  document
-    .getElementById("chatArea")
-    .classList
-    .add("hidden");
+document
+.getElementById("chatArea")
+.classList
+.add("hidden");
 
 }
 
-
-/* =========================
-   LOAD MESSAGES
-========================= */
 
 async function loadMessages(){
 
-  if(
-    !currentUser ||
-    !currentChatUser
-  ){
+if(!currentUser || !currentChatUser){
+return;
+}
 
-    return;
+const {data,error} =
+await sb
+.from("messages")
+.select("*")
+.or(
+"and(sender_id.eq."+currentUser.id+
+",receiver_id.eq."+currentChatUser.id+
+"),and(sender_id.eq."+currentChatUser.id+
+",receiver_id.eq."+currentUser.id+")"
+)
+.order("created_at",{ascending:true});
 
-  }
+const box=
+document.getElementById("messages");
 
+if(error){
 
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from("messages")
-      .select("*")
-      .or(
-        "and(sender_id.eq." +
-        currentUser.id +
-        ",receiver_id.eq." +
-        currentChatUser.id +
-        "),and(sender_id.eq." +
-        currentChatUser.id +
-        ",receiver_id.eq." +
-        currentUser.id +
-        ")"
-      )
-      .order(
-        "created_at",
-        {
-          ascending:true
-        }
-      );
+box.innerHTML=
+"<div class='notice'>"+
+esc(error.message)+
+"</div>";
 
-
-  const box =
-    document.getElementById(
-      "messages"
-    );
-
-
-  if(error){
-
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
-      "</div>";
-
-    return;
-
-  }
-
-
-  box.innerHTML = "";
-
-
-  (
-    data || []
-  ).forEach(function(message){
-
-    const div =
-      document.createElement(
-        "div"
-      );
-
-
-    div.className =
-      "bubble " +
-      (
-        message.sender_id ===
-        currentUser.id
-        ?
-        "mine"
-        :
-        ""
-      );
-
-
-    div.textContent =
-      message.message;
-
-
-    box.appendChild(div);
-
-  });
-
-
-  box.scrollTop =
-    box.scrollHeight;
+return;
 
 }
 
+box.innerHTML="";
 
-/* =========================
-   ENTER MESSAGE
-========================= */
+(data || []).forEach(message=>{
+
+const div=document.createElement("div");
+
+div.className=
+"bubble "+
+(
+message.sender_id===currentUser.id
+?
+"mine"
+:
+""
+);
+
+div.textContent=message.message;
+
+box.appendChild(div);
+
+});
+
+box.scrollTop=box.scrollHeight;
+
+}
+
 
 function handleChatEnter(event){
 
-  if(
-    event.key ===
-    "Enter"
-  ){
+if(event.key==="Enter"){
 
-    event.preventDefault();
-
-    sendMessage();
-
-  }
+event.preventDefault();
+sendMessage();
 
 }
 
+}
 
-/* =========================
-   SEND MESSAGE
-========================= */
 
 async function sendMessage(){
 
-  if(
-    !currentUser ||
-    !currentChatUser
-  ){
+if(!currentUser || !currentChatUser){
+return;
+}
 
-    return;
+const input=
+document.getElementById("chatInput");
 
-  }
+const text=input.value.trim();
 
+if(!text){
+return;
+}
 
-  const input =
-    document.getElementById(
-      "chatInput"
-    );
+const {error} =
+await sb
+.from("messages")
+.insert({
 
+sender_id:currentUser.id,
+receiver_id:currentChatUser.id,
+message:text
 
-  const text =
-    input.value.trim();
+});
 
+if(error){
 
-  if(!text){
-    return;
-  }
+toast(
+"Message error: "+
+error.message
+);
 
+return;
 
-  const {error} =
-    await sb
-      .from("messages")
-      .insert({
+}
 
-        sender_id:
-          currentUser.id,
+input.value="";
 
-        receiver_id:
-          currentChatUser.id,
+await createNotification(
+currentChatUser.id,
+"sent you a message"
+);
 
-        message:
-          text
+await loadMessages();
 
-      });
-
-
-  if(error){
-
-    toast(
-      "Message error: " +
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  input.value = "";
-
-
-  try{
-
-    await createNotification(
-      currentChatUser.id,
-      "sent you a message"
-    );
-
-  }catch(error){
-
-    console.error(
-      "MESSAGE NOTIFICATION ERROR:",
-      error
-    );
-
-  }
-
-
-  await loadMessages();
-
-  await updateChatBadge();
+await updateChatBadge();
 
 }
 
 
-/* =========================
-   CHAT BADGE
-========================= */
-
 async function updateChatBadge(){
 
-  if(!currentUser){
-    return;
-  }
+if(!currentUser){
+return;
+}
 
+const {data,error} =
+await sb
+.from("messages")
+.select("id")
+.eq("receiver_id",currentUser.id)
+.limit(50);
 
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from("messages")
-      .select(
-        "id,sender_id,receiver_id,created_at"
-      )
-      .eq(
-        "receiver_id",
-        currentUser.id
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(50);
+if(error){
 
+console.error(
+"CHAT BADGE ERROR:",
+error
+);
 
-  if(error){
+return;
 
-    console.error(
-      "CHAT BADGE ERROR:",
-      error
-    );
+}
 
-    return;
+const badge=
+document.getElementById("chatBadge");
 
-  }
+const count=(data || []).length;
 
+badge.textContent=count;
 
-  const badge =
-    document.getElementById(
-      "chatBadge"
-    );
-
-
-  const count =
-    (
-      data || []
-    ).length;
-
-
-  badge.textContent =
-    count;
-
-
-  badge.classList.toggle(
-    "hidden",
-    count === 0
-  );
+badge.classList.toggle(
+"hidden",
+count===0
+);
 
 }
 
@@ -4619,111 +2732,120 @@ async function updateChatBadge(){
 
 async function logout(){
 
-  try{
+try{
+await sb.auth.signOut();
+}catch(error){
+console.error(error);
+}
 
-    await sb.auth.signOut();
+currentUser=null;
 
-  }catch(error){
+document
+.getElementById("homeScreen")
+.classList
+.add("hidden");
 
-    console.error(
-      "LOGOUT ERROR:",
-      error
-    );
+document
+.getElementById("authScreen")
+.classList
+.remove("hidden");
 
-  }
+document.getElementById("password").value="";
 
-
-  currentUser =
-    null;
-
-  currentChatUser =
-    null;
-
-
-  location.reload();
+authMessage("Logged out.");
 
 }
 
 
 /* =========================
-   SESSION CHECK
+   SESSION
 ========================= */
 
-async function checkSession(){
+async function initAuth(){
 
-  try{
+try{
 
-    const {
-      data,
-      error
-    } =
-      await sb.auth.getSession();
+const {
+data,
+error
+} =
+await sb.auth.getSession();
 
+if(error){
 
-    if(error){
-
-      console.error(
-        "SESSION ERROR:",
-        error
-      );
-
-      return;
-
-    }
-
-
-    if(data?.session?.user){
-
-      await openApp(
-        data.session.user
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "SESSION CRASH:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================
-   AUTH STATE
-========================= */
-
-sb.auth.onAuthStateChange(
-  function(event,session){
-
-    console.log(
-      "AUTH EVENT:",
-      event
-    );
-
-
-    if(
-      event ===
-      "SIGNED_OUT"
-    ){
-
-      currentUser =
-        null;
-
-    }
-
-  }
+console.error(
+"SESSION ERROR:",
+error
 );
 
+return;
 
-/* =========================
-   START
-========================= */
+}
 
-checkSession();
+if(data?.session?.user){
+
+await openApp(
+data.session.user
+);
+
+}
+
+}catch(error){
+
+console.error(
+"INIT AUTH ERROR:",
+error
+);
+
+}
+
+}
+
+sb.auth.onAuthStateChange(
+async(event,session)=>{
+
+console.log(
+"AUTH EVENT:",
+event
+);
+
+if(
+event==="SIGNED_IN" &&
+session?.user
+){
+
+if(!currentUser){
+
+await openApp(
+session.user
+);
+
+}
+
+}
+
+if(
+event==="PASSWORD_RECOVERY"
+){
+
+authMessage(
+"Password recovery link open ho gaya. New password set karna hoga."
+);
+
+}
+
+if(
+event==="SIGNED_OUT"
+){
+
+currentUser=null;
+
+}
+
+}
+);
+
+initAuth();
 
 </script>
 
