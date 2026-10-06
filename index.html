@@ -230,8 +230,6 @@ text-align:center
 
 <body>
 
-<!-- ================= AUTH ================= -->
-
 <div id="authScreen" class="app">
 
 <div class="auth">
@@ -302,8 +300,6 @@ Forgot password?
 </div>
 
 
-<!-- ================= APP ================= -->
-
 <div id="homeScreen" class="app hidden">
 
 <header>
@@ -317,9 +313,6 @@ Welcome 👋
 </header>
 
 <main class="content">
-
-
-<!-- HOME -->
 
 <section id="homePage">
 
@@ -342,8 +335,6 @@ Loading...
 </section>
 
 
-<!-- SEARCH -->
-
 <section id="searchPage" class="hidden">
 
 <div class="card">
@@ -364,8 +355,6 @@ Search something...
 
 </section>
 
-
-<!-- CREATE -->
 
 <section id="createPage" class="hidden">
 
@@ -409,8 +398,6 @@ Publish Poll
 
 </section>
 
-
-<!-- CHAT -->
 
 <section id="chatPage" class="hidden">
 
@@ -492,8 +479,6 @@ Send
 
 </section>
 
-
-<!-- PROFILE -->
 
 <section id="profilePage" class="hidden">
 
@@ -639,8 +624,6 @@ Logout
 </main>
 
 
-<!-- NAV -->
-
 <nav class="bottom">
 
 <button
@@ -715,10 +698,6 @@ class="toast"
 
 <script>
 
-/* =========================
-   SUPABASE
-========================= */
-
 const SUPABASE_URL =
 "https://dbpbkvfaxgifjeveijqf.supabase.co";
 
@@ -731,10 +710,6 @@ let currentChatUser = null;
 let searchTimer = null;
 let chatTimer = null;
 
-
-/* =========================
-   SUPABASE START
-========================= */
 
 function initSupabase(){
 
@@ -773,10 +748,6 @@ function initSupabase(){
     }
 }
 
-
-/* =========================
-   HELPERS
-========================= */
 
 function esc(text){
 
@@ -828,10 +799,6 @@ function toast(text){
 }
 
 
-/* =========================
-   AUTH MODE
-========================= */
-
 function toggleAuth(){
 
     const username =
@@ -865,10 +832,6 @@ function toggleAuth(){
     authMessage("");
 }
 
-
-/* =========================
-   SIGNUP
-========================= */
 
 async function signup(){
 
@@ -1008,10 +971,6 @@ async function signup(){
 }
 
 
-/* =========================
-   CREATE PROFILE
-========================= */
-
 async function createProfile(
     user,
     email,
@@ -1051,10 +1010,6 @@ async function createProfile(
     }
 }
 
-
-/* =========================
-   LOGIN
-========================= */
 
 async function login(){
 
@@ -1168,10 +1123,6 @@ async function login(){
 }
 
 
-/* =========================
-   PASSWORD RESET
-========================= */
-
 async function resetPassword(){
 
     if(!sb){
@@ -1250,10 +1201,6 @@ async function resetPassword(){
 }
 
 
-/* =========================
-   PROFILE
-========================= */
-
 async function getProfile(id){
 
     if(!sb || !id)return null;
@@ -1329,10 +1276,6 @@ async function ensureProfile(user){
 }
 
 
-/* =========================
-   OPEN APP
-========================= */
-
 async function openApp(user){
 
     if(!user)return;
@@ -1346,11 +1289,6 @@ async function openApp(user){
     document
         .getElementById("homeScreen")
         .classList.remove("hidden");
-
-    /*
-      Login ke baad profile loading
-      app ko block nahi karegi.
-    */
 
     let profile = null;
 
@@ -1433,10 +1371,6 @@ async function openApp(user){
 }
 
 
-/* =========================
-   STATS
-========================= */
-
 async function updateProfileStats(){
 
     if(!currentUser || !sb)return;
@@ -1502,10 +1436,6 @@ async function updateProfileStats(){
         polls.count || 0;
 }
 
-
-/* =========================
-   NAVIGATION
-========================= */
 
 function showPage(page){
 
@@ -1607,10 +1537,6 @@ function showPage(page){
 }
 
 
-/* =========================
-   FOLLOW IDS
-========================= */
-
 async function getFollowingIds(){
 
     if(!currentUser || !sb){
@@ -1640,10 +1566,6 @@ async function getFollowingIds(){
         .map(x=>x.following_id);
 }
 
-
-/* =========================
-   CHECK FOLLOWING
-========================= */
 
 async function isFollowing(userId){
 
@@ -1679,19 +1601,10 @@ async function isFollowing(userId){
 }
 
 
-/* =========================
-   FOLLOW
-========================= */
-
 async function followUser(
     userId,
     button
 ){
-
-    console.log(
-        "FOLLOW CLICKED:",
-        userId
-    );
 
     if(!sb){
 
@@ -1737,10 +1650,6 @@ async function followUser(
 
     try{
 
-        /*
-          Existing follow check
-        */
-
         const {
             data:existing,
             error:checkError
@@ -1760,20 +1669,10 @@ async function followUser(
 
         if(checkError){
 
-            console.error(
-                "FOLLOW CHECK ERROR:",
-                checkError
-            );
-
             throw new Error(
                 checkError.message
             );
         }
-
-
-        /*
-          UNFOLLOW
-        */
 
         if(
             existing &&
@@ -1793,11 +1692,6 @@ async function followUser(
 
             if(deleteError){
 
-                console.error(
-                    "UNFOLLOW ERROR:",
-                    deleteError
-                );
-
                 throw new Error(
                     deleteError.message
                 );
@@ -1816,14 +1710,8 @@ async function followUser(
             toast(
                 "Unfollowed"
             );
-        }
 
-
-        /*
-          FOLLOW
-        */
-
-        else{
+        }else{
 
             const {
                 data,
@@ -1845,20 +1733,10 @@ async function followUser(
 
             if(insertError){
 
-                console.error(
-                    "FOLLOW INSERT ERROR:",
-                    insertError
-                );
-
                 throw new Error(
                     insertError.message
                 );
             }
-
-            console.log(
-                "FOLLOW SUCCESS:",
-                data
-            );
 
             if(button){
 
@@ -1879,11 +1757,6 @@ async function followUser(
                 "✅ Following!"
             );
         }
-
-
-        /*
-          Update own stats
-        */
 
         await updateProfileStats();
 
@@ -1915,16 +1788,11 @@ async function followUser(
     }finally{
 
         if(button){
-
             button.disabled = false;
         }
     }
 }
 
-
-/* =========================
-   SUGGESTIONS
-========================= */
 
 async function loadSuggestions(){
 
@@ -2055,10 +1923,6 @@ async function loadSuggestions(){
     return box;
 }
 
-
-/* =========================
-   POLLS
-========================= */
 
 async function loadPolls(){
 
@@ -2378,10 +2242,6 @@ async function loadPolls(){
 }
 
 
-/* =========================
-   VOTE
-========================= */
-
 async function vote(
     pollId,
     option
@@ -2474,10 +2334,6 @@ async function vote(
     await loadPolls();
 }
 
-
-/* =========================
-   CREATE POLL
-========================= */
 
 async function createPoll(){
 
@@ -2585,10 +2441,6 @@ async function createPoll(){
     showPage("home");
 }
 
-
-/* =========================
-   SEARCH
-========================= */
 
 function searchAll(){
 
@@ -2784,10 +2636,6 @@ async function runSearch(){
 }
 
 
-/* =========================
-   PROFILE TABS
-========================= */
-
 async function profileTab(
     tab,
     button
@@ -2812,16 +2660,13 @@ async function profileTab(
     }
 
     const box =
-        document
-        .getElementById(
+        document.getElementById(
             "profileContent"
         );
 
     box.innerHTML =
         "Loading...";
 
-
-    /* MY POLLS */
 
     if(tab === "polls"){
 
@@ -2883,8 +2728,6 @@ async function profileTab(
     }
 
 
-    /* MY VOTES */
-
     if(tab === "votes"){
 
         const {
@@ -2944,8 +2787,6 @@ async function profileTab(
         }
     }
 
-
-    /* FOLLOWERS */
 
     if(tab === "followers"){
 
@@ -3086,8 +2927,6 @@ async function profileTab(
     }
 
 
-    /* FOLLOWING */
-
     if(tab === "following"){
 
         const {
@@ -3197,10 +3036,6 @@ async function profileTab(
     }
 }
 
-
-/* =========================
-   NOTIFICATIONS
-========================= */
 
 async function createNotification(
     userId,
@@ -3339,10 +3174,6 @@ async function loadNotifications(){
 }
 
 
-/* =========================
-   LIKE
-========================= */
-
 async function likePoll(
     pollId
 ){
@@ -3436,10 +3267,6 @@ async function likePoll(
     }
 }
 
-
-/* =========================
-   CHAT SEARCH
-========================= */
 
 function searchChatUsers(){
 
@@ -3577,10 +3404,6 @@ async function runChatSearch(){
 }
 
 
-/* =========================
-   OPEN CHAT
-========================= */
-
 async function openChat(user){
 
     if(!user || !currentUser){
@@ -3634,10 +3457,6 @@ function closeChat(){
 }
 
 
-/* =========================
-   LOAD MESSAGES
-========================= */
-
 async function loadMessages(){
 
     if(
@@ -3675,8 +3494,7 @@ async function loadMessages(){
         );
 
     const box =
-        document
-        .getElementById(
+        document.getElementById(
             "messages"
         );
 
@@ -3723,10 +3541,6 @@ async function loadMessages(){
 }
 
 
-/* =========================
-   SEND MESSAGE
-========================= */
-
 function handleChatEnter(
     event
 ){
@@ -3751,8 +3565,7 @@ async function sendMessage(){
     }
 
     const input =
-        document
-        .getElementById(
+        document.getElementById(
             "chatInput"
         );
 
@@ -3801,10 +3614,6 @@ async function sendMessage(){
 }
 
 
-/* =========================
-   CHAT BADGE
-========================= */
-
 async function updateChatBadge(){
 
     if(!currentUser || !sb){
@@ -3852,10 +3661,6 @@ async function updateChatBadge(){
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
-
 async function logout(){
 
     if(sb){
@@ -3890,10 +3695,6 @@ async function logout(){
     );
 }
 
-
-/* =========================
-   SESSION
-========================= */
 
 async function initAuth(){
 
@@ -3945,10 +3746,6 @@ async function initAuth(){
 }
 
 
-/* =========================
-   START APP
-========================= */
-
 function startApp(){
 
     if(!initSupabase()){
@@ -3986,10 +3783,6 @@ function startApp(){
     initAuth();
 }
 
-
-/* =========================
-   START
-========================= */
 
 if(
     document.readyState ===
