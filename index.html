@@ -314,6 +314,24 @@ Forgot password?
 Welcome 👋
 </p>
 
+<!-- ================= APK DOWNLOAD ================= -->
+
+<a
+href="pollpulse.apk"
+download="pollpulse.apk"
+class="btn wide"
+style="
+display:block;
+text-align:center;
+text-decoration:none;
+background:white;
+color:#6c5ce7;
+margin-top:15px;
+"
+>
+📱 Download Poll Pulse APK
+</a>
+
 </header>
 
 <main class="content">
@@ -1347,11 +1365,6 @@ async function openApp(user){
         .getElementById("homeScreen")
         .classList.remove("hidden");
 
-    /*
-      Login ke baad profile loading
-      app ko block nahi karegi.
-    */
-
     let profile = null;
 
     try{
@@ -1737,10 +1750,6 @@ async function followUser(
 
     try{
 
-        /*
-          Existing follow check
-        */
-
         const {
             data:existing,
             error:checkError
@@ -1769,11 +1778,6 @@ async function followUser(
                 checkError.message
             );
         }
-
-
-        /*
-          UNFOLLOW
-        */
 
         if(
             existing &&
@@ -1817,11 +1821,6 @@ async function followUser(
                 "Unfollowed"
             );
         }
-
-
-        /*
-          FOLLOW
-        */
 
         else{
 
@@ -1879,11 +1878,6 @@ async function followUser(
                 "✅ Following!"
             );
         }
-
-
-        /*
-          Update own stats
-        */
 
         await updateProfileStats();
 
