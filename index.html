@@ -398,12 +398,6 @@ overflow:hidden;
 text-overflow:ellipsis
 }
 
-.chat-time{
-font-size:10px;
-color:#999;
-white-space:nowrap
-}
-
 .chatbox{
 height:320px;
 overflow:auto;
@@ -453,9 +447,6 @@ text-align:center
 </head>
 
 <body>
-
-
-<!-- AUTH -->
 
 <div id="authScreen" class="app">
 
@@ -524,10 +515,7 @@ Forgot password?
 </div>
 
 
-<!-- MAIN APP -->
-
 <div id="homeScreen" class="app hidden">
-
 
 <header>
 
@@ -541,11 +529,7 @@ Welcome 👋
 
 </header>
 
-
 <main class="content">
-
-
-<!-- HOME -->
 
 <section id="homePage">
 
@@ -568,8 +552,6 @@ Loading...
 </section>
 
 
-<!-- SEARCH -->
-
 <section id="searchPage" class="hidden">
 
 <div class="card">
@@ -591,8 +573,6 @@ Search something...
 
 </section>
 
-
-<!-- CREATE -->
 
 <section id="createPage" class="hidden">
 
@@ -633,8 +613,6 @@ Publish Poll
 </section>
 
 
-<!-- CHAT -->
-
 <section id="chatPage" class="hidden">
 
 <div class="card">
@@ -651,7 +629,6 @@ oninput="searchChatUsers()">
 <div id="chatUsers">
 Search a user to start chatting.
 </div>
-
 
 <div id="chatArea" class="hidden">
 
@@ -687,12 +664,10 @@ Chat
 
 </div>
 
-
 <div
 id="messages"
 class="chatbox">
 </div>
-
 
 <div class="row">
 
@@ -716,8 +691,6 @@ Send
 
 </section>
 
-
-<!-- PROFILE -->
 
 <section id="profilePage" class="hidden">
 
@@ -748,9 +721,7 @@ class="small">
 
 </div>
 
-
 <br>
-
 
 <div class="row">
 
@@ -792,9 +763,7 @@ Polls
 
 </div>
 
-
 <br>
-
 
 <div class="notice">
 
@@ -808,7 +777,6 @@ class="tiny">
 </div>
 
 </div>
-
 
 <div class="tabs">
 
@@ -839,7 +807,6 @@ Following
 
 </div>
 
-
 <div class="card">
 
 <h3>
@@ -852,7 +819,6 @@ Loading...
 
 </div>
 
-
 <button
 class="btn wide"
 style="background:#e74c3c"
@@ -864,8 +830,6 @@ Logout
 
 </main>
 
-
-<!-- BOTTOM NAV -->
 
 <nav class="bottom">
 
@@ -882,7 +846,6 @@ Home
 
 </button>
 
-
 <button
 id="navSearch"
 class="nav"
@@ -896,15 +859,11 @@ Search
 
 </button>
 
-
 <button
 class="nav create"
 onclick="showPage('create')">
-
 ＋
-
 </button>
-
 
 <button
 id="navChat"
@@ -924,7 +883,6 @@ class="badge hidden">
 </span>
 
 </button>
-
 
 <button
 id="navProfile"
@@ -958,11 +916,6 @@ class="toast">
 
 <script>
 
-
-/* =========================
-   SUPABASE
-========================= */
-
 const SUPABASE_URL =
 "https://dbpbkvfaxgifjeveijqf.supabase.co";
 
@@ -975,16 +928,11 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
-
 let currentUser = null;
 let currentChatUser = null;
 let searchTimer = null;
 let chatTimer = null;
 
-
-/* =========================
-   HELPERS
-========================= */
 
 function esc(text){
 
@@ -1010,9 +958,12 @@ t.style.display = "block";
 clearTimeout(window.toastTimer);
 
 window.toastTimer =
-setTimeout(()=>{
+setTimeout(
+()=>{
 t.style.display = "none";
-},3000);
+},
+3000
+);
 
 }
 
@@ -1028,16 +979,17 @@ document
 
 function getInitial(name){
 
-return (name || "U")
+return (
+name ||
+"U"
+)
 .charAt(0)
 .toUpperCase();
 
 }
 
 
-/* =========================
-   AUTH
-========================= */
+/* AUTH */
 
 function toggleAuth(){
 
@@ -1103,7 +1055,7 @@ return;
 if(!/^[a-z0-9_]{3,25}$/.test(username)){
 
 authMessage(
-"Username 3-25 characters ka ho. Sirf letters, numbers aur _ use karo."
+"Username 3-25 characters ka ho."
 );
 
 return;
@@ -1111,7 +1063,9 @@ return;
 }
 
 
-authMessage("Creating account...");
+authMessage(
+"Creating account..."
+);
 
 
 try{
@@ -1133,7 +1087,10 @@ username
 
 if(error){
 
-authMessage(error.message);
+authMessage(
+error.message
+);
+
 return;
 
 }
@@ -1141,7 +1098,9 @@ return;
 
 if(data.user){
 
-const {error:profileError} =
+const {
+error:profileError
+} =
 await sb
 .from("profiles")
 .upsert({
@@ -1156,10 +1115,8 @@ display_name:username
 
 if(profileError){
 
-console.error(profileError);
-
 authMessage(
-"Account bana hai, lekin profile save nahi hui: " +
+"Profile error: " +
 profileError.message
 );
 
@@ -1170,7 +1127,9 @@ return;
 
 if(data.session){
 
-await openApp(data.user);
+await openApp(
+data.user
+);
 
 }else{
 
@@ -1222,7 +1181,9 @@ return;
 }
 
 
-authMessage("Logging in...");
+authMessage(
+"Logging in..."
+);
 
 
 try{
@@ -1238,17 +1199,20 @@ password
 
 if(error){
 
-authMessage(error.message);
+authMessage(
+error.message
+);
+
 return;
 
 }
 
 
-await openApp(data.user);
+await openApp(
+data.user
+);
 
 }catch(error){
-
-console.error(error);
 
 authMessage(
 error.message ||
@@ -1281,13 +1245,12 @@ return;
 }
 
 
-try{
-
 const {error} =
 await sb.auth.resetPasswordForEmail(
 email,
 {
-redirectTo:window.location.href
+redirectTo:
+window.location.href
 }
 );
 
@@ -1300,21 +1263,10 @@ error.message
 "Password reset email sent."
 );
 
-}catch(error){
-
-authMessage(
-error.message ||
-"Reset failed."
-);
-
-}
-
 }
 
 
-/* =========================
-   PROFILE
-========================= */
+/* PROFILE */
 
 async function getProfile(id){
 
@@ -1326,8 +1278,13 @@ return null;
 const {data,error} =
 await sb
 .from("profiles")
-.select("id,username,display_name")
-.eq("id",id)
+.select(
+"id,username,display_name"
+)
+.eq(
+"id",
+id
+)
 .maybeSingle();
 
 
@@ -1351,7 +1308,9 @@ return data || null;
 async function ensureProfile(user){
 
 let profile =
-await getProfile(user.id);
+await getProfile(
+user.id
+);
 
 
 if(profile){
@@ -1372,7 +1331,10 @@ user.email.split("@")[0]
 
 username =
 username
-.replace(/[^a-zA-Z0-9_]/g,"")
+.replace(
+/[^a-zA-Z0-9_]/g,
+""
+)
 .slice(0,25);
 
 
@@ -1403,7 +1365,7 @@ display_name:username
 if(error){
 
 console.error(
-"Create profile error:",
+"Profile creation error:",
 error
 );
 
@@ -1412,7 +1374,9 @@ return null;
 }
 
 
-return await getProfile(user.id);
+return await getProfile(
+user.id
+);
 
 }
 
@@ -1424,7 +1388,8 @@ return;
 }
 
 
-currentUser = user;
+currentUser =
+user;
 
 
 document
@@ -1438,14 +1403,19 @@ document
 
 
 const profile =
-await ensureProfile(user);
+await ensureProfile(
+user
+);
 
 
 document
 .getElementById("hello")
 .textContent =
 "@" +
-(profile?.username || "user");
+(
+profile?.username ||
+"user"
+);
 
 
 document
@@ -1460,7 +1430,10 @@ document
 .getElementById("profileUsername")
 .textContent =
 "@" +
-(profile?.username || "user");
+(
+profile?.username ||
+"user"
+);
 
 
 document
@@ -1472,7 +1445,9 @@ user.id;
 document
 .getElementById("avatar")
 .textContent =
-getInitial(profile?.username);
+getInitial(
+profile?.username
+);
 
 
 await updateProfileStats();
@@ -1486,9 +1461,7 @@ await updateChatBadge();
 }
 
 
-/* =========================
-   PROFILE STATS
-========================= */
+/* STATS */
 
 async function updateProfileStats(){
 
@@ -1565,9 +1538,7 @@ polls.count || 0;
 }
 
 
-/* =========================
-   NAVIGATION
-========================= */
+/* NAVIGATION */
 
 function showPage(page){
 
@@ -1578,13 +1549,12 @@ function showPage(page){
 "chatPage",
 "profilePage"
 ]
-.forEach(id=>{
-
+.forEach(
+id =>
 document
 .getElementById(id)
-.classList.add("hidden");
-
-});
+.classList.add("hidden")
+);
 
 
 [
@@ -1593,13 +1563,12 @@ document
 "navChat",
 "navProfile"
 ]
-.forEach(id=>{
-
+.forEach(
+id =>
 document
 .getElementById(id)
-.classList.remove("active");
-
-});
+.classList.remove("active")
+);
 
 
 if(page === "home"){
@@ -1669,7 +1638,9 @@ updateProfileStats();
 loadNotifications();
 
 const firstTab =
-document.querySelector(".tabs button");
+document.querySelector(
+".tabs button"
+);
 
 profileTab(
 "polls",
@@ -1681,9 +1652,7 @@ firstTab
 }
 
 
-/* =========================
-   FOLLOWING
-========================= */
+/* FOLLOW */
 
 async function getFollowingIds(){
 
@@ -1695,7 +1664,9 @@ return [];
 const {data,error} =
 await sb
 .from("follows")
-.select("following_id")
+.select(
+"following_id"
+)
 .eq(
 "follower_id",
 currentUser.id
@@ -1714,9 +1685,11 @@ return [];
 }
 
 
-return (data || [])
+return (
+data || []
+)
 .map(
-x=>x.following_id
+x => x.following_id
 );
 
 }
@@ -1724,8 +1697,13 @@ x=>x.following_id
 
 async function isFollowing(userId){
 
-if(!currentUser || !userId){
+if(
+!currentUser ||
+!userId
+){
+
 return false;
+
 }
 
 
@@ -1741,13 +1719,13 @@ currentUser.id
 "following_id",
 userId
 )
-.maybeSingle();
+.limit(1);
 
 
 if(error){
 
 console.error(
-"Is following error:",
+"Following check error:",
 error
 );
 
@@ -1756,14 +1734,298 @@ return false;
 }
 
 
-return !!data;
+return (
+data &&
+data.length > 0
+);
 
 }
 
 
-/* =========================
-   SUGGESTIONS
-========================= */
+/* FOLLOW BUTTON */
+
+async function followUser(
+userId,
+button
+){
+
+if(
+!currentUser ||
+!userId
+){
+
+toast(
+"Please login first."
+);
+
+return;
+
+}
+
+
+if(
+userId === currentUser.id
+){
+
+toast(
+"You cannot follow yourself."
+);
+
+return;
+
+}
+
+
+if(button){
+
+button.disabled = true;
+button.textContent =
+"Loading...";
+
+}
+
+
+try{
+
+/*
+  First check whether
+  relationship already exists.
+*/
+
+const {
+data:existing,
+error:checkError
+} =
+await sb
+.from("follows")
+.select("id")
+.eq(
+"follower_id",
+currentUser.id
+)
+.eq(
+"following_id",
+userId
+)
+.limit(1);
+
+
+if(checkError){
+
+throw new Error(
+"Follow check: " +
+checkError.message
+);
+
+}
+
+
+/* UNFOLLOW */
+
+if(
+existing &&
+existing.length > 0
+){
+
+const followId =
+existing[0].id;
+
+
+const {
+error:deleteError
+} =
+await sb
+.from("follows")
+.delete()
+.eq(
+"id",
+followId
+)
+.eq(
+"follower_id",
+currentUser.id
+);
+
+
+if(deleteError){
+
+throw new Error(
+"Unfollow: " +
+deleteError.message
+);
+
+}
+
+
+if(button){
+
+button.textContent =
+"Follow";
+
+button.classList.remove(
+"following"
+);
+
+}
+
+
+toast(
+"Unfollowed"
+);
+
+}
+
+
+/* FOLLOW */
+
+else{
+
+const {
+error:insertError
+} =
+await sb
+.from("follows")
+.insert({
+
+follower_id:
+currentUser.id,
+
+following_id:
+userId
+
+});
+
+
+if(insertError){
+
+/*
+  If duplicate happened because
+  another request was already made,
+  refresh button instead of failing.
+*/
+
+if(
+insertError.code === "23505"
+){
+
+if(button){
+
+button.textContent =
+"Following";
+
+button.classList.add(
+"following"
+);
+
+}
+
+toast(
+"Already following"
+);
+
+}else{
+
+throw new Error(
+"Follow: " +
+insertError.message
+);
+
+}
+
+}else{
+
+if(button){
+
+button.textContent =
+"Following";
+
+button.classList.add(
+"following"
+);
+
+}
+
+
+await createNotification(
+userId,
+"started following you"
+);
+
+
+toast(
+"✅ Following!"
+);
+
+}
+
+}
+
+
+/* Refresh counters */
+
+await updateProfileStats();
+
+
+/*
+  Refresh home suggestions only
+  when home is visible.
+*/
+
+const homeVisible =
+!document
+.getElementById("homePage")
+.classList
+.contains("hidden");
+
+
+if(homeVisible){
+
+await loadPolls();
+
+}
+
+}catch(error){
+
+console.error(
+"FOLLOW ERROR:",
+error
+);
+
+
+if(button){
+
+button.textContent =
+"Follow";
+
+button.classList.remove(
+"following"
+);
+
+}
+
+
+toast(
+"❌ " +
+(
+error.message ||
+"Follow failed"
+)
+);
+
+}finally{
+
+if(button){
+
+button.disabled = false;
+
+}
+
+}
+
+}
+
+
+/* SUGGESTIONS */
 
 async function loadSuggestions(){
 
@@ -1772,7 +2034,10 @@ return null;
 }
 
 
-const {data:users,error} =
+const {
+data:users,
+error
+} =
 await sb
 .from("profiles")
 .select(
@@ -1794,33 +2059,12 @@ ascending:true
 if(error){
 
 console.error(
-"Profiles suggestion error:",
+"Suggestion error:",
 error
 );
 
-
-const errorBox =
-document.createElement("div");
-
-errorBox.className =
-"suggestion";
-
-
-errorBox.innerHTML =
-"<h3>👥 Follow Suggestions</h3>" +
-"<div class='small'>" +
-"Suggestions load nahi hui.<br><br>" +
-esc(error.message) +
-"</div>";
-
-
-return errorBox;
-
-}
-
-
-if(!users || users.length === 0){
 return null;
+
 }
 
 
@@ -1829,17 +2073,23 @@ await getFollowingIds();
 
 
 const candidates =
-users
-.filter(user =>
-user.id &&
+(
+users || []
+)
+.filter(
+user =>
 user.id !== currentUser.id &&
-!followingIds.includes(user.id)
+!followingIds.includes(
+user.id
+)
 )
 .slice(0,5);
 
 
-if(candidates.length === 0){
+if(!candidates.length){
+
 return null;
+
 }
 
 
@@ -1857,7 +2107,9 @@ box.innerHTML =
 "</div>";
 
 
-for(const user of candidates){
+for(
+const user of candidates
+){
 
 const row =
 document.createElement("div");
@@ -1873,7 +2125,9 @@ av.className =
 "avatar";
 
 av.textContent =
-getInitial(user.username);
+getInitial(
+user.username
+);
 
 
 const info =
@@ -1882,13 +2136,16 @@ document.createElement("div");
 info.className =
 "grow";
 
-
 info.innerHTML =
 "<b>@" +
-esc(user.username || "user") +
+esc(
+user.username
+) +
 "</b>" +
 "<div class='small'>" +
-esc(user.display_name || "") +
+esc(
+user.display_name || ""
+) +
 "</div>";
 
 
@@ -1914,9 +2171,7 @@ button
 
 
 row.appendChild(av);
-
 row.appendChild(info);
-
 row.appendChild(button);
 
 box.appendChild(row);
@@ -1929,9 +2184,7 @@ return box;
 }
 
 
-/* =========================
-   POLLS
-========================= */
+/* POLLS */
 
 async function loadPolls(){
 
@@ -1956,7 +2209,11 @@ box.innerHTML = "";
 
 
 if(suggestion){
-box.appendChild(suggestion);
+
+box.appendChild(
+suggestion
+);
+
 }
 
 
@@ -2001,13 +2258,12 @@ return;
 
 const ids =
 polls.map(
-p=>p.id
+p => p.id
 );
 
 
 const {
-data:votes,
-error:votesError
+data:votes
 } =
 await sb
 .from("votes")
@@ -2020,20 +2276,12 @@ ids
 );
 
 
-if(votesError){
-
-console.error(
-"Votes loading error:",
-votesError
-);
-
-}
-
-
 const profileMap = {};
 
 
-for(const poll of polls){
+for(
+const poll of polls
+){
 
 if(poll.user_id){
 
@@ -2047,30 +2295,33 @@ poll.user_id
 }
 
 
-for(const poll of polls){
+for(
+const poll of polls
+){
 
 const profile =
-profileMap[poll.user_id];
+profileMap[
+poll.user_id
+];
 
 
 let options =
 poll.options;
 
 
-if(typeof options === "string"){
+if(
+typeof options === "string"
+){
 
 try{
 
 options =
-JSON.parse(options);
-
-}catch(error){
-
-console.error(
-"Options JSON error:",
-error
+JSON.parse(
+options
 );
 
+}catch{
+
 options = [];
 
 }
@@ -2078,38 +2329,52 @@ options = [];
 }
 
 
-if(!Array.isArray(options)){
+if(
+!Array.isArray(options)
+){
+
 options = [];
+
 }
 
 
 const pollVotes =
-(votes || [])
+(
+votes || []
+)
 .filter(
-v=>v.poll_id === poll.id
+v =>
+v.poll_id === poll.id
 );
 
 
 const myVote =
 pollVotes.find(
-v=>v.user_id === currentUser.id
+v =>
+v.user_id ===
+currentUser.id
 );
 
 
 const counts = {};
 
 
-options.forEach(option=>{
-counts[option] = 0;
-});
+options.forEach(
+option =>
+counts[option] = 0
+);
 
 
-pollVotes.forEach(voteItem=>{
+pollVotes.forEach(
+v => {
 
-counts[voteItem.option] =
-(counts[voteItem.option] || 0) + 1;
+counts[v.option] =
+(
+counts[v.option] || 0
+) + 1;
 
-});
+}
+);
 
 
 const total =
@@ -2151,20 +2416,15 @@ esc(
 profile?.username ||
 "user"
 ) +
-"</b>" +
-"<div class='tiny'>" +
-"ID: " +
-esc(
-poll.user_id || ""
-) +
-"</div>";
+"</b>";
 
 
 creator.appendChild(ca);
-
 creator.appendChild(ci);
 
-card.appendChild(creator);
+card.appendChild(
+creator
+);
 
 
 const title =
@@ -2177,17 +2437,21 @@ title.textContent =
 poll.question ||
 "Untitled poll";
 
-card.appendChild(title);
+card.appendChild(
+title
+);
 
 
-options.forEach(option=>{
+options.forEach(
+option => {
 
 const button =
-document.createElement("button");
+document.createElement(
+"button"
+);
 
 button.className =
 "option";
-
 
 button.textContent =
 (
@@ -2199,36 +2463,46 @@ myVote?.option === option
 ) +
 option +
 " — " +
-(counts[option] || 0);
+(
+counts[option] || 0
+);
 
 
 button.onclick =
 async function(){
 
-button.disabled = true;
+button.disabled =
+true;
 
 await vote(
 poll.id,
 option
 );
 
-button.disabled = false;
+button.disabled =
+false;
 
 };
 
 
-card.appendChild(button);
+card.appendChild(
+button
+);
 
 
 const bar =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 bar.className =
 "resultbar";
 
 
 const fill =
-document.createElement("i");
+document.createElement(
+"i"
+);
 
 
 fill.style.width =
@@ -2236,10 +2510,8 @@ fill.style.width =
 total
 ?
 (
-(counts[option] || 0)
-/
-total
-*
+counts[option] /
+total *
 100
 )
 :
@@ -2249,14 +2521,16 @@ total
 
 
 bar.appendChild(fill);
-
 card.appendChild(bar);
 
-});
+}
+);
 
 
 const info =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 info.className =
 "small";
@@ -2277,7 +2551,9 @@ card.appendChild(info);
 
 
 const like =
-document.createElement("button");
+document.createElement(
+"button"
+);
 
 like.className =
 "link";
@@ -2299,18 +2575,20 @@ poll.id
 };
 
 
-card.appendChild(like);
+card.appendChild(
+like
+);
 
-box.appendChild(card);
+box.appendChild(
+card
+);
 
 }
 
 }
 
 
-/* =========================
-   VOTE
-========================= */
+/* VOTE */
 
 async function vote(
 pollId,
@@ -2328,7 +2606,10 @@ return;
 }
 
 
-const old =
+const {
+data:old,
+error:oldError
+} =
 await sb
 .from("votes")
 .select("id")
@@ -2340,14 +2621,13 @@ pollId
 "user_id",
 currentUser.id
 )
-.maybeSingle();
+.limit(1);
 
 
-if(old.error){
+if(oldError){
 
 toast(
-"Vote error: " +
-old.error.message
+oldError.message
 );
 
 return;
@@ -2355,7 +2635,7 @@ return;
 }
 
 
-if(old.data){
+if(old?.length){
 
 const {error} =
 await sb
@@ -2365,13 +2645,16 @@ option:option
 })
 .eq(
 "id",
-old.data.id
+old[0].id
 );
 
 
 if(error){
 
-toast(error.message);
+toast(
+error.message
+);
+
 return;
 
 }
@@ -2392,7 +2675,10 @@ option:option
 
 if(error){
 
-toast(error.message);
+toast(
+error.message
+);
+
 return;
 
 }
@@ -2404,15 +2690,12 @@ toast(
 "✅ Vote saved!"
 );
 
-
 await loadPolls();
 
 }
 
 
-/* =========================
-   CREATE POLL
-========================= */
+/* CREATE POLL */
 
 async function createPoll(){
 
@@ -2441,7 +2724,7 @@ const options = [
 "option4"
 ]
 .map(
-id=>
+id =>
 document
 .getElementById(id)
 .value
@@ -2491,9 +2774,10 @@ await sb
 .from("polls")
 .insert({
 
-question:question,
-options:options,
-user_id:currentUser.id
+question,
+options,
+user_id:
+currentUser.id
 
 });
 
@@ -2501,7 +2785,6 @@ user_id:currentUser.id
 if(error){
 
 toast(
-"Poll error: " +
 error.message
 );
 
@@ -2517,13 +2800,12 @@ return;
 "option3",
 "option4"
 ]
-.forEach(id=>{
-
+.forEach(
+id =>
 document
 .getElementById(id)
-.value = "";
-
-});
+.value = ""
+);
 
 
 toast(
@@ -2538,13 +2820,13 @@ showPage("home");
 }
 
 
-/* =========================
-   SEARCH
-========================= */
+/* SEARCH */
 
 function searchAll(){
 
-clearTimeout(searchTimer);
+clearTimeout(
+searchTimer
+);
 
 searchTimer =
 setTimeout(
@@ -2576,7 +2858,7 @@ document
 
 if(!q){
 
-box.innerHTML =
+box.textContent =
 "Search users or polls.";
 
 return;
@@ -2584,30 +2866,24 @@ return;
 }
 
 
-const safeQ =
-q
-.replace(/,/g," ")
-.replace(/\(/g," ")
-.replace(/\)/g," ");
-
-
-const users =
+const {
+data:users
+} =
 await sb
 .from("profiles")
 .select(
 "id,username,display_name"
 )
-.or(
-"username.ilike.%" +
-safeQ +
-"%,display_name.ilike.%" +
-safeQ +
-"%"
+.ilike(
+"username",
+"%" + q + "%"
 )
 .limit(20);
 
 
-const polls =
+const {
+data:polls
+} =
 await sb
 .from("polls")
 .select(
@@ -2624,18 +2900,8 @@ box.innerHTML =
 "<h3>👤 Users</h3>";
 
 
-if(!users.data?.length){
-
-box.innerHTML +=
-"<div class='small'>" +
-"No users found." +
-"</div>";
-
-}
-
-
 for(
-const user of users.data || []
+const user of users || []
 ){
 
 const row =
@@ -2663,7 +2929,6 @@ document.createElement("div");
 info.className =
 "grow";
 
-
 info.innerHTML =
 "<b>@" +
 esc(user.username) +
@@ -2672,10 +2937,6 @@ esc(user.username) +
 esc(
 user.display_name || ""
 ) +
-"</div>" +
-"<div class='tiny'>" +
-"🆔 " +
-esc(user.id) +
 "</div>";
 
 
@@ -2686,12 +2947,16 @@ button.className =
 "btn follow";
 
 
-if(user.id === currentUser.id){
+if(
+user.id ===
+currentUser.id
+){
 
 button.textContent =
 "You";
 
-button.disabled = true;
+button.disabled =
+true;
 
 }else{
 
@@ -2732,9 +2997,7 @@ button
 
 
 row.appendChild(av);
-
 row.appendChild(info);
-
 row.appendChild(button);
 
 box.appendChild(row);
@@ -2746,296 +3009,42 @@ box.innerHTML +=
 "<h3>🗳️ Polls</h3>";
 
 
-if(!polls.data?.length){
-
-box.innerHTML +=
-"<div class='small'>" +
-"No polls found." +
-"</div>";
-
-}
-
-
 for(
-const poll of polls.data || []
+const poll of polls || []
 ){
 
 const div =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 div.className =
 "notice";
 
-
-const profile =
-await getProfile(
-poll.user_id
-);
-
-
-div.innerHTML =
-"<b>" +
-esc(poll.question) +
-"</b>" +
-"<div class='tiny'>" +
-"by @" +
-esc(
-profile?.username ||
-"user"
-) +
-"</div>";
-
+div.textContent =
+poll.question;
 
 box.appendChild(div);
 
 }
 
-}
-
-
-/* =========================
-   FOLLOW
-========================= */
-
-async function followUser(
-userId,
-button
-){
-
-if(!currentUser){
-
-toast(
-"Please login first."
-);
-
-return;
-
-}
-
-
-if(!userId){
-
-toast(
-"Invalid user."
-);
-
-return;
-
-}
-
-
-if(userId === currentUser.id){
-
-toast(
-"You cannot follow yourself."
-);
-
-return;
-
-}
-
-
-if(button){
-
-button.disabled = true;
-
-button.textContent =
-"Loading...";
-
-}
-
-
-try{
-
-const {
-data:existing,
-error:checkError
-} =
-await sb
-.from("follows")
-.select("id")
-.eq(
-"follower_id",
-currentUser.id
-)
-.eq(
-"following_id",
-userId
-)
-.maybeSingle();
-
-
-if(checkError){
-
-throw new Error(
-"Follow check failed: " +
-checkError.message
-);
-
-}
-
-
-if(existing){
-
-const {error} =
-await sb
-.from("follows")
-.delete()
-.eq(
-"id",
-existing.id
-);
-
-
-if(error){
-
-throw new Error(
-"Unfollow failed: " +
-error.message
-);
-
-}
-
-
-if(button){
-
-button.textContent =
-"Follow";
-
-button.classList.remove(
-"following"
-);
-
-}
-
-
-toast(
-"Unfollowed"
-);
-
-}else{
-
-const {
-data,
-error
-} =
-await sb
-.from("follows")
-.insert({
-
-follower_id:
-currentUser.id,
-
-following_id:
-userId
-
-})
-.select("id")
-.single();
-
-
-if(error){
-
-throw new Error(
-"Follow insert failed: " +
-error.message
-);
-
-}
-
-
-if(!data){
-
-throw new Error(
-"Follow insert returned no data. Check Supabase RLS."
-);
-
-}
-
-
-if(button){
-
-button.textContent =
-"Following";
-
-button.classList.add(
-"following"
-);
-
-}
-
-
-await createNotification(
-userId,
-"started following you"
-);
-
-
-toast(
-"✅ Following!"
-);
-
-}
-
-
-await updateProfileStats();
-
 
 if(
-!document
-.getElementById("homePage")
-.classList
-.contains("hidden")
+!users?.length &&
+!polls?.length
 ){
 
-await loadPolls();
-
-}
-
-}catch(error){
-
-console.error(
-"FOLLOW ERROR:",
-error
-);
-
-
-if(button){
-
-button.textContent =
-"Follow";
-
-button.classList.remove(
-"following"
-);
-
-}
-
-
-toast(
-"❌ " +
-(
-error.message ||
-"Follow failed"
-)
-);
-
-}finally{
-
-if(button){
-
-button.disabled = false;
-
-}
+box.innerHTML +=
+"<div class='small'>" +
+"No results found." +
+"</div>";
 
 }
 
 }
 
 
-/* =========================
-   PROFILE TABS
-========================= */
+/* PROFILE TABS */
 
 async function profileTab(
 tab,
@@ -3043,16 +3052,20 @@ button
 ){
 
 document
-.querySelectorAll(".tabs button")
+.querySelectorAll(
+".tabs button"
+)
 .forEach(
-b=>
+b =>
 b.classList.remove("active")
 );
 
 
 if(button){
 
-button.classList.add("active");
+button.classList.add(
+"active"
+);
 
 }
 
@@ -3069,7 +3082,10 @@ box.innerHTML =
 
 if(tab === "polls"){
 
-const {data,error} =
+const {
+data,
+error
+} =
 await sb
 .from("polls")
 .select(
@@ -3102,12 +3118,13 @@ return;
 box.innerHTML = "";
 
 
-for(
-const poll of data || []
-){
+(data || []).forEach(
+poll => {
 
 const div =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 div.className =
 "notice";
@@ -3118,7 +3135,7 @@ poll.question;
 box.appendChild(div);
 
 }
-
+);
 
 if(!data?.length){
 
@@ -3132,7 +3149,10 @@ box.textContent =
 
 if(tab === "votes"){
 
-const {data,error} =
+const {
+data,
+error
+} =
 await sb
 .from("votes")
 .select(
@@ -3159,16 +3179,16 @@ return;
 box.innerHTML = "";
 
 
-for(
-const voteItem of data || []
-){
+(data || []).forEach(
+voteItem => {
 
 const div =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 div.className =
 "notice";
-
 
 div.innerHTML =
 "<b>" +
@@ -3178,13 +3198,14 @@ voteItem.polls?.question ||
 ) +
 "</b>" +
 "<br>✓ " +
-esc(voteItem.option);
-
+esc(
+voteItem.option
+);
 
 box.appendChild(div);
 
 }
-
+);
 
 if(!data?.length){
 
@@ -3198,10 +3219,15 @@ box.textContent =
 
 if(tab === "followers"){
 
-const {data,error} =
+const {
+data,
+error
+} =
 await sb
 .from("follows")
-.select("follower_id")
+.select(
+"follower_id"
+)
 .eq(
 "following_id",
 currentUser.id
@@ -3239,14 +3265,18 @@ continue;
 
 
 const row =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 row.className =
 "row user";
 
 
 const av =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 av.className =
 "avatar";
@@ -3258,35 +3288,38 @@ user.username
 
 
 const info =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 info.className =
 "grow";
 
-
 info.innerHTML =
 "<b>@" +
 esc(user.username) +
-"</b>" +
-"<div class='tiny'>" +
-"ID: " +
-esc(user.id) +
-"</div>";
+"</b>";
 
 
 const button =
-document.createElement("button");
+document.createElement(
+"button"
+);
 
 button.className =
 "btn follow";
 
 
-if(user.id === currentUser.id){
+if(
+user.id ===
+currentUser.id
+){
 
 button.textContent =
 "You";
 
-button.disabled = true;
+button.disabled =
+true;
 
 }else{
 
@@ -3327,9 +3360,7 @@ button
 
 
 row.appendChild(av);
-
 row.appendChild(info);
-
 row.appendChild(button);
 
 box.appendChild(row);
@@ -3349,10 +3380,15 @@ box.textContent =
 
 if(tab === "following"){
 
-const {data,error} =
+const {
+data,
+error
+} =
 await sb
 .from("follows")
-.select("following_id")
+.select(
+"following_id"
+)
 .eq(
 "follower_id",
 currentUser.id
@@ -3390,14 +3426,18 @@ continue;
 
 
 const row =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 row.className =
 "row user";
 
 
 const av =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 av.className =
 "avatar";
@@ -3409,24 +3449,23 @@ user.username
 
 
 const info =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 info.className =
 "grow";
 
-
 info.innerHTML =
 "<b>@" +
 esc(user.username) +
-"</b>" +
-"<div class='tiny'>" +
-"ID: " +
-esc(user.id) +
-"</div>";
+"</b>";
 
 
 const button =
-document.createElement("button");
+document.createElement(
+"button"
+);
 
 button.className =
 "btn following";
@@ -3447,9 +3486,7 @@ button
 
 
 row.appendChild(av);
-
 row.appendChild(info);
-
 row.appendChild(button);
 
 box.appendChild(row);
@@ -3466,12 +3503,8 @@ box.textContent =
 
 }
 
-}
 
-
-/* =========================
-   NOTIFICATIONS
-========================= */
+/* NOTIFICATIONS */
 
 async function createNotification(
 userId,
@@ -3568,17 +3601,22 @@ box.textContent =
 
 }else{
 
-data.forEach(n=>{
+data.forEach(
+n => {
 
 const div =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 div.className =
 "notice";
 
-
 div.textContent =
-(n.message || "Activity") +
+(
+n.message ||
+"Activity"
+) +
 " • " +
 (
 n.created_at
@@ -3590,18 +3628,20 @@ n.created_at
 ""
 );
 
-
 box.appendChild(div);
 
-});
+}
+);
 
 }
 
 
 const unread =
-(data || [])
+(
+data || []
+)
 .filter(
-n=>!n.read
+n => !n.read
 )
 .length;
 
@@ -3624,9 +3664,7 @@ unread === 0
 }
 
 
-/* =========================
-   LIKE
-========================= */
+/* LIKE */
 
 async function likePoll(
 pollId
@@ -3643,7 +3681,10 @@ return;
 }
 
 
-const existing =
+const {
+data,
+error
+} =
 await sb
 .from("likes")
 .select("id")
@@ -3655,14 +3696,13 @@ currentUser.id
 "poll_id",
 pollId
 )
-.maybeSingle();
+.limit(1);
 
 
-if(existing.error){
+if(error){
 
 toast(
-"Like error: " +
-existing.error.message
+error.message
 );
 
 return;
@@ -3670,7 +3710,7 @@ return;
 }
 
 
-if(existing.data){
+if(data?.length){
 
 const {error} =
 await sb
@@ -3678,13 +3718,16 @@ await sb
 .delete()
 .eq(
 "id",
-existing.data.id
+data[0].id
 );
 
 
 if(error){
 
-toast(error.message);
+toast(
+error.message
+);
+
 return;
 
 }
@@ -3712,7 +3755,10 @@ pollId
 
 if(error){
 
-toast(error.message);
+toast(
+error.message
+);
+
 return;
 
 }
@@ -3727,13 +3773,13 @@ toast(
 }
 
 
-/* =========================
-   CHAT SEARCH
-========================= */
+/* CHAT */
 
 function searchChatUsers(){
 
-clearTimeout(chatTimer);
+clearTimeout(
+chatTimer
+);
 
 chatTimer =
 setTimeout(
@@ -3773,7 +3819,10 @@ return;
 }
 
 
-const {data,error} =
+const {
+data,
+error
+} =
 await sb
 .from("profiles")
 .select(
@@ -3815,19 +3864,22 @@ return;
 }
 
 
-for(
-const user of data
-){
+data.forEach(
+user => {
 
 const row =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 row.className =
 "row chat-user";
 
 
 const av =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 av.className =
 "avatar";
@@ -3839,17 +3891,17 @@ user.username
 
 
 const info =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 info.className =
 "grow";
 
-
 info.innerHTML =
 "<b>@" +
 esc(
-user.username ||
-"user"
+user.username
 ) +
 "</b>" +
 "<div class='chat-preview'>" +
@@ -3861,14 +3913,15 @@ user.display_name ||
 
 
 row.appendChild(av);
-
 row.appendChild(info);
 
 
 row.onclick =
 function(){
 
-openChat(user);
+openChat(
+user
+);
 
 };
 
@@ -3876,18 +3929,20 @@ openChat(user);
 box.appendChild(row);
 
 }
+);
 
 }
 
 
-/* =========================
-   OPEN CHAT
-========================= */
-
 async function openChat(user){
 
-if(!user || !currentUser){
+if(
+!user ||
+!currentUser
+){
+
 return;
+
 }
 
 
@@ -3928,25 +3983,13 @@ user.username
 
 await loadMessages();
 
-
-/*
-   When chat is opened,
-   clear badge if this chat's
-   messages have been read.
-*/
-
-await updateChatBadge();
-
 }
 
 
-/* =========================
-   CLOSE CHAT
-========================= */
-
 function closeChat(){
 
-currentChatUser = null;
+currentChatUser =
+null;
 
 
 document
@@ -3956,10 +3999,6 @@ document
 
 }
 
-
-/* =========================
-   LOAD MESSAGES
-========================= */
 
 async function loadMessages(){
 
@@ -3973,7 +4012,10 @@ return;
 }
 
 
-const {data,error} =
+const {
+data,
+error
+} =
 await sb
 .from("messages")
 .select("*")
@@ -4017,31 +4059,35 @@ return;
 box.innerHTML = "";
 
 
-(data || [])
-.forEach(message=>{
+(
+data || []
+)
+.forEach(
+message => {
 
 const div =
-document.createElement("div");
-
+document.createElement(
+"div"
+);
 
 div.className =
 "bubble " +
 (
-message.sender_id === currentUser.id
+message.sender_id ===
+currentUser.id
 ?
 "mine"
 :
 ""
 );
 
-
 div.textContent =
 message.message;
 
-
 box.appendChild(div);
 
-});
+}
+);
 
 
 box.scrollTop =
@@ -4050,13 +4096,13 @@ box.scrollHeight;
 }
 
 
-/* =========================
-   CHAT ENTER
-========================= */
+function handleChatEnter(
+event
+){
 
-function handleChatEnter(event){
-
-if(event.key === "Enter"){
+if(
+event.key === "Enter"
+){
 
 event.preventDefault();
 
@@ -4066,10 +4112,6 @@ sendMessage();
 
 }
 
-
-/* =========================
-   SEND MESSAGE
-========================= */
 
 async function sendMessage(){
 
@@ -4138,13 +4180,8 @@ currentChatUser.id,
 
 await loadMessages();
 
-
 }
 
-
-/* =========================
-   CHAT BADGE
-========================= */
 
 async function updateChatBadge(){
 
@@ -4153,7 +4190,10 @@ return;
 }
 
 
-const {data,error} =
+const {
+data,
+error
+} =
 await sb
 .from("messages")
 .select(
@@ -4184,13 +4224,6 @@ return;
 }
 
 
-/*
-   Current messages table
-   does not have a read column,
-   so we show the number of
-   received messages as badge.
-*/
-
 const badge =
 document.getElementById(
 "chatBadge"
@@ -4198,7 +4231,9 @@ document.getElementById(
 
 
 const count =
-(data || []).length;
+(
+data || []
+).length;
 
 
 badge.textContent =
@@ -4213,44 +4248,27 @@ count === 0
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
+/* LOGOUT */
 
 async function logout(){
 
-try{
-
 await sb.auth.signOut();
-
-}catch(error){
-
-console.error(
-"Logout error:",
-error
-);
-
-}
-
 
 location.reload();
 
 }
 
 
-/* =========================
-   SESSION
-========================= */
+/* SESSION */
 
 sb.auth
 .getSession()
 .then(
-async ({data,error})=>{
+async ({data,error}) => {
 
 if(error){
 
 console.error(
-"Session error:",
 error
 );
 
@@ -4271,16 +4289,18 @@ data.session.user
 );
 
 
-/* =========================
-   AUTH STATE
-========================= */
-
 sb.auth.onAuthStateChange(
-async (event,session)=>{
+async (
+event,
+session
+) => {
 
-if(event === "SIGNED_OUT"){
+if(
+event === "SIGNED_OUT"
+){
 
-currentUser = null;
+currentUser =
+null;
 
 }
 
