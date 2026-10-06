@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +10,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
+
+*{
+box-sizing:border-box;
+font-family:Arial,sans-serif
+}
 
 body{
 margin:0;
@@ -26,7 +29,9 @@ min-height:100vh;
 padding-bottom:90px
 }
 
-.hidden{display:none!important}
+.hidden{
+display:none!important
+}
 
 .auth{
 min-height:100vh;
@@ -56,7 +61,8 @@ color:#777;
 margin:8px 0 25px
 }
 
-input,textarea{
+input,
+textarea{
 width:100%;
 padding:14px;
 margin:6px 0;
@@ -345,6 +351,59 @@ background:#6c5ce7;
 color:white
 }
 
+/* CHAT */
+
+.chat-header{
+display:flex;
+align-items:center;
+gap:10px;
+padding:8px 0 14px;
+border-bottom:1px solid #eee;
+margin-bottom:10px
+}
+
+.chat-header-info{
+flex:1;
+min-width:0
+}
+
+.chat-header-name{
+font-size:16px;
+font-weight:800
+}
+
+.chat-header-status{
+font-size:11px;
+color:#777;
+margin-top:3px
+}
+
+.chat-user{
+padding:12px 4px;
+border-bottom:1px solid #eee;
+cursor:pointer
+}
+
+.chat-user:hover{
+background:#f7f5ff;
+border-radius:12px
+}
+
+.chat-preview{
+font-size:12px;
+color:#777;
+margin-top:3px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis
+}
+
+.chat-time{
+font-size:10px;
+color:#999;
+white-space:nowrap
+}
+
 .chatbox{
 height:320px;
 overflow:auto;
@@ -389,10 +448,14 @@ border-radius:15px;
 z-index:1000;
 text-align:center
 }
+
 </style>
 </head>
 
 <body>
+
+
+<!-- AUTH -->
 
 <div id="authScreen" class="app">
 
@@ -400,7 +463,9 @@ text-align:center
 
 <div class="box">
 
-<div class="logo">Poll Pulse</div>
+<div class="logo">
+Poll Pulse
+</div>
 
 <div class="sub">
 Everyone has an opinion.
@@ -459,11 +524,16 @@ Forgot password?
 </div>
 
 
+<!-- MAIN APP -->
+
 <div id="homeScreen" class="app hidden">
+
 
 <header>
 
-<h1>Poll Pulse</h1>
+<h1>
+Poll Pulse
+</h1>
 
 <p id="hello">
 Welcome 👋
@@ -474,6 +544,8 @@ Welcome 👋
 
 <main class="content">
 
+
+<!-- HOME -->
 
 <section id="homePage">
 
@@ -496,6 +568,8 @@ Loading...
 </section>
 
 
+<!-- SEARCH -->
+
 <section id="searchPage" class="hidden">
 
 <div class="card">
@@ -517,6 +591,8 @@ Search something...
 
 </section>
 
+
+<!-- CREATE -->
 
 <section id="createPage" class="hidden">
 
@@ -557,6 +633,8 @@ Publish Poll
 </section>
 
 
+<!-- CHAT -->
+
 <section id="chatPage" class="hidden">
 
 <div class="card">
@@ -574,9 +652,10 @@ oninput="searchChatUsers()">
 Search a user to start chatting.
 </div>
 
+
 <div id="chatArea" class="hidden">
 
-<div class="row">
+<div class="chat-header">
 
 <button
 class="btn"
@@ -584,20 +663,44 @@ onclick="closeChat()">
 ←
 </button>
 
-<b id="chatTitle"></b>
+<div
+id="chatAvatar"
+class="avatar">
+U
+</div>
+
+<div class="chat-header-info">
+
+<div
+id="chatTitle"
+class="chat-header-name">
+User
+</div>
+
+<div
+id="chatStatus"
+class="chat-header-status">
+Chat
+</div>
 
 </div>
 
-<br>
+</div>
 
-<div id="messages" class="chatbox"></div>
+
+<div
+id="messages"
+class="chatbox">
+</div>
+
 
 <div class="row">
 
 <input
 id="chatInput"
 class="grow"
-placeholder="Message...">
+placeholder="Message..."
+onkeydown="handleChatEnter(event)">
 
 <button
 class="btn"
@@ -614,13 +717,17 @@ Send
 </section>
 
 
+<!-- PROFILE -->
+
 <section id="profilePage" class="hidden">
 
 <div class="card">
 
 <div class="row">
 
-<div id="avatar" class="avatar">
+<div
+id="avatar"
+class="avatar">
 U
 </div>
 
@@ -641,7 +748,9 @@ class="small">
 
 </div>
 
+
 <br>
+
 
 <div class="row">
 
@@ -683,7 +792,9 @@ Polls
 
 </div>
 
+
 <br>
+
 
 <div class="notice">
 
@@ -753,6 +864,8 @@ Logout
 
 </main>
 
+
+<!-- BOTTOM NAV -->
 
 <nav class="bottom">
 
@@ -837,10 +950,18 @@ class="badge hidden">
 </div>
 
 
-<div id="toast" class="toast"></div>
+<div
+id="toast"
+class="toast">
+</div>
 
 
 <script>
+
+
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
 "https://dbpbkvfaxgifjeveijqf.supabase.co";
@@ -854,11 +975,16 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
+
 let currentUser = null;
 let currentChatUser = null;
 let searchTimer = null;
 let chatTimer = null;
 
+
+/* =========================
+   HELPERS
+========================= */
 
 function esc(text){
 
@@ -878,6 +1004,7 @@ const t =
 document.getElementById("toast");
 
 t.textContent = text;
+
 t.style.display = "block";
 
 clearTimeout(window.toastTimer);
@@ -892,7 +1019,8 @@ t.style.display = "none";
 
 function authMessage(text){
 
-document.getElementById("authMsg")
+document
+.getElementById("authMsg")
 .textContent = text;
 
 }
@@ -906,6 +1034,10 @@ return (name || "U")
 
 }
 
+
+/* =========================
+   AUTH
+========================= */
 
 function toggleAuth(){
 
@@ -927,16 +1059,24 @@ document
 async function signup(){
 
 const email =
-document.getElementById("email")
-.value.trim().toLowerCase();
+document
+.getElementById("email")
+.value
+.trim()
+.toLowerCase();
 
 const password =
-document.getElementById("password")
+document
+.getElementById("password")
 .value;
 
 const username =
-document.getElementById("username")
-.value.trim().toLowerCase();
+document
+.getElementById("username")
+.value
+.trim()
+.toLowerCase();
+
 
 if(!email || !password || !username){
 
@@ -948,6 +1088,7 @@ return;
 
 }
 
+
 if(password.length < 6){
 
 authMessage(
@@ -957,6 +1098,7 @@ authMessage(
 return;
 
 }
+
 
 if(!/^[a-z0-9_]{3,25}$/.test(username)){
 
@@ -968,7 +1110,9 @@ return;
 
 }
 
+
 authMessage("Creating account...");
+
 
 try{
 
@@ -986,12 +1130,14 @@ username
 
 });
 
+
 if(error){
 
 authMessage(error.message);
 return;
 
 }
+
 
 if(data.user){
 
@@ -1007,6 +1153,7 @@ display_name:username
 
 });
 
+
 if(profileError){
 
 console.error(profileError);
@@ -1019,6 +1166,7 @@ profileError.message
 return;
 
 }
+
 
 if(data.session){
 
@@ -1039,7 +1187,8 @@ authMessage(
 console.error(error);
 
 authMessage(
-error.message || "Signup failed."
+error.message ||
+"Signup failed."
 );
 
 }
@@ -1050,12 +1199,17 @@ error.message || "Signup failed."
 async function login(){
 
 const email =
-document.getElementById("email")
-.value.trim().toLowerCase();
+document
+.getElementById("email")
+.value
+.trim()
+.toLowerCase();
 
 const password =
-document.getElementById("password")
+document
+.getElementById("password")
 .value;
+
 
 if(!email || !password){
 
@@ -1067,7 +1221,9 @@ return;
 
 }
 
+
 authMessage("Logging in...");
+
 
 try{
 
@@ -1079,12 +1235,14 @@ password
 
 });
 
+
 if(error){
 
 authMessage(error.message);
 return;
 
 }
+
 
 await openApp(data.user);
 
@@ -1093,7 +1251,8 @@ await openApp(data.user);
 console.error(error);
 
 authMessage(
-error.message || "Login failed."
+error.message ||
+"Login failed."
 );
 
 }
@@ -1104,8 +1263,12 @@ error.message || "Login failed."
 async function resetPassword(){
 
 const email =
-document.getElementById("email")
-.value.trim().toLowerCase();
+document
+.getElementById("email")
+.value
+.trim()
+.toLowerCase();
+
 
 if(!email){
 
@@ -1117,6 +1280,7 @@ return;
 
 }
 
+
 try{
 
 const {error} =
@@ -1127,22 +1291,30 @@ redirectTo:window.location.href
 }
 );
 
+
 authMessage(
 error
-? error.message
-: "Password reset email sent."
+?
+error.message
+:
+"Password reset email sent."
 );
 
 }catch(error){
 
 authMessage(
-error.message || "Reset failed."
+error.message ||
+"Reset failed."
 );
 
 }
 
 }
 
+
+/* =========================
+   PROFILE
+========================= */
 
 async function getProfile(id){
 
@@ -1150,12 +1322,14 @@ if(!id){
 return null;
 }
 
+
 const {data,error} =
 await sb
 .from("profiles")
 .select("id,username,display_name")
 .eq("id",id)
 .maybeSingle();
+
 
 if(error){
 
@@ -1168,6 +1342,7 @@ return null;
 
 }
 
+
 return data || null;
 
 }
@@ -1178,20 +1353,28 @@ async function ensureProfile(user){
 let profile =
 await getProfile(user.id);
 
+
 if(profile){
 return profile;
 }
 
+
 let username =
 user.user_metadata?.username ||
-(user.email
-? user.email.split("@")[0]
-: "user");
+(
+user.email
+?
+user.email.split("@")[0]
+:
+"user"
+);
+
 
 username =
 username
 .replace(/[^a-zA-Z0-9_]/g,"")
 .slice(0,25);
+
 
 if(username.length < 3){
 
@@ -1202,6 +1385,7 @@ user.id
 .slice(0,8);
 
 }
+
 
 const {error} =
 await sb
@@ -1215,6 +1399,7 @@ display_name:username
 
 });
 
+
 if(error){
 
 console.error(
@@ -1225,6 +1410,7 @@ error
 return null;
 
 }
+
 
 return await getProfile(user.id);
 
@@ -1237,24 +1423,30 @@ if(!user){
 return;
 }
 
+
 currentUser = user;
+
 
 document
 .getElementById("authScreen")
 .classList.add("hidden");
 
+
 document
 .getElementById("homeScreen")
 .classList.remove("hidden");
 
+
 const profile =
 await ensureProfile(user);
+
 
 document
 .getElementById("hello")
 .textContent =
 "@" +
 (profile?.username || "user");
+
 
 document
 .getElementById("profileName")
@@ -1263,28 +1455,40 @@ profile?.display_name ||
 profile?.username ||
 "User";
 
+
 document
 .getElementById("profileUsername")
 .textContent =
 "@" +
 (profile?.username || "user");
 
+
 document
 .getElementById("profileId")
 .textContent =
 user.id;
+
 
 document
 .getElementById("avatar")
 .textContent =
 getInitial(profile?.username);
 
+
 await updateProfileStats();
+
 await loadPolls();
+
 await loadNotifications();
+
+await updateChatBadge();
 
 }
 
+
+/* =========================
+   PROFILE STATS
+========================= */
 
 async function updateProfileStats(){
 
@@ -1292,54 +1496,66 @@ if(!currentUser){
 return;
 }
 
+
 const followers =
 await sb
 .from("follows")
-.select("id",{count:"exact",head:true})
+.select(
+"id",
+{
+count:"exact",
+head:true
+}
+)
 .eq(
 "following_id",
 currentUser.id
 );
 
+
 const following =
 await sb
 .from("follows")
-.select("id",{count:"exact",head:true})
+.select(
+"id",
+{
+count:"exact",
+head:true
+}
+)
 .eq(
 "follower_id",
 currentUser.id
 );
 
+
 const polls =
 await sb
 .from("polls")
-.select("id",{count:"exact",head:true})
+.select(
+"id",
+{
+count:"exact",
+head:true
+}
+)
 .eq(
 "user_id",
 currentUser.id
 );
 
-if(followers.error){
-console.error("Followers count error:",followers.error);
-}
-
-if(following.error){
-console.error("Following count error:",following.error);
-}
-
-if(polls.error){
-console.error("Poll count error:",polls.error);
-}
 
 document
 .getElementById("followersCount")
 .textContent =
 followers.count || 0;
 
+
 document
 .getElementById("followingCount")
 .textContent =
 following.count || 0;
+
 
 document
 .getElementById("myPollCount")
@@ -1348,6 +1564,10 @@ polls.count || 0;
 
 }
 
+
+/* =========================
+   NAVIGATION
+========================= */
 
 function showPage(page){
 
@@ -1366,6 +1586,7 @@ document
 
 });
 
+
 [
 "navHome",
 "navSearch",
@@ -1379,6 +1600,7 @@ document
 .classList.remove("active");
 
 });
+
 
 if(page === "home"){
 
@@ -1394,6 +1616,7 @@ loadPolls();
 
 }
 
+
 if(page === "search"){
 
 document
@@ -1406,6 +1629,7 @@ document
 
 }
 
+
 if(page === "create"){
 
 document
@@ -1413,6 +1637,7 @@ document
 .classList.remove("hidden");
 
 }
+
 
 if(page === "chat"){
 
@@ -1424,7 +1649,10 @@ document
 .getElementById("navChat")
 .classList.add("active");
 
+updateChatBadge();
+
 }
+
 
 if(page === "profile"){
 
@@ -1437,23 +1665,32 @@ document
 .classList.add("active");
 
 updateProfileStats();
+
 loadNotifications();
 
 const firstTab =
 document.querySelector(".tabs button");
 
-profileTab("polls",firstTab);
+profileTab(
+"polls",
+firstTab
+);
 
 }
 
 }
 
+
+/* =========================
+   FOLLOWING
+========================= */
 
 async function getFollowingIds(){
 
 if(!currentUser){
 return [];
 }
+
 
 const {data,error} =
 await sb
@@ -1463,6 +1700,7 @@ await sb
 "follower_id",
 currentUser.id
 );
+
 
 if(error){
 
@@ -1475,8 +1713,11 @@ return [];
 
 }
 
+
 return (data || [])
-.map(x=>x.following_id);
+.map(
+x=>x.following_id
+);
 
 }
 
@@ -1486,6 +1727,7 @@ async function isFollowing(userId){
 if(!currentUser || !userId){
 return false;
 }
+
 
 const {data,error} =
 await sb
@@ -1501,6 +1743,7 @@ userId
 )
 .maybeSingle();
 
+
 if(error){
 
 console.error(
@@ -1512,10 +1755,15 @@ return false;
 
 }
 
+
 return !!data;
 
 }
 
+
+/* =========================
+   SUGGESTIONS
+========================= */
 
 async function loadSuggestions(){
 
@@ -1523,55 +1771,77 @@ if(!currentUser){
 return null;
 }
 
-const followingIds =
-await getFollowingIds();
 
 const {data:users,error} =
 await sb
 .from("profiles")
-.select("id,username,display_name")
+.select(
+"id,username,display_name"
+)
 .neq(
 "id",
 currentUser.id
 )
+.order(
+"username",
+{
+ascending:true
+}
+)
 .limit(50);
+
 
 if(error){
 
 console.error(
-"Suggestions error:",
+"Profiles suggestion error:",
 error
 );
+
 
 const errorBox =
 document.createElement("div");
 
-errorBox.className = "suggestion";
+errorBox.className =
+"suggestion";
+
 
 errorBox.innerHTML =
 "<h3>👥 Follow Suggestions</h3>" +
 "<div class='small'>" +
-"Suggestions load nahi hui: " +
+"Suggestions load nahi hui.<br><br>" +
 esc(error.message) +
 "</div>";
+
 
 return errorBox;
 
 }
 
+
+if(!users || users.length === 0){
+return null;
+}
+
+
+const followingIds =
+await getFollowingIds();
+
+
 const candidates =
-(users || [])
+users
 .filter(user =>
 user.id &&
+user.id !== currentUser.id &&
 !followingIds.includes(user.id)
 )
 .slice(0,5);
 
-if(!candidates.length){
 
+if(candidates.length === 0){
 return null;
-
 }
+
 
 const box =
 document.createElement("div");
@@ -1579,11 +1849,13 @@ document.createElement("div");
 box.className =
 "suggestion";
 
+
 box.innerHTML =
 "<h3>👥 Follow Suggestions</h3>" +
 "<div class='small'>" +
 "People you may want to follow" +
 "</div>";
+
 
 for(const user of candidates){
 
@@ -1592,6 +1864,7 @@ document.createElement("div");
 
 row.className =
 "row user";
+
 
 const av =
 document.createElement("div");
@@ -1602,11 +1875,13 @@ av.className =
 av.textContent =
 getInitial(user.username);
 
+
 const info =
 document.createElement("div");
 
 info.className =
 "grow";
+
 
 info.innerHTML =
 "<b>@" +
@@ -1616,6 +1891,7 @@ esc(user.username || "user") +
 esc(user.display_name || "") +
 "</div>";
 
+
 const button =
 document.createElement("button");
 
@@ -1624,6 +1900,7 @@ button.className =
 
 button.textContent =
 "Follow";
+
 
 button.onclick =
 async function(){
@@ -1635,18 +1912,26 @@ button
 
 };
 
+
 row.appendChild(av);
+
 row.appendChild(info);
+
 row.appendChild(button);
 
 box.appendChild(row);
 
 }
 
+
 return box;
 
 }
 
+
+/* =========================
+   POLLS
+========================= */
 
 async function loadPolls(){
 
@@ -1654,24 +1939,26 @@ if(!currentUser){
 return;
 }
 
+
 const box =
 document.getElementById("polls");
 
-box.innerHTML =
-"Loading polls...";
 
-/* FOLLOW SUGGESTIONS FIRST */
+box.innerHTML =
+"Loading...";
+
 
 const suggestion =
 await loadSuggestions();
 
+
 box.innerHTML = "";
 
+
 if(suggestion){
-
 box.appendChild(suggestion);
-
 }
+
 
 const {
 data:polls,
@@ -1682,8 +1969,11 @@ await sb
 .select("*")
 .order(
 "created_at",
-{ascending:false}
+{
+ascending:false
+}
 );
+
 
 if(error){
 
@@ -1695,6 +1985,7 @@ esc(error.message) +
 return;
 
 }
+
 
 if(!polls?.length){
 
@@ -1707,8 +1998,12 @@ return;
 
 }
 
+
 const ids =
-polls.map(p=>p.id);
+polls.map(
+p=>p.id
+);
+
 
 const {
 data:votes,
@@ -1716,8 +2011,14 @@ error:votesError
 } =
 await sb
 .from("votes")
-.select("poll_id,user_id,option")
-.in("poll_id",ids);
+.select(
+"poll_id,user_id,option"
+)
+.in(
+"poll_id",
+ids
+);
+
 
 if(votesError){
 
@@ -1728,7 +2029,9 @@ votesError
 
 }
 
+
 const profileMap = {};
+
 
 for(const poll of polls){
 
@@ -1743,20 +2046,16 @@ poll.user_id
 
 }
 
-for(
-let index=0;
-index<polls.length;
-index++
-){
 
-const poll =
-polls[index];
+for(const poll of polls){
 
 const profile =
 profileMap[poll.user_id];
 
+
 let options =
 poll.options;
+
 
 if(typeof options === "string"){
 
@@ -1778,11 +2077,11 @@ options = [];
 
 }
 
+
 if(!Array.isArray(options)){
-
 options = [];
-
 }
+
 
 const pollVotes =
 (votes || [])
@@ -1790,16 +2089,20 @@ const pollVotes =
 v=>v.poll_id === poll.id
 );
 
+
 const myVote =
 pollVotes.find(
 v=>v.user_id === currentUser.id
 );
 
+
 const counts = {};
+
 
 options.forEach(option=>{
 counts[option] = 0;
 });
+
 
 pollVotes.forEach(voteItem=>{
 
@@ -1808,8 +2111,10 @@ counts[voteItem.option] =
 
 });
 
+
 const total =
 pollVotes.length;
+
 
 const card =
 document.createElement("div");
@@ -1817,11 +2122,13 @@ document.createElement("div");
 card.className =
 "card";
 
+
 const creator =
 document.createElement("div");
 
 creator.className =
 "creator";
+
 
 const ca =
 document.createElement("div");
@@ -1830,24 +2137,35 @@ ca.className =
 "creator-avatar";
 
 ca.textContent =
-getInitial(profile?.username);
+getInitial(
+profile?.username
+);
+
 
 const ci =
 document.createElement("div");
 
 ci.innerHTML =
 "<b>@" +
-esc(profile?.username || "user") +
+esc(
+profile?.username ||
+"user"
+) +
 "</b>" +
 "<div class='tiny'>" +
 "ID: " +
-esc(poll.user_id || "") +
+esc(
+poll.user_id || ""
+) +
 "</div>";
 
+
 creator.appendChild(ca);
+
 creator.appendChild(ci);
 
 card.appendChild(creator);
+
 
 const title =
 document.createElement("div");
@@ -1856,9 +2174,11 @@ title.className =
 "poll-title";
 
 title.textContent =
-poll.question || "Untitled poll";
+poll.question ||
+"Untitled poll";
 
 card.appendChild(title);
+
 
 options.forEach(option=>{
 
@@ -1868,13 +2188,19 @@ document.createElement("button");
 button.className =
 "option";
 
+
 button.textContent =
-(myVote?.option === option
-? "✓ "
-: "") +
+(
+myVote?.option === option
+?
+"✓ "
+:
+""
+) +
 option +
 " — " +
 (counts[option] || 0);
+
 
 button.onclick =
 async function(){
@@ -1890,7 +2216,9 @@ button.disabled = false;
 
 };
 
+
 card.appendChild(button);
+
 
 const bar =
 document.createElement("div");
@@ -1898,22 +2226,34 @@ document.createElement("div");
 bar.className =
 "resultbar";
 
+
 const fill =
 document.createElement("i");
+
 
 fill.style.width =
 (
 total
 ?
-((counts[option] || 0) / total * 100)
+(
+(counts[option] || 0)
+/
+total
+*
+100
+)
 :
 0
-) + "%";
+) +
+"%";
+
 
 bar.appendChild(fill);
+
 card.appendChild(bar);
 
 });
+
 
 const info =
 document.createElement("div");
@@ -1932,7 +2272,9 @@ myVote
 ""
 );
 
+
 card.appendChild(info);
+
 
 const like =
 document.createElement("button");
@@ -1946,6 +2288,7 @@ like.style.textAlign =
 like.textContent =
 "❤️ Like";
 
+
 like.onclick =
 async function(){
 
@@ -1954,6 +2297,7 @@ poll.id
 );
 
 };
+
 
 card.appendChild(like);
 
@@ -1964,6 +2308,10 @@ box.appendChild(card);
 }
 
 
+/* =========================
+   VOTE
+========================= */
+
 async function vote(
 pollId,
 option
@@ -1971,10 +2319,14 @@ option
 
 if(!currentUser){
 
-toast("Please login first.");
+toast(
+"Please login first."
+);
+
 return;
 
 }
+
 
 const old =
 await sb
@@ -1990,6 +2342,7 @@ currentUser.id
 )
 .maybeSingle();
 
+
 if(old.error){
 
 toast(
@@ -2000,6 +2353,7 @@ old.error.message
 return;
 
 }
+
 
 if(old.data){
 
@@ -2013,6 +2367,7 @@ option:option
 "id",
 old.data.id
 );
+
 
 if(error){
 
@@ -2034,6 +2389,7 @@ option:option
 
 });
 
+
 if(error){
 
 toast(error.message);
@@ -2043,27 +2399,40 @@ return;
 
 }
 
-toast("✅ Vote saved!");
+
+toast(
+"✅ Vote saved!"
+);
+
 
 await loadPolls();
 
 }
 
 
+/* =========================
+   CREATE POLL
+========================= */
+
 async function createPoll(){
 
 if(!currentUser){
 
-toast("Please login first.");
+toast(
+"Please login first."
+);
+
 return;
 
 }
+
 
 const question =
 document
 .getElementById("question")
 .value
 .trim();
+
 
 const options = [
 "option1",
@@ -2080,26 +2449,42 @@ document
 )
 .filter(Boolean);
 
+
 if(!question){
 
-toast("Question enter karo.");
+toast(
+"Question enter karo."
+);
+
 return;
 
 }
+
 
 if(options.length < 2){
 
-toast("At least 2 options chahiye.");
+toast(
+"At least 2 options chahiye."
+);
+
 return;
 
 }
 
-if(options.length !== new Set(options).size){
 
-toast("Options same nahi hone chahiye.");
+if(
+options.length !==
+new Set(options).size
+){
+
+toast(
+"Options same nahi hone chahiye."
+);
+
 return;
 
 }
+
 
 const {error} =
 await sb
@@ -2112,6 +2497,7 @@ user_id:currentUser.id
 
 });
 
+
 if(error){
 
 toast(
@@ -2122,6 +2508,7 @@ error.message
 return;
 
 }
+
 
 [
 "question",
@@ -2138,13 +2525,22 @@ document
 
 });
 
-toast("🎉 Poll published!");
+
+toast(
+"🎉 Poll published!"
+);
+
 
 await updateProfileStats();
+
 showPage("home");
 
 }
 
+
+/* =========================
+   SEARCH
+========================= */
 
 function searchAll(){
 
@@ -2165,14 +2561,18 @@ if(!currentUser){
 return;
 }
 
+
 const q =
 document
 .getElementById("searchInput")
 .value
 .trim();
 
+
 const box =
-document.getElementById("searchResults");
+document
+.getElementById("searchResults");
+
 
 if(!q){
 
@@ -2183,16 +2583,20 @@ return;
 
 }
 
+
 const safeQ =
 q
 .replace(/,/g," ")
 .replace(/\(/g," ")
 .replace(/\)/g," ");
 
+
 const users =
 await sb
 .from("profiles")
-.select("id,username,display_name")
+.select(
+"id,username,display_name"
+)
 .or(
 "username.ilike.%" +
 safeQ +
@@ -2202,18 +2606,23 @@ safeQ +
 )
 .limit(20);
 
+
 const polls =
 await sb
 .from("polls")
-.select("id,question,user_id")
+.select(
+"id,question,user_id"
+)
 .ilike(
 "question",
 "%" + q + "%"
 )
 .limit(20);
 
+
 box.innerHTML =
 "<h3>👤 Users</h3>";
+
 
 if(!users.data?.length){
 
@@ -2223,6 +2632,7 @@ box.innerHTML +=
 "</div>";
 
 }
+
 
 for(
 const user of users.data || []
@@ -2234,6 +2644,7 @@ document.createElement("div");
 row.className =
 "row user";
 
+
 const av =
 document.createElement("div");
 
@@ -2241,7 +2652,10 @@ av.className =
 "avatar";
 
 av.textContent =
-getInitial(user.username);
+getInitial(
+user.username
+);
+
 
 const info =
 document.createElement("div");
@@ -2249,23 +2663,28 @@ document.createElement("div");
 info.className =
 "grow";
 
+
 info.innerHTML =
 "<b>@" +
 esc(user.username) +
 "</b>" +
 "<div class='small'>" +
-esc(user.display_name || "") +
+esc(
+user.display_name || ""
+) +
 "</div>" +
 "<div class='tiny'>" +
 "🆔 " +
 esc(user.id) +
 "</div>";
 
+
 const button =
 document.createElement("button");
 
 button.className =
 "btn follow";
+
 
 if(user.id === currentUser.id){
 
@@ -2277,18 +2696,27 @@ button.disabled = true;
 }else{
 
 const following =
-await isFollowing(user.id);
+await isFollowing(
+user.id
+);
+
 
 button.textContent =
 following
-? "Following"
-: "Follow";
+?
+"Following"
+:
+"Follow";
+
 
 if(following){
 
-button.classList.add("following");
+button.classList.add(
+"following"
+);
 
 }
+
 
 button.onclick =
 async function(){
@@ -2302,16 +2730,21 @@ button
 
 }
 
+
 row.appendChild(av);
+
 row.appendChild(info);
+
 row.appendChild(button);
 
 box.appendChild(row);
 
 }
 
+
 box.innerHTML +=
 "<h3>🗳️ Polls</h3>";
+
 
 if(!polls.data?.length){
 
@@ -2321,6 +2754,7 @@ box.innerHTML +=
 "</div>";
 
 }
+
 
 for(
 const poll of polls.data || []
@@ -2332,10 +2766,12 @@ document.createElement("div");
 div.className =
 "notice";
 
+
 const profile =
 await getProfile(
 poll.user_id
 );
+
 
 div.innerHTML =
 "<b>" +
@@ -2343,8 +2779,12 @@ esc(poll.question) +
 "</b>" +
 "<div class='tiny'>" +
 "by @" +
-esc(profile?.username || "user") +
+esc(
+profile?.username ||
+"user"
+) +
 "</div>";
+
 
 box.appendChild(div);
 
@@ -2353,6 +2793,10 @@ box.appendChild(div);
 }
 
 
+/* =========================
+   FOLLOW
+========================= */
+
 async function followUser(
 userId,
 button
@@ -2360,42 +2804,56 @@ button
 
 if(!currentUser){
 
-toast("Please login first.");
+toast(
+"Please login first."
+);
+
 return;
 
 }
 
-if(userId === currentUser.id){
-
-toast("You cannot follow yourself.");
-return;
-
-}
 
 if(!userId){
 
-toast("Invalid user.");
+toast(
+"Invalid user."
+);
+
 return;
 
 }
+
+
+if(userId === currentUser.id){
+
+toast(
+"You cannot follow yourself."
+);
+
+return;
+
+}
+
 
 if(button){
 
 button.disabled = true;
-button.textContent = "Loading...";
+
+button.textContent =
+"Loading...";
+
 }
+
 
 try{
 
-const following =
-await isFollowing(userId);
-
-if(following){
-
-const {error} =
+const {
+data:existing,
+error:checkError
+} =
 await sb
 .from("follows")
-.delete()
+.select("id")
 .eq(
 "follower_id",
 currentUser.id
@@ -2403,26 +2861,64 @@ currentUser.id
 .eq(
 "following_id",
 userId
+)
+.maybeSingle();
+
+
+if(checkError){
+
+throw new Error(
+"Follow check failed: " +
+checkError.message
 );
+
+}
+
+
+if(existing){
+
+const {error} =
+await sb
+.from("follows")
+.delete()
+.eq(
+"id",
+existing.id
+);
+
 
 if(error){
 
-throw error;
+throw new Error(
+"Unfollow failed: " +
+error.message
+);
 
 }
+
 
 if(button){
 
-button.textContent = "Follow";
-button.classList.remove("following");
+button.textContent =
+"Follow";
+
+button.classList.remove(
+"following"
+);
 
 }
 
-toast("Unfollowed");
+
+toast(
+"Unfollowed"
+);
 
 }else{
 
-const {error} =
+const {
+data,
+error
+} =
 await sb
 .from("follows")
 .insert({
@@ -2433,49 +2929,95 @@ currentUser.id,
 following_id:
 userId
 
-});
+})
+.select("id")
+.single();
+
 
 if(error){
 
-throw error;
+throw new Error(
+"Follow insert failed: " +
+error.message
+);
 
 }
+
+
+if(!data){
+
+throw new Error(
+"Follow insert returned no data. Check Supabase RLS."
+);
+
+}
+
 
 if(button){
 
-button.textContent = "Following";
-button.classList.add("following");
+button.textContent =
+"Following";
+
+button.classList.add(
+"following"
+);
 
 }
+
 
 await createNotification(
 userId,
 "started following you"
 );
 
-toast("✅ Following!");
+
+toast(
+"✅ Following!"
+);
 
 }
 
+
 await updateProfileStats();
+
+
+if(
+!document
+.getElementById("homePage")
+.classList
+.contains("hidden")
+){
+
+await loadPolls();
+
+}
 
 }catch(error){
 
 console.error(
-"Follow error:",
+"FOLLOW ERROR:",
 error
 );
+
 
 if(button){
 
 button.textContent =
-followingButtonText(button);
+"Follow";
+
+button.classList.remove(
+"following"
+);
 
 }
 
+
 toast(
-"Follow failed: " +
-(error.message || "Unknown error")
+"❌ " +
+(
+error.message ||
+"Follow failed"
+)
 );
 
 }finally{
@@ -2491,21 +3033,9 @@ button.disabled = false;
 }
 
 
-function followingButtonText(button){
-
-if(
-button &&
-button.classList.contains("following")
-){
-
-return "Following";
-
-}
-
-return "Follow";
-
-}
-
+/* =========================
+   PROFILE TABS
+========================= */
 
 async function profileTab(
 tab,
@@ -2519,34 +3049,43 @@ b=>
 b.classList.remove("active")
 );
 
+
 if(button){
 
 button.classList.add("active");
 
 }
 
+
 const box =
 document.getElementById(
 "profileContent"
 );
 
+
 box.innerHTML =
 "Loading...";
+
 
 if(tab === "polls"){
 
 const {data,error} =
 await sb
 .from("polls")
-.select("id,question,created_at")
+.select(
+"id,question,created_at"
+)
 .eq(
 "user_id",
 currentUser.id
 )
 .order(
 "created_at",
-{ascending:false}
+{
+ascending:false
+}
 );
+
 
 if(error){
 
@@ -2559,7 +3098,9 @@ return;
 
 }
 
+
 box.innerHTML = "";
+
 
 for(
 const poll of data || []
@@ -2578,6 +3119,7 @@ box.appendChild(div);
 
 }
 
+
 if(!data?.length){
 
 box.textContent =
@@ -2587,16 +3129,20 @@ box.textContent =
 
 }
 
+
 if(tab === "votes"){
 
 const {data,error} =
 await sb
 .from("votes")
-.select("option,polls(question)")
+.select(
+"option,polls(question)"
+)
 .eq(
 "user_id",
 currentUser.id
 );
+
 
 if(error){
 
@@ -2609,7 +3155,9 @@ return;
 
 }
 
+
 box.innerHTML = "";
+
 
 for(
 const voteItem of data || []
@@ -2621,6 +3169,7 @@ document.createElement("div");
 div.className =
 "notice";
 
+
 div.innerHTML =
 "<b>" +
 esc(
@@ -2631,9 +3180,11 @@ voteItem.polls?.question ||
 "<br>✓ " +
 esc(voteItem.option);
 
+
 box.appendChild(div);
 
 }
+
 
 if(!data?.length){
 
@@ -2643,6 +3194,7 @@ box.textContent =
 }
 
 }
+
 
 if(tab === "followers"){
 
@@ -2655,6 +3207,7 @@ await sb
 currentUser.id
 );
 
+
 if(error){
 
 box.innerHTML =
@@ -2666,7 +3219,9 @@ return;
 
 }
 
+
 box.innerHTML = "";
+
 
 for(
 const item of data || []
@@ -2677,15 +3232,18 @@ await getProfile(
 item.follower_id
 );
 
+
 if(!user){
 continue;
 }
+
 
 const row =
 document.createElement("div");
 
 row.className =
 "row user";
+
 
 const av =
 document.createElement("div");
@@ -2694,13 +3252,17 @@ av.className =
 "avatar";
 
 av.textContent =
-getInitial(user.username);
+getInitial(
+user.username
+);
+
 
 const info =
 document.createElement("div");
 
 info.className =
 "grow";
+
 
 info.innerHTML =
 "<b>@" +
@@ -2711,25 +3273,45 @@ esc(user.username) +
 esc(user.id) +
 "</div>";
 
+
 const button =
 document.createElement("button");
 
 button.className =
 "btn follow";
 
+
+if(user.id === currentUser.id){
+
+button.textContent =
+"You";
+
+button.disabled = true;
+
+}else{
+
 const following =
-await isFollowing(user.id);
+await isFollowing(
+user.id
+);
+
 
 button.textContent =
 following
-? "Following"
-: "Follow";
+?
+"Following"
+:
+"Follow";
+
 
 if(following){
 
-button.classList.add("following");
+button.classList.add(
+"following"
+);
 
 }
+
 
 button.onclick =
 async function(){
@@ -2741,13 +3323,19 @@ button
 
 };
 
+}
+
+
 row.appendChild(av);
+
 row.appendChild(info);
+
 row.appendChild(button);
 
 box.appendChild(row);
 
 }
+
 
 if(!data?.length){
 
@@ -2757,6 +3345,7 @@ box.textContent =
 }
 
 }
+
 
 if(tab === "following"){
 
@@ -2769,6 +3358,7 @@ await sb
 currentUser.id
 );
 
+
 if(error){
 
 box.innerHTML =
@@ -2780,7 +3370,9 @@ return;
 
 }
 
+
 box.innerHTML = "";
+
 
 for(
 const item of data || []
@@ -2791,15 +3383,18 @@ await getProfile(
 item.following_id
 );
 
+
 if(!user){
 continue;
 }
+
 
 const row =
 document.createElement("div");
 
 row.className =
 "row user";
+
 
 const av =
 document.createElement("div");
@@ -2808,13 +3403,17 @@ av.className =
 "avatar";
 
 av.textContent =
-getInitial(user.username);
+getInitial(
+user.username
+);
+
 
 const info =
 document.createElement("div");
 
 info.className =
 "grow";
+
 
 info.innerHTML =
 "<b>@" +
@@ -2825,6 +3424,7 @@ esc(user.username) +
 esc(user.id) +
 "</div>";
 
+
 const button =
 document.createElement("button");
 
@@ -2833,6 +3433,7 @@ button.className =
 
 button.textContent =
 "Following";
+
 
 button.onclick =
 async function(){
@@ -2844,13 +3445,17 @@ button
 
 };
 
+
 row.appendChild(av);
+
 row.appendChild(info);
+
 row.appendChild(button);
 
 box.appendChild(row);
 
 }
+
 
 if(!data?.length){
 
@@ -2863,6 +3468,10 @@ box.textContent =
 
 }
 
+
+/* =========================
+   NOTIFICATIONS
+========================= */
 
 async function createNotification(
 userId,
@@ -2878,6 +3487,7 @@ return;
 
 }
 
+
 const {error} =
 await sb
 .from("notifications")
@@ -2889,6 +3499,7 @@ type:"activity",
 message:message
 
 });
+
 
 if(error){
 
@@ -2908,7 +3519,11 @@ if(!currentUser){
 return;
 }
 
-const {data,error} =
+
+const {
+data,
+error
+} =
 await sb
 .from("notifications")
 .select("*")
@@ -2918,14 +3533,18 @@ currentUser.id
 )
 .order(
 "created_at",
-{ascending:false}
+{
+ascending:false
+}
 )
 .limit(50);
+
 
 const box =
 document.getElementById(
 "notifications"
 );
+
 
 if(error){
 
@@ -2938,7 +3557,9 @@ return;
 
 }
 
+
 box.innerHTML = "";
+
 
 if(!data?.length){
 
@@ -2955,6 +3576,7 @@ document.createElement("div");
 div.className =
 "notice";
 
+
 div.textContent =
 (n.message || "Activity") +
 " • " +
@@ -2968,11 +3590,13 @@ n.created_at
 ""
 );
 
+
 box.appendChild(div);
 
 });
 
 }
+
 
 const unread =
 (data || [])
@@ -2981,13 +3605,16 @@ n=>!n.read
 )
 .length;
 
+
 const badge =
 document.getElementById(
 "notificationBadge"
 );
 
+
 badge.textContent =
 unread;
+
 
 badge.classList.toggle(
 "hidden",
@@ -2997,16 +3624,24 @@ unread === 0
 }
 
 
+/* =========================
+   LIKE
+========================= */
+
 async function likePoll(
 pollId
 ){
 
 if(!currentUser){
 
-toast("Please login first.");
+toast(
+"Please login first."
+);
+
 return;
 
 }
+
 
 const existing =
 await sb
@@ -3022,6 +3657,7 @@ pollId
 )
 .maybeSingle();
 
+
 if(existing.error){
 
 toast(
@@ -3032,6 +3668,7 @@ existing.error.message
 return;
 
 }
+
 
 if(existing.data){
 
@@ -3044,6 +3681,7 @@ await sb
 existing.data.id
 );
 
+
 if(error){
 
 toast(error.message);
@@ -3051,7 +3689,10 @@ return;
 
 }
 
-toast("Like removed");
+
+toast(
+"Like removed"
+);
 
 }else{
 
@@ -3068,6 +3709,7 @@ pollId
 
 });
 
+
 if(error){
 
 toast(error.message);
@@ -3075,12 +3717,19 @@ return;
 
 }
 
-toast("❤️ Liked");
+
+toast(
+"❤️ Liked"
+);
 
 }
 
 }
 
+
+/* =========================
+   CHAT SEARCH
+========================= */
 
 function searchChatUsers(){
 
@@ -3101,16 +3750,18 @@ if(!currentUser){
 return;
 }
 
+
 const q =
 document
 .getElementById("chatSearch")
 .value
 .trim();
 
+
 const box =
-document.getElementById(
-"chatUsers"
-);
+document
+.getElementById("chatUsers");
+
 
 if(!q){
 
@@ -3121,10 +3772,13 @@ return;
 
 }
 
+
 const {data,error} =
 await sb
 .from("profiles")
-.select("id,username,display_name")
+.select(
+"id,username,display_name"
+)
 .ilike(
 "username",
 "%" + q + "%"
@@ -3134,6 +3788,7 @@ await sb
 currentUser.id
 )
 .limit(10);
+
 
 if(error){
 
@@ -3146,7 +3801,9 @@ return;
 
 }
 
+
 box.innerHTML = "";
+
 
 if(!data?.length){
 
@@ -3157,14 +3814,17 @@ return;
 
 }
 
-(data || [])
-.forEach(user=>{
+
+for(
+const user of data
+){
 
 const row =
 document.createElement("div");
 
 row.className =
-"row user";
+"row chat-user";
+
 
 const av =
 document.createElement("div");
@@ -3173,7 +3833,10 @@ av.className =
 "avatar";
 
 av.textContent =
-getInitial(user.username);
+getInitial(
+user.username
+);
+
 
 const info =
 document.createElement("div");
@@ -3181,17 +3844,26 @@ document.createElement("div");
 info.className =
 "grow";
 
+
 info.innerHTML =
 "<b>@" +
-esc(user.username) +
+esc(
+user.username ||
+"user"
+) +
 "</b>" +
-"<div class='tiny'>" +
-"ID: " +
-esc(user.id) +
+"<div class='chat-preview'>" +
+esc(
+user.display_name ||
+"Start chatting"
+) +
 "</div>";
 
+
 row.appendChild(av);
+
 row.appendChild(info);
+
 
 row.onclick =
 function(){
@@ -3200,44 +3872,94 @@ openChat(user);
 
 };
 
+
 box.appendChild(row);
 
-});
+}
 
 }
 
 
+/* =========================
+   OPEN CHAT
+========================= */
+
 async function openChat(user){
+
+if(!user || !currentUser){
+return;
+}
+
 
 currentChatUser =
 user;
 
+
 document
 .getElementById("chatArea")
-.classList.remove("hidden");
+.classList
+.remove("hidden");
+
 
 document
 .getElementById("chatTitle")
 .textContent =
 "@" +
-user.username;
+(
+user.username ||
+"user"
+);
+
+
+document
+.getElementById("chatStatus")
+.textContent =
+user.display_name ||
+"Poll Pulse user";
+
+
+document
+.getElementById("chatAvatar")
+.textContent =
+getInitial(
+user.username
+);
+
 
 await loadMessages();
 
+
+/*
+   When chat is opened,
+   clear badge if this chat's
+   messages have been read.
+*/
+
+await updateChatBadge();
+
 }
 
+
+/* =========================
+   CLOSE CHAT
+========================= */
 
 function closeChat(){
 
-currentChatUser =
-null;
+currentChatUser = null;
+
 
 document
 .getElementById("chatArea")
-.classList.add("hidden");
+.classList
+.add("hidden");
 
 }
 
+
+/* =========================
+   LOAD MESSAGES
+========================= */
 
 async function loadMessages(){
 
@@ -3249,6 +3971,7 @@ if(
 return;
 
 }
+
 
 const {data,error} =
 await sb
@@ -3267,13 +3990,17 @@ currentUser.id +
 )
 .order(
 "created_at",
-{ascending:true}
+{
+ascending:true
+}
 );
+
 
 const box =
 document.getElementById(
 "messages"
 );
+
 
 if(error){
 
@@ -3286,7 +4013,9 @@ return;
 
 }
 
+
 box.innerHTML = "";
+
 
 (data || [])
 .forEach(message=>{
@@ -3294,26 +4023,53 @@ box.innerHTML = "";
 const div =
 document.createElement("div");
 
+
 div.className =
 "bubble " +
 (
 message.sender_id === currentUser.id
-? "mine"
-: ""
+?
+"mine"
+:
+""
 );
+
 
 div.textContent =
 message.message;
 
+
 box.appendChild(div);
 
 });
+
 
 box.scrollTop =
 box.scrollHeight;
 
 }
 
+
+/* =========================
+   CHAT ENTER
+========================= */
+
+function handleChatEnter(event){
+
+if(event.key === "Enter"){
+
+event.preventDefault();
+
+sendMessage();
+
+}
+
+}
+
+
+/* =========================
+   SEND MESSAGE
+========================= */
 
 async function sendMessage(){
 
@@ -3326,17 +4082,21 @@ return;
 
 }
 
+
 const input =
 document.getElementById(
 "chatInput"
 );
 
+
 const text =
 input.value.trim();
+
 
 if(!text){
 return;
 }
+
 
 const {error} =
 await sb
@@ -3354,6 +4114,7 @@ text
 
 });
 
+
 if(error){
 
 toast(
@@ -3365,17 +4126,96 @@ return;
 
 }
 
+
 input.value = "";
+
 
 await createNotification(
 currentChatUser.id,
 "sent you a message"
 );
 
+
 await loadMessages();
+
 
 }
 
+
+/* =========================
+   CHAT BADGE
+========================= */
+
+async function updateChatBadge(){
+
+if(!currentUser){
+return;
+}
+
+
+const {data,error} =
+await sb
+.from("messages")
+.select(
+"id,sender_id,receiver_id,created_at"
+)
+.eq(
+"receiver_id",
+currentUser.id
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+)
+.limit(50);
+
+
+if(error){
+
+console.error(
+"Chat badge error:",
+error
+);
+
+return;
+
+}
+
+
+/*
+   Current messages table
+   does not have a read column,
+   so we show the number of
+   received messages as badge.
+*/
+
+const badge =
+document.getElementById(
+"chatBadge"
+);
+
+
+const count =
+(data || []).length;
+
+
+badge.textContent =
+count;
+
+
+badge.classList.toggle(
+"hidden",
+count === 0
+);
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
 
 async function logout(){
 
@@ -3392,14 +4232,20 @@ error
 
 }
 
+
 location.reload();
 
 }
 
 
+/* =========================
+   SESSION
+========================= */
+
 sb.auth
 .getSession()
-.then(async ({data,error})=>{
+.then(
+async ({data,error})=>{
 
 if(error){
 
@@ -3412,6 +4258,7 @@ return;
 
 }
 
+
 if(data?.session){
 
 await openApp(
@@ -3420,8 +4267,13 @@ data.session.user
 
 }
 
-});
+}
+);
 
+
+/* =========================
+   AUTH STATE
+========================= */
 
 sb.auth.onAuthStateChange(
 async (event,session)=>{
@@ -3439,4 +4291,3 @@ currentUser = null;
 
 </body>
 </html>
-```
