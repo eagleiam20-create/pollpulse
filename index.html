@@ -14,6 +14,48 @@ body{margin:0;background:#f5f3ff;color:#181824}
 .app{max-width:520px;margin:auto;min-height:100vh;padding-bottom:90px}
 .hidden{display:none!important}
 
+.download-page{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px
+}
+
+.download-box{
+width:100%;
+max-width:500px;
+background:white;
+padding:32px 25px;
+border-radius:28px;
+box-shadow:0 15px 40px #0001;
+text-align:center
+}
+
+.download-logo{
+font-size:38px;
+font-weight:800;
+color:#6c5ce7;
+margin-bottom:8px
+}
+
+.download-sub{
+color:#777;
+margin-bottom:25px
+}
+
+.download-btn{
+display:block;
+width:100%;
+padding:15px;
+border-radius:15px;
+background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
+color:white;
+font-weight:bold;
+font-size:17px;
+text-decoration:none
+}
+
 .auth{min-height:100vh;display:flex;align-items:center;padding:20px}
 .box{width:100%;background:#fff;padding:28px;border-radius:28px;box-shadow:0 15px 40px #0001}
 .logo{text-align:center;font-size:34px;font-weight:800;color:#6c5ce7}
@@ -230,9 +272,43 @@ text-align:center
 
 <body>
 
+<!-- =====================================================
+     NORMAL WEBSITE
+     Sirf Download Button
+===================================================== -->
+
+<div id="downloadScreen" class="download-page">
+
+<div class="download-box">
+
+<div class="download-logo">
+Poll Pulse
+</div>
+
+<div class="download-sub">
+Everyone has an opinion.
+</div>
+
+<a
+href="pollpulse.apk"
+download="pollpulse.apk"
+class="download-btn"
+>
+📱 Download Poll Pulse APK
+</a>
+
+<div class="small" style="margin-top:15px">
+Android app download karne ke liye button dabao.
+</div>
+
+</div>
+
+</div>
+
+
 <!-- ================= AUTH ================= -->
 
-<div id="authScreen" class="app">
+<div id="authScreen" class="app hidden">
 
 <div class="auth">
 
@@ -313,24 +389,6 @@ Forgot password?
 <p id="hello">
 Welcome 👋
 </p>
-
-<!-- ================= APK DOWNLOAD ================= -->
-
-<a
-href="pollpulse.apk"
-download="pollpulse.apk"
-class="btn wide"
-style="
-display:block;
-text-align:center;
-text-decoration:none;
-background:white;
-color:#6c5ce7;
-margin-top:15px;
-"
->
-📱 Download Poll Pulse APK
-</a>
 
 </header>
 
@@ -732,6 +790,70 @@ class="toast"
 
 
 <script>
+
+/* =====================================================
+   PAGE MODE
+
+   Normal website:
+   https://eagleiam20-create.github.io/pollpulse/
+
+   APK:
+   https://eagleiam20-create.github.io/pollpulse/?app=1
+===================================================== */
+
+const APP_MODE =
+new URLSearchParams(
+window.location.search
+).get("app") === "1";
+
+
+function setupPageMode(){
+
+    const downloadScreen =
+        document.getElementById(
+            "downloadScreen"
+        );
+
+    const authScreen =
+        document.getElementById(
+            "authScreen"
+        );
+
+    const homeScreen =
+        document.getElementById(
+            "homeScreen"
+        );
+
+    if(APP_MODE){
+
+        downloadScreen.classList.add(
+            "hidden"
+        );
+
+        authScreen.classList.remove(
+            "hidden"
+        );
+
+        homeScreen.classList.add(
+            "hidden"
+        );
+
+    }else{
+
+        downloadScreen.classList.remove(
+            "hidden"
+        );
+
+        authScreen.classList.add(
+            "hidden"
+        );
+
+        homeScreen.classList.add(
+            "hidden"
+        );
+    }
+}
+
 
 /* =========================
    SUPABASE
@@ -1225,7 +1347,8 @@ async function resetPassword(){
 
         const redirectUrl =
             window.location.origin +
-            window.location.pathname;
+            window.location.pathname +
+            "?app=1";
 
         const {error} =
             await sb.auth.resetPasswordForEmail(
@@ -1356,6 +1479,10 @@ async function openApp(user){
     if(!user)return;
 
     currentUser = user;
+
+    document
+        .getElementById("downloadScreen")
+        .classList.add("hidden");
 
     document
         .getElementById("authScreen")
@@ -3945,6 +4072,16 @@ async function initAuth(){
 
 function startApp(){
 
+    /* Normal website par
+       Supabase start hi nahi hoga.
+       Sirf download page rahega.
+    */
+
+    if(!APP_MODE){
+
+        return;
+    }
+
     if(!initSupabase()){
         return;
     }
@@ -3984,6 +4121,8 @@ function startApp(){
 /* =========================
    START
 ========================= */
+
+setupPageMode();
 
 if(
     document.readyState ===
