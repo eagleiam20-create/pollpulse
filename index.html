@@ -9,462 +9,895 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{margin:0;background:#f5f3ff;color:#181824}
-.app{max-width:520px;margin:auto;min-height:100vh;padding-bottom:90px}
-.hidden{display:none!important}
+*{
+  box-sizing:border-box;
+  font-family:Arial,sans-serif
+}
 
-.auth{min-height:100vh;display:flex;align-items:center;padding:20px}
-.box{width:100%;background:#fff;padding:28px;border-radius:28px;box-shadow:0 15px 40px #0001}
-.logo{text-align:center;font-size:34px;font-weight:800;color:#6c5ce7}
-.sub{text-align:center;color:#777;margin:8px 0 25px}
+body{
+  margin:0;
+  background:#f5f3ff;
+  color:#181824
+}
+
+.app{
+  max-width:520px;
+  margin:auto;
+  min-height:100vh;
+  padding-bottom:90px
+}
+
+.hidden{
+  display:none!important
+}
+
+.auth{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  padding:20px
+}
+
+.box{
+  width:100%;
+  background:#fff;
+  padding:28px;
+  border-radius:28px;
+  box-shadow:0 15px 40px #0001
+}
+
+.logo{
+  text-align:center;
+  font-size:34px;
+  font-weight:800;
+  color:#6c5ce7
+}
+
+.sub{
+  text-align:center;
+  color:#777;
+  margin:8px 0 25px
+}
 
 input,textarea{
-width:100%;padding:14px;margin:6px 0;border:1px solid #ddd;
-border-radius:14px;outline:none;font-size:15px
+  width:100%;
+  padding:14px;
+  margin:6px 0;
+  border:1px solid #ddd;
+  border-radius:14px;
+  outline:none;
+  font-size:15px
 }
 
-button{cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
+input:focus,textarea:focus{
+  border-color:#6c5ce7
+}
+
+button{
+  cursor:pointer
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed
+}
 
 .btn{
-border:0;border-radius:14px;padding:12px 15px;
-background:#6c5ce7;color:white;font-weight:bold
+  border:0;
+  border-radius:14px;
+  padding:12px 15px;
+  background:#6c5ce7;
+  color:white;
+  font-weight:bold
 }
 
-.wide{width:100%;margin-top:8px}
+.wide{
+  width:100%;
+  margin-top:8px
+}
+
 .link{
-width:100%;border:0;background:none;color:#6c5ce7;
-font-weight:bold;margin-top:13px
+  width:100%;
+  border:0;
+  background:none;
+  color:#6c5ce7;
+  font-weight:bold;
+  margin-top:13px
 }
 
-.msg{text-align:center;min-height:20px;margin-top:12px;color:#e74c3c;font-size:14px}
+.msg{
+  text-align:center;
+  min-height:20px;
+  margin-top:12px;
+  color:#e74c3c;
+  font-size:14px
+}
 
 header{
-padding:24px 18px;color:white;
-background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
-border-radius:0 0 28px 28px
+  padding:24px 18px;
+  color:white;
+  background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
+  border-radius:0 0 28px 28px
 }
 
-header h1{margin:0;font-size:29px}
-header p{margin:7px 0 0}
-.content{padding:16px}
+header h1{
+  margin:0;
+  font-size:29px
+}
+
+header p{
+  margin:7px 0 0
+}
+
+.content{
+  padding:16px
+}
 
 .card{
-background:white;padding:17px;margin-bottom:14px;
-border-radius:21px;box-shadow:0 6px 20px #0001
+  background:white;
+  padding:17px;
+  margin-bottom:14px;
+  border-radius:21px;
+  box-shadow:0 6px 20px #0001
 }
 
-.row{display:flex;align-items:center;gap:10px}
-.grow{flex:1;min-width:0}
+.row{
+  display:flex;
+  align-items:center;
+  gap:10px
+}
+
+.grow{
+  flex:1;
+  min-width:0
+}
 
 .avatar{
-width:46px;height:46px;border-radius:50%;
-display:grid;place-items:center;
-background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
-color:white;font-weight:bold;flex:none
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
+  color:white;
+  font-weight:bold;
+  flex:none
 }
 
-.small{color:#777;font-size:12px}
-.tiny{color:#888;font-size:11px;word-break:break-all}
+.small{
+  color:#777;
+  font-size:12px
+}
 
-.poll-title{font-size:18px;font-weight:800;margin-bottom:8px}
+.tiny{
+  color:#888;
+  font-size:11px;
+  word-break:break-all
+}
 
-.creator{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.poll-title{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:8px
+}
+
+.creator{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:12px
+}
 
 .creator-avatar{
-width:34px;height:34px;border-radius:50%;
-background:#6c5ce7;color:white;display:grid;
-place-items:center;font-size:13px;font-weight:bold;flex:none
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#6c5ce7;
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:13px;
+  font-weight:bold;
+  flex:none
 }
 
 .option{
-width:100%;padding:13px;margin:5px 0;border:0;
-border-radius:13px;background:#eeeafe;color:#5145b5;
-font-weight:bold;text-align:left
+  width:100%;
+  padding:13px;
+  margin:5px 0;
+  border:0;
+  border-radius:13px;
+  background:#eeeafe;
+  color:#5145b5;
+  font-weight:bold;
+  text-align:left
+}
+
+.option:hover{
+  background:#e4defd
 }
 
 .resultbar{
-height:7px;background:#eee;border-radius:8px;
-overflow:hidden;margin-bottom:6px
+  height:7px;
+  background:#eee;
+  border-radius:8px;
+  overflow:hidden;
+  margin-bottom:6px
 }
 
 .resultbar i{
-display:block;height:100%;
-background:linear-gradient(90deg,#6c5ce7,#ff4f8b)
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,#6c5ce7,#ff4f8b)
 }
 
 .bottom{
-position:fixed;bottom:0;left:50%;
-transform:translateX(-50%);
-width:min(520px,100%);height:72px;background:white;
-display:flex;justify-content:space-around;align-items:center;
-box-shadow:0 -5px 20px #0002;z-index:100;
-border-radius:20px 20px 0 0
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(520px,100%);
+  height:72px;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -5px 20px #0002;
+  z-index:100;
+  border-radius:20px 20px 0 0
 }
 
 .nav{
-border:0;background:none;color:#777;font-size:21px;
-position:relative
+  border:0;
+  background:none;
+  color:#777;
+  font-size:21px;
+  position:relative
 }
 
-.nav b{display:block;font-size:10px;margin-top:3px}
-.nav.active{color:#6c5ce7}
-.create{font-size:29px;color:#6c5ce7}
+.nav b{
+  display:block;
+  font-size:10px;
+  margin-top:3px
+}
+
+.nav.active{
+  color:#6c5ce7
+}
+
+.create{
+  font-size:29px;
+  color:#6c5ce7
+}
 
 .badge{
-position:absolute;top:-6px;right:-8px;
-background:#e74c3c;color:white;border-radius:20px;
-padding:2px 6px;font-size:9px
+  position:absolute;
+  top:-6px;
+  right:-8px;
+  background:#e74c3c;
+  color:white;
+  border-radius:20px;
+  padding:2px 6px;
+  font-size:9px
 }
 
 .suggestion{
-background:linear-gradient(135deg,#f0edff,#fff);
-border:1px solid #e2ddff;padding:15px;
-border-radius:19px;margin-bottom:14px
+  background:linear-gradient(135deg,#f0edff,#fff);
+  border:1px solid #e2ddff;
+  padding:15px;
+  border-radius:19px;
+  margin-bottom:14px
 }
 
-.suggestion h3{margin:0 0 5px}
-.user{padding:11px 0;border-bottom:1px solid #eee}
-.user:last-child{border-bottom:0}
+.suggestion h3{
+  margin:0 0 5px
+}
 
-.follow{background:#6c5ce7;padding:8px 12px;white-space:nowrap}
-.following{background:#19a974}
+.user{
+  padding:11px 0;
+  border-bottom:1px solid #eee
+}
 
-.profile-stat{text-align:center;flex:1}
-.profile-stat strong{display:block;font-size:20px}
-.profile-stat span{font-size:11px;color:#777}
+.user:last-child{
+  border-bottom:0
+}
 
-.tabs{display:flex;gap:7px;overflow:auto;margin:14px 0}
+.follow{
+  background:#6c5ce7;
+  padding:8px 12px;
+  white-space:nowrap
+}
+
+.following{
+  background:#19a974
+}
+
+.profile-stat{
+  text-align:center;
+  flex:1
+}
+
+.profile-stat strong{
+  display:block;
+  font-size:20px
+}
+
+.profile-stat span{
+  font-size:11px;
+  color:#777
+}
+
+.tabs{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  margin:14px 0
+}
+
 .tabs button{
-border:0;border-radius:18px;padding:9px 13px;
-background:#eee;white-space:nowrap
+  border:0;
+  border-radius:18px;
+  padding:9px 13px;
+  background:#eee;
+  white-space:nowrap
 }
-.tabs button.active{background:#6c5ce7;color:white}
+
+.tabs button.active{
+  background:#6c5ce7;
+  color:white
+}
 
 .chat-header{
-display:flex;align-items:center;gap:10px;
-padding:8px 0 14px;border-bottom:1px solid #eee;
-margin-bottom:10px
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 0 14px;
+  border-bottom:1px solid #eee;
+  margin-bottom:10px
 }
 
-.chat-header-info{flex:1;min-width:0}
-.chat-header-name{font-size:16px;font-weight:800}
-.chat-header-status{font-size:11px;color:#777;margin-top:3px}
+.chat-header-info{
+  flex:1;
+  min-width:0
+}
+
+.chat-header-name{
+  font-size:16px;
+  font-weight:800
+}
+
+.chat-header-status{
+  font-size:11px;
+  color:#777;
+  margin-top:3px
+}
 
 .chat-user{
-padding:12px 4px;border-bottom:1px solid #eee;cursor:pointer
+  padding:12px 4px;
+  border-bottom:1px solid #eee;
+  cursor:pointer
 }
 
-.chat-user:hover{background:#f7f5ff;border-radius:12px}
+.chat-user:hover{
+  background:#f7f5ff;
+  border-radius:12px
+}
 
 .chat-preview{
-font-size:12px;color:#777;margin-top:3px;
-white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+  font-size:12px;
+  color:#777;
+  margin-top:3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
 }
 
 .chatbox{
-height:320px;overflow:auto;background:#f5f3ff;
-border-radius:15px;padding:10px
+  height:320px;
+  overflow:auto;
+  background:#f5f3ff;
+  border-radius:15px;
+  padding:10px
 }
 
 .bubble{
-max-width:78%;padding:10px 13px;background:white;
-border-radius:15px;margin:7px 0;word-break:break-word
+  max-width:78%;
+  padding:10px 13px;
+  background:white;
+  border-radius:15px;
+  margin:7px 0;
+  word-break:break-word
 }
 
-.mine{margin-left:auto;background:#6c5ce7;color:white}
+.mine{
+  margin-left:auto;
+  background:#6c5ce7;
+  color:white
+}
 
 .notice{
-padding:12px;background:#f6f5ff;border-radius:14px;margin:7px 0
+  padding:12px;
+  background:#f6f5ff;
+  border-radius:14px;
+  margin:7px 0
 }
 
 .toast{
-display:none;position:fixed;top:15px;left:50%;
-transform:translateX(-50%);width:min(450px,92%);
-background:#181824;color:white;padding:14px;
-border-radius:15px;z-index:1000;text-align:center
+  display:none;
+  position:fixed;
+  top:15px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(450px,92%);
+  background:#181824;
+  color:white;
+  padding:14px;
+  border-radius:15px;
+  z-index:1000;
+  text-align:center
+}
+
+.recovery-box{
+  margin-top:15px;
+  padding:14px;
+  background:#f6f5ff;
+  border-radius:15px
+}
+
+.success{
+  color:#19a974
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUTH -->
+<!-- =========================
+     AUTH SCREEN
+========================= -->
 
 <div id="authScreen" class="app">
-<div class="auth">
-<div class="box">
 
-<div class="logo">Poll Pulse</div>
-<div class="sub">Everyone has an opinion.</div>
+  <div class="auth">
 
-<input id="email" type="email" placeholder="Email" autocomplete="email">
+    <div class="box">
 
-<input id="password" type="password" placeholder="Password" autocomplete="current-password">
+      <div class="logo">Poll Pulse</div>
 
-<input id="username" class="hidden" placeholder="Username" autocomplete="username">
+      <div class="sub">
+        Everyone has an opinion.
+      </div>
 
-<button id="loginBtn" class="btn wide" onclick="login()">
-Login
-</button>
+      <div id="normalAuth">
 
-<button id="signupBtn" class="btn wide hidden" onclick="signup()">
-Create Account
-</button>
+        <input
+          id="email"
+          type="email"
+          placeholder="Email"
+          autocomplete="email">
 
-<button class="link" onclick="toggleAuth()">
-Create new account
-</button>
+        <input
+          id="password"
+          type="password"
+          placeholder="Password"
+          autocomplete="current-password">
 
-<button class="link" onclick="resetPassword()">
-Forgot password?
-</button>
+        <input
+          id="username"
+          class="hidden"
+          placeholder="Username"
+          autocomplete="username">
 
-<div id="authMsg" class="msg"></div>
+        <button
+          id="loginBtn"
+          class="btn wide"
+          onclick="login()">
+          Login
+        </button>
+
+        <button
+          id="signupBtn"
+          class="btn wide hidden"
+          onclick="signup()">
+          Create Account
+        </button>
+
+        <button
+          id="authToggleBtn"
+          class="link"
+          onclick="toggleAuth()">
+          Create new account
+        </button>
+
+        <button
+          class="link"
+          onclick="resetPassword()">
+          Forgot password?
+        </button>
+
+      </div>
+
+      <!-- PASSWORD RECOVERY -->
+
+      <div id="recoveryBox" class="recovery-box hidden">
+
+        <h3 style="margin-top:0">
+          🔐 Set New Password
+        </h3>
+
+        <input
+          id="newPassword"
+          type="password"
+          placeholder="New password">
+
+        <input
+          id="confirmPassword"
+          type="password"
+          placeholder="Confirm new password">
+
+        <button
+          class="btn wide"
+          onclick="updatePassword()">
+          Update Password
+        </button>
+
+      </div>
+
+      <div id="authMsg" class="msg"></div>
+
+    </div>
+
+  </div>
 
 </div>
-</div>
-</div>
 
 
-<!-- APP -->
+<!-- =========================
+     MAIN APP
+========================= -->
 
 <div id="homeScreen" class="app hidden">
 
-<header>
-<h1>Poll Pulse</h1>
-<p id="hello">Welcome 👋</p>
-</header>
+  <header>
 
-<main class="content">
+    <h1>Poll Pulse</h1>
 
-<section id="homePage">
+    <p id="hello">
+      Welcome 👋
+    </p>
 
-<div class="card">
-<h2 style="margin-top:0">🔥 Poll Feed</h2>
-<p>Vote, discover people and follow interesting users.</p>
-</div>
+  </header>
 
-<div id="polls">Loading...</div>
 
-</section>
+  <main class="content">
 
+    <!-- HOME -->
 
-<section id="searchPage" class="hidden">
+    <section id="homePage">
 
-<div class="card">
-<h2>🔎 Search</h2>
+      <div class="card">
 
-<input
-id="searchInput"
-placeholder="Search username or poll..."
-oninput="searchAll()">
+        <h2 style="margin-top:0">
+          🔥 Poll Feed
+        </h2>
 
-<div id="searchResults">Search something...</div>
+        <p>
+          Vote, discover people and follow interesting users.
+        </p>
 
-</div>
+      </div>
 
-</section>
+      <div id="polls">
+        Loading...
+      </div>
 
+    </section>
 
-<section id="createPage" class="hidden">
 
-<div class="card">
+    <!-- SEARCH -->
 
-<h2>➕ Create Poll</h2>
+    <section id="searchPage" class="hidden">
 
-<input id="question" placeholder="Ask your question...">
-<input id="option1" placeholder="Option 1">
-<input id="option2" placeholder="Option 2">
-<input id="option3" placeholder="Option 3 (optional)">
-<input id="option4" placeholder="Option 4 (optional)">
+      <div class="card">
 
-<button class="btn wide" onclick="createPoll()">
-Publish Poll
-</button>
+        <h2>🔎 Search</h2>
 
-</div>
+        <input
+          id="searchInput"
+          placeholder="Search username or poll..."
+          oninput="searchAll()">
 
-</section>
+        <div id="searchResults">
+          Search something...
+        </div>
 
+      </div>
 
-<section id="chatPage" class="hidden">
+    </section>
 
-<div class="card">
 
-<h2>💬 Chats</h2>
+    <!-- CREATE -->
 
-<input
-id="chatSearch"
-placeholder="Search username..."
-oninput="searchChatUsers()">
+    <section id="createPage" class="hidden">
 
-<div id="chatUsers">
-Search a user to start chatting.
-</div>
+      <div class="card">
 
-<div id="chatArea" class="hidden">
+        <h2>➕ Create Poll</h2>
 
-<div class="chat-header">
+        <input
+          id="question"
+          placeholder="Ask your question...">
 
-<button class="btn" onclick="closeChat()">←</button>
+        <input
+          id="option1"
+          placeholder="Option 1">
 
-<div id="chatAvatar" class="avatar">U</div>
+        <input
+          id="option2"
+          placeholder="Option 2">
 
-<div class="chat-header-info">
+        <input
+          id="option3"
+          placeholder="Option 3 (optional)">
 
-<div id="chatTitle" class="chat-header-name">User</div>
+        <input
+          id="option4"
+          placeholder="Option 4 (optional)">
 
-<div id="chatStatus" class="chat-header-status">Chat</div>
+        <button
+          class="btn wide"
+          onclick="createPoll()">
+          Publish Poll
+        </button>
 
-</div>
+      </div>
 
-</div>
+    </section>
 
-<div id="messages" class="chatbox"></div>
 
-<div class="row">
+    <!-- CHAT -->
 
-<input
-id="chatInput"
-class="grow"
-placeholder="Message..."
-onkeydown="handleChatEnter(event)">
+    <section id="chatPage" class="hidden">
 
-<button class="btn" onclick="sendMessage()">
-Send
-</button>
+      <div class="card">
 
-</div>
+        <h2>💬 Chats</h2>
 
-</div>
+        <input
+          id="chatSearch"
+          placeholder="Search username..."
+          oninput="searchChatUsers()">
 
-</div>
+        <div id="chatUsers">
+          Search a user to start chatting.
+        </div>
 
-</section>
+        <div id="chatArea" class="hidden">
 
+          <div class="chat-header">
 
-<section id="profilePage" class="hidden">
+            <button
+              class="btn"
+              onclick="closeChat()">
+              ←
+            </button>
 
-<div class="card">
+            <div id="chatAvatar" class="avatar">
+              U
+            </div>
 
-<div class="row">
+            <div class="chat-header-info">
 
-<div id="avatar" class="avatar">U</div>
+              <div
+                id="chatTitle"
+                class="chat-header-name">
+                User
+              </div>
 
-<div>
-<h2 id="profileName" style="margin:0">User</h2>
-<div id="profileUsername" class="small"></div>
-</div>
+              <div
+                id="chatStatus"
+                class="chat-header-status">
+                Chat
+              </div>
 
-</div>
+            </div>
 
-<br>
+          </div>
 
-<div class="row">
+          <div id="messages" class="chatbox"></div>
 
-<div class="profile-stat">
-<strong id="followersCount">0</strong>
-<span>Followers</span>
-</div>
+          <div class="row">
 
-<div class="profile-stat">
-<strong id="followingCount">0</strong>
-<span>Following</span>
-</div>
+            <input
+              id="chatInput"
+              class="grow"
+              placeholder="Message..."
+              onkeydown="handleChatEnter(event)">
 
-<div class="profile-stat">
-<strong id="myPollCount">0</strong>
-<span>Polls</span>
-</div>
+            <button
+              class="btn"
+              onclick="sendMessage()">
+              Send
+            </button>
 
-</div>
+          </div>
 
-<br>
+        </div>
 
-<div class="notice">
-<b>🆔 My User ID</b>
-<div id="profileId" class="tiny"></div>
-</div>
+      </div>
 
-<div class="tabs">
+    </section>
 
-<button class="active" onclick="profileTab('polls',this)">
-My Polls
-</button>
 
-<button onclick="profileTab('votes',this)">
-My Votes
-</button>
+    <!-- PROFILE -->
 
-<button onclick="profileTab('followers',this)">
-Followers
-</button>
+    <section id="profilePage" class="hidden">
 
-<button onclick="profileTab('following',this)">
-Following
-</button>
+      <div class="card">
 
-</div>
+        <div class="row">
 
-<div id="profileContent"></div>
+          <div id="avatar" class="avatar">
+            U
+          </div>
 
-</div>
+          <div>
 
+            <h2
+              id="profileName"
+              style="margin:0">
+              User
+            </h2>
 
-<div class="card">
+            <div
+              id="profileUsername"
+              class="small">
+            </div>
 
-<h3>🔔 Notifications</h3>
+          </div>
 
-<div id="notifications">
-Loading...
-</div>
+        </div>
 
-</div>
+        <br>
 
+        <div class="row">
 
-<button
-class="btn wide"
-style="background:#e74c3c"
-onclick="logout()">
-Logout
-</button>
+          <div class="profile-stat">
+            <strong id="followersCount">0</strong>
+            <span>Followers</span>
+          </div>
 
-</section>
+          <div class="profile-stat">
+            <strong id="followingCount">0</strong>
+            <span>Following</span>
+          </div>
 
-</main>
+          <div class="profile-stat">
+            <strong id="myPollCount">0</strong>
+            <span>Polls</span>
+          </div>
 
+        </div>
 
-<nav class="bottom">
+        <br>
 
-<button id="navHome" class="nav active" onclick="showPage('home')">
-🏠
-<b>Home</b>
-</button>
+        <div class="notice">
 
-<button id="navSearch" class="nav" onclick="showPage('search')">
-🔎
-<b>Search</b>
-</button>
+          <b>🆔 My User ID</b>
 
-<button class="nav create" onclick="showPage('create')">
-＋
-</button>
+          <div
+            id="profileId"
+            class="tiny">
+          </div>
 
-<button id="navChat" class="nav" onclick="showPage('chat')">
-💬
-<b>Chat</b>
-<span id="chatBadge" class="badge hidden">0</span>
-</button>
+        </div>
 
-<button id="navProfile" class="nav" onclick="showPage('profile')">
-👤
-<b>Profile</b>
-<span id="notificationBadge" class="badge hidden">0</span>
-</button>
+        <div class="tabs">
 
-</nav>
+          <button
+            class="active"
+            onclick="profileTab('polls',this)">
+            My Polls
+          </button>
+
+          <button
+            onclick="profileTab('votes',this)">
+            My Votes
+          </button>
+
+          <button
+            onclick="profileTab('followers',this)">
+            Followers
+          </button>
+
+          <button
+            onclick="profileTab('following',this)">
+            Following
+          </button>
+
+        </div>
+
+        <div id="profileContent"></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>🔔 Notifications</h3>
+
+        <div id="notifications">
+          Loading...
+        </div>
+
+      </div>
+
+
+      <button
+        class="btn wide"
+        style="background:#e74c3c"
+        onclick="logout()">
+        Logout
+      </button>
+
+    </section>
+
+  </main>
+
+
+  <!-- BOTTOM NAV -->
+
+  <nav class="bottom">
+
+    <button
+      id="navHome"
+      class="nav active"
+      onclick="showPage('home')">
+      🏠
+      <b>Home</b>
+    </button>
+
+    <button
+      id="navSearch"
+      class="nav"
+      onclick="showPage('search')">
+      🔎
+      <b>Search</b>
+    </button>
+
+    <button
+      class="nav create"
+      onclick="showPage('create')">
+      ＋
+    </button>
+
+    <button
+      id="navChat"
+      class="nav"
+      onclick="showPage('chat')">
+      💬
+      <b>Chat</b>
+      <span
+        id="chatBadge"
+        class="badge hidden">
+        0
+      </span>
+    </button>
+
+    <button
+      id="navProfile"
+      class="nav"
+      onclick="showPage('profile')">
+      👤
+      <b>Profile</b>
+      <span
+        id="notificationBadge"
+        class="badge hidden">
+        0
+      </span>
+    </button>
+
+  </nav>
 
 </div>
 
@@ -474,9 +907,9 @@ Logout
 
 <script>
 
-/* =========================
+/* =====================================================
    SUPABASE
-========================= */
+===================================================== */
 
 const SUPABASE_URL =
 "https://dbpbkvfaxgifjeveijqf.supabase.co";
@@ -484,2368 +917,3906 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
 
-const sb =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
+let sb = null;
 
 let currentUser = null;
 let currentChatUser = null;
+
 let searchTimer = null;
 let chatTimer = null;
 
 
-/* =========================
+/* =====================================================
+   SUPABASE INITIALIZATION
+===================================================== */
+
+function initSupabase(){
+
+  if(
+    !window.supabase ||
+    typeof window.supabase.createClient !== "function"
+  ){
+
+    authMessage(
+      "Supabase load nahi hua. Internet check karke page reload karo."
+    );
+
+    return false;
+  }
+
+  try{
+
+    sb = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "SUPABASE INIT ERROR:",
+      error
+    );
+
+    authMessage(
+      "Supabase start nahi ho paaya."
+    );
+
+    return false;
+  }
+}
+
+
+/* =====================================================
    HELPERS
-========================= */
+===================================================== */
 
 function esc(text){
-return String(text || "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+
+  return String(text || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
+
 
 function toast(text){
 
-const t=document.getElementById("toast");
+  const t =
+    document.getElementById("toast");
 
-t.textContent=text;
-t.style.display="block";
+  t.textContent = text;
+  t.style.display = "block";
 
-clearTimeout(window.toastTimer);
+  clearTimeout(window.toastTimer);
 
-window.toastTimer=setTimeout(()=>{
-t.style.display="none";
-},3000);
-
+  window.toastTimer =
+    setTimeout(()=>{
+      t.style.display = "none";
+    },3000);
 }
+
 
 function authMessage(text){
 
-document.getElementById("authMsg").textContent=text;
+  const box =
+    document.getElementById("authMsg");
 
+  if(box){
+    box.textContent = text;
+  }
 }
+
 
 function getInitial(name){
 
-return String(name || "U")
-.charAt(0)
-.toUpperCase();
-
+  return String(name || "U")
+    .charAt(0)
+    .toUpperCase();
 }
 
 
-/* =========================
+/* =====================================================
    AUTH MODE
-========================= */
+===================================================== */
 
 function toggleAuth(){
 
-const username =
-document.getElementById("username");
+  const username =
+    document.getElementById("username");
 
-const loginBtn =
-document.getElementById("loginBtn");
+  const loginBtn =
+    document.getElementById("loginBtn");
 
-const signupBtn =
-document.getElementById("signupBtn");
+  const signupBtn =
+    document.getElementById("signupBtn");
 
-const createLink =
-document.querySelector(".link");
+  const toggleBtn =
+    document.getElementById("authToggleBtn");
 
-const isSignup =
-!username.classList.contains("hidden");
+  const isSignup =
+    !username.classList.contains("hidden");
 
-username.classList.toggle("hidden");
-loginBtn.classList.toggle("hidden");
-signupBtn.classList.toggle("hidden");
+  username.classList.toggle("hidden");
 
-createLink.textContent =
-isSignup
-? "Create new account"
-: "Already have an account? Login";
+  loginBtn.classList.toggle("hidden");
 
-authMessage("");
+  signupBtn.classList.toggle("hidden");
+
+  toggleBtn.textContent =
+    isSignup
+      ? "Create new account"
+      : "Already have an account? Login";
+
+  authMessage("");
 
 }
 
 
-/* =========================
+/* =====================================================
    SIGNUP
-========================= */
+===================================================== */
 
 async function signup(){
 
-const email =
-document.getElementById("email")
-.value
-.trim()
-.toLowerCase();
+  if(!sb){
 
-const password =
-document.getElementById("password")
-.value;
+    authMessage("App ready nahi hai. Page reload karo.");
+    return;
+  }
 
-const username =
-document.getElementById("username")
-.value
-.trim()
-.toLowerCase();
+  const email =
+    document.getElementById("email")
+      .value
+      .trim()
+      .toLowerCase();
 
-if(!email || !password || !username){
+  const password =
+    document.getElementById("password")
+      .value;
 
-authMessage(
-"Email, password aur username required hai."
-);
+  const username =
+    document.getElementById("username")
+      .value
+      .trim()
+      .toLowerCase();
 
-return;
+  if(!email || !password || !username){
+
+    authMessage(
+      "Email, password aur username required hai."
+    );
+
+    return;
+  }
+
+  if(password.length < 6){
+
+    authMessage(
+      "Password minimum 6 characters ka hona chahiye."
+    );
+
+    return;
+  }
+
+  if(!/^[a-z0-9_]{3,25}$/.test(username)){
+
+    authMessage(
+      "Username 3-25 characters ka ho. Sirf letters, numbers aur _ use karo."
+    );
+
+    return;
+  }
+
+  authMessage("Creating account...");
+
+  const signupBtn =
+    document.getElementById("signupBtn");
+
+  signupBtn.disabled = true;
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await sb.auth.signUp({
+
+      email:email,
+
+      password:password,
+
+      options:{
+        data:{
+          username:username,
+          display_name:username
+        }
+      }
+
+    });
+
+    if(error){
+
+      console.error(
+        "SIGNUP ERROR:",
+        error
+      );
+
+      authMessage(
+        error.message ||
+        "Signup failed."
+      );
+
+      return;
+    }
+
+    if(!data || !data.user){
+
+      authMessage(
+        "Account create nahi hua. Please try again."
+      );
+
+      return;
+    }
+
+    /*
+      Agar email confirmation OFF hai,
+      to session mil jayega.
+    */
+
+    if(data.session){
+
+      try{
+
+        await sb
+          .from("profiles")
+          .upsert({
+
+            id:data.user.id,
+
+            email:email,
+
+            username:username,
+
+            display_name:username
+
+          });
+
+      }catch(profileError){
+
+        console.error(
+          "PROFILE ERROR:",
+          profileError
+        );
+
+      }
+
+      await openApp(data.user);
+
+    }else{
+
+      authMessage(
+        "Account created! Email verify karo, phir Login karo."
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "SIGNUP ERROR:",
+      error
+    );
+
+    authMessage(
+      error?.message ||
+      "Signup failed."
+    );
+
+  }finally{
+
+    signupBtn.disabled = false;
+
+  }
+
 }
 
-if(password.length < 6){
 
-authMessage(
-"Password minimum 6 characters."
-);
-
-return;
-}
-
-if(!/^[a-z0-9_]{3,25}$/.test(username)){
-
-authMessage(
-"Username 3-25 characters ka ho."
-);
-
-return;
-}
-
-authMessage("Creating account...");
-
-const signupBtn =
-document.getElementById("signupBtn");
-
-signupBtn.disabled=true;
-
-try{
-
-const {data,error} =
-await sb.auth.signUp({
-
-email:email,
-password:password,
-
-options:{
-data:{
-username:username,
-display_name:username
-}
-}
-
-});
-
-if(error){
-
-console.error("SIGNUP ERROR:",error);
-
-authMessage(error.message);
-
-return;
-}
-
-if(!data.user){
-
-authMessage(
-"Account create nahi hua. Please try again."
-);
-
-return;
-}
-
-/*
-  Profile creation ko login se separate rakha hai.
-  Agar profile RLS issue ho, auth fail nahi hoga.
-*/
-
-if(data.session){
-
-try{
-
-await sb
-.from("profiles")
-.upsert({
-id:data.user.id,
-email:email,
-username:username,
-display_name:username
-});
-
-}catch(profileError){
-
-console.error(
-"PROFILE ERROR:",
-profileError
-);
-
-}
-
-await openApp(data.user);
-
-}else{
-
-authMessage(
-"Account created. Email verify karo, phir Login karo."
-);
-
-}
-
-}catch(error){
-
-console.error("SIGNUP ERROR:",error);
-
-authMessage(
-error?.message ||
-"Signup failed."
-);
-
-}finally{
-
-signupBtn.disabled=false;
-
-}
-
-}
-
-
-/* =========================
+/* =====================================================
    LOGIN
-========================= */
+===================================================== */
 
 async function login(){
 
-const email =
-document.getElementById("email")
-.value
-.trim()
-.toLowerCase();
+  if(!sb){
 
-const password =
-document.getElementById("password")
-.value;
+    authMessage(
+      "App ready nahi hai. Page reload karo."
+    );
 
-if(!email){
+    return;
+  }
 
-authMessage("Email enter karo.");
-return;
+  const email =
+    document.getElementById("email")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const password =
+    document.getElementById("password")
+      .value;
+
+  if(!email){
+
+    authMessage("Email enter karo.");
+    return;
+  }
+
+  if(!password){
+
+    authMessage("Password enter karo.");
+    return;
+  }
+
+  authMessage("Logging in...");
+
+  const loginBtn =
+    document.getElementById("loginBtn");
+
+  loginBtn.disabled = true;
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await sb.auth.signInWithPassword({
+
+      email:email,
+
+      password:password
+
+    });
+
+    if(error){
+
+      console.error(
+        "LOGIN ERROR:",
+        error
+      );
+
+      authMessage(
+        error.message ||
+        "Login failed."
+      );
+
+      return;
+    }
+
+    if(!data?.user){
+
+      authMessage(
+        "Login failed. User session nahi mili."
+      );
+
+      return;
+    }
+
+    authMessage("");
+
+    await openApp(data.user);
+
+  }catch(error){
+
+    console.error(
+      "LOGIN ERROR:",
+      error
+    );
+
+    authMessage(
+      error?.message ||
+      "Login failed."
+    );
+
+  }finally{
+
+    loginBtn.disabled = false;
+
+  }
 
 }
 
-if(!password){
 
-authMessage("Password enter karo.");
-return;
-
-}
-
-authMessage("Logging in...");
-
-const loginBtn =
-document.getElementById("loginBtn");
-
-loginBtn.disabled=true;
-
-try{
-
-const {data,error} =
-await sb.auth.signInWithPassword({
-
-email:email,
-password:password
-
-});
-
-if(error){
-
-console.error("LOGIN ERROR:",error);
-
-authMessage(error.message);
-
-return;
-
-}
-
-if(!data?.user){
-
-authMessage(
-"Login failed. User session nahi mili."
-);
-
-return;
-
-}
-
-authMessage("");
-
-await openApp(data.user);
-
-}catch(error){
-
-console.error("LOGIN ERROR:",error);
-
-authMessage(
-error?.message ||
-"Login failed."
-);
-
-}finally{
-
-loginBtn.disabled=false;
-
-}
-
-}
-
-
-/* =========================
-   PASSWORD RESET
-========================= */
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
 
 async function resetPassword(){
 
-const email =
-document.getElementById("email")
-.value
-.trim()
-.toLowerCase();
+  if(!sb){
 
-if(!email){
+    authMessage(
+      "App ready nahi hai. Page reload karo."
+    );
 
-authMessage(
-"Password reset ke liye email enter karo."
-);
+    return;
+  }
 
-return;
+  const email =
+    document.getElementById("email")
+      .value
+      .trim()
+      .toLowerCase();
+
+  if(!email){
+
+    authMessage(
+      "Password reset ke liye pehle email enter karo."
+    );
+
+    return;
+  }
+
+  authMessage(
+    "Sending reset email..."
+  );
+
+  try{
+
+    const redirectUrl =
+      window.location.origin +
+      window.location.pathname;
+
+    const {
+      error
+    } =
+    await sb.auth.resetPasswordForEmail(
+
+      email,
+
+      {
+        redirectTo:redirectUrl
+      }
+
+    );
+
+    if(error){
+
+      console.error(
+        "RESET ERROR:",
+        error
+      );
+
+      authMessage(
+        error.message ||
+        "Password reset failed."
+      );
+
+      return;
+    }
+
+    authMessage(
+      "Reset email bhej diya. Inbox aur spam folder check karo."
+    );
+
+  }catch(error){
+
+    console.error(
+      "RESET ERROR:",
+      error
+    );
+
+    authMessage(
+      error?.message ||
+      "Password reset failed."
+    );
+
+  }
 
 }
 
-authMessage("Sending reset email...");
 
-try{
+/* =====================================================
+   UPDATE NEW PASSWORD
+===================================================== */
 
-const redirectUrl =
-window.location.origin +
-window.location.pathname;
+async function updatePassword(){
 
-const {error} =
-await sb.auth.resetPasswordForEmail(
-email,
-{
-redirectTo:redirectUrl
+  if(!sb){
+
+    authMessage(
+      "App ready nahi hai. Page reload karo."
+    );
+
+    return;
+  }
+
+  const newPassword =
+    document.getElementById("newPassword")
+      .value;
+
+  const confirmPassword =
+    document.getElementById("confirmPassword")
+      .value;
+
+  if(!newPassword || !confirmPassword){
+
+    authMessage(
+      "Dono password fields fill karo."
+    );
+
+    return;
+  }
+
+  if(newPassword.length < 6){
+
+    authMessage(
+      "Password minimum 6 characters ka hona chahiye."
+    );
+
+    return;
+  }
+
+  if(newPassword !== confirmPassword){
+
+    authMessage(
+      "Passwords match nahi kar rahe."
+    );
+
+    return;
+  }
+
+  authMessage(
+    "Updating password..."
+  );
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await sb.auth.updateUser({
+
+      password:newPassword
+
+    });
+
+    if(error){
+
+      console.error(
+        "UPDATE PASSWORD ERROR:",
+        error
+      );
+
+      authMessage(
+        error.message ||
+        "Password update failed."
+      );
+
+      return;
+    }
+
+    if(data?.user){
+
+      document
+        .getElementById("recoveryBox")
+        .classList
+        .add("hidden");
+
+      document
+        .getElementById("normalAuth")
+        .classList
+        .remove("hidden");
+
+      document
+        .getElementById("newPassword")
+        .value="";
+
+      document
+        .getElementById("confirmPassword")
+        .value="";
+
+      authMessage(
+        "Password successfully update ho gaya. Ab login karo."
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "UPDATE PASSWORD ERROR:",
+      error
+    );
+
+    authMessage(
+      error?.message ||
+      "Password update failed."
+    );
+
+  }
+
 }
-);
-
-if(error){
-
-console.error(
-"RESET ERROR:",
-error
-);
-
-authMessage(error.message);
-
-return;
-
-}
-
-authMessage(
-"Reset email bhej diya. Inbox/spam check karo."
-);
-
-}catch(error){
-
-console.error(
-"RESET ERROR:",
-error
-);
-
-authMessage(
-error?.message ||
-"Password reset failed."
-);
-
-}
-
-}
 
 
-/* =========================
+/* =====================================================
    PROFILE
-========================= */
+===================================================== */
 
 async function getProfile(id){
 
-if(!id){
-return null;
-}
+  if(!sb || !id){
+    return null;
+  }
 
-const {data,error} =
-await sb
-.from("profiles")
-.select("id,username,display_name")
-.eq("id",id)
-.maybeSingle();
+  try{
 
-if(error){
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("profiles")
+      .select("id,username,display_name")
+      .eq("id",id)
+      .maybeSingle();
 
-console.error(
-"PROFILE READ ERROR:",
-error
-);
+    if(error){
 
-return null;
+      console.error(
+        "PROFILE READ ERROR:",
+        error
+      );
 
-}
+      return null;
+    }
 
-return data || null;
+    return data || null;
+
+  }catch(error){
+
+    console.error(
+      "PROFILE ERROR:",
+      error
+    );
+
+    return null;
+  }
 
 }
 
 
 async function ensureProfile(user){
 
-let profile =
-await getProfile(user.id);
+  if(!sb || !user){
+    return null;
+  }
 
-if(profile){
-return profile;
+  let profile =
+    await getProfile(user.id);
+
+  if(profile){
+    return profile;
+  }
+
+  let username =
+    user.user_metadata?.username ||
+    (
+      user.email
+      ?
+      user.email.split("@")[0]
+      :
+      "user"
+    );
+
+  username =
+    username
+      .replace(/[^a-zA-Z0-9_]/g,"")
+      .slice(0,25);
+
+  if(username.length < 3){
+
+    username =
+      "user" +
+      user.id
+        .replace(/-/g,"")
+        .slice(0,8);
+
+  }
+
+  try{
+
+    const {
+      error
+    } =
+    await sb
+      .from("profiles")
+      .upsert({
+
+        id:user.id,
+
+        email:user.email || "",
+
+        username:username,
+
+        display_name:
+          user.user_metadata?.display_name ||
+          username
+
+      });
+
+    if(error){
+
+      console.error(
+        "PROFILE CREATE ERROR:",
+        error
+      );
+
+      return {
+        id:user.id,
+        username:username,
+        display_name:username
+      };
+    }
+
+  }catch(error){
+
+    console.error(
+      "PROFILE CREATE ERROR:",
+      error
+    );
+
+    return {
+      id:user.id,
+      username:username,
+      display_name:username
+    };
+  }
+
+  return await getProfile(user.id);
+
 }
 
-let username =
-user.user_metadata?.username ||
-(
-user.email
-?
-user.email.split("@")[0]
-:
-"user"
-);
 
-username =
-username
-.replace(/[^a-zA-Z0-9_]/g,"")
-.slice(0,25);
-
-if(username.length < 3){
-
-username =
-"user" +
-user.id.replace(/-/g,"").slice(0,8);
-
-}
-
-const {error} =
-await sb
-.from("profiles")
-.upsert({
-
-id:user.id,
-email:user.email || "",
-username:username,
-display_name:
-user.user_metadata?.display_name ||
-username
-
-});
-
-if(error){
-
-console.error(
-"PROFILE CREATE ERROR:",
-error
-);
-
-return {
-id:user.id,
-username:username,
-display_name:username
-};
-
-}
-
-return await getProfile(user.id);
-
-}
-
-
-/* =========================
+/* =====================================================
    OPEN APP
-========================= */
+===================================================== */
 
 async function openApp(user){
 
-if(!user){
-return;
+  if(!user){
+    return;
+  }
+
+  currentUser = user;
+
+  document
+    .getElementById("authScreen")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("homeScreen")
+    .classList
+    .remove("hidden");
+
+  let profile = null;
+
+  try{
+
+    profile =
+      await ensureProfile(user);
+
+  }catch(error){
+
+    console.error(
+      "OPEN PROFILE ERROR:",
+      error
+    );
+
+  }
+
+  const username =
+    profile?.username ||
+    user.user_metadata?.username ||
+    (
+      user.email
+      ?
+      user.email.split("@")[0]
+      :
+      "user"
+    );
+
+  const displayName =
+    profile?.display_name ||
+    username;
+
+  document
+    .getElementById("hello")
+    .textContent =
+    "@" + username;
+
+  document
+    .getElementById("profileName")
+    .textContent =
+    displayName;
+
+  document
+    .getElementById("profileUsername")
+    .textContent =
+    "@" + username;
+
+  document
+    .getElementById("profileId")
+    .textContent =
+    user.id;
+
+  document
+    .getElementById("avatar")
+    .textContent =
+    getInitial(username);
+
+  /*
+    Login ko database ke kisi
+    extra error se block nahi karna.
+  */
+
+  updateProfileStats()
+    .catch(console.error);
+
+  loadPolls()
+    .catch(console.error);
+
+  loadNotifications()
+    .catch(console.error);
+
+  updateChatBadge()
+    .catch(console.error);
+
 }
 
-currentUser=user;
 
-document
-.getElementById("authScreen")
-.classList.add("hidden");
-
-document
-.getElementById("homeScreen")
-.classList.remove("hidden");
-
-let profile=null;
-
-try{
-
-profile=await ensureProfile(user);
-
-}catch(error){
-
-console.error(
-"OPEN PROFILE ERROR:",
-error
-);
-
-}
-
-const username =
-profile?.username ||
-user.user_metadata?.username ||
-(
-user.email
-?
-user.email.split("@")[0]
-:
-"user"
-);
-
-const displayName =
-profile?.display_name ||
-username;
-
-document.getElementById("hello")
-.textContent="@"+username;
-
-document.getElementById("profileName")
-.textContent=displayName;
-
-document.getElementById("profileUsername")
-.textContent="@"+username;
-
-document.getElementById("profileId")
-.textContent=user.id;
-
-document.getElementById("avatar")
-.textContent=getInitial(username);
-
-/*
-  Important:
-  Login successful hone ke baad
-  feed/profile errors login ko break nahi karenge.
-*/
-
-try{
-await updateProfileStats();
-}catch(e){
-console.error(e);
-}
-
-try{
-await loadPolls();
-}catch(e){
-console.error(e);
-}
-
-try{
-await loadNotifications();
-}catch(e){
-console.error(e);
-}
-
-try{
-await updateChatBadge();
-}catch(e){
-console.error(e);
-}
-
-}
-
-
-/* =========================
+/* =====================================================
    STATS
-========================= */
+===================================================== */
 
 async function updateProfileStats(){
 
-if(!currentUser){
-return;
+  if(!sb || !currentUser){
+    return;
+  }
+
+  try{
+
+    const followers =
+      await sb
+        .from("follows")
+        .select("id",{count:"exact",head:true})
+        .eq(
+          "following_id",
+          currentUser.id
+        );
+
+    const following =
+      await sb
+        .from("follows")
+        .select("id",{count:"exact",head:true})
+        .eq(
+          "follower_id",
+          currentUser.id
+        );
+
+    const polls =
+      await sb
+        .from("polls")
+        .select("id",{count:"exact",head:true})
+        .eq(
+          "user_id",
+          currentUser.id
+        );
+
+    document
+      .getElementById("followersCount")
+      .textContent =
+      followers.count || 0;
+
+    document
+      .getElementById("followingCount")
+      .textContent =
+      following.count || 0;
+
+    document
+      .getElementById("myPollCount")
+      .textContent =
+      polls.count || 0;
+
+  }catch(error){
+
+    console.error(
+      "STATS ERROR:",
+      error
+    );
+
+  }
+
 }
 
-const followers =
-await sb
-.from("follows")
-.select("id",{count:"exact",head:true})
-.eq("following_id",currentUser.id);
 
-const following =
-await sb
-.from("follows")
-.select("id",{count:"exact",head:true})
-.eq("follower_id",currentUser.id);
-
-const polls =
-await sb
-.from("polls")
-.select("id",{count:"exact",head:true})
-.eq("user_id",currentUser.id);
-
-document.getElementById("followersCount")
-.textContent=followers.count || 0;
-
-document.getElementById("followingCount")
-.textContent=following.count || 0;
-
-document.getElementById("myPollCount")
-.textContent=polls.count || 0;
-
-}
-
-
-/* =========================
-   NAV
-========================= */
+/* =====================================================
+   NAVIGATION
+===================================================== */
 
 function showPage(page){
 
-[
-"homePage",
-"searchPage",
-"createPage",
-"chatPage",
-"profilePage"
-].forEach(id=>{
-document.getElementById(id)
-.classList.add("hidden");
-});
+  [
+    "homePage",
+    "searchPage",
+    "createPage",
+    "chatPage",
+    "profilePage"
+  ].forEach(id=>{
 
-[
-"navHome",
-"navSearch",
-"navChat",
-"navProfile"
-].forEach(id=>{
-document.getElementById(id)
-.classList.remove("active");
-});
+    document
+      .getElementById(id)
+      .classList
+      .add("hidden");
 
-if(page==="home"){
+  });
 
-document.getElementById("homePage")
-.classList.remove("hidden");
+  [
+    "navHome",
+    "navSearch",
+    "navChat",
+    "navProfile"
+  ].forEach(id=>{
 
-document.getElementById("navHome")
-.classList.add("active");
+    document
+      .getElementById(id)
+      .classList
+      .remove("active");
 
-loadPolls();
+  });
+
+
+  if(page==="home"){
+
+    document
+      .getElementById("homePage")
+      .classList
+      .remove("hidden");
+
+    document
+      .getElementById("navHome")
+      .classList
+      .add("active");
+
+    loadPolls();
+
+  }
+
+
+  if(page==="search"){
+
+    document
+      .getElementById("searchPage")
+      .classList
+      .remove("hidden");
+
+    document
+      .getElementById("navSearch")
+      .classList
+      .add("active");
+
+  }
+
+
+  if(page==="create"){
+
+    document
+      .getElementById("createPage")
+      .classList
+      .remove("hidden");
+
+  }
+
+
+  if(page==="chat"){
+
+    document
+      .getElementById("chatPage")
+      .classList
+      .remove("hidden");
+
+    document
+      .getElementById("navChat")
+      .classList
+      .add("active");
+
+    updateChatBadge();
+
+  }
+
+
+  if(page==="profile"){
+
+    document
+      .getElementById("profilePage")
+      .classList
+      .remove("hidden");
+
+    document
+      .getElementById("navProfile")
+      .classList
+      .add("active");
+
+    updateProfileStats();
+
+    loadNotifications();
+
+    const firstTab =
+      document.querySelector(
+        ".tabs button"
+      );
+
+    profileTab(
+      "polls",
+      firstTab
+    );
+
+  }
 
 }
 
-if(page==="search"){
 
-document.getElementById("searchPage")
-.classList.remove("hidden");
-
-document.getElementById("navSearch")
-.classList.add("active");
-
-}
-
-if(page==="create"){
-
-document.getElementById("createPage")
-.classList.remove("hidden");
-
-}
-
-if(page==="chat"){
-
-document.getElementById("chatPage")
-.classList.remove("hidden");
-
-document.getElementById("navChat")
-.classList.add("active");
-
-updateChatBadge();
-
-}
-
-if(page==="profile"){
-
-document.getElementById("profilePage")
-.classList.remove("hidden");
-
-document.getElementById("navProfile")
-.classList.add("active");
-
-updateProfileStats();
-loadNotifications();
-
-const firstTab =
-document.querySelector(".tabs button");
-
-profileTab("polls",firstTab);
-
-}
-
-}
-
-
-/* =========================
-   FOLLOW
-========================= */
+/* =====================================================
+   FOLLOWING IDS
+===================================================== */
 
 async function getFollowingIds(){
 
-if(!currentUser){
-return [];
+  if(!sb || !currentUser){
+    return [];
+  }
+
+  const {
+    data,
+    error
+  } =
+  await sb
+    .from("follows")
+    .select("following_id")
+    .eq(
+      "follower_id",
+      currentUser.id
+    );
+
+  if(error){
+
+    console.error(
+      "FOLLOWING ERROR:",
+      error
+    );
+
+    return [];
+  }
+
+  return (
+    data || []
+  ).map(
+    x=>x.following_id
+  );
+
 }
 
-const {data,error} =
-await sb
-.from("follows")
-.select("following_id")
-.eq("follower_id",currentUser.id);
 
-if(error){
-
-console.error(
-"FOLLOWING ERROR:",
-error
-);
-
-return [];
-}
-
-return (data || [])
-.map(x=>x.following_id);
-
-}
-
+/* =====================================================
+   IS FOLLOWING
+===================================================== */
 
 async function isFollowing(userId){
 
-if(!currentUser || !userId){
-return false;
+  if(!sb || !currentUser || !userId){
+    return false;
+  }
+
+  const {
+    data,
+    error
+  } =
+  await sb
+    .from("follows")
+    .select("id")
+    .eq(
+      "follower_id",
+      currentUser.id
+    )
+    .eq(
+      "following_id",
+      userId
+    )
+    .limit(1);
+
+  if(error){
+
+    console.error(
+      "FOLLOW CHECK ERROR:",
+      error
+    );
+
+    return false;
+  }
+
+  return !!(
+    data &&
+    data.length
+  );
+
 }
 
-const {data,error} =
-await sb
-.from("follows")
-.select("id")
-.eq("follower_id",currentUser.id)
-.eq("following_id",userId)
-.limit(1);
 
-if(error){
-
-console.error(
-"FOLLOW CHECK ERROR:",
-error
-);
-
-return false;
-}
-
-return !!(data && data.length);
-
-}
-
+/* =====================================================
+   FOLLOW / UNFOLLOW
+===================================================== */
 
 async function followUser(userId,button){
 
-if(!currentUser){
+  if(!currentUser){
 
-toast("Please login first.");
-return;
+    toast(
+      "Please login first."
+    );
+
+    return;
+  }
+
+  if(!userId){
+
+    toast(
+      "Invalid user."
+    );
+
+    return;
+  }
+
+  if(userId===currentUser.id){
+
+    toast(
+      "You cannot follow yourself."
+    );
+
+    return;
+  }
+
+  if(button){
+
+    button.disabled=true;
+    button.textContent="Loading...";
+
+  }
+
+  try{
+
+    const {
+      data:existing,
+      error:checkError
+    } =
+    await sb
+      .from("follows")
+      .select("id")
+      .eq(
+        "follower_id",
+        currentUser.id
+      )
+      .eq(
+        "following_id",
+        userId
+      )
+      .limit(1);
+
+    if(checkError){
+
+      throw new Error(
+        "Follow check failed: " +
+        checkError.message
+      );
+
+    }
+
+
+    if(existing?.length){
+
+      const {
+        error
+      } =
+      await sb
+        .from("follows")
+        .delete()
+        .eq(
+          "follower_id",
+          currentUser.id
+        )
+        .eq(
+          "following_id",
+          userId
+        );
+
+      if(error){
+
+        throw new Error(
+          "Unfollow failed: " +
+          error.message
+        );
+
+      }
+
+      if(button){
+
+        button.textContent="Follow";
+
+        button.classList
+          .remove("following");
+
+      }
+
+      toast("Unfollowed");
+
+    }else{
+
+      const {
+        error
+      } =
+      await sb
+        .from("follows")
+        .insert({
+
+          follower_id:
+            currentUser.id,
+
+          following_id:
+            userId
+
+        });
+
+      if(error){
+
+        throw new Error(
+          "Follow failed: " +
+          error.message
+        );
+
+      }
+
+      if(button){
+
+        button.textContent=
+          "Following";
+
+        button.classList
+          .add("following");
+
+      }
+
+      await createNotification(
+        userId,
+        "started following you"
+      );
+
+      toast(
+        "✅ Following!"
+      );
+
+    }
+
+    await updateProfileStats();
+
+    const homePage =
+      document.getElementById(
+        "homePage"
+      );
+
+    if(
+      homePage &&
+      !homePage.classList.contains(
+        "hidden"
+      )
+    ){
+
+      await loadPolls();
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "FOLLOW ERROR:",
+      error
+    );
+
+    if(button){
+
+      button.textContent="Follow";
+
+      button.classList
+        .remove("following");
+
+    }
+
+    toast(
+      "❌ " +
+      (
+        error.message ||
+        "Follow failed"
+      )
+    );
+
+  }finally{
+
+    if(button){
+      button.disabled=false;
+    }
+
+  }
 
 }
 
-if(!userId){
 
-toast("Invalid user.");
-return;
-
-}
-
-if(userId===currentUser.id){
-
-toast("You cannot follow yourself.");
-return;
-
-}
-
-if(button){
-
-button.disabled=true;
-button.textContent="Loading...";
-
-}
-
-try{
-
-const {
-data:existing,
-error:checkError
-} =
-await sb
-.from("follows")
-.select("id")
-.eq("follower_id",currentUser.id)
-.eq("following_id",userId)
-.limit(1);
-
-if(checkError){
-
-throw new Error(
-"Follow check failed: "+
-checkError.message
-);
-
-}
-
-if(existing?.length){
-
-const {error} =
-await sb
-.from("follows")
-.delete()
-.eq("follower_id",currentUser.id)
-.eq("following_id",userId);
-
-if(error){
-
-throw new Error(
-"Unfollow failed: "+
-error.message
-);
-
-}
-
-if(button){
-
-button.textContent="Follow";
-button.classList.remove("following");
-
-}
-
-toast("Unfollowed");
-
-}else{
-
-const {error} =
-await sb
-.from("follows")
-.insert({
-
-follower_id:currentUser.id,
-following_id:userId
-
-});
-
-if(error){
-
-throw new Error(
-"Follow failed: "+
-error.message
-);
-
-}
-
-if(button){
-
-button.textContent="Following";
-button.classList.add("following");
-
-}
-
-await createNotification(
-userId,
-"started following you"
-);
-
-toast("✅ Following!");
-
-}
-
-await updateProfileStats();
-
-if(
-!document
-.getElementById("homePage")
-.classList
-.contains("hidden")
-){
-
-await loadPolls();
-
-}
-
-}catch(error){
-
-console.error(
-"FOLLOW ERROR:",
-error
-);
-
-if(button){
-
-button.textContent="Follow";
-button.classList.remove("following");
-
-}
-
-toast(
-"❌ "+
-(error.message || "Follow failed")
-);
-
-}finally{
-
-if(button){
-button.disabled=false;
-}
-
-}
-
-}
-
-
-/* =========================
+/* =====================================================
    SUGGESTIONS
-========================= */
+===================================================== */
 
 async function loadSuggestions(){
 
-if(!currentUser){
-return null;
+  if(!sb || !currentUser){
+    return null;
+  }
+
+  const {
+    data:users,
+    error
+  } =
+  await sb
+    .from("profiles")
+    .select(
+      "id,username,display_name"
+    )
+    .neq(
+      "id",
+      currentUser.id
+    )
+    .order(
+      "username",
+      {ascending:true}
+    )
+    .limit(50);
+
+  if(error){
+
+    console.error(
+      "SUGGESTIONS ERROR:",
+      error
+    );
+
+    return null;
+  }
+
+  const followingIds =
+    await getFollowingIds();
+
+  const candidates =
+    (users || [])
+      .filter(
+        user =>
+          !followingIds.includes(
+            user.id
+          )
+      )
+      .slice(0,5);
+
+  if(!candidates.length){
+    return null;
+  }
+
+  const box =
+    document.createElement("div");
+
+  box.className =
+    "suggestion";
+
+  box.innerHTML =
+    "<h3>👥 Follow Suggestions</h3>" +
+    "<div class='small'>" +
+    "People you may want to follow" +
+    "</div>";
+
+  for(
+    const user of candidates
+  ){
+
+    const row =
+      document.createElement(
+        "div"
+      );
+
+    row.className =
+      "row user";
+
+    const av =
+      document.createElement(
+        "div"
+      );
+
+    av.className =
+      "avatar";
+
+    av.textContent =
+      getInitial(
+        user.username
+      );
+
+    const info =
+      document.createElement(
+        "div"
+      );
+
+    info.className =
+      "grow";
+
+    info.innerHTML =
+      "<b>@" +
+      esc(user.username) +
+      "</b>" +
+      "<div class='small'>" +
+      esc(
+        user.display_name || ""
+      ) +
+      "</div>";
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+    button.className =
+      "btn follow";
+
+    button.textContent =
+      "Follow";
+
+    button.onclick=()=>{
+      followUser(
+        user.id,
+        button
+      );
+    };
+
+    row.appendChild(av);
+    row.appendChild(info);
+    row.appendChild(button);
+
+    box.appendChild(row);
+
+  }
+
+  return box;
+
 }
 
-const {data:users,error} =
-await sb
-.from("profiles")
-.select("id,username,display_name")
-.neq("id",currentUser.id)
-.order("username",{ascending:true})
-.limit(50);
 
-if(error){
-
-console.error(error);
-return null;
-
-}
-
-const followingIds =
-await getFollowingIds();
-
-const candidates =
-(users || [])
-.filter(user =>
-!followingIds.includes(user.id)
-)
-.slice(0,5);
-
-if(!candidates.length){
-return null;
-}
-
-const box=document.createElement("div");
-
-box.className="suggestion";
-
-box.innerHTML=
-"<h3>👥 Follow Suggestions</h3>"+
-"<div class='small'>People you may want to follow</div>";
-
-for(const user of candidates){
-
-const row=document.createElement("div");
-row.className="row user";
-
-const av=document.createElement("div");
-av.className="avatar";
-av.textContent=getInitial(user.username);
-
-const info=document.createElement("div");
-info.className="grow";
-
-info.innerHTML=
-"<b>@"+esc(user.username)+"</b>"+
-"<div class='small'>"+
-esc(user.display_name || "")+
-"</div>";
-
-const button=document.createElement("button");
-
-button.className="btn follow";
-button.textContent="Follow";
-
-button.onclick=()=>{
-followUser(user.id,button);
-};
-
-row.appendChild(av);
-row.appendChild(info);
-row.appendChild(button);
-
-box.appendChild(row);
-
-}
-
-return box;
-
-}
-
-
-/* =========================
-   POLLS
-========================= */
+/* =====================================================
+   LOAD POLLS
+===================================================== */
 
 async function loadPolls(){
 
-if(!currentUser){
-return;
+  if(!sb || !currentUser){
+    return;
+  }
+
+  const box =
+    document.getElementById(
+      "polls"
+    );
+
+  box.innerHTML =
+    "Loading...";
+
+  try{
+
+    const suggestion =
+      await loadSuggestions();
+
+    box.innerHTML = "";
+
+    if(suggestion){
+      box.appendChild(
+        suggestion
+      );
+    }
+
+    const {
+      data:polls,
+      error
+    } =
+    await sb
+      .from("polls")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+    if(error){
+
+      box.innerHTML =
+        "<div class='card'>" +
+        esc(error.message) +
+        "</div>";
+
+      return;
+    }
+
+    if(!polls?.length){
+
+      box.innerHTML +=
+        "<div class='card'>" +
+        "No polls yet. Create the first poll! 🎉" +
+        "</div>";
+
+      return;
+    }
+
+    const ids =
+      polls.map(
+        p=>p.id
+      );
+
+    let votes=[];
+
+    if(ids.length){
+
+      const {
+        data:votesData,
+        error:votesError
+      } =
+      await sb
+        .from("votes")
+        .select(
+          "poll_id,user_id,option"
+        )
+        .in(
+          "poll_id",
+          ids
+        );
+
+      if(votesError){
+
+        console.error(
+          "VOTES LOAD ERROR:",
+          votesError
+        );
+
+      }else{
+
+        votes =
+          votesData || [];
+
+      }
+
+    }
+
+    const profileMap={};
+
+    for(
+      const poll of polls
+    ){
+
+      if(poll.user_id){
+
+        profileMap[poll.user_id] =
+          await getProfile(
+            poll.user_id
+          );
+
+      }
+
+    }
+
+
+    for(
+      const poll of polls
+    ){
+
+      const profile =
+        profileMap[
+          poll.user_id
+        ];
+
+      let options =
+        poll.options;
+
+      if(
+        typeof options ===
+        "string"
+      ){
+
+        try{
+
+          options =
+            JSON.parse(
+              options
+            );
+
+        }catch{
+
+          options=[];
+
+        }
+
+      }
+
+      if(!Array.isArray(options)){
+        options=[];
+      }
+
+      const pollVotes =
+        votes.filter(
+          v =>
+            v.poll_id ===
+            poll.id
+        );
+
+      const myVote =
+        pollVotes.find(
+          v =>
+            v.user_id ===
+            currentUser.id
+        );
+
+      const counts={};
+
+      options.forEach(
+        option=>{
+          counts[option]=0;
+        }
+      );
+
+      pollVotes.forEach(
+        v=>{
+          counts[v.option] =
+            (
+              counts[v.option] ||
+              0
+            ) + 1;
+        }
+      );
+
+      const total =
+        pollVotes.length;
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+      card.className =
+        "card";
+
+
+      const creator =
+        document.createElement(
+          "div"
+        );
+
+      creator.className =
+        "creator";
+
+
+      const ca =
+        document.createElement(
+          "div"
+        );
+
+      ca.className =
+        "creator-avatar";
+
+      ca.textContent =
+        getInitial(
+          profile?.username
+        );
+
+
+      const ci =
+        document.createElement(
+          "div"
+        );
+
+      ci.innerHTML =
+        "<b>@" +
+        esc(
+          profile?.username ||
+          "user"
+        ) +
+        "</b>";
+
+
+      creator.appendChild(ca);
+      creator.appendChild(ci);
+
+      card.appendChild(
+        creator
+      );
+
+
+      const title =
+        document.createElement(
+          "div"
+        );
+
+      title.className =
+        "poll-title";
+
+      title.textContent =
+        poll.question ||
+        "Untitled poll";
+
+      card.appendChild(title);
+
+
+      options.forEach(
+        option=>{
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+          button.className =
+            "option";
+
+          button.textContent =
+            (
+              myVote?.option ===
+              option
+              ?
+              "✓ "
+              :
+              ""
+            ) +
+            option +
+            " — " +
+            (
+              counts[option] ||
+              0
+            );
+
+          button.onclick=async()=>{
+
+            button.disabled=true;
+
+            await vote(
+              poll.id,
+              option
+            );
+
+            button.disabled=false;
+
+          };
+
+          card.appendChild(
+            button
+          );
+
+
+          const bar =
+            document.createElement(
+              "div"
+            );
+
+          bar.className =
+            "resultbar";
+
+
+          const fill =
+            document.createElement(
+              "i"
+            );
+
+          fill.style.width =
+            (
+              total
+              ?
+              counts[option] /
+              total *
+              100
+              :
+              0
+            ) +
+            "%";
+
+
+          bar.appendChild(fill);
+          card.appendChild(bar);
+
+        }
+      );
+
+
+      const info =
+        document.createElement(
+          "div"
+        );
+
+      info.className =
+        "small";
+
+      info.textContent =
+        total +
+        " votes" +
+        (
+          myVote
+          ?
+          " • You voted"
+          :
+          ""
+        );
+
+      card.appendChild(info);
+
+
+      const like =
+        document.createElement(
+          "button"
+        );
+
+      like.className =
+        "link";
+
+      like.style.textAlign =
+        "left";
+
+      like.textContent =
+        "❤️ Like";
+
+      like.onclick=()=>{
+        likePoll(
+          poll.id
+        );
+      };
+
+      card.appendChild(like);
+
+      box.appendChild(card);
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "LOAD POLLS ERROR:",
+      error
+    );
+
+    box.innerHTML =
+      "<div class='card'>" +
+      "Polls load nahi ho paaye." +
+      "</div>";
+
+  }
+
 }
 
-const box=document.getElementById("polls");
 
-box.innerHTML="Loading...";
-
-const suggestion=await loadSuggestions();
-
-box.innerHTML="";
-
-if(suggestion){
-box.appendChild(suggestion);
-}
-
-const {data:polls,error} =
-await sb
-.from("polls")
-.select("*")
-.order("created_at",{ascending:false});
-
-if(error){
-
-box.innerHTML=
-"<div class='card'>"+
-esc(error.message)+
-"</div>";
-
-return;
-
-}
-
-if(!polls?.length){
-
-box.innerHTML+=
-"<div class='card'>"+
-"No polls yet. Create the first poll! 🎉"+
-"</div>";
-
-return;
-
-}
-
-const ids=polls.map(p=>p.id);
-
-const {data:votes} =
-await sb
-.from("votes")
-.select("poll_id,user_id,option")
-.in("poll_id",ids);
-
-const profileMap={};
-
-for(const poll of polls){
-
-if(poll.user_id){
-
-profileMap[poll.user_id]=
-await getProfile(poll.user_id);
-
-}
-
-}
-
-for(const poll of polls){
-
-const profile=profileMap[poll.user_id];
-
-let options=poll.options;
-
-if(typeof options==="string"){
-
-try{
-options=JSON.parse(options);
-}catch{
-options=[];
-}
-
-}
-
-if(!Array.isArray(options)){
-options=[];
-}
-
-const pollVotes=
-(votes || []).filter(
-v=>v.poll_id===poll.id
-);
-
-const myVote=
-pollVotes.find(
-v=>v.user_id===currentUser.id
-);
-
-const counts={};
-
-options.forEach(
-option=>counts[option]=0
-);
-
-pollVotes.forEach(v=>{
-counts[v.option]=(counts[v.option] || 0)+1;
-});
-
-const total=pollVotes.length;
-
-const card=document.createElement("div");
-card.className="card";
-
-const creator=document.createElement("div");
-creator.className="creator";
-
-const ca=document.createElement("div");
-ca.className="creator-avatar";
-ca.textContent=getInitial(profile?.username);
-
-const ci=document.createElement("div");
-
-ci.innerHTML=
-"<b>@"+
-esc(profile?.username || "user")+
-"</b>";
-
-creator.appendChild(ca);
-creator.appendChild(ci);
-card.appendChild(creator);
-
-const title=document.createElement("div");
-
-title.className="poll-title";
-title.textContent=poll.question || "Untitled poll";
-
-card.appendChild(title);
-
-options.forEach(option=>{
-
-const button=document.createElement("button");
-
-button.className="option";
-
-button.textContent=
-(myVote?.option===option ? "✓ " : "")+
-option+
-" — "+
-(counts[option] || 0);
-
-button.onclick=async()=>{
-
-button.disabled=true;
-
-await vote(poll.id,option);
-
-button.disabled=false;
-
-};
-
-card.appendChild(button);
-
-const bar=document.createElement("div");
-bar.className="resultbar";
-
-const fill=document.createElement("i");
-
-fill.style.width=
-(
-total
-?
-counts[option]/total*100
-:
-0
-)+"%";
-
-bar.appendChild(fill);
-card.appendChild(bar);
-
-});
-
-const info=document.createElement("div");
-
-info.className="small";
-
-info.textContent=
-total+
-" votes"+
-(myVote ? " • You voted" : "");
-
-card.appendChild(info);
-
-const like=document.createElement("button");
-
-like.className="link";
-like.style.textAlign="left";
-like.textContent="❤️ Like";
-
-like.onclick=()=>{
-likePoll(poll.id);
-};
-
-card.appendChild(like);
-
-box.appendChild(card);
-
-}
-
-}
-
-
-/* =========================
+/* =====================================================
    VOTE
-========================= */
+===================================================== */
 
-async function vote(pollId,option){
+async function vote(
+  pollId,
+  option
+){
 
-if(!currentUser){
+  if(!sb || !currentUser){
 
-toast("Please login first.");
-return;
+    toast(
+      "Please login first."
+    );
+
+    return;
+  }
+
+  try{
+
+    const {
+      data:old,
+      error:oldError
+    } =
+    await sb
+      .from("votes")
+      .select("id")
+      .eq(
+        "poll_id",
+        pollId
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .limit(1);
+
+    if(oldError){
+
+      toast(
+        oldError.message
+      );
+
+      return;
+    }
+
+
+    if(old?.length){
+
+      const {
+        error
+      } =
+      await sb
+        .from("votes")
+        .update({
+          option:option
+        })
+        .eq(
+          "id",
+          old[0].id
+        );
+
+      if(error){
+
+        toast(
+          error.message
+        );
+
+        return;
+      }
+
+    }else{
+
+      const {
+        error
+      } =
+      await sb
+        .from("votes")
+        .insert({
+
+          poll_id:pollId,
+
+          user_id:
+            currentUser.id,
+
+          option:option
+
+        });
+
+      if(error){
+
+        toast(
+          error.message
+        );
+
+        return;
+      }
+
+    }
+
+    toast(
+      "✅ Vote saved!"
+    );
+
+    await loadPolls();
+
+  }catch(error){
+
+    console.error(
+      "VOTE ERROR:",
+      error
+    );
+
+    toast(
+      error.message ||
+      "Vote failed."
+    );
+
+  }
 
 }
 
-const {data:old,error:oldError} =
-await sb
-.from("votes")
-.select("id")
-.eq("poll_id",pollId)
-.eq("user_id",currentUser.id)
-.limit(1);
 
-if(oldError){
-
-toast(oldError.message);
-return;
-
-}
-
-if(old?.length){
-
-const {error} =
-await sb
-.from("votes")
-.update({option:option})
-.eq("id",old[0].id);
-
-if(error){
-
-toast(error.message);
-return;
-
-}
-
-}else{
-
-const {error} =
-await sb
-.from("votes")
-.insert({
-
-poll_id:pollId,
-user_id:currentUser.id,
-option:option
-
-});
-
-if(error){
-
-toast(error.message);
-return;
-
-}
-
-}
-
-toast("✅ Vote saved!");
-
-await loadPolls();
-
-}
-
-
-/* =========================
+/* =====================================================
    CREATE POLL
-========================= */
+===================================================== */
 
 async function createPoll(){
 
-if(!currentUser){
+  if(!sb || !currentUser){
 
-toast("Please login first.");
-return;
+    toast(
+      "Please login first."
+    );
+
+    return;
+  }
+
+  const question =
+    document
+      .getElementById("question")
+      .value
+      .trim();
+
+  const options=[
+    "option1",
+    "option2",
+    "option3",
+    "option4"
+  ]
+  .map(
+    id =>
+      document
+        .getElementById(id)
+        .value
+        .trim()
+  )
+  .filter(Boolean);
+
+
+  if(!question){
+
+    toast(
+      "Question enter karo."
+    );
+
+    return;
+  }
+
+  if(options.length < 2){
+
+    toast(
+      "At least 2 options chahiye."
+    );
+
+    return;
+  }
+
+  if(
+    options.length !==
+    new Set(options).size
+  ){
+
+    toast(
+      "Options same nahi hone chahiye."
+    );
+
+    return;
+  }
+
+
+  try{
+
+    const {
+      error
+    } =
+    await sb
+      .from("polls")
+      .insert({
+
+        question:question,
+
+        options:options,
+
+        user_id:
+          currentUser.id
+
+      });
+
+    if(error){
+
+      toast(
+        error.message
+      );
+
+      return;
+    }
+
+
+    [
+      "question",
+      "option1",
+      "option2",
+      "option3",
+      "option4"
+    ].forEach(
+      id=>{
+        document
+          .getElementById(id)
+          .value="";
+      }
+    );
+
+
+    toast(
+      "🎉 Poll published!"
+    );
+
+    await updateProfileStats();
+
+    showPage("home");
+
+  }catch(error){
+
+    console.error(
+      "CREATE POLL ERROR:",
+      error
+    );
+
+    toast(
+      error.message ||
+      "Poll create failed."
+    );
+
+  }
 
 }
 
-const question=
-document.getElementById("question")
-.value.trim();
 
-const options=[
-"option1",
-"option2",
-"option3",
-"option4"
-]
-.map(id=>
-document.getElementById(id).value.trim()
-)
-.filter(Boolean);
-
-if(!question){
-
-toast("Question enter karo.");
-return;
-
-}
-
-if(options.length<2){
-
-toast("At least 2 options chahiye.");
-return;
-
-}
-
-if(options.length!==new Set(options).size){
-
-toast("Options same nahi hone chahiye.");
-return;
-
-}
-
-const {error} =
-await sb
-.from("polls")
-.insert({
-
-question,
-options,
-user_id:currentUser.id
-
-});
-
-if(error){
-
-toast(error.message);
-return;
-
-}
-
-[
-"question",
-"option1",
-"option2",
-"option3",
-"option4"
-].forEach(id=>{
-document.getElementById(id).value="";
-});
-
-toast("🎉 Poll published!");
-
-await updateProfileStats();
-
-showPage("home");
-
-}
-
-
-/* =========================
+/* =====================================================
    SEARCH
-========================= */
+===================================================== */
 
 function searchAll(){
 
-clearTimeout(searchTimer);
+  clearTimeout(
+    searchTimer
+  );
 
-searchTimer=setTimeout(runSearch,300);
+  searchTimer =
+    setTimeout(
+      runSearch,
+      300
+    );
 
 }
+
 
 async function runSearch(){
 
-if(!currentUser){
-return;
+  if(!sb || !currentUser){
+    return;
+  }
+
+  const q =
+    document
+      .getElementById(
+        "searchInput"
+      )
+      .value
+      .trim();
+
+  const box =
+    document.getElementById(
+      "searchResults"
+    );
+
+  if(!q){
+
+    box.textContent =
+      "Search users or polls.";
+
+    return;
+  }
+
+  try{
+
+    const {
+      data:users,
+      error:userError
+    } =
+    await sb
+      .from("profiles")
+      .select(
+        "id,username,display_name"
+      )
+      .ilike(
+        "username",
+        "%" + q + "%"
+      )
+      .limit(20);
+
+    if(userError){
+
+      console.error(
+        "USER SEARCH ERROR:",
+        userError
+      );
+
+    }
+
+    const {
+      data:polls
+    } =
+    await sb
+      .from("polls")
+      .select(
+        "id,question,user_id"
+      )
+      .ilike(
+        "question",
+        "%" + q + "%"
+      )
+      .limit(20);
+
+
+    box.innerHTML =
+      "<h3>👤 Users</h3>";
+
+
+    for(
+      const user of users || []
+    ){
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "row user";
+
+
+      const av =
+        document.createElement(
+          "div"
+        );
+
+      av.className =
+        "avatar";
+
+      av.textContent =
+        getInitial(
+          user.username
+        );
+
+
+      const info =
+        document.createElement(
+          "div"
+        );
+
+      info.className =
+        "grow";
+
+      info.innerHTML =
+        "<b>@" +
+        esc(user.username) +
+        "</b>" +
+        "<div class='small'>" +
+        esc(
+          user.display_name || ""
+        ) +
+        "</div>";
+
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.className =
+        "btn follow";
+
+
+      if(
+        user.id ===
+        currentUser.id
+      ){
+
+        button.textContent =
+          "You";
+
+        button.disabled =
+          true;
+
+      }else{
+
+        const following =
+          await isFollowing(
+            user.id
+          );
+
+        button.textContent =
+          following
+          ?
+          "Following"
+          :
+          "Follow";
+
+        if(following){
+
+          button.classList
+            .add("following");
+
+        }
+
+        button.onclick=()=>{
+
+          followUser(
+            user.id,
+            button
+          );
+
+        };
+
+      }
+
+
+      row.appendChild(av);
+      row.appendChild(info);
+      row.appendChild(button);
+
+      box.appendChild(row);
+
+    }
+
+
+    box.innerHTML +=
+      "<h3>🗳️ Polls</h3>";
+
+
+    for(
+      const poll of polls || []
+    ){
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "notice";
+
+      div.textContent =
+        poll.question;
+
+      box.appendChild(div);
+
+    }
+
+
+    if(
+      !users?.length &&
+      !polls?.length
+    ){
+
+      box.innerHTML +=
+        "<div class='small'>" +
+        "No results found." +
+        "</div>";
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "SEARCH ERROR:",
+      error
+    );
+
+    box.innerHTML =
+      "<div class='notice'>" +
+      esc(
+        error.message ||
+        "Search failed."
+      ) +
+      "</div>";
+
+  }
+
 }
 
-const q=
-document.getElementById("searchInput")
-.value.trim();
 
-const box=
-document.getElementById("searchResults");
-
-if(!q){
-
-box.textContent="Search users or polls.";
-return;
-
-}
-
-const {data:users} =
-await sb
-.from("profiles")
-.select("id,username,display_name")
-.ilike("username","%"+q+"%")
-.limit(20);
-
-const {data:polls} =
-await sb
-.from("polls")
-.select("id,question,user_id")
-.ilike("question","%"+q+"%")
-.limit(20);
-
-box.innerHTML="<h3>👤 Users</h3>";
-
-for(const user of users || []){
-
-const row=document.createElement("div");
-row.className="row user";
-
-const av=document.createElement("div");
-av.className="avatar";
-av.textContent=getInitial(user.username);
-
-const info=document.createElement("div");
-info.className="grow";
-
-info.innerHTML=
-"<b>@"+esc(user.username)+"</b>"+
-"<div class='small'>"+
-esc(user.display_name || "")+
-"</div>";
-
-const button=document.createElement("button");
-
-button.className="btn follow";
-
-if(user.id===currentUser.id){
-
-button.textContent="You";
-button.disabled=true;
-
-}else{
-
-const following=
-await isFollowing(user.id);
-
-button.textContent=
-following ? "Following" : "Follow";
-
-if(following){
-button.classList.add("following");
-}
-
-button.onclick=()=>{
-followUser(user.id,button);
-};
-
-}
-
-row.appendChild(av);
-row.appendChild(info);
-row.appendChild(button);
-
-box.appendChild(row);
-
-}
-
-box.innerHTML+="<h3>🗳️ Polls</h3>";
-
-for(const poll of polls || []){
-
-const div=document.createElement("div");
-
-div.className="notice";
-div.textContent=poll.question;
-
-box.appendChild(div);
-
-}
-
-if(!users?.length && !polls?.length){
-
-box.innerHTML+=
-"<div class='small'>No results found.</div>";
-
-}
-
-}
-
-
-/* =========================
+/* =====================================================
    PROFILE TABS
-========================= */
+===================================================== */
 
-async function profileTab(tab,button){
+async function profileTab(
+  tab,
+  button
+){
 
-document
-.querySelectorAll(".tabs button")
-.forEach(b=>b.classList.remove("active"));
+  if(!sb || !currentUser){
+    return;
+  }
 
-if(button){
-button.classList.add("active");
+  document
+    .querySelectorAll(
+      ".tabs button"
+    )
+    .forEach(
+      b =>
+        b.classList
+          .remove("active")
+    );
+
+  if(button){
+
+    button.classList
+      .add("active");
+
+  }
+
+  const box =
+    document.getElementById(
+      "profileContent"
+    );
+
+  box.innerHTML =
+    "Loading...";
+
+
+  /* MY POLLS */
+
+  if(tab==="polls"){
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("polls")
+      .select(
+        "id,question,created_at"
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+    if(error){
+
+      box.innerHTML =
+        "<div class='notice'>" +
+        esc(error.message) +
+        "</div>";
+
+      return;
+    }
+
+    box.innerHTML="";
+
+    (data || []).forEach(
+      poll=>{
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+        div.className =
+          "notice";
+
+        div.textContent =
+          poll.question;
+
+        box.appendChild(div);
+
+      }
+    );
+
+    if(!data?.length){
+
+      box.textContent =
+        "No polls yet.";
+
+    }
+
+  }
+
+
+  /* MY VOTES */
+
+  if(tab==="votes"){
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("votes")
+      .select(
+        "option,polls(question)"
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      );
+
+    if(error){
+
+      box.innerHTML =
+        "<div class='notice'>" +
+        esc(error.message) +
+        "</div>";
+
+      return;
+    }
+
+    box.innerHTML="";
+
+    (data || []).forEach(
+      v=>{
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+        div.className =
+          "notice";
+
+        div.innerHTML =
+          "<b>" +
+          esc(
+            v.polls?.question ||
+            "Poll"
+          ) +
+          "</b><br>✓ " +
+          esc(v.option);
+
+        box.appendChild(div);
+
+      }
+    );
+
+    if(!data?.length){
+
+      box.textContent =
+        "No votes yet.";
+
+    }
+
+  }
+
+
+  /* FOLLOWERS */
+
+  if(tab==="followers"){
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("follows")
+      .select(
+        "follower_id"
+      )
+      .eq(
+        "following_id",
+        currentUser.id
+      );
+
+    if(error){
+
+      box.innerHTML =
+        "<div class='notice'>" +
+        esc(error.message) +
+        "</div>";
+
+      return;
+    }
+
+    box.innerHTML="";
+
+    for(
+      const item of data || []
+    ){
+
+      const user =
+        await getProfile(
+          item.follower_id
+        );
+
+      if(!user){
+        continue;
+      }
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "row user";
+
+
+      const av =
+        document.createElement(
+          "div"
+        );
+
+      av.className =
+        "avatar";
+
+      av.textContent =
+        getInitial(
+          user.username
+        );
+
+
+      const info =
+        document.createElement(
+          "div"
+        );
+
+      info.className =
+        "grow";
+
+      info.innerHTML =
+        "<b>@" +
+        esc(user.username) +
+        "</b>";
+
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.className =
+        "btn follow";
+
+
+      if(
+        user.id ===
+        currentUser.id
+      ){
+
+        button.textContent =
+          "You";
+
+        button.disabled =
+          true;
+
+      }else{
+
+        const following =
+          await isFollowing(
+            user.id
+          );
+
+        button.textContent =
+          following
+          ?
+          "Following"
+          :
+          "Follow";
+
+        if(following){
+
+          button.classList
+            .add("following");
+
+        }
+
+        button.onclick=()=>{
+
+          followUser(
+            user.id,
+            button
+          );
+
+        };
+
+      }
+
+
+      row.appendChild(av);
+      row.appendChild(info);
+      row.appendChild(button);
+
+      box.appendChild(row);
+
+    }
+
+    if(!data?.length){
+
+      box.textContent =
+        "No followers yet.";
+
+    }
+
+  }
+
+
+  /* FOLLOWING */
+
+  if(tab==="following"){
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("follows")
+      .select(
+        "following_id"
+      )
+      .eq(
+        "follower_id",
+        currentUser.id
+      );
+
+    if(error){
+
+      box.innerHTML =
+        "<div class='notice'>" +
+        esc(error.message) +
+        "</div>";
+
+      return;
+    }
+
+    box.innerHTML="";
+
+    for(
+      const item of data || []
+    ){
+
+      const user =
+        await getProfile(
+          item.following_id
+        );
+
+      if(!user){
+        continue;
+      }
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "row user";
+
+
+      const av =
+        document.createElement(
+          "div"
+        );
+
+      av.className =
+        "avatar";
+
+      av.textContent =
+        getInitial(
+          user.username
+        );
+
+
+      const info =
+        document.createElement(
+          "div"
+        );
+
+      info.className =
+        "grow";
+
+      info.innerHTML =
+        "<b>@" +
+        esc(user.username) +
+        "</b>";
+
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.className =
+        "btn following";
+
+      button.textContent =
+        "Following";
+
+      button.onclick=()=>{
+
+        followUser(
+          user.id,
+          button
+        );
+
+      };
+
+
+      row.appendChild(av);
+      row.appendChild(info);
+      row.appendChild(button);
+
+      box.appendChild(row);
+
+    }
+
+    if(!data?.length){
+
+      box.textContent =
+        "Not following anyone yet.";
+
+    }
+
+  }
+
 }
 
-const box=
-document.getElementById("profileContent");
 
-box.innerHTML="Loading...";
-
-if(tab==="polls"){
-
-const {data,error} =
-await sb
-.from("polls")
-.select("id,question,created_at")
-.eq("user_id",currentUser.id)
-.order("created_at",{ascending:false});
-
-if(error){
-
-box.innerHTML=
-"<div class='notice'>"+
-esc(error.message)+
-"</div>";
-
-return;
-
-}
-
-box.innerHTML="";
-
-(data || []).forEach(poll=>{
-
-const div=document.createElement("div");
-
-div.className="notice";
-div.textContent=poll.question;
-
-box.appendChild(div);
-
-});
-
-if(!data?.length){
-box.textContent="No polls yet.";
-}
-
-}
-
-if(tab==="votes"){
-
-const {data,error} =
-await sb
-.from("votes")
-.select("option,polls(question)")
-.eq("user_id",currentUser.id);
-
-if(error){
-
-box.innerHTML=
-"<div class='notice'>"+
-esc(error.message)+
-"</div>";
-
-return;
-
-}
-
-box.innerHTML="";
-
-(data || []).forEach(v=>{
-
-const div=document.createElement("div");
-
-div.className="notice";
-
-div.innerHTML=
-"<b>"+
-esc(v.polls?.question || "Poll")+
-"</b><br>✓ "+
-esc(v.option);
-
-box.appendChild(div);
-
-});
-
-if(!data?.length){
-box.textContent="No votes yet.";
-}
-
-}
-
-if(tab==="followers"){
-
-const {data,error} =
-await sb
-.from("follows")
-.select("follower_id")
-.eq("following_id",currentUser.id);
-
-if(error){
-
-box.innerHTML=
-"<div class='notice'>"+
-esc(error.message)+
-"</div>";
-
-return;
-
-}
-
-box.innerHTML="";
-
-for(const item of data || []){
-
-const user=
-await getProfile(item.follower_id);
-
-if(!user)continue;
-
-const row=document.createElement("div");
-row.className="row user";
-
-const av=document.createElement("div");
-av.className="avatar";
-av.textContent=getInitial(user.username);
-
-const info=document.createElement("div");
-info.className="grow";
-info.innerHTML="<b>@"+esc(user.username)+"</b>";
-
-const button=document.createElement("button");
-
-button.className="btn follow";
-
-if(user.id===currentUser.id){
-
-button.textContent="You";
-button.disabled=true;
-
-}else{
-
-const following=
-await isFollowing(user.id);
-
-button.textContent=
-following ? "Following" : "Follow";
-
-if(following){
-button.classList.add("following");
-}
-
-button.onclick=()=>{
-followUser(user.id,button);
-};
-
-}
-
-row.appendChild(av);
-row.appendChild(info);
-row.appendChild(button);
-
-box.appendChild(row);
-
-}
-
-if(!data?.length){
-box.textContent="No followers yet.";
-}
-
-}
-
-if(tab==="following"){
-
-const {data,error} =
-await sb
-.from("follows")
-.select("following_id")
-.eq("follower_id",currentUser.id);
-
-if(error){
-
-box.innerHTML=
-"<div class='notice'>"+
-esc(error.message)+
-"</div>";
-
-return;
-
-}
-
-box.innerHTML="";
-
-for(const item of data || []){
-
-const user=
-await getProfile(item.following_id);
-
-if(!user)continue;
-
-const row=document.createElement("div");
-row.className="row user";
-
-const av=document.createElement("div");
-av.className="avatar";
-av.textContent=getInitial(user.username);
-
-const info=document.createElement("div");
-info.className="grow";
-info.innerHTML="<b>@"+esc(user.username)+"</b>";
-
-const button=document.createElement("button");
-
-button.className="btn following";
-button.textContent="Following";
-
-button.onclick=()=>{
-followUser(user.id,button);
-};
-
-row.appendChild(av);
-row.appendChild(info);
-row.appendChild(button);
-
-box.appendChild(row);
-
-}
-
-if(!data?.length){
-box.textContent="Not following anyone yet.";
-}
-
-}
-
-
-/* =========================
+/* =====================================================
    NOTIFICATIONS
-========================= */
+===================================================== */
 
-async function createNotification(userId,message){
+async function createNotification(
+  userId,
+  message
+){
 
-if(!currentUser || userId===currentUser.id){
-return;
+  if(
+    !sb ||
+    !currentUser ||
+    userId === currentUser.id
+  ){
+
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+    await sb
+      .from("notifications")
+      .insert({
+
+        user_id:userId,
+
+        actor_id:
+          currentUser.id,
+
+        type:"activity",
+
+        message:message
+
+      });
+
+    if(error){
+
+      console.error(
+        "NOTIFICATION ERROR:",
+        error
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "NOTIFICATION ERROR:",
+      error
+    );
+
+  }
+
 }
 
-const {error} =
-await sb
-.from("notifications")
-.insert({
-
-user_id:userId,
-actor_id:currentUser.id,
-type:"activity",
-message:message
-
-});
-
-if(error){
-console.error("Notification error:",error);
-}
-
-}
 
 async function loadNotifications(){
 
-if(!currentUser){
-return;
+  if(!sb || !currentUser){
+    return;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("notifications")
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {ascending:false}
+      )
+      .limit(50);
+
+
+    const box =
+      document.getElementById(
+        "notifications"
+      );
+
+
+    if(error){
+
+      box.innerHTML =
+        "<div class='notice'>" +
+        esc(error.message) +
+        "</div>";
+
+      return;
+    }
+
+
+    box.innerHTML="";
+
+
+    if(!data?.length){
+
+      box.textContent =
+        "No notifications yet.";
+
+    }else{
+
+      data.forEach(
+        n=>{
+
+          const div =
+            document.createElement(
+              "div"
+            );
+
+          div.className =
+            "notice";
+
+          div.textContent =
+            (
+              n.message ||
+              "Activity"
+            ) +
+            " • " +
+            (
+              n.created_at
+              ?
+              new Date(
+                n.created_at
+              ).toLocaleString()
+              :
+              ""
+            );
+
+          box.appendChild(div);
+
+        }
+      );
+
+    }
+
+
+    const unread =
+      (data || [])
+        .filter(
+          n => !n.read
+        )
+        .length;
+
+
+    const badge =
+      document.getElementById(
+        "notificationBadge"
+      );
+
+    badge.textContent =
+      unread;
+
+    badge.classList.toggle(
+      "hidden",
+      unread === 0
+    );
+
+  }catch(error){
+
+    console.error(
+      "NOTIFICATIONS ERROR:",
+      error
+    );
+
+  }
+
 }
 
-const {data,error} =
-await sb
-.from("notifications")
-.select("*")
-.eq("user_id",currentUser.id)
-.order("created_at",{ascending:false})
-.limit(50);
 
-const box=
-document.getElementById("notifications");
-
-if(error){
-
-box.innerHTML=
-"<div class='notice'>"+
-esc(error.message)+
-"</div>";
-
-return;
-
-}
-
-box.innerHTML="";
-
-if(!data?.length){
-
-box.textContent="No notifications yet.";
-
-}else{
-
-data.forEach(n=>{
-
-const div=document.createElement("div");
-
-div.className="notice";
-
-div.textContent=
-(n.message || "Activity")+
-" • "+
-(
-n.created_at
-?
-new Date(n.created_at).toLocaleString()
-:
-""
-);
-
-box.appendChild(div);
-
-});
-
-}
-
-const unread=
-(data || []).filter(n=>!n.read).length;
-
-const badge=
-document.getElementById("notificationBadge");
-
-badge.textContent=unread;
-
-badge.classList.toggle(
-"hidden",
-unread===0
-);
-
-}
-
-
-/* =========================
+/* =====================================================
    LIKE
-========================= */
+===================================================== */
 
-async function likePoll(pollId){
+async function likePoll(
+  pollId
+){
 
-if(!currentUser){
+  if(!sb || !currentUser){
 
-toast("Please login first.");
-return;
+    toast(
+      "Please login first."
+    );
+
+    return;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("likes")
+      .select("id")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .eq(
+        "poll_id",
+        pollId
+      )
+      .limit(1);
+
+
+    if(error){
+
+      toast(
+        error.message
+      );
+
+      return;
+    }
+
+
+    if(data?.length){
+
+      const {
+        error
+      } =
+      await sb
+        .from("likes")
+        .delete()
+        .eq(
+          "id",
+          data[0].id
+        );
+
+      if(error){
+
+        toast(
+          error.message
+        );
+
+        return;
+      }
+
+      toast(
+        "Like removed"
+      );
+
+    }else{
+
+      const {
+        error
+      } =
+      await sb
+        .from("likes")
+        .insert({
+
+          user_id:
+            currentUser.id,
+
+          poll_id:
+            pollId
+
+        });
+
+      if(error){
+
+        toast(
+          error.message
+        );
+
+        return;
+      }
+
+      toast(
+        "❤️ Liked"
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "LIKE ERROR:",
+      error
+    );
+
+    toast(
+      error.message ||
+      "Like failed."
+    );
+
+  }
 
 }
 
-const {data,error} =
-await sb
-.from("likes")
-.select("id")
-.eq("user_id",currentUser.id)
-.eq("poll_id",pollId)
-.limit(1);
 
-if(error){
-
-toast(error.message);
-return;
-
-}
-
-if(data?.length){
-
-const {error} =
-await sb
-.from("likes")
-.delete()
-.eq("id",data[0].id);
-
-if(error){
-
-toast(error.message);
-return;
-
-}
-
-toast("Like removed");
-
-}else{
-
-const {error} =
-await sb
-.from("likes")
-.insert({
-
-user_id:currentUser.id,
-poll_id:pollId
-
-});
-
-if(error){
-
-toast(error.message);
-return;
-
-}
-
-toast("❤️ Liked");
-
-}
-
-}
-
-
-/* =========================
-   CHAT
-========================= */
+/* =====================================================
+   CHAT SEARCH
+===================================================== */
 
 function searchChatUsers(){
 
-clearTimeout(chatTimer);
+  clearTimeout(
+    chatTimer
+  );
 
-chatTimer=setTimeout(
-runChatSearch,
-300
-);
+  chatTimer =
+    setTimeout(
+      runChatSearch,
+      300
+    );
 
 }
+
 
 async function runChatSearch(){
 
-if(!currentUser){
-return;
+  if(!sb || !currentUser){
+    return;
+  }
+
+  const q =
+    document
+      .getElementById(
+        "chatSearch"
+      )
+      .value
+      .trim();
+
+  const box =
+    document.getElementById(
+      "chatUsers"
+    );
+
+  if(!q){
+
+    box.textContent =
+      "Search a username to start chatting.";
+
+    return;
+  }
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("profiles")
+      .select(
+        "id,username,display_name"
+      )
+      .ilike(
+        "username",
+        "%" + q + "%"
+      )
+      .neq(
+        "id",
+        currentUser.id
+      )
+      .limit(10);
+
+
+    if(error){
+
+      box.innerHTML =
+        "<div class='notice'>" +
+        esc(error.message) +
+        "</div>";
+
+      return;
+    }
+
+
+    box.innerHTML="";
+
+
+    if(!data?.length){
+
+      box.textContent =
+        "No users found.";
+
+      return;
+    }
+
+
+    data.forEach(
+      user=>{
+
+        const row =
+          document.createElement(
+            "div"
+          );
+
+        row.className =
+          "row chat-user";
+
+
+        const av =
+          document.createElement(
+            "div"
+          );
+
+        av.className =
+          "avatar";
+
+        av.textContent =
+          getInitial(
+            user.username
+          );
+
+
+        const info =
+          document.createElement(
+            "div"
+          );
+
+        info.className =
+          "grow";
+
+        info.innerHTML =
+          "<b>@" +
+          esc(user.username) +
+          "</b>" +
+          "<div class='chat-preview'>" +
+          esc(
+            user.display_name ||
+            "Start chatting"
+          ) +
+          "</div>";
+
+
+        row.appendChild(av);
+        row.appendChild(info);
+
+
+        row.onclick=()=>{
+
+          openChat(user);
+
+        };
+
+
+        box.appendChild(row);
+
+      }
+    );
+
+  }catch(error){
+
+    console.error(
+      "CHAT SEARCH ERROR:",
+      error
+    );
+
+    box.innerHTML =
+      "<div class='notice'>" +
+      esc(error.message) +
+      "</div>";
+
+  }
+
 }
 
-const q=
-document.getElementById("chatSearch")
-.value.trim();
 
-const box=
-document.getElementById("chatUsers");
-
-if(!q){
-
-box.textContent=
-"Search a username to start chatting.";
-
-return;
-
-}
-
-const {data,error} =
-await sb
-.from("profiles")
-.select("id,username,display_name")
-.ilike("username","%"+q+"%")
-.neq("id",currentUser.id)
-.limit(10);
-
-if(error){
-
-box.innerHTML=
-"<div class='notice'>"+
-esc(error.message)+
-"</div>";
-
-return;
-
-}
-
-box.innerHTML="";
-
-if(!data?.length){
-
-box.textContent="No users found.";
-return;
-
-}
-
-data.forEach(user=>{
-
-const row=document.createElement("div");
-row.className="row chat-user";
-
-const av=document.createElement("div");
-av.className="avatar";
-av.textContent=getInitial(user.username);
-
-const info=document.createElement("div");
-info.className="grow";
-
-info.innerHTML=
-"<b>@"+esc(user.username)+"</b>"+
-"<div class='chat-preview'>"+
-esc(user.display_name || "Start chatting")+
-"</div>";
-
-row.appendChild(av);
-row.appendChild(info);
-
-row.onclick=()=>{
-openChat(user);
-};
-
-box.appendChild(row);
-
-});
-
-}
-
+/* =====================================================
+   OPEN CHAT
+===================================================== */
 
 async function openChat(user){
 
-if(!user || !currentUser){
-return;
+  if(!user || !currentUser){
+    return;
+  }
+
+  currentChatUser =
+    user;
+
+  document
+    .getElementById("chatArea")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("chatTitle")
+    .textContent =
+    "@" +
+    (
+      user.username ||
+      "user"
+    );
+
+
+  document
+    .getElementById("chatStatus")
+    .textContent =
+    user.display_name ||
+    "Poll Pulse user";
+
+
+  document
+    .getElementById("chatAvatar")
+    .textContent =
+    getInitial(
+      user.username
+    );
+
+
+  await loadMessages();
+
 }
 
-currentChatUser=user;
-
-document
-.getElementById("chatArea")
-.classList
-.remove("hidden");
-
-document.getElementById("chatTitle")
-.textContent="@"+(user.username || "user");
-
-document.getElementById("chatStatus")
-.textContent=
-user.display_name || "Poll Pulse user";
-
-document.getElementById("chatAvatar")
-.textContent=
-getInitial(user.username);
-
-await loadMessages();
-
-}
 
 function closeChat(){
 
-currentChatUser=null;
+  currentChatUser =
+    null;
 
-document
-.getElementById("chatArea")
-.classList
-.add("hidden");
+  document
+    .getElementById("chatArea")
+    .classList
+    .add("hidden");
 
 }
 
+
+/* =====================================================
+   LOAD MESSAGES
+===================================================== */
 
 async function loadMessages(){
 
-if(!currentUser || !currentChatUser){
-return;
+  if(
+    !sb ||
+    !currentUser ||
+    !currentChatUser
+  ){
+
+    return;
+  }
+
+  const box =
+    document.getElementById(
+      "messages"
+    );
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("messages")
+      .select("*")
+      .or(
+
+        "and(sender_id.eq." +
+        currentUser.id +
+        ",receiver_id.eq." +
+        currentChatUser.id +
+        ")," +
+
+        "and(sender_id.eq." +
+        currentChatUser.id +
+        ",receiver_id.eq." +
+        currentUser.id +
+        ")"
+
+      )
+      .order(
+        "created_at",
+        {ascending:true}
+      );
+
+
+    if(error){
+
+      box.innerHTML =
+        "<div class='notice'>" +
+        esc(error.message) +
+        "</div>";
+
+      return;
+    }
+
+
+    box.innerHTML="";
+
+
+    (data || []).forEach(
+      message=>{
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+        div.className =
+          "bubble " +
+          (
+            message.sender_id ===
+            currentUser.id
+            ?
+            "mine"
+            :
+            ""
+          );
+
+        div.textContent =
+          message.message;
+
+        box.appendChild(div);
+
+      }
+    );
+
+
+    box.scrollTop =
+      box.scrollHeight;
+
+  }catch(error){
+
+    console.error(
+      "MESSAGES ERROR:",
+      error
+    );
+
+    box.innerHTML =
+      "<div class='notice'>" +
+      esc(error.message) +
+      "</div>";
+
+  }
+
 }
 
-const {data,error} =
-await sb
-.from("messages")
-.select("*")
-.or(
-"and(sender_id.eq."+currentUser.id+
-",receiver_id.eq."+currentChatUser.id+
-"),and(sender_id.eq."+currentChatUser.id+
-",receiver_id.eq."+currentUser.id+")"
-)
-.order("created_at",{ascending:true});
 
-const box=
-document.getElementById("messages");
+/* =====================================================
+   CHAT ENTER
+===================================================== */
 
-if(error){
+function handleChatEnter(
+  event
+){
 
-box.innerHTML=
-"<div class='notice'>"+
-esc(error.message)+
-"</div>";
+  if(
+    event.key ===
+    "Enter"
+  ){
 
-return;
+    event.preventDefault();
 
-}
+    sendMessage();
 
-box.innerHTML="";
-
-(data || []).forEach(message=>{
-
-const div=document.createElement("div");
-
-div.className=
-"bubble "+
-(
-message.sender_id===currentUser.id
-?
-"mine"
-:
-""
-);
-
-div.textContent=message.message;
-
-box.appendChild(div);
-
-});
-
-box.scrollTop=box.scrollHeight;
+  }
 
 }
 
 
-function handleChatEnter(event){
-
-if(event.key==="Enter"){
-
-event.preventDefault();
-sendMessage();
-
-}
-
-}
-
+/* =====================================================
+   SEND MESSAGE
+===================================================== */
 
 async function sendMessage(){
 
-if(!currentUser || !currentChatUser){
-return;
+  if(
+    !sb ||
+    !currentUser ||
+    !currentChatUser
+  ){
+
+    return;
+  }
+
+  const input =
+    document.getElementById(
+      "chatInput"
+    );
+
+  const text =
+    input.value.trim();
+
+  if(!text){
+    return;
+  }
+
+
+  try{
+
+    const {
+      error
+    } =
+    await sb
+      .from("messages")
+      .insert({
+
+        sender_id:
+          currentUser.id,
+
+        receiver_id:
+          currentChatUser.id,
+
+        message:text
+
+      });
+
+
+    if(error){
+
+      toast(
+        "Message error: " +
+        error.message
+      );
+
+      return;
+    }
+
+
+    input.value="";
+
+
+    await createNotification(
+      currentChatUser.id,
+      "sent you a message"
+    );
+
+
+    await loadMessages();
+
+    await updateChatBadge();
+
+  }catch(error){
+
+    console.error(
+      "SEND MESSAGE ERROR:",
+      error
+    );
+
+    toast(
+      error.message ||
+      "Message failed."
+    );
+
+  }
+
 }
 
-const input=
-document.getElementById("chatInput");
 
-const text=input.value.trim();
-
-if(!text){
-return;
-}
-
-const {error} =
-await sb
-.from("messages")
-.insert({
-
-sender_id:currentUser.id,
-receiver_id:currentChatUser.id,
-message:text
-
-});
-
-if(error){
-
-toast(
-"Message error: "+
-error.message
-);
-
-return;
-
-}
-
-input.value="";
-
-await createNotification(
-currentChatUser.id,
-"sent you a message"
-);
-
-await loadMessages();
-
-await updateChatBadge();
-
-}
-
+/* =====================================================
+   CHAT BADGE
+===================================================== */
 
 async function updateChatBadge(){
 
-if(!currentUser){
-return;
+  if(!sb || !currentUser){
+    return;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from("messages")
+      .select("id")
+      .eq(
+        "receiver_id",
+        currentUser.id
+      )
+      .limit(50);
+
+
+    if(error){
+
+      console.error(
+        "CHAT BADGE ERROR:",
+        error
+      );
+
+      return;
+    }
+
+
+    const badge =
+      document.getElementById(
+        "chatBadge"
+      );
+
+    const count =
+      (data || []).length;
+
+    badge.textContent =
+      count;
+
+    badge.classList.toggle(
+      "hidden",
+      count === 0
+    );
+
+  }catch(error){
+
+    console.error(
+      "CHAT BADGE ERROR:",
+      error
+    );
+
+  }
+
 }
 
-const {data,error} =
-await sb
-.from("messages")
-.select("id")
-.eq("receiver_id",currentUser.id)
-.limit(50);
 
-if(error){
-
-console.error(
-"CHAT BADGE ERROR:",
-error
-);
-
-return;
-
-}
-
-const badge=
-document.getElementById("chatBadge");
-
-const count=(data || []).length;
-
-badge.textContent=count;
-
-badge.classList.toggle(
-"hidden",
-count===0
-);
-
-}
-
-
-/* =========================
+/* =====================================================
    LOGOUT
-========================= */
+===================================================== */
 
 async function logout(){
 
-try{
-await sb.auth.signOut();
-}catch(error){
-console.error(error);
+  try{
+
+    if(sb){
+
+      await sb.auth.signOut();
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "LOGOUT ERROR:",
+      error
+    );
+
+  }
+
+
+  currentUser =
+    null;
+
+  currentChatUser =
+    null;
+
+
+  document
+    .getElementById("homeScreen")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("authScreen")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("password")
+    .value="";
+
+
+  authMessage(
+    "Logged out."
+  );
+
 }
 
-currentUser=null;
 
-document
-.getElementById("homeScreen")
-.classList
-.add("hidden");
-
-document
-.getElementById("authScreen")
-.classList
-.remove("hidden");
-
-document.getElementById("password").value="";
-
-authMessage("Logged out.");
-
-}
-
-
-/* =========================
-   SESSION
-========================= */
+/* =====================================================
+   AUTH SESSION
+===================================================== */
 
 async function initAuth(){
 
-try{
+  if(!sb){
+    return;
+  }
 
-const {
-data,
-error
-} =
-await sb.auth.getSession();
+  try{
 
-if(error){
+    const {
+      data,
+      error
+    } =
+    await sb.auth.getSession();
 
-console.error(
-"SESSION ERROR:",
-error
-);
 
-return;
+    if(error){
+
+      console.error(
+        "SESSION ERROR:",
+        error
+      );
+
+      return;
+    }
+
+
+    if(
+      data?.session?.user
+    ){
+
+      await openApp(
+        data.session.user
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "INIT AUTH ERROR:",
+      error
+    );
+
+  }
 
 }
 
-if(data?.session?.user){
 
-await openApp(
-data.session.user
-);
+/* =====================================================
+   AUTH STATE CHANGE
+===================================================== */
+
+function setupAuthListener(){
+
+  if(!sb){
+    return;
+  }
+
+  sb.auth.onAuthStateChange(
+    async(
+      event,
+      session
+    )=>{
+
+      console.log(
+        "AUTH EVENT:",
+        event
+      );
+
+
+      if(
+        event ===
+        "SIGNED_IN" &&
+        session?.user
+      ){
+
+        if(!currentUser){
+
+          await openApp(
+            session.user
+          );
+
+        }
+
+      }
+
+
+      if(
+        event ===
+        "PASSWORD_RECOVERY"
+      ){
+
+        document
+          .getElementById(
+            "normalAuth"
+          )
+          .classList
+          .add("hidden");
+
+        document
+          .getElementById(
+            "recoveryBox"
+          )
+          .classList
+          .remove("hidden");
+
+        authMessage(
+          "New password set karo."
+        );
+
+      }
+
+
+      if(
+        event ===
+        "SIGNED_OUT"
+      ){
+
+        currentUser =
+          null;
+
+      }
+
+    }
+  );
 
 }
 
-}catch(error){
 
-console.error(
-"INIT AUTH ERROR:",
-error
-);
+/* =====================================================
+   START APP
+===================================================== */
+
+function startApp(){
+
+  const ready =
+    initSupabase();
+
+  if(!ready){
+    return;
+  }
+
+  setupAuthListener();
+
+  initAuth();
 
 }
 
-}
 
-sb.auth.onAuthStateChange(
-async(event,session)=>{
-
-console.log(
-"AUTH EVENT:",
-event
-);
+/* =====================================================
+   START AFTER PAGE LOAD
+===================================================== */
 
 if(
-event==="SIGNED_IN" &&
-session?.user
+  document.readyState ===
+  "loading"
 ){
 
-if(!currentUser){
+  document.addEventListener(
+    "DOMContentLoaded",
+    startApp
+  );
 
-await openApp(
-session.user
-);
+}else{
 
-}
-
-}
-
-if(
-event==="PASSWORD_RECOVERY"
-){
-
-authMessage(
-"Password recovery link open ho gaya. New password set karna hoga."
-);
+  startApp();
 
 }
-
-if(
-event==="SIGNED_OUT"
-){
-
-currentUser=null;
-
-}
-
-}
-);
-
-initAuth();
 
 </script>
 
