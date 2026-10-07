@@ -2,14 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport"
-content="width=device-width, initial-scale=1, maximum-scale=1,
-minimum-scale=1, user-scalable=no, viewport-fit=cover">
-
-<meta name="theme-color" content="#7c3aed">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
+      content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
 
 <title>Poll Pulse</title>
 
@@ -24,16 +18,14 @@ html,body{
   padding:0;
   width:100%;
   min-height:100%;
-  overflow-x:hidden;
-  background:#f7f5ff;
-  color:#181525;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,
-  "Segoe UI",sans-serif;
+  font-family:Inter,Arial,sans-serif;
+  background:#f5f7fb;
+  color:#18202a;
+  overscroll-behavior:none;
 }
 
 body{
-  min-height:100vh;
-  min-height:100dvh;
+  overflow-x:hidden;
 }
 
 button,input,textarea{
@@ -45,25 +37,11 @@ button{
   cursor:pointer;
 }
 
-button:disabled{
-  opacity:.55;
-}
-
-input,textarea{
-  outline:none;
-}
-
-img{
-  max-width:100%;
-}
-
 .hidden{
   display:none!important;
 }
 
-/* =========================
-AUTH
-========================= */
+/* ================= AUTH ================= */
 
 #authScreen{
   min-height:100vh;
@@ -71,226 +49,205 @@ AUTH
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:
-    max(24px,env(safe-area-inset-top))
-    18px
-    max(24px,env(safe-area-inset-bottom));
+  padding:24px;
   background:
-    radial-gradient(circle at 10% 10%,#ddd6fe 0,transparent 35%),
-    radial-gradient(circle at 90% 20%,#fbcfe8 0,transparent 32%),
-    linear-gradient(135deg,#faf7ff,#f2efff);
-}
-
-.auth-wrap{
-  width:100%;
-  max-width:430px;
-}
-
-.brand{
-  text-align:center;
-  margin-bottom:22px;
-}
-
-.brand-logo{
-  width:76px;
-  height:76px;
-  margin:auto auto 14px;
-  border-radius:25px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  font-size:34px;
-  font-weight:900;
-  background:linear-gradient(135deg,#7c3aed,#ec4899);
-  box-shadow:0 18px 45px rgba(124,58,237,.28);
-}
-
-.brand h1{
-  margin:0;
-  font-size:32px;
-  font-weight:900;
-  letter-spacing:-1.5px;
-}
-
-.brand p{
-  margin:7px 0 0;
-  color:#77718a;
-  font-size:14px;
+    radial-gradient(circle at 10% 10%,#dfe8ff 0,transparent 32%),
+    radial-gradient(circle at 90% 90%,#e7ddff 0,transparent 35%),
+    #f7f9ff;
 }
 
 .auth-card{
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(18px);
+  width:100%;
+  max-width:430px;
+  background:#fff;
   border-radius:28px;
-  padding:24px;
-  box-shadow:0 25px 70px rgba(55,35,100,.13);
+  padding:30px 24px;
+  box-shadow:0 20px 60px rgba(30,40,80,.12);
 }
 
-.auth-tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  background:#f1eff7;
-  padding:4px;
-  border-radius:14px;
-  margin-bottom:20px;
+.logo{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin-bottom:26px;
 }
 
-.auth-tab{
-  padding:11px;
-  border-radius:11px;
-  background:transparent;
-  color:#77718a;
+.logo-icon{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  background:linear-gradient(135deg,#635bff,#8b5cf6);
+  color:#fff;
+  box-shadow:0 10px 25px rgba(99,91,255,.25);
+}
+
+.logo-title{
+  font-size:23px;
   font-weight:800;
 }
 
-.auth-tab.active{
-  background:white;
-  color:#6d28d9;
-  box-shadow:0 4px 12px rgba(0,0,0,.06);
+.logo-sub{
+  color:#7c8494;
+  font-size:12px;
+  margin-top:2px;
+}
+
+.auth-card h1{
+  margin:0 0 8px;
+  font-size:29px;
+}
+
+.auth-desc{
+  color:#747c8b;
+  margin:0 0 23px;
+  line-height:1.5;
 }
 
 .field{
-  margin-bottom:13px;
+  margin-bottom:14px;
 }
 
 .field label{
   display:block;
-  margin:0 0 7px 3px;
-  color:#625b70;
-  font-size:12px;
-  font-weight:800;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
 }
 
-.input{
+.field input,
+.field textarea,
+.search-input{
   width:100%;
-  padding:13px 14px;
-  border:1px solid #e6e1ee;
+  border:1px solid #e3e7ef;
+  background:#f8f9fc;
   border-radius:14px;
-  background:#faf9fc;
-  color:#1f1930;
+  padding:13px 14px;
+  outline:none;
+  transition:.2s;
 }
 
-.input:focus{
-  border-color:#9b7bea;
-  background:white;
-  box-shadow:0 0 0 4px rgba(124,58,237,.08);
+.field input:focus,
+.field textarea:focus,
+.search-input:focus{
+  border-color:#756cff;
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(99,91,255,.08);
 }
 
 .primary-btn{
   width:100%;
   padding:14px;
-  margin-top:5px;
-  border-radius:15px;
-  color:white;
-  font-weight:900;
-  background:linear-gradient(135deg,#7c3aed,#ec4899);
-  box-shadow:0 12px 28px rgba(124,58,237,.22);
-}
-
-.secondary-link{
-  width:100%;
-  margin-top:12px;
-  padding:8px;
-  background:transparent;
-  color:#6d28d9;
+  border-radius:14px;
+  color:#fff;
+  background:linear-gradient(135deg,#635bff,#8b5cf6);
   font-weight:800;
+  box-shadow:0 10px 24px rgba(99,91,255,.22);
 }
 
-.auth-message{
-  display:none;
-  margin-top:13px;
-  padding:11px 12px;
-  border-radius:12px;
+.primary-btn:disabled{
+  opacity:.65;
+}
+
+.secondary-btn{
+  width:100%;
+  padding:13px;
+  margin-top:10px;
+  border-radius:14px;
+  background:#f0f1f7;
+  color:#313846;
+  font-weight:700;
+}
+
+.auth-links{
+  display:flex;
+  justify-content:space-between;
+  margin-top:16px;
+  gap:10px;
+}
+
+.text-btn{
+  background:none;
+  color:#635bff;
   font-size:13px;
+  font-weight:700;
 }
 
-.auth-message.error{
-  display:block;
-  color:#be123c;
-  background:#fff1f2;
+#authMessage{
+  min-height:20px;
+  margin:12px 0 0;
+  font-size:13px;
+  text-align:center;
 }
 
-.auth-message.success{
-  display:block;
-  color:#047857;
-  background:#ecfdf5;
+.success{
+  color:#16834b!important;
 }
 
-/* =========================
-APP
-========================= */
+.error{
+  color:#d83b4d!important;
+}
+
+/* ================= APP ================= */
 
 #appScreen{
   min-height:100vh;
   min-height:100dvh;
-  background:#f7f5ff;
+  background:#f6f7fb;
 }
 
 .app-shell{
   width:100%;
-  max-width:650px;
+  max-width:520px;
   margin:auto;
   min-height:100vh;
   min-height:100dvh;
+  background:#f6f7fb;
+  position:relative;
 }
 
 .topbar{
   position:sticky;
   top:0;
   z-index:30;
-  padding:
-    max(10px,env(safe-area-inset-top))
-    16px
-    12px;
-  background:rgba(247,245,255,.92);
+  height:68px;
+  padding:10px 16px;
+  padding-top:max(10px,env(safe-area-inset-top));
+  background:rgba(246,247,251,.94);
   backdrop-filter:blur(18px);
-  border-bottom:1px solid rgba(30,20,50,.05);
-}
-
-.topbar-inner{
   display:flex;
   align-items:center;
   justify-content:space-between;
 }
 
-.app-logo{
+.top-brand{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:9px;
 }
 
-.app-logo-icon{
-  width:40px;
-  height:40px;
-  border-radius:13px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  font-size:18px;
-  font-weight:900;
-  background:linear-gradient(135deg,#7c3aed,#ec4899);
-}
-
-.app-logo-text{
+.top-brand .logo-icon{
+  width:39px;
+  height:39px;
+  border-radius:12px;
   font-size:19px;
-  font-weight:900;
 }
 
-.top-actions{
-  display:flex;
-  gap:8px;
+.top-brand span{
+  font-weight:850;
 }
 
 .icon-btn{
-  position:relative;
-  width:40px;
-  height:40px;
+  width:42px;
+  height:42px;
   border-radius:13px;
-  background:white;
-  color:#4c455b;
-  box-shadow:0 5px 16px rgba(45,25,70,.07);
+  background:#fff;
+  box-shadow:0 5px 18px rgba(30,40,70,.07);
+  font-size:19px;
+  position:relative;
 }
 
 .badge{
@@ -301,119 +258,68 @@ APP
   height:17px;
   padding:0 4px;
   border-radius:20px;
+  background:#ff4d67;
+  color:#fff;
+  font-size:10px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:#ef4444;
-  color:white;
-  font-size:9px;
-  font-weight:900;
-  border:2px solid #f7f5ff;
+  font-weight:800;
 }
 
-.page{
-  padding:15px 15px 110px;
-}
+/* ================= CONTENT ================= */
 
-.section{
-  display:none;
+.content{
+  padding:10px 15px 110px;
 }
-
-.section.active{
-  display:block;
-}
-
-/* =========================
-HERO
-========================= */
 
 .hero{
-  padding:20px;
-  margin-bottom:18px;
   border-radius:25px;
-  color:white;
+  padding:23px;
+  color:#fff;
   background:
-    radial-gradient(circle at 90% 10%,rgba(255,255,255,.22),transparent 30%),
-    linear-gradient(135deg,#6d28d9,#9333ea 50%,#ec4899);
-  box-shadow:0 18px 38px rgba(124,58,237,.2);
-}
-
-.hero-small{
-  font-size:12px;
-  font-weight:700;
-  opacity:.85;
+    radial-gradient(circle at 100% 0,#a78bfa,transparent 40%),
+    linear-gradient(135deg,#4f46e5,#7c3aed);
+  box-shadow:0 16px 35px rgba(79,70,229,.22);
+  margin-bottom:17px;
 }
 
 .hero h2{
-  margin:6px 0;
+  margin:0 0 7px;
   font-size:25px;
-  line-height:1.1;
 }
 
 .hero p{
-  margin:8px 0 0;
-  font-size:13px;
-  line-height:1.45;
+  margin:0;
   opacity:.9;
+  line-height:1.45;
+  font-size:14px;
 }
 
-/* =========================
-HEADINGS
-========================= */
-
-.section-title-row{
+.section-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin:18px 2px 10px;
+  margin:22px 2px 11px;
 }
 
-.section-title{
+.section-head h3{
   margin:0;
-  font-size:18px;
-  font-weight:900;
+  font-size:17px;
 }
 
-.small-link{
-  background:transparent;
-  color:#7c3aed;
+.muted{
+  color:#818998;
   font-size:12px;
-  font-weight:900;
 }
 
-/* =========================
-AVATAR
-========================= */
-
-.avatar{
-  width:48px;
-  height:48px;
-  flex-shrink:0;
-  border-radius:50%;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#ddd6fe,#fbcfe8);
-  color:#6d28d9;
-  font-weight:900;
-}
-
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-/* =========================
-SUGGESTIONS
-========================= */
+/* ================= SUGGESTIONS ================= */
 
 .suggestions{
   display:flex;
   gap:11px;
   overflow-x:auto;
-  padding:3px 1px 8px;
+  padding:2px 2px 5px;
   scrollbar-width:none;
 }
 
@@ -421,266 +327,280 @@ SUGGESTIONS
   display:none;
 }
 
-.suggestion{
+.suggestion-card{
   min-width:150px;
+  background:#fff;
+  border-radius:19px;
   padding:14px;
-  border-radius:20px;
-  background:white;
-  box-shadow:0 8px 25px rgba(45,25,70,.06);
+  box-shadow:0 7px 22px rgba(25,35,60,.06);
 }
 
-.suggestion-name{
-  margin-top:9px;
-  font-size:13px;
-  font-weight:900;
-  white-space:nowrap;
+.avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#e9eaf1;
+  display:block;
+}
+
+.suggestion-card .avatar{
+  margin-bottom:9px;
+}
+
+.user-name{
+  font-weight:800;
+  font-size:14px;
   overflow:hidden;
   text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
-.suggestion-user{
-  margin:3px 0 10px;
-  color:#8a8295;
+.username{
+  color:#89909e;
   font-size:11px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  margin-top:2px;
 }
 
 .follow-btn{
   width:100%;
-  padding:9px;
-  border-radius:11px;
-  background:#f1ebff;
-  color:#6d28d9;
+  margin-top:11px;
+  padding:8px;
+  border-radius:10px;
+  background:#635bff;
+  color:#fff;
   font-size:12px;
-  font-weight:900;
+  font-weight:800;
 }
 
 .follow-btn.following{
-  background:#eeeef2;
-  color:#57515f;
+  background:#ececf5;
+  color:#4e5361;
 }
 
-/* =========================
-POLL
-========================= */
+/* ================= POLLS ================= */
 
 .poll-card{
-  margin-bottom:14px;
-  padding:16px;
-  border:1px solid #eeeaf4;
-  border-radius:23px;
-  background:white;
-  box-shadow:0 9px 28px rgba(40,25,60,.055);
+  background:#fff;
+  border-radius:22px;
+  padding:17px;
+  margin-bottom:13px;
+  box-shadow:0 7px 25px rgba(25,35,60,.06);
 }
 
-.poll-head{
+.poll-author{
   display:flex;
-  gap:10px;
   align-items:center;
+  gap:10px;
 }
 
-.poll-user{
-  flex:1;
-  min-width:0;
-}
-
-.poll-user strong{
-  display:block;
-  font-size:13px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.poll-user span{
-  display:block;
-  margin-top:2px;
-  color:#958d9e;
-  font-size:10px;
-}
-
-.poll-more{
-  width:32px;
-  height:32px;
-  border-radius:10px;
-  background:#f6f3fa;
+.poll-author .avatar{
+  width:39px;
+  height:39px;
 }
 
 .poll-question{
-  margin:15px 0 12px;
   font-size:17px;
   line-height:1.35;
-  font-weight:900;
+  font-weight:800;
+  margin:15px 0 12px;
 }
 
 .poll-option{
-  position:relative;
   width:100%;
+  position:relative;
   overflow:hidden;
-  text-align:left;
-  margin-top:8px;
+  margin:8px 0;
   padding:12px 13px;
-  border:1px solid #e8e3ee;
   border-radius:13px;
-  background:#faf9fc;
-  color:#2d2737;
-  font-size:13px;
-  font-weight:700;
+  border:1px solid #e7e9ef;
+  background:#fafbfc;
+  text-align:left;
+  color:#222936;
 }
 
-.poll-option .progress{
+.poll-option .bar{
   position:absolute;
   inset:0 auto 0 0;
   width:0;
-  background:rgba(124,58,237,.1);
+  background:rgba(99,91,255,.12);
+  transition:.4s;
 }
 
-.poll-option .option-text{
+.poll-option .option-content{
   position:relative;
-  z-index:2;
+  z-index:1;
   display:flex;
   justify-content:space-between;
-  gap:8px;
+  gap:10px;
 }
 
 .poll-option.selected{
-  border-color:#9b7bea;
-  background:#f8f4ff;
+  border-color:#7168ff;
+}
+
+.poll-meta{
+  display:flex;
+  justify-content:space-between;
+  margin-top:13px;
+  color:#8b919d;
+  font-size:11px;
 }
 
 .poll-actions{
   display:flex;
   gap:8px;
   margin-top:13px;
+  border-top:1px solid #f0f1f5;
+  padding-top:11px;
 }
 
-.poll-action{
-  padding:8px 10px;
-  border-radius:10px;
-  background:#f7f5fa;
-  color:#696171;
+.action-btn{
+  flex:1;
+  padding:9px;
+  border-radius:11px;
+  background:#f6f7fa;
+  color:#646b79;
   font-size:12px;
-  font-weight:800;
+  font-weight:700;
 }
 
-.poll-action.liked{
-  color:#e11d48;
-  background:#fff1f2;
-}
-
-/* =========================
-SEARCH
-========================= */
+/* ================= SEARCH ================= */
 
 .search-box{
-  position:relative;
-  margin-bottom:14px;
+  margin:5px 0 15px;
 }
 
-.search-symbol{
-  position:absolute;
-  left:14px;
-  top:50%;
-  transform:translateY(-50%);
-  color:#9a91a5;
+.search-results{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
 }
 
-.search-box .input{
-  padding-left:42px;
-  background:white;
-}
-
-.search-result{
+.search-item{
+  background:#fff;
+  padding:13px;
+  border-radius:16px;
   display:flex;
   align-items:center;
-  gap:11px;
-  padding:13px;
-  margin-bottom:8px;
-  border-radius:17px;
-  background:white;
-  box-shadow:0 5px 18px rgba(40,25,60,.05);
+  justify-content:space-between;
+  gap:10px;
+  box-shadow:0 5px 18px rgba(30,40,70,.05);
 }
 
-.search-result-info{
-  flex:1;
+.search-user{
+  display:flex;
+  align-items:center;
+  gap:10px;
   min-width:0;
 }
 
-.search-result-info strong{
-  display:block;
-  font-size:13px;
+.search-user .avatar{
+  width:43px;
+  height:43px;
 }
 
-.search-result-info span{
-  display:block;
-  margin-top:2px;
-  color:#8e8697;
-  font-size:11px;
+.empty{
+  text-align:center;
+  color:#8b919d;
+  padding:35px 15px;
 }
 
-.mini-follow{
-  padding:8px 11px;
-  border-radius:10px;
-  background:#7c3aed;
-  color:white;
-  font-size:11px;
-  font-weight:900;
-}
-
-/* =========================
-CREATE
-========================= */
+/* ================= CREATE ================= */
 
 .create-card{
+  background:#fff;
+  border-radius:22px;
   padding:18px;
-  border-radius:23px;
-  background:white;
-  box-shadow:0 9px 28px rgba(40,25,60,.06);
+  box-shadow:0 7px 25px rgba(25,35,60,.06);
 }
 
-.create-card h2{
-  margin:0 0 5px;
-  font-size:22px;
+.create-card textarea{
+  min-height:105px;
+  resize:none;
 }
 
-.create-card p{
-  margin:0 0 18px;
-  color:#8a8292;
-  font-size:12px;
-}
-
-.option-row{
-  display:flex;
-  gap:7px;
-  margin-top:8px;
-}
-
-.option-row .input{
-  flex:1;
+.option-input{
+  margin-top:9px;
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #e3e6ed;
+  background:#fafbfc;
+  outline:none;
 }
 
 .remove-option{
-  width:42px;
-  border-radius:12px;
-  background:#fff1f2;
-  color:#e11d48;
+  margin-top:5px;
+  font-size:11px;
+  color:#d54b59;
+  background:none;
 }
 
-.add-option{
-  width:100%;
-  margin-top:9px;
-  padding:11px;
-  border-radius:12px;
-  background:#f2edff;
-  color:#6d28d9;
-  font-weight:900;
+/* ================= PROFILE ================= */
+
+.profile-card{
+  background:#fff;
+  border-radius:23px;
+  padding:22px;
+  text-align:center;
+  box-shadow:0 7px 25px rgba(25,35,60,.06);
 }
 
-/* =========================
-CHAT
-========================= */
+.profile-avatar-wrap{
+  position:relative;
+  width:90px;
+  height:90px;
+  margin:0 auto 12px;
+}
+
+.profile-avatar{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#e8e9ef;
+}
+
+.photo-edit{
+  position:absolute;
+  right:0;
+  bottom:0;
+  width:29px;
+  height:29px;
+  border-radius:50%;
+  background:#635bff;
+  color:#fff;
+  border:3px solid #fff;
+}
+
+.profile-stats{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin:19px 0;
+}
+
+.stat strong{
+  display:block;
+  font-size:18px;
+}
+
+.stat span{
+  color:#858b98;
+  font-size:11px;
+}
+
+.profile-actions{
+  display:flex;
+  gap:9px;
+}
+
+.profile-actions button{
+  flex:1;
+}
+
+/* ================= CHAT ================= */
 
 .chat-list{
   display:flex;
@@ -688,355 +608,172 @@ CHAT
   gap:8px;
 }
 
-.chat-row{
-  width:100%;
+.chat-item{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:11px;
+  background:#fff;
   padding:13px;
-  border-radius:18px;
-  background:white;
-  text-align:left;
-  box-shadow:0 5px 20px rgba(40,25,60,.05);
+  border-radius:17px;
+  box-shadow:0 5px 17px rgba(30,40,70,.05);
 }
 
-.chat-info{
+.chat-item-info{
   flex:1;
   min-width:0;
 }
 
-.chat-info strong{
-  display:block;
-  font-size:14px;
-}
-
-.chat-preview{
-  margin-top:3px;
-  color:#8e8796;
-  font-size:11px;
+.chat-last{
+  color:#8a909c;
+  font-size:12px;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-}
-
-.chat-time{
-  color:#aaa2b1;
-  font-size:9px;
 }
 
 .chat-window{
   position:fixed;
   inset:0;
   z-index:100;
-  display:none;
-  flex-direction:column;
-  background:#f7f5ff;
-}
-
-.chat-window.open{
+  background:#f7f8fc;
   display:flex;
+  flex-direction:column;
 }
 
 .chat-header{
+  height:64px;
+  padding:8px 13px;
+  padding-top:max(8px,env(safe-area-inset-top));
+  background:#fff;
   display:flex;
   align-items:center;
   gap:10px;
-  padding:
-    max(10px,env(safe-area-inset-top))
-    14px 10px;
-  background:rgba(255,255,255,.94);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid #ece8f0;
+  border-bottom:1px solid #eceef3;
 }
 
-.chat-back{
-  width:38px;
-  height:38px;
-  border-radius:12px;
-  background:#f3eff8;
+.chat-header button{
+  background:none;
+  font-size:22px;
 }
 
-.chat-header-info{
-  flex:1;
-}
-
-.chat-header-info strong{
-  display:block;
-  font-size:14px;
-}
-
-.chat-header-info span{
-  font-size:10px;
-  color:#948b9d;
+.chat-header .avatar{
+  width:39px;
+  height:39px;
 }
 
 .chat-messages{
   flex:1;
   overflow-y:auto;
-  padding:15px;
-  display:flex;
-  flex-direction:column;
-  gap:7px;
+  padding:16px;
 }
 
-.bubble{
+.message{
   max-width:78%;
   padding:10px 13px;
   border-radius:16px;
-  font-size:13px;
+  margin:6px 0;
+  font-size:14px;
   line-height:1.4;
   word-break:break-word;
 }
 
-.bubble.me{
-  align-self:flex-end;
-  color:white;
-  background:linear-gradient(135deg,#7c3aed,#a855f7);
+.message.mine{
+  margin-left:auto;
+  background:#635bff;
+  color:#fff;
   border-bottom-right-radius:5px;
 }
 
-.bubble.them{
-  align-self:flex-start;
-  background:white;
-  border:1px solid #eee9f2;
+.message.theirs{
+  margin-right:auto;
+  background:#fff;
   border-bottom-left-radius:5px;
 }
 
-.chat-input-bar{
+.chat-input{
+  padding:9px;
+  padding-bottom:max(9px,env(safe-area-inset-bottom));
+  background:#fff;
   display:flex;
   gap:8px;
-  padding:
-    9px
-    12px
-    max(10px,env(safe-area-inset-bottom));
-  background:white;
-  border-top:1px solid #ece8f0;
+  border-top:1px solid #e9ebf0;
 }
 
-.chat-input-bar .input{
+.chat-input input{
   flex:1;
-}
-
-.send-btn{
-  width:46px;
-  border-radius:13px;
-  color:white;
-  background:#7c3aed;
-  font-weight:900;
-}
-
-/* =========================
-PROFILE
-========================= */
-
-.profile-card{
-  padding:20px;
-  border-radius:25px;
-  background:white;
-  box-shadow:0 10px 30px rgba(40,25,60,.06);
-}
-
-.profile-top{
-  display:flex;
-  gap:15px;
-  align-items:center;
-}
-
-.profile-avatar{
-  width:82px;
-  height:82px;
-  flex-shrink:0;
-  border-radius:50%;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#ddd6fe,#fbcfe8);
-  color:#6d28d9;
-  font-size:25px;
-  font-weight:900;
-}
-
-.profile-avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.profile-main{
   min-width:0;
+  border:1px solid #e0e3ea;
+  background:#f7f8fa;
+  border-radius:13px;
+  padding:12px;
+  outline:none;
 }
 
-.profile-main h2{
-  margin:0;
-  font-size:20px;
+.chat-input button{
+  width:47px;
+  border-radius:13px;
+  background:#635bff;
+  color:#fff;
 }
 
-.profile-main p{
-  margin:3px 0;
-  color:#8d8595;
-  font-size:12px;
-}
-
-.profile-stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  margin-top:18px;
-  padding-top:15px;
-  border-top:1px solid #eeeaf1;
-  text-align:center;
-}
-
-.stat strong{
-  display:block;
-  font-size:17px;
-}
-
-.stat span{
-  color:#948b9c;
-  font-size:10px;
-}
-
-.profile-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:15px;
-}
-
-.profile-btn{
-  padding:11px;
-  border-radius:12px;
-  background:#f2eef9;
-  color:#5e5568;
-  font-size:12px;
-  font-weight:900;
-}
-
-.profile-btn.primary{
-  color:white;
-  background:#7c3aed;
-}
-
-/* =========================
-NOTIFICATIONS
-========================= */
-
-.notification-card{
-  display:flex;
-  gap:10px;
-  padding:13px;
-  margin-bottom:8px;
-  border-radius:18px;
-  background:white;
-  box-shadow:0 5px 18px rgba(40,25,60,.05);
-}
-
-.notification-text{
-  flex:1;
-  font-size:12px;
-  line-height:1.4;
-}
-
-.notification-text span{
-  display:block;
-  margin-top:3px;
-  color:#928a99;
-  font-size:10px;
-}
-
-/* =========================
-BOTTOM NAV
-========================= */
+/* ================= BOTTOM NAV ================= */
 
 .bottom-nav{
   position:fixed;
-  left:50%;
+  z-index:40;
   bottom:0;
-  z-index:50;
-  width:min(650px,100%);
+  left:50%;
   transform:translateX(-50%);
-  padding:
-    8px 10px
-    max(8px,env(safe-area-inset-bottom));
-  background:rgba(255,255,255,.94);
-  backdrop-filter:blur(18px);
-  border-top:1px solid rgba(30,20,50,.06);
-}
-
-.nav-inner{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:5px;
+  width:min(520px,100%);
+  padding:7px 9px;
+  padding-bottom:max(7px,env(safe-area-inset-bottom));
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(20px);
+  border-top:1px solid #eceef3;
+  display:flex;
+  justify-content:space-around;
 }
 
 .nav-btn{
-  position:relative;
-  min-height:52px;
-  border-radius:15px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  background:transparent;
-  color:#8e8797;
-  font-size:19px;
+  flex:1;
+  background:none;
+  color:#9298a5;
+  padding:7px 2px;
+  font-size:10px;
+  font-weight:700;
 }
 
 .nav-btn span{
-  font-size:9px;
-  font-weight:800;
+  display:block;
+  font-size:19px;
+  margin-bottom:2px;
 }
 
 .nav-btn.active{
-  color:#6d28d9;
-  background:#f1ebff;
+  color:#635bff;
 }
 
-.nav-badge{
-  position:absolute;
-  top:3px;
-  right:calc(50% - 19px);
-  min-width:15px;
-  height:15px;
+/* ================= MODALS ================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:90;
+  background:rgba(12,15,25,.55);
   display:flex;
   align-items:center;
   justify-content:center;
-  border-radius:10px;
-  background:#ef4444;
-  color:white;
-  font-size:8px;
+  padding:18px;
 }
 
-/* =========================
-MODAL
-========================= */
-
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  z-index:200;
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  padding:12px;
-  background:rgba(20,14,30,.42);
-}
-
-.modal-backdrop.open{
-  display:flex;
-}
-
-.modal{
+.modal-card{
   width:100%;
-  max-width:620px;
-  max-height:88vh;
-  overflow-y:auto;
+  max-width:420px;
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:24px;
   padding:20px;
-  border-radius:25px;
-  background:white;
-  box-shadow:0 25px 80px rgba(0,0,0,.2);
 }
 
 .modal-head{
@@ -1048,61 +785,49 @@ MODAL
 
 .modal-head h3{
   margin:0;
-  font-size:18px;
 }
 
 .close-btn{
   width:35px;
   height:35px;
-  border-radius:11px;
-  background:#f2eef7;
+  border-radius:10px;
+  background:#f0f1f5;
 }
 
-/* =========================
-MISC
-========================= */
+/* ================= TOAST ================= */
 
-.empty{
-  padding:30px 15px;
-  text-align:center;
-  color:#92899b;
-  font-size:13px;
-}
-
-.loading{
-  padding:25px;
-  text-align:center;
-  color:#81788b;
-  font-size:13px;
-}
-
-.toast{
+#toast{
   position:fixed;
+  z-index:200;
   left:50%;
   bottom:88px;
-  z-index:500;
-  max-width:calc(100% - 30px);
+  transform:translateX(-50%) translateY(20px);
+  background:#202532;
+  color:#fff;
   padding:11px 15px;
-  transform:translateX(-50%) translateY(15px);
   border-radius:13px;
-  background:#211b2c;
-  color:white;
   font-size:12px;
-  font-weight:700;
   opacity:0;
   pointer-events:none;
-  transition:.22s;
+  transition:.25s;
+  max-width:90%;
+  text-align:center;
 }
 
-.toast.show{
+#toast.show{
   opacity:1;
   transform:translateX(-50%) translateY(0);
 }
 
+/* ================= DESKTOP ================= */
+
 @media(min-width:700px){
-  .page{
-    padding-left:20px;
-    padding-right:20px;
+  .app-shell{
+    box-shadow:0 0 60px rgba(20,30,60,.08);
+  }
+
+  .bottom-nav{
+    box-shadow:0 -5px 25px rgba(20,30,60,.08);
   }
 }
 </style>
@@ -1110,687 +835,251 @@ MISC
 
 <body>
 
-<!-- =========================
-AUTH SCREEN
-========================= -->
+<!-- ================= AUTH ================= -->
 
-<div id="authScreen">
+<section id="authScreen">
 
-  <div class="auth-wrap">
+  <div class="auth-card">
 
-    <div class="brand">
-      <div class="brand-logo">P</div>
-      <h1>Poll Pulse</h1>
-      <p>Ask. Vote. Connect.</p>
+    <div class="logo">
+      <div class="logo-icon">📊</div>
+      <div>
+        <div class="logo-title">Poll Pulse</div>
+        <div class="logo-sub">Your voice. Your pulse.</div>
+      </div>
     </div>
 
-    <div class="auth-card">
-
-      <div class="auth-tabs">
-
-        <button
-          id="loginTab"
-          class="auth-tab active"
-          type="button">
-          Login
-        </button>
-
-        <button
-          id="signupTab"
-          class="auth-tab"
-          type="button">
-          Sign Up
-        </button>
-
-      </div>
-
-      <!-- LOGIN -->
-
-      <div id="loginForm">
-
-        <div class="field">
-          <label>Email</label>
-
-          <input
-            id="loginEmail"
-            class="input"
-            type="email"
-            autocomplete="email"
-            placeholder="Enter your email">
-        </div>
-
-        <div class="field">
-          <label>Password</label>
-
-          <input
-            id="loginPassword"
-            class="input"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Enter your password">
-        </div>
-
-        <button
-          id="loginButton"
-          class="primary-btn"
-          type="button">
-          Login
-        </button>
-
-        <button
-          id="resetButton"
-          class="secondary-link"
-          type="button">
-          Forgot password?
-        </button>
-
-      </div>
-
-      <!-- SIGNUP -->
-
-      <div id="signupForm" class="hidden">
-
-        <div class="field">
-          <label>Username</label>
-
-          <input
-            id="signupUsername"
-            class="input"
-            type="text"
-            autocomplete="username"
-            maxlength="30"
-            placeholder="Choose a username">
-        </div>
-
-        <div class="field">
-          <label>Display name</label>
-
-          <input
-            id="signupName"
-            class="input"
-            type="text"
-            maxlength="50"
-            placeholder="Your name">
-        </div>
-
-        <div class="field">
-          <label>Email</label>
-
-          <input
-            id="signupEmail"
-            class="input"
-            type="email"
-            autocomplete="email"
-            placeholder="Enter your email">
-        </div>
-
-        <div class="field">
-          <label>Password</label>
-
-          <input
-            id="signupPassword"
-            class="input"
-            type="password"
-            autocomplete="new-password"
-            placeholder="At least 6 characters">
-        </div>
-
-        <button
-          id="signupButton"
-          class="primary-btn"
-          type="button">
-          Create account
-        </button>
-
-      </div>
-
-      <div id="authMessage" class="auth-message"></div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-APP
-========================= -->
-
-<div id="appScreen" class="hidden">
-
-  <div class="app-shell">
-
-    <header class="topbar">
-
-      <div class="topbar-inner">
-
-        <div class="app-logo">
-
-          <div class="app-logo-icon">P</div>
-
-          <div class="app-logo-text">
-            Poll Pulse
-          </div>
-
-        </div>
-
-        <div class="top-actions">
-
-          <button
-            id="notificationButton"
-            class="icon-btn"
-            type="button">
-            🔔
-            <span
-              id="notificationBadge"
-              class="badge hidden">
-              0
-            </span>
-          </button>
-
-          <button
-            id="profileButton"
-            class="icon-btn"
-            type="button">
-            👤
-          </button>
-
-        </div>
-
-      </div>
-
-    </header>
-
-
-    <main class="page">
-
-      <!-- HOME -->
-
-      <section
-        id="homeSection"
-        class="section active">
-
-        <div class="hero">
-
-          <div class="hero-small">
-            WELCOME TO POLL PULSE
-          </div>
-
-          <h2 id="heroTitle">
-            What's on your mind?
-          </h2>
-
-          <p>
-            Share your opinion, discover what others think,
-            and join the conversation.
-          </p>
-
-        </div>
-
-
-        <div class="section-title-row">
-
-          <h3 class="section-title">
-            People you may know
-          </h3>
-
-          <button
-            id="refreshSuggestions"
-            class="small-link"
-            type="button">
-            Refresh
-          </button>
-
-        </div>
-
-        <div
-          id="suggestions"
-          class="suggestions">
-
-          <div class="loading">
-            Loading suggestions...
-          </div>
-
-        </div>
-
-
-        <div class="section-title-row">
-
-          <h3 class="section-title">
-            Latest polls
-          </h3>
-
-          <button
-            id="refreshHome"
-            class="small-link"
-            type="button">
-            Refresh
-          </button>
-
-        </div>
-
-        <div id="pollFeed">
-
-          <div class="loading">
-            Loading polls...
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- SEARCH -->
-
-      <section
-        id="searchSection"
-        class="section">
-
-        <div class="section-title-row">
-
-          <h2 class="section-title">
-            Search
-          </h2>
-
-        </div>
-
-        <div class="search-box">
-
-          <span class="search-symbol">
-            🔎
-          </span>
-
-          <input
-            id="searchInput"
-            class="input"
-            type="search"
-            placeholder="Search people...">
-
-        </div>
-
-        <div id="searchResults">
-
-          <div class="empty">
-            Search for people by name or username.
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- CREATE -->
-
-      <section
-        id="createSection"
-        class="section">
-
-        <div class="create-card">
-
-          <h2>
-            Create a poll
-          </h2>
-
-          <p>
-            Ask something interesting and let people vote.
-          </p>
-
-          <div class="field">
-
-            <label>
-              Your question
-            </label>
-
-            <textarea
-              id="pollQuestion"
-              class="input"
-              rows="4"
-              maxlength="300"
-              placeholder="What do you want to ask?"></textarea>
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Options
-            </label>
-
-            <div id="optionsContainer">
-
-              <div class="option-row">
-
-                <input
-                  class="input poll-option-input"
-                  maxlength="100"
-                  placeholder="Option 1">
-
-              </div>
-
-              <div class="option-row">
-
-                <input
-                  class="input poll-option-input"
-                  maxlength="100"
-                  placeholder="Option 2">
-
-              </div>
-
-            </div>
-
-            <button
-              id="addOptionButton"
-              class="add-option"
-              type="button">
-              + Add another option
-            </button>
-
-          </div>
-
-          <button
-            id="createPollButton"
-            class="primary-btn"
-            type="button">
-            Publish poll
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <!-- CHAT -->
-
-      <section
-        id="chatSection"
-        class="section">
-
-        <div class="section-title-row">
-
-          <h2 class="section-title">
-            Messages
-          </h2>
-
-        </div>
-
-        <div
-          id="chatList"
-          class="chat-list">
-
-          <div class="loading">
-            Loading chats...
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- PROFILE -->
-
-      <section
-        id="profileSection"
-        class="section">
-
-        <div id="profileContent">
-
-          <div class="loading">
-            Loading profile...
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- NOTIFICATIONS -->
-
-      <section
-        id="notificationsSection"
-        class="section">
-
-        <div class="section-title-row">
-
-          <h2 class="section-title">
-            Notifications
-          </h2>
-
-          <button
-            id="markNotificationsButton"
-            class="small-link"
-            type="button">
-            Mark read
-          </button>
-
-        </div>
-
-        <div id="notificationList">
-
-          <div class="loading">
-            Loading notifications...
-          </div>
-
-        </div>
-
-      </section>
-
-    </main>
-
-
-    <!-- BOTTOM NAV -->
-
-    <nav class="bottom-nav">
-
-      <div class="nav-inner">
-
-        <button
-          id="navHome"
-          class="nav-btn active"
-          type="button">
-          🏠
-          <span>Home</span>
-        </button>
-
-        <button
-          id="navSearch"
-          class="nav-btn"
-          type="button">
-          🔎
-          <span>Search</span>
-        </button>
-
-        <button
-          id="navCreate"
-          class="nav-btn"
-          type="button">
-          ➕
-          <span>Create</span>
-        </button>
-
-        <button
-          id="navChat"
-          class="nav-btn"
-          type="button">
-          💬
-          <span>Chat</span>
-          <span
-            id="chatBadge"
-            class="nav-badge hidden">
-            0
-          </span>
-        </button>
-
-        <button
-          id="navProfile"
-          class="nav-btn"
-          type="button">
-          👤
-          <span>Profile</span>
-        </button>
-
-      </div>
-
-    </nav>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-CHAT WINDOW
-========================= -->
-
-<div
-  id="chatWindow"
-  class="chat-window">
-
-  <div class="chat-header">
-
-    <button
-      id="chatBackButton"
-      class="chat-back"
-      type="button">
-      ←
-    </button>
-
-    <div
-      id="chatHeaderAvatar"
-      class="avatar">
-      👤
-    </div>
-
-    <div class="chat-header-info">
-
-      <strong id="chatHeaderName">
-        Chat
-      </strong>
-
-      <span>
-        Messages
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="chatMessages"
-    class="chat-messages">
-  </div>
-
-
-  <div class="chat-input-bar">
-
-    <input
-      id="messageInput"
-      class="input"
-      type="text"
-      maxlength="1000"
-      placeholder="Message...">
-
-    <button
-      id="sendButton"
-      class="send-btn"
-      type="button">
-      ➤
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-PHOTO MODAL
-========================= -->
-
-<div
-  id="photoModal"
-  class="modal-backdrop">
-
-  <div class="modal">
-
-    <div class="modal-head">
-
-      <h3>
-        Profile photo
-      </h3>
-
-      <button
-        id="closePhotoButton"
-        class="close-btn"
-        type="button">
-        ✕
-      </button>
-
+    <h1 id="authTitle">Welcome back</h1>
+
+    <p class="auth-desc" id="authDesc">
+      Login to see polls, people and conversations.
+    </p>
+
+    <div class="field">
+      <label>Email</label>
+      <input
+        id="emailInput"
+        type="email"
+        autocomplete="email"
+        placeholder="you@example.com">
     </div>
 
     <div class="field">
-
-      <label>
-        Select photo
-      </label>
-
+      <label>Password</label>
       <input
-        id="photoInput"
-        class="input"
-        type="file"
-        accept="image/*">
-
+        id="passwordInput"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Your password">
     </div>
+
+    <div class="field hidden" id="usernameField">
+      <label>Username</label>
+      <input
+        id="usernameInput"
+        type="text"
+        autocomplete="username"
+        placeholder="yourusername">
+    </div>
+
+    <button
+      id="loginButton"
+      class="primary-btn"
+      type="button">
+      Login
+    </button>
+
+    <button
+      id="signupButton"
+      class="secondary-btn"
+      type="button">
+      Create account
+    </button>
+
+    <div class="auth-links">
+      <button id="forgotButton" class="text-btn" type="button">
+        Forgot password?
+      </button>
+
+      <button id="modeButton" class="text-btn" type="button">
+        Sign up
+      </button>
+    </div>
+
+    <div id="authMessage"></div>
+
+  </div>
+</section>
+
+
+<!-- ================= APP ================= -->
+
+<section id="appScreen" class="hidden">
+
+<div class="app-shell">
+
+  <header class="topbar">
+
+    <div class="top-brand">
+      <div class="logo-icon">📊</div>
+      <span>Poll Pulse</span>
+    </div>
+
+    <button
+      id="notificationButton"
+      class="icon-btn"
+      type="button">
+      🔔
+      <span id="notificationBadge" class="badge hidden">0</span>
+    </button>
+
+  </header>
+
+
+  <main id="mainContent" class="content"></main>
+
+
+  <nav class="bottom-nav">
+
+    <button class="nav-btn active" data-page="home" type="button">
+      <span>⌂</span>
+      Home
+    </button>
+
+    <button class="nav-btn" data-page="search" type="button">
+      <span>⌕</span>
+      Search
+    </button>
+
+    <button class="nav-btn" data-page="create" type="button">
+      <span>＋</span>
+      Create
+    </button>
+
+    <button class="nav-btn" data-page="chat" type="button">
+      <span>💬</span>
+      Chat
+    </button>
+
+    <button class="nav-btn" data-page="profile" type="button">
+      <span>◉</span>
+      Profile
+    </button>
+
+  </nav>
+
+</div>
+</section>
+
+
+<!-- ================= CHAT MODAL ================= -->
+
+<div id="chatWindow" class="chat-window hidden">
+
+  <div class="chat-header">
+
+    <button id="closeChatButton" type="button">‹</button>
+
+    <img id="chatAvatar" class="avatar" src="" alt="">
+
+    <div>
+      <div id="chatName" class="user-name">Chat</div>
+      <div id="chatUsername" class="username"></div>
+    </div>
+
+  </div>
+
+  <div id="chatMessages" class="chat-messages"></div>
+
+  <form id="chatForm" class="chat-input">
+
+    <input
+      id="chatInput"
+      type="text"
+      maxlength="1000"
+      autocomplete="off"
+      placeholder="Message...">
+
+    <button type="submit">➤</button>
+
+  </form>
+
+</div>
+
+
+<!-- ================= PHOTO MODAL ================= -->
+
+<div id="photoModal" class="modal hidden">
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+      <h3>Profile photo</h3>
+      <button id="closePhotoModal" class="close-btn" type="button">✕</button>
+    </div>
+
+    <input id="photoInput" type="file" accept="image/*">
 
     <button
       id="uploadPhotoButton"
       class="primary-btn"
-      type="button">
-      Set profile photo
+      type="button"
+      style="margin-top:14px">
+      Upload photo
     </button>
 
-  </div>
+    <div id="photoMessage" class="muted" style="margin-top:10px"></div>
 
+  </div>
 </div>
 
 
-<div id="toast" class="toast"></div>
+<div id="toast"></div>
 
 
 <script>
 "use strict";
 
 /* =========================================================
-   SUPABASE CONFIG
+   CONFIG
 ========================================================= */
 
 const SUPABASE_URL =
-"https://dbpbkvfaxgifjeveijqf.supabase.co";
+  "https://dbpbkvfaxgifjeveijqf.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
-
-let supabaseClient = null;
-let supabaseReadyPromise = null;
+  "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
 
 
 /* =========================================================
-   HELPERS
+   GLOBALS
 ========================================================= */
 
-function $(id){
-  return document.getElementById(id);
-}
+let supabaseClient = null;
+let supabaseLoading = null;
+
+let currentUser = null;
+let currentProfile = null;
+
+let currentPage = "home";
+
+let currentChatUser = null;
+let chatChannel = null;
+
+let authMode = "login";
+
+let pollCache = [];
+let profileCache = [];
+
+const $ = id => document.getElementById(id);
 
 
-function escapeHtml(value){
+/* =========================================================
+   BASIC HELPERS
+========================================================= */
 
-  if(value === null || value === undefined){
-    return "";
-  }
-
-  return String(value)
+function escapeHTML(value){
+  return String(value ?? "")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
@@ -1798,361 +1087,158 @@ function escapeHtml(value){
     .replace(/'/g,"&#039;");
 }
 
+function avatarURL(url,name){
+  if(url) return url;
 
-function initials(name){
+  const letter =
+    String(name || "?")
+      .trim()
+      .charAt(0)
+      .toUpperCase() || "?";
 
-  const text =
-    String(name || "User")
-    .trim();
-
-  if(!text){
-    return "U";
-  }
-
-  const parts =
-    text.split(/\s+/);
-
-  if(parts.length === 1){
-    return parts[0][0].toUpperCase();
-  }
-
-  return (
-    parts[0][0] +
-    parts[parts.length - 1][0]
-  ).toUpperCase();
+  return "https://ui-avatars.com/api/?name=" +
+    encodeURIComponent(letter) +
+    "&background=635bff&color=fff&size=160";
 }
-
-
-function avatarHtml(profile,className){
-
-  const cls =
-    className || "avatar";
-
-  if(profile && profile.avatar_url){
-
-    return `
-      <div class="${cls}">
-        <img
-          src="${escapeHtml(profile.avatar_url)}"
-          alt="">
-      </div>
-    `;
-  }
-
-  return `
-    <div class="${cls}">
-      ${escapeHtml(
-        initials(
-          profile
-          ? (profile.display_name || profile.username)
-          : "User"
-        )
-      )}
-    </div>
-  `;
-}
-
 
 function showToast(message){
+  const el = $("toast");
+  el.textContent = message;
+  el.classList.add("show");
 
-  const toast = $("toast");
+  clearTimeout(window.__toastTimer);
 
-  if(!toast){
-    return;
-  }
-
-  toast.textContent = message;
-
-  toast.classList.add("show");
-
-  clearTimeout(showToast.timer);
-
-  showToast.timer =
-    setTimeout(
-      () => toast.classList.remove("show"),
-      2500
-    );
+  window.__toastTimer = setTimeout(()=>{
+    el.classList.remove("show");
+  },2600);
 }
 
+function setAuthMessage(message,type=""){
+  const el = $("authMessage");
 
-function setAuthMessage(message,type){
-
-  const box =
-    $("authMessage");
-
-  if(!box){
-    return;
-  }
-
-  box.textContent =
-    message || "";
-
-  box.className =
-    "auth-message";
-
-  if(message){
-
-    box.classList.add(
-      type === "success"
-      ? "success"
-      : "error"
-    );
-  }
+  el.textContent = message;
+  el.className = type;
 }
 
-
-function setButtonLoading(
-  id,
-  loading,
-  normalText
-){
-
-  const button = $(id);
-
-  if(!button){
-    return;
-  }
-
-  button.disabled = loading;
-
-  button.textContent =
-    loading
-    ? "Please wait..."
-    : normalText;
+function setPhotoMessage(message){
+  $("photoMessage").textContent = message;
 }
 
+function timeAgo(date){
+  const d = new Date(date);
+  const diff = Math.floor((Date.now()-d.getTime())/1000);
 
-function timeAgo(dateString){
+  if(diff < 60) return "just now";
 
-  const date =
-    new Date(dateString);
+  const min = Math.floor(diff/60);
+  if(min < 60) return min+"m";
 
-  if(isNaN(date.getTime())){
-    return "";
-  }
+  const hour = Math.floor(min/60);
+  if(hour < 24) return hour+"h";
 
-  const seconds =
-    Math.floor(
-      (Date.now() - date.getTime()) / 1000
-    );
+  const day = Math.floor(hour/24);
+  if(day < 30) return day+"d";
 
-  if(seconds < 60){
-    return "just now";
-  }
-
-  const minutes =
-    Math.floor(seconds / 60);
-
-  if(minutes < 60){
-    return minutes + "m";
-  }
-
-  const hours =
-    Math.floor(minutes / 60);
-
-  if(hours < 24){
-    return hours + "h";
-  }
-
-  const days =
-    Math.floor(hours / 24);
-
-  if(days < 7){
-    return days + "d";
-  }
-
-  return date.toLocaleDateString();
-}
-
-
-function friendlyAuthError(error){
-
-  const message =
-    error && error.message
-    ? error.message
-    : "Something went wrong.";
-
-  const lower =
-    message.toLowerCase();
-
-  if(
-    lower.includes(
-      "invalid login credentials"
-    )
-  ){
-    return "Email ya password galat hai.";
-  }
-
-  if(
-    lower.includes(
-      "email not confirmed"
-    )
-  ){
-    return "Pehle apna email verify karo.";
-  }
-
-  if(
-    lower.includes(
-      "user already registered"
-    )
-  ){
-    return "Ye email already registered hai. Login try karo.";
-  }
-
-  if(
-    lower.includes(
-      "password should be at least"
-    )
-  ){
-    return "Password kam se kam 6 characters ka rakho.";
-  }
-
-  if(
-    lower.includes("network") ||
-    lower.includes("fetch")
-  ){
-    return "Internet connection check karo.";
-  }
-
-  return message;
+  return d.toLocaleDateString();
 }
 
 
 /* =========================================================
-   SUPABASE SAFE LOADER
+   SUPABASE LOADER
 ========================================================= */
 
 function loadSupabase(){
 
   if(
     window.supabase &&
-    typeof window.supabase.createClient ===
-    "function"
+    typeof window.supabase.createClient === "function"
   ){
-    return Promise.resolve(
-      window.supabase
-    );
+    return Promise.resolve(window.supabase);
   }
 
-  if(supabaseReadyPromise){
-    return supabaseReadyPromise;
+  if(supabaseLoading){
+    return supabaseLoading;
   }
 
-  supabaseReadyPromise =
-    new Promise(
-      function(resolve,reject){
+  supabaseLoading = new Promise((resolve,reject)=>{
 
-        const urls = [
+    const sources = [
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
+      "https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"
+    ];
 
-          "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
+    let index = 0;
 
-          "https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"
+    function tryLoad(){
 
-        ];
+      if(
+        window.supabase &&
+        typeof window.supabase.createClient === "function"
+      ){
+        resolve(window.supabase);
+        return;
+      }
 
-        let index = 0;
+      if(index >= sources.length){
+        reject(
+          new Error(
+            "Supabase library load nahi hui. Internet/CDN check karo."
+          )
+        );
+        return;
+      }
 
+      const script = document.createElement("script");
 
-        function tryNext(){
+      script.src = sources[index++];
+      script.async = true;
 
-          if(
-            window.supabase &&
-            typeof window.supabase.createClient ===
-            "function"
-          ){
-            resolve(
-              window.supabase
-            );
+      script.onload = ()=>{
 
-            return;
-          }
-
-
-          if(index >= urls.length){
-
-            reject(
-              new Error(
-                "Supabase library load nahi hui."
-              )
-            );
-
-            return;
-          }
-
-
-          const script =
-            document.createElement("script");
-
-          script.src =
-            urls[index++];
-
-          script.async = true;
-
-
-          script.onload =
-            function(){
-
-              if(
-                window.supabase &&
-                typeof window.supabase.createClient ===
-                "function"
-              ){
-
-                resolve(
-                  window.supabase
-                );
-
-              }else{
-
-                tryNext();
-
-              }
-            };
-
-
-          script.onerror =
-            function(){
-
-              tryNext();
-
-            };
-
-
-          document.head.appendChild(
-            script
-          );
+        if(
+          window.supabase &&
+          typeof window.supabase.createClient === "function"
+        ){
+          resolve(window.supabase);
+        }else{
+          tryLoad();
         }
 
+      };
 
-        tryNext();
+      script.onerror = ()=>{
+        tryLoad();
+      };
 
-      }
-    );
+      document.head.appendChild(script);
+    }
 
-  return supabaseReadyPromise;
+    tryLoad();
+
+  });
+
+  return supabaseLoading;
 }
 
 
 async function initSupabase(){
 
-  const sdk =
-    await loadSupabase();
-
+  const sdk = await loadSupabase();
 
   if(!supabaseClient){
 
-    supabaseClient =
-      sdk.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY,
-        {
-          auth:{
-            persistSession:true,
-            autoRefreshToken:true,
-            detectSessionInUrl:true
-          }
+    supabaseClient = sdk.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY,
+      {
+        auth:{
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:true
         }
-      );
+      }
+    );
+
   }
 
   return supabaseClient;
@@ -2160,306 +1246,219 @@ async function initSupabase(){
 
 
 /* =========================================================
-   STATE
+   AUTH MODE
 ========================================================= */
 
-let currentUser = null;
-let currentProfile = null;
+function setAuthMode(mode){
 
-let allProfiles = [];
-let allPolls = [];
-
-let currentChatUser = null;
-let currentChatChannel = null;
-let appRealtimeChannel = null;
-
-let notifications = [];
-
-let appStarting = false;
-let authListenerReady = false;
-
-
-/* =========================================================
-   AUTH
-========================================================= */
-
-function showAuthMode(mode){
+  authMode = mode;
 
   const signup =
     mode === "signup";
 
-  $("loginForm")
-    .classList
-    .toggle("hidden",signup);
+  $("authTitle").textContent =
+    signup ? "Create account" : "Welcome back";
 
-  $("signupForm")
-    .classList
-    .toggle("hidden",!signup);
+  $("authDesc").textContent =
+    signup
+      ? "Create your Poll Pulse account."
+      : "Login to see polls, people and conversations.";
 
-  $("loginTab")
-    .classList
-    .toggle("active",!signup);
+  $("usernameField")
+    .classList.toggle("hidden",!signup);
 
-  $("signupTab")
-    .classList
-    .toggle("active",signup);
+  $("loginButton")
+    .classList.toggle("hidden",signup);
 
-  setAuthMessage("","");
+  $("signupButton")
+    .classList.toggle("hidden",!signup);
+
+  $("modeButton").textContent =
+    signup ? "Login" : "Sign up";
+
+  setAuthMessage("");
+
 }
 
 
-/* LOGIN */
+/* =========================================================
+   LOGIN
+========================================================= */
 
 async function loginUser(){
 
   const email =
-    $("loginEmail")
-    .value
-    .trim();
+    $("emailInput").value.trim();
 
   const password =
-    $("loginPassword")
-    .value;
-
+    $("passwordInput").value;
 
   if(!email || !password){
-
     setAuthMessage(
-      "Email aur password dono enter karo.",
+      "Email aur password dono bharo.",
       "error"
     );
-
     return;
   }
 
+  const button = $("loginButton");
 
-  setButtonLoading(
-    "loginButton",
-    true,
-    "Login"
-  );
+  button.disabled = true;
+  button.textContent = "Logging in...";
 
-
-  setAuthMessage("","");
-
+  setAuthMessage("Connecting...");
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
-
-    const result =
+    const {data,error} =
       await sb.auth.signInWithPassword({
-
-        email:email,
-
-        password:password
-
+        email,
+        password
       });
 
-
-    if(result.error){
-
-      throw result.error;
-
+    if(error){
+      throw error;
     }
 
-
-    if(
-      !result.data ||
-      !result.data.user
-    ){
-
-      throw new Error(
-        "Login successful nahi hua."
-      );
-
+    if(!data || !data.user){
+      throw new Error("Login successful nahi hua.");
     }
 
+    currentUser = data.user;
 
-    currentUser =
-      result.data.user;
-
-
-    await openApp(
-      currentUser
+    setAuthMessage(
+      "Login successful!",
+      "success"
     );
 
+    await openApp(currentUser);
 
   }catch(error){
 
-    console.error(
-      "LOGIN ERROR:",
-      error
-    );
+    console.error("LOGIN ERROR:",error);
 
     setAuthMessage(
-      friendlyAuthError(error),
+      error?.message ||
+      "Login failed. Internet aur account check karo.",
       "error"
     );
 
-
   }finally{
 
-    setButtonLoading(
-      "loginButton",
-      false,
-      "Login"
-    );
+    button.disabled = false;
+    button.textContent = "Login";
 
   }
 }
 
 
-/* SIGN UP */
+/* =========================================================
+   SIGNUP
+========================================================= */
 
 async function signupUser(){
 
-  const username =
-    $("signupUsername")
-    .value
-    .trim();
-
-  const displayName =
-    $("signupName")
-    .value
-    .trim();
-
   const email =
-    $("signupEmail")
-    .value
-    .trim();
+    $("emailInput").value.trim();
 
   const password =
-    $("signupPassword")
-    .value;
+    $("passwordInput").value;
 
+  const username =
+    $("usernameInput").value.trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9_]/g,"");
 
-  if(
-    !username ||
-    !email ||
-    !password
-  ){
+  if(!email || !password || !username){
 
     setAuthMessage(
-      "Username, email aur password required hain.",
+      "Email, password aur username bharo.",
       "error"
     );
 
     return;
   }
-
 
   if(password.length < 6){
 
     setAuthMessage(
-      "Password kam se kam 6 characters ka rakho.",
+      "Password kam se kam 6 characters ka hona chahiye.",
       "error"
     );
 
     return;
   }
 
+  const button = $("signupButton");
 
-  setButtonLoading(
-    "signupButton",
-    true,
-    "Create account"
-  );
-
+  button.disabled = true;
+  button.textContent = "Creating...";
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
-
-    const result =
+    const {data,error} =
       await sb.auth.signUp({
-
-        email:email,
-
-        password:password,
-
+        email,
+        password,
         options:{
           data:{
-            username:username,
-
-            display_name:
-              displayName ||
-              username
+            username
           }
         }
-
       });
 
-
-    if(result.error){
-
-      throw result.error;
-
+    if(error){
+      throw error;
     }
 
+    if(data?.session){
 
-    if(
-      result.data &&
-      result.data.session
-    ){
+      currentUser = data.user;
 
-      currentUser =
-        result.data.user;
+      await ensureProfile();
 
-      await openApp(
-        currentUser
-      );
+      await openApp(currentUser);
 
     }else{
 
-      showAuthMode("login");
-
       setAuthMessage(
-        "Account create ho gaya. Agar email confirmation enabled hai to email verify karo.",
+        "Account ban gaya. Agar email confirmation enabled hai to email verify karo.",
         "success"
       );
 
     }
 
-
   }catch(error){
 
-    console.error(
-      "SIGNUP ERROR:",
-      error
-    );
+    console.error("SIGNUP ERROR:",error);
 
     setAuthMessage(
-      friendlyAuthError(error),
+      error?.message ||
+      "Signup failed.",
       "error"
     );
 
-
   }finally{
 
-    setButtonLoading(
-      "signupButton",
-      false,
-      "Create account"
-    );
+    button.disabled = false;
+    button.textContent = "Create account";
 
   }
 }
 
 
-/* RESET */
+/* =========================================================
+   PASSWORD RESET
+========================================================= */
 
 async function resetPassword(){
 
   const email =
-    $("loginEmail")
-    .value
-    .trim();
-
+    $("emailInput").value.trim();
 
   if(!email){
 
@@ -2471,36 +1470,33 @@ async function resetPassword(){
     return;
   }
 
-
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
-
-    const result =
+    const {error} =
       await sb.auth.resetPasswordForEmail(
-        email
+        email,
+        {
+          redirectTo:
+            window.location.origin +
+            window.location.pathname
+        }
       );
 
-
-    if(result.error){
-
-      throw result.error;
-
-    }
-
+    if(error) throw error;
 
     setAuthMessage(
       "Password reset email bhej diya gaya.",
       "success"
     );
 
-
   }catch(error){
 
+    console.error(error);
+
     setAuthMessage(
-      friendlyAuthError(error),
+      error?.message || "Reset failed.",
       "error"
     );
 
@@ -2509,227 +1505,157 @@ async function resetPassword(){
 
 
 /* =========================================================
-   APP START
+   PROFILE
 ========================================================= */
 
-async function openApp(user){
+async function ensureProfile(){
 
-  if(!user){
-    return;
-  }
+  if(!currentUser) return null;
 
-  currentUser =
-    user;
-
-
-  if(appStarting){
-    return;
-  }
-
-  appStarting = true;
-
-
-  $("authScreen")
-    .classList
-    .add("hidden");
-
-  $("appScreen")
-    .classList
-    .remove("hidden");
-
-
-  const display =
-    user.email
-    ? user.email.split("@")[0]
-    : "there";
-
-
-  $("heroTitle").textContent =
-    "Hey " + display + " 👋";
-
+  const sb = await initSupabase();
 
   try{
 
-    currentProfile =
-      await ensureProfile(user);
+    const {data,error} =
+      await sb
+        .from("profiles")
+        .select("*")
+        .eq("id",currentUser.id)
+        .maybeSingle();
+
+    if(error){
+      throw error;
+    }
+
+    if(data){
+
+      currentProfile = data;
+      return data;
+
+    }
+
+    const username =
+      currentUser.user_metadata?.username ||
+      (
+        currentUser.email
+          ? currentUser.email.split("@")[0]
+          : "user"
+      );
+
+    const fallback = {
+      id:currentUser.id,
+      username:username,
+      full_name:"",
+      avatar_url:""
+    };
+
+    const result =
+      await sb
+        .from("profiles")
+        .insert(fallback)
+        .select()
+        .maybeSingle();
+
+    if(result.error){
+
+      console.warn(
+        "Profile create warning:",
+        result.error
+      );
+
+      currentProfile = fallback;
+
+    }else{
+
+      currentProfile =
+        result.data || fallback;
+
+    }
 
   }catch(error){
 
     console.warn(
-      "Profile error:",
+      "ensureProfile:",
       error
     );
 
     currentProfile = {
-
-      id:user.id,
-
+      id:currentUser.id,
       username:
-        user.user_metadata?.username ||
-        display,
-
-      display_name:
-        user.user_metadata?.display_name ||
-        display,
-
-      avatar_url:null
-
+        currentUser.email?.split("@")[0] || "user",
+      full_name:"",
+      avatar_url:""
     };
 
   }
 
-
-  try{
-    await loadHome();
-  }catch(e){
-    console.warn(e);
-  }
-
-
-  try{
-    await loadChatList();
-  }catch(e){
-    console.warn(e);
-  }
-
-
-  try{
-    await loadNotifications();
-  }catch(e){
-    console.warn(e);
-  }
-
-
-  try{
-    await loadProfile();
-  }catch(e){
-    console.warn(e);
-  }
-
-
-  setupRealtime();
-
-
-  appStarting = false;
+  return currentProfile;
 }
 
 
 /* =========================================================
-   PROFILE
+   OPEN APP
 ========================================================= */
 
-async function ensureProfile(user){
+async function openApp(user){
 
-  const metadata =
-    user.user_metadata || {};
+  currentUser = user;
 
+  $("authScreen").classList.add("hidden");
+  $("appScreen").classList.remove("hidden");
 
-  const fallback = {
+  await ensureProfile();
 
-    id:user.id,
+  await loadPage("home");
 
-    username:
-      metadata.username ||
-      (
-        user.email
-        ? user.email.split("@")[0]
-        : "user"
-      ),
+  updateNotificationCount();
 
-    display_name:
-      metadata.display_name ||
-      metadata.username ||
-      (
-        user.email
-        ? user.email.split("@")[0]
-        : "User"
-      ),
-
-    avatar_url:null
-
-  };
+}
 
 
-  try{
+/* =========================================================
+   AUTH LISTENER
+========================================================= */
 
-    const sb =
-      await initSupabase();
+async function setupAuthListener(){
 
+  const sb = await initSupabase();
 
-    const result =
-      await sb
-      .from("profiles")
-      .select("*")
-      .eq("id",user.id)
-      .maybeSingle();
+  sb.auth.onAuthStateChange(
+    async(event,session)=>{
 
+      if(
+        session?.user &&
+        !currentUser
+      ){
 
-    if(
-      !result.error &&
-      result.data
-    ){
+        currentUser = session.user;
 
-      return result.data;
+        setTimeout(()=>{
+          openApp(session.user);
+        },0);
 
-    }
+      }
 
-  }catch(error){
+      if(
+        event === "SIGNED_OUT"
+      ){
 
-    console.warn(
-      "Profile read:",
-      error
-    );
+        currentUser = null;
+        currentProfile = null;
 
-  }
+        $("appScreen")
+          .classList.add("hidden");
 
+        $("authScreen")
+          .classList.remove("hidden");
 
-  try{
+        setAuthMode("login");
 
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("profiles")
-      .upsert(
-        {
-          id:user.id,
-
-          username:
-            fallback.username,
-
-          display_name:
-            fallback.display_name
-        },
-        {
-          onConflict:"id"
-        }
-      )
-      .select()
-      .maybeSingle();
-
-
-    if(
-      !result.error &&
-      result.data
-    ){
-
-      return result.data;
+      }
 
     }
-
-  }catch(error){
-
-    console.warn(
-      "Profile create:",
-      error
-    );
-
-  }
-
-
-  return fallback;
+  );
 }
 
 
@@ -2737,541 +1663,51 @@ async function ensureProfile(user){
    NAVIGATION
 ========================================================= */
 
-function showSection(section){
+async function loadPage(page){
 
-  [
-    "home",
-    "search",
-    "create",
-    "chat",
-    "profile",
-    "notifications"
-  ].forEach(
-    name => {
+  currentPage = page;
 
-      const el =
-        $(name + "Section");
-
-      if(el){
-        el.classList.remove(
-          "active"
-        );
-      }
-
-    }
-  );
-
-
-  const active =
-    $(section + "Section");
-
-  if(active){
-    active.classList.add(
-      "active"
-    );
-  }
-
-
-  [
-    "navHome",
-    "navSearch",
-    "navCreate",
-    "navChat",
-    "navProfile"
-  ].forEach(
-    id => {
-
-      $(id)?.classList.remove(
-        "active"
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(button=>{
+      button.classList.toggle(
+        "active",
+        button.dataset.page === page
       );
+    });
 
-    }
-  );
+  const main = $("mainContent");
 
-
-  const navMap = {
-
-    home:"navHome",
-
-    search:"navSearch",
-
-    create:"navCreate",
-
-    chat:"navChat",
-
-    profile:"navProfile"
-
-  };
-
-
-  if(navMap[section]){
-
-    $(navMap[section])
-      ?.classList
-      .add("active");
-
-  }
-
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-
-  if(section === "home"){
-    loadHome();
-  }
-
-  if(section === "search"){
-    searchAll();
-  }
-
-  if(section === "chat"){
-    loadChatList();
-  }
-
-  if(section === "profile"){
-    loadProfile();
-  }
-
-  if(section === "notifications"){
-    loadNotifications();
-  }
-}
-
-
-function openProfile(){
-  showSection("profile");
-}
-
-
-function openNotifications(){
-  showSection("notifications");
-}
-
-
-/* =========================================================
-   PROFILES
-========================================================= */
-
-async function loadAllProfiles(){
-
-  if(allProfiles.length){
-    return allProfiles;
-  }
-
+  main.innerHTML =
+    '<div class="empty">Loading...</div>';
 
   try{
 
-    const sb =
-      await initSupabase();
+    if(page === "home")
+      await loadHome();
 
+    else if(page === "search")
+      loadSearch();
 
-    const result =
-      await sb
-      .from("profiles")
-      .select("*")
-      .order(
-        "display_name",
-        {
-          ascending:true
-        }
-      );
+    else if(page === "create")
+      loadCreate();
 
+    else if(page === "chat")
+      await loadChatList();
 
-    if(result.error){
-
-      throw result.error;
-
-    }
-
-
-    allProfiles =
-      result.data || [];
-
+    else if(page === "profile")
+      await loadProfile();
 
   }catch(error){
 
-    console.warn(
-      "Profiles:",
-      error
-    );
-
-    allProfiles = [];
-
-  }
-
-
-  return allProfiles;
-}
-
-
-/* =========================================================
-   FOLLOW
-========================================================= */
-
-async function getFollowingIds(){
-
-  if(!currentUser){
-    return [];
-  }
-
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("follows")
-      .select("following_id")
-      .eq(
-        "follower_id",
-        currentUser.id
-      );
-
-
-    if(result.error){
-      return [];
-    }
-
-
-    return (
-      result.data || []
-    ).map(
-      x => x.following_id
-    );
-
-
-  }catch(error){
-
-    return [];
-
-  }
-}
-
-
-async function isFollowing(userId){
-
-  if(
-    !currentUser ||
-    !userId
-  ){
-    return false;
-  }
-
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("follows")
-      .select("id")
-      .eq(
-        "follower_id",
-        currentUser.id
-      )
-      .eq(
-        "following_id",
-        userId
-      )
-      .maybeSingle();
-
-
-    return (
-      !result.error &&
-      !!result.data
-    );
-
-
-  }catch(error){
-
-    return false;
-
-  }
-}
-
-
-async function toggleFollow(
-  userId,
-  button
-){
-
-  if(
-    !currentUser ||
-    !userId ||
-    currentUser.id === userId
-  ){
-    return;
-  }
-
-
-  if(button){
-    button.disabled = true;
-  }
-
-
-  try{
-
-    const following =
-      await isFollowing(
-        userId
-      );
-
-
-    const sb =
-      await initSupabase();
-
-
-    if(following){
-
-      const result =
-        await sb
-        .from("follows")
-        .delete()
-        .eq(
-          "follower_id",
-          currentUser.id
-        )
-        .eq(
-          "following_id",
-          userId
-        );
-
-
-      if(result.error){
-        throw result.error;
-      }
-
-
-      if(button){
-
-        button.textContent =
-          "Follow";
-
-        button.classList.remove(
-          "following"
-        );
-
-      }
-
-
-      showToast(
-        "Unfollowed"
-      );
-
-
-    }else{
-
-      const result =
-        await sb
-        .from("follows")
-        .insert({
-
-          follower_id:
-            currentUser.id,
-
-          following_id:
-            userId
-
-        });
-
-
-      if(result.error){
-        throw result.error;
-      }
-
-
-      if(button){
-
-        button.textContent =
-          "Following";
-
-        button.classList.add(
-          "following"
-        );
-
-      }
-
-
-      await createNotification(
-        userId,
-        "started following you"
-      );
-
-
-      showToast(
-        "Following ✓"
-      );
-
-    }
-
-
-  }catch(error){
-
-    console.error(
-      "FOLLOW ERROR:",
-      error
-    );
-
-    showToast(
-      error.message ||
-      "Follow update nahi ho paya."
-    );
-
-
-  }finally{
-
-    if(button){
-      button.disabled = false;
-    }
-
-  }
-}
-
-
-/* =========================================================
-   SUGGESTIONS
-========================================================= */
-
-async function loadSuggestions(){
-
-  const box =
-    $("suggestions");
-
-
-  if(
-    !box ||
-    !currentUser
-  ){
-    return;
-  }
-
-
-  box.innerHTML =
-    '<div class="loading">Loading...</div>';
-
-
-  try{
-
-    const profiles =
-      await loadAllProfiles();
-
-
-    const following =
-      await getFollowingIds();
-
-
-    const list =
-      profiles
-      .filter(
-        p =>
-          p.id !== currentUser.id &&
-          !following.includes(p.id)
-      )
-      .slice(0,10);
-
-
-    if(!list.length){
-
-      box.innerHTML =
-        '<div class="empty">No new suggestions right now.</div>';
-
-      return;
-    }
-
-
-    const html =
-      await Promise.all(
-
-        list.map(
-          async profile => {
-
-            const following =
-              await isFollowing(
-                profile.id
-              );
-
-
-            return `
-
-              <div class="suggestion">
-
-                ${avatarHtml(profile)}
-
-                <div class="suggestion-name">
-                  ${escapeHtml(
-                    profile.display_name ||
-                    profile.username ||
-                    "User"
-                  )}
-                </div>
-
-                <div class="suggestion-user">
-                  @${escapeHtml(
-                    profile.username ||
-                    "user"
-                  )}
-                </div>
-
-                <button
-                  class="follow-btn ${following ? "following" : ""}"
-                  data-follow-id="${escapeHtml(profile.id)}"
-                  type="button">
-
-                  ${following
-                    ? "Following"
-                    : "Follow"}
-
-                </button>
-
-              </div>
-
-            `;
-
-          }
-        )
-
-      );
-
-
-    box.innerHTML =
-      html.join("");
-
-
-    box
-      .querySelectorAll(
-        "[data-follow-id]"
-      )
-      .forEach(
-        button => {
-
-          button.addEventListener(
-            "click",
-            () =>
-              toggleFollow(
-                button.dataset.followId,
-                button
-              )
-          );
-
-        }
-      );
-
-
-  }catch(error){
-
-    console.error(error);
-
-    box.innerHTML =
-      '<div class="empty">Suggestions load nahi ho payi.</div>';
+    console.error("PAGE ERROR:",error);
+
+    main.innerHTML = `
+      <div class="empty">
+        Something went wrong.<br>
+        <small>${escapeHTML(error.message)}</small>
+      </div>
+    `;
 
   }
 }
@@ -3283,11 +1719,250 @@ async function loadSuggestions(){
 
 async function loadHome(){
 
-  await Promise.all([
-    loadSuggestions(),
-    loadPolls()
-  ]);
+  const main = $("mainContent");
 
+  main.innerHTML = `
+
+    <section class="hero">
+      <h2>What's your pulse? 👋</h2>
+      <p>
+        Vote, create polls and discover what people think.
+      </p>
+    </section>
+
+    <div class="section-head">
+      <h3>People you may know</h3>
+      <span class="muted">Suggestions</span>
+    </div>
+
+    <div id="suggestions" class="suggestions">
+      <div class="empty">Loading...</div>
+    </div>
+
+    <div class="section-head">
+      <h3>Latest polls</h3>
+      <span class="muted">For you</span>
+    </div>
+
+    <div id="polls">
+      <div class="empty">Loading polls...</div>
+    </div>
+  `;
+
+  await loadSuggestions();
+  await loadPolls();
+}
+
+
+/* =========================================================
+   SUGGESTIONS
+========================================================= */
+
+async function loadSuggestions(){
+
+  const box = $("suggestions");
+
+  if(!box) return;
+
+  try{
+
+    const sb = await initSupabase();
+
+    const {data,error} =
+      await sb
+        .from("profiles")
+        .select("*")
+        .neq("id",currentUser.id)
+        .limit(12);
+
+    if(error) throw error;
+
+    profileCache = data || [];
+
+    if(!profileCache.length){
+
+      box.innerHTML =
+        '<div class="empty">No suggestions yet.</div>';
+
+      return;
+    }
+
+    box.innerHTML =
+      profileCache.map(user=>`
+
+        <div class="suggestion-card">
+
+          <img
+            class="avatar"
+            src="${avatarURL(
+              user.avatar_url,
+              user.username
+            )}"
+            alt="">
+
+          <div class="user-name">
+            ${escapeHTML(
+              user.full_name ||
+              user.username ||
+              "User"
+            )}
+          </div>
+
+          <div class="username">
+            @${escapeHTML(user.username || "")}
+          </div>
+
+          <button
+            class="follow-btn"
+            type="button"
+            data-follow-id="${user.id}">
+            Follow
+          </button>
+
+        </div>
+
+      `).join("");
+
+    await updateFollowButtons();
+
+  }catch(error){
+
+    console.error("SUGGESTION ERROR:",error);
+
+    box.innerHTML =
+      '<div class="empty">Suggestions unavailable.</div>';
+
+  }
+}
+
+
+/* =========================================================
+   FOLLOW BUTTONS
+========================================================= */
+
+async function updateFollowButtons(){
+
+  if(!currentUser) return;
+
+  try{
+
+    const sb = await initSupabase();
+
+    const {data,error} =
+      await sb
+        .from("follows")
+        .select("following_id")
+        .eq("follower_id",currentUser.id);
+
+    if(error) throw error;
+
+    const followed =
+      new Set(
+        (data || []).map(
+          x=>x.following_id
+        )
+      );
+
+    document
+      .querySelectorAll("[data-follow-id]")
+      .forEach(button=>{
+
+        const id =
+          button.dataset.followId;
+
+        if(followed.has(id)){
+
+          button.textContent = "Following";
+          button.classList.add("following");
+
+        }else{
+
+          button.textContent = "Follow";
+          button.classList.remove("following");
+
+        }
+
+      });
+
+  }catch(error){
+
+    console.warn(
+      "FOLLOW STATUS:",
+      error
+    );
+
+  }
+}
+
+
+async function toggleFollow(userId,button){
+
+  if(!currentUser || !userId) return;
+
+  button.disabled = true;
+
+  try{
+
+    const sb = await initSupabase();
+
+    const {data,error} =
+      await sb
+        .from("follows")
+        .select("id")
+        .eq("follower_id",currentUser.id)
+        .eq("following_id",userId)
+        .maybeSingle();
+
+    if(error) throw error;
+
+    if(data){
+
+      const result =
+        await sb
+          .from("follows")
+          .delete()
+          .eq("id",data.id);
+
+      if(result.error) throw result.error;
+
+      button.textContent = "Follow";
+      button.classList.remove("following");
+
+      showToast("Unfollowed");
+
+    }else{
+
+      const result =
+        await sb
+          .from("follows")
+          .insert({
+            follower_id:currentUser.id,
+            following_id:userId
+          });
+
+      if(result.error) throw result.error;
+
+      button.textContent = "Following";
+      button.classList.add("following");
+
+      showToast("Following");
+
+    }
+
+  }catch(error){
+
+    console.error("FOLLOW ERROR:",error);
+
+    showToast(
+      error?.message ||
+      "Follow failed"
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+  }
 }
 
 
@@ -3297,349 +1972,145 @@ async function loadHome(){
 
 async function loadPolls(){
 
-  const feed =
-    $("pollFeed");
+  const box = $("polls");
 
-
-  if(
-    !feed ||
-    !currentUser
-  ){
-    return;
-  }
-
-
-  feed.innerHTML =
-    '<div class="loading">Loading polls...</div>';
-
+  if(!box) return;
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
-
-    const result =
+    const {data,error} =
       await sb
-      .from("polls")
-      .select("*")
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(50);
+        .from("polls")
+        .select("*")
+        .order("created_at",{ascending:false})
+        .limit(30);
 
+    if(error) throw error;
 
-    if(result.error){
-      throw result.error;
-    }
+    pollCache = data || [];
 
+    if(!pollCache.length){
 
-    allPolls =
-      result.data || [];
-
-
-    if(!allPolls.length){
-
-      feed.innerHTML =
-        '<div class="empty">No polls yet. Be the first to create one!</div>';
+      box.innerHTML =
+        '<div class="empty">No polls yet. Create the first one!</div>';
 
       return;
     }
 
+    box.innerHTML =
+      pollCache.map(renderPoll).join("");
 
-    const profiles =
-      await loadAllProfiles();
-
-
-    const profileMap = {};
-
-    profiles.forEach(
-      p => {
-        profileMap[p.id] = p;
-      }
-    );
-
-
-    const cards =
-      await Promise.all(
-
-        allPolls.map(
-          poll =>
-            renderPoll(
-              poll,
-              profileMap[poll.user_id] ||
-              null
-            )
-        )
-
-      );
-
-
-    feed.innerHTML =
-      cards.join("");
-
+    await loadPollVotes();
 
   }catch(error){
 
-    console.error(
-      "POLL LOAD ERROR:",
-      error
-    );
+    console.error("POLL ERROR:",error);
 
-
-    feed.innerHTML =
-      `<div class="empty">
-        Polls load nahi ho pa rahe.<br>
-        ${escapeHtml(
-          error.message || ""
-        )}
-      </div>`;
+    box.innerHTML = `
+      <div class="empty">
+        Polls could not be loaded.
+        <br>
+        <small>${escapeHTML(error.message)}</small>
+      </div>
+    `;
 
   }
 }
 
 
-async function renderPoll(
-  poll,
-  author
-){
+function renderPoll(poll){
 
-  const options =
-    Array.isArray(poll.options)
-    ? poll.options
-    : [];
+  let options = [];
 
-
-  let userVote = null;
-
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("poll_votes")
-      .select("option_index")
-      .eq(
-        "poll_id",
-        poll.id
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .maybeSingle();
-
-
-    if(
-      !result.error &&
-      result.data
-    ){
-
-      userVote =
-        Number(
-          result.data.option_index
-        );
-
+  if(Array.isArray(poll.options)){
+    options = poll.options;
+  }else if(typeof poll.options === "string"){
+    try{
+      options = JSON.parse(poll.options);
+    }catch{
+      options = poll.options
+        .split(",")
+        .map(x=>x.trim())
+        .filter(Boolean);
     }
+  }
 
-  }catch(error){}
+  if(!options.length){
+    options = ["Yes","No"];
+  }
 
-
-  let counts =
-    options.map(
-      () => 0
-    );
-
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("poll_votes")
-      .select("option_index")
-      .eq(
-        "poll_id",
-        poll.id
-      );
-
-
-    if(
-      !result.error &&
-      result.data
-    ){
-
-      result.data.forEach(
-        vote => {
-
-          const index =
-            Number(
-              vote.option_index
-            );
-
-          if(
-            index >= 0 &&
-            index < counts.length
-          ){
-
-            counts[index]++;
-
-          }
-
-        }
-      );
-
-    }
-
-  }catch(error){}
-
-
-  const total =
-    counts.reduce(
-      (a,b) => a+b,
-      0
-    );
-
-
-  const liked =
-    await hasLikedPoll(
-      poll.id
-    );
-
-
-  const optionHtml =
-    options.map(
-      (option,index) => {
-
-        const percentage =
-          total
-          ? Math.round(
-              counts[index] *
-              100 /
-              total
-            )
-          : 0;
-
-
-        return `
-
-          <button
-            class="poll-option ${userVote === index ? "selected" : ""}"
-            data-vote-poll="${escapeHtml(poll.id)}"
-            data-option="${index}"
-            type="button">
-
-            <div
-              class="progress"
-              style="width:${percentage}%">
-            </div>
-
-            <div class="option-text">
-
-              <span>
-                ${escapeHtml(option)}
-              </span>
-
-              <span>
-                ${total
-                  ? percentage + "%"
-                  : ""}
-              </span>
-
-            </div>
-
-          </button>
-
-        `;
-
-      }
-    )
-    .join("");
-
+  const author =
+    poll.username ||
+    poll.author_name ||
+    "Poll creator";
 
   return `
 
-    <article class="poll-card">
+    <article
+      class="poll-card"
+      data-poll="${poll.id}">
 
-      <div class="poll-head">
+      <div class="poll-author">
 
-        ${avatarHtml(author)}
+        <img
+          class="avatar"
+          src="${avatarURL(
+            poll.avatar_url,
+            author
+          )}"
+          alt="">
 
-        <div class="poll-user">
-
-          <strong>
-            ${escapeHtml(
-              author
-              ? (
-                author.display_name ||
-                author.username
-              )
-              : "Poll Pulse user"
-            )}
-          </strong>
-
-          <span>
-            ${timeAgo(
-              poll.created_at
-            )}
-          </span>
-
+        <div>
+          <div class="user-name">
+            ${escapeHTML(author)}
+          </div>
+          <div class="username">
+            ${timeAgo(poll.created_at)}
+          </div>
         </div>
-
-        ${
-          poll.user_id === currentUser.id
-          ? `
-            <button
-              class="poll-more"
-              data-delete-poll="${escapeHtml(poll.id)}"
-              type="button">
-              🗑️
-            </button>
-          `
-          : ""
-        }
 
       </div>
 
-
       <div class="poll-question">
-        ${escapeHtml(
-          poll.question
+        ${escapeHTML(
+          poll.question ||
+          poll.title ||
+          "Untitled poll"
         )}
       </div>
 
+      <div class="poll-options">
 
-      <div>
-        ${optionHtml}
+        ${options.map((option,index)=>`
+
+          <button
+            class="poll-option"
+            type="button"
+            data-vote-poll="${poll.id}"
+            data-vote-index="${index}">
+
+            <span class="bar"></span>
+
+            <span class="option-content">
+              <span>
+                ${escapeHTML(option)}
+              </span>
+              <strong class="vote-percent">
+                0%
+              </strong>
+            </span>
+
+          </button>
+
+        `).join("")}
+
       </div>
 
-
-      <div class="poll-actions">
-
-        <button
-          class="poll-action ${liked ? "liked" : ""}"
-          data-like-poll="${escapeHtml(poll.id)}"
-          type="button">
-
-          ${liked ? "❤️" : "🤍"}
-          Like
-
-        </button>
-
-        <span class="poll-action">
-          🗳️ ${total} votes
-        </span>
-
+      <div class="poll-meta">
+        <span class="vote-total">0 votes</span>
+        <span>Poll</span>
       </div>
 
     </article>
@@ -3648,410 +2119,175 @@ async function renderPoll(
 }
 
 
-async function hasLikedPoll(
-  pollId
-){
+/* =========================================================
+   VOTES
+========================================================= */
+
+async function loadPollVotes(){
+
+  if(!pollCache.length) return;
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
+    const ids =
+      pollCache.map(p=>p.id);
 
-    const result =
+    const {data,error} =
       await sb
-      .from("poll_likes")
-      .select("id")
-      .eq(
-        "poll_id",
-        pollId
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .maybeSingle();
+        .from("poll_votes")
+        .select("*")
+        .in("poll_id",ids);
 
+    if(error) throw error;
 
-    return (
-      !result.error &&
-      !!result.data
-    );
+    const grouped = {};
 
+    (data || []).forEach(v=>{
 
-  }catch(error){
+      if(!grouped[v.poll_id]){
+        grouped[v.poll_id] = [];
+      }
 
-    return false;
+      grouped[v.poll_id].push(v);
 
-  }
-}
+    });
 
+    document
+      .querySelectorAll("[data-poll]")
+      .forEach(card=>{
 
-async function likePoll(
-  pollId
-){
+        const pollId =
+          card.dataset.poll;
 
-  try{
+        const votes =
+          grouped[pollId] || [];
 
-    const sb =
-      await initSupabase();
+        const total =
+          votes.length;
 
+        card.querySelector(".vote-total")
+          .textContent =
+          total + (total === 1 ? " vote" : " votes");
 
-    const liked =
-      await hasLikedPoll(
-        pollId
-      );
+        const counts = {};
 
-
-    let result;
-
-
-    if(liked){
-
-      result =
-        await sb
-        .from("poll_likes")
-        .delete()
-        .eq(
-          "poll_id",
-          pollId
-        )
-        .eq(
-          "user_id",
-          currentUser.id
-        );
-
-    }else{
-
-      result =
-        await sb
-        .from("poll_likes")
-        .insert({
-
-          poll_id:pollId,
-
-          user_id:
-            currentUser.id
-
+        votes.forEach(v=>{
+          counts[v.option_index] =
+            (counts[v.option_index] || 0) + 1;
         });
 
-    }
+        card
+          .querySelectorAll("[data-vote-index]")
+          .forEach(button=>{
 
+            const index =
+              button.dataset.voteIndex;
 
-    if(result.error){
-      throw result.error;
-    }
+            const count =
+              counts[index] || 0;
 
+            const percent =
+              total
+                ? Math.round(
+                    count / total * 100
+                  )
+                : 0;
 
-    await loadPolls();
+            button
+              .querySelector(".bar")
+              .style.width =
+              percent + "%";
 
+            button
+              .querySelector(".vote-percent")
+              .textContent =
+              percent + "%";
 
-  }catch(error){
+            const hasVoted =
+              votes.some(v=>
+                String(v.user_id) ===
+                String(currentUser.id) &&
+                String(v.option_index) ===
+                String(index)
+              );
 
-    console.error(
-      "LIKE ERROR:",
-      error
-    );
+            if(hasVoted){
+              button.classList.add("selected");
+            }
 
-    showToast(
-      "Like update nahi ho paya."
-    );
-
-  }
-}
-
-
-async function votePoll(
-  pollId,
-  optionIndex
-){
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("poll_votes")
-      .upsert(
-        {
-          poll_id:pollId,
-
-          user_id:
-            currentUser.id,
-
-          option_index:
-            optionIndex
-        },
-        {
-          onConflict:
-            "poll_id,user_id"
-        }
-      );
-
-
-    if(result.error){
-      throw result.error;
-    }
-
-
-    showToast(
-      "Vote saved ✓"
-    );
-
-
-    await loadPolls();
-
-
-  }catch(error){
-
-    console.error(
-      "VOTE ERROR:",
-      error
-    );
-
-    showToast(
-      "Vote save nahi hua. poll_votes table/RLS check karo."
-    );
-
-  }
-}
-
-
-/* CREATE POLL */
-
-async function createPoll(){
-
-  const question =
-    $("pollQuestion")
-    .value
-    .trim();
-
-
-  const options =
-    Array.from(
-      document.querySelectorAll(
-        ".poll-option-input"
-      )
-    )
-    .map(
-      input =>
-        input.value.trim()
-    )
-    .filter(Boolean);
-
-
-  if(!question){
-
-    showToast(
-      "Poll question likho."
-    );
-
-    return;
-  }
-
-
-  if(options.length < 2){
-
-    showToast(
-      "Kam se kam 2 options chahiye."
-    );
-
-    return;
-  }
-
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("polls")
-      .insert({
-
-        user_id:
-          currentUser.id,
-
-        question:
-          question,
-
-        options:
-          options
+          });
 
       });
 
-
-    if(result.error){
-      throw result.error;
-    }
-
-
-    $("pollQuestion")
-      .value = "";
-
-
-    $("optionsContainer")
-      .innerHTML = `
-
-        <div class="option-row">
-          <input
-            class="input poll-option-input"
-            placeholder="Option 1"
-            maxlength="100">
-        </div>
-
-        <div class="option-row">
-          <input
-            class="input poll-option-input"
-            placeholder="Option 2"
-            maxlength="100">
-        </div>
-
-      `;
-
-
-    showToast(
-      "Poll published 🎉"
-    );
-
-
-    showSection(
-      "home"
-    );
-
-
   }catch(error){
 
-    console.error(error);
-
-    showToast(
-      error.message ||
-      "Poll create nahi hua."
+    console.warn(
+      "Vote stats unavailable:",
+      error
     );
 
   }
 }
 
 
-function addPollOption(){
+async function votePoll(pollId,index){
 
-  const box =
-    $("optionsContainer");
-
-
-  const count =
-    box.querySelectorAll(
-      ".poll-option-input"
-    ).length;
-
-
-  if(count >= 6){
-
-    showToast(
-      "Maximum 6 options."
-    );
-
-    return;
-  }
-
-
-  const row =
-    document.createElement(
-      "div"
-    );
-
-
-  row.className =
-    "option-row";
-
-
-  row.innerHTML = `
-
-    <input
-      class="input poll-option-input"
-      maxlength="100"
-      placeholder="Option ${count + 1}">
-
-    <button
-      class="remove-option"
-      type="button">
-      ✕
-    </button>
-
-  `;
-
-
-  row
-    .querySelector(
-      ".remove-option"
-    )
-    .addEventListener(
-      "click",
-      () => row.remove()
-    );
-
-
-  box.appendChild(
-    row
-  );
-}
-
-
-async function deletePoll(
-  pollId
-){
-
-  if(
-    !confirm(
-      "Delete this poll?"
-    )
-  ){
-    return;
-  }
-
+  if(!currentUser) return;
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
-
-    const result =
+    const existing =
       await sb
-      .from("polls")
-      .delete()
-      .eq(
-        "id",
-        pollId
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      );
+        .from("poll_votes")
+        .select("id")
+        .eq("poll_id",pollId)
+        .eq("user_id",currentUser.id)
+        .maybeSingle();
 
+    if(existing.error) throw existing.error;
 
-    if(result.error){
-      throw result.error;
+    if(existing.data){
+
+      const result =
+        await sb
+          .from("poll_votes")
+          .update({
+            option_index:index
+          })
+          .eq("id",existing.data.id);
+
+      if(result.error) throw result.error;
+
+    }else{
+
+      const result =
+        await sb
+          .from("poll_votes")
+          .insert({
+            poll_id:pollId,
+            user_id:currentUser.id,
+            option_index:index
+          });
+
+      if(result.error) throw result.error;
+
     }
 
+    showToast("Vote saved!");
 
-    showToast(
-      "Poll deleted."
-    );
-
-
-    await loadPolls();
-
+    await loadPollVotes();
 
   }catch(error){
 
+    console.error("VOTE ERROR:",error);
+
     showToast(
-      "Poll delete nahi hua."
+      error?.message ||
+      "Vote save nahi hua."
     );
 
   }
@@ -4062,6 +2298,39 @@ async function deletePoll(
    SEARCH
 ========================================================= */
 
+function loadSearch(){
+
+  $("mainContent").innerHTML = `
+
+    <div class="section-head">
+      <h3>Search</h3>
+    </div>
+
+    <div class="search-box">
+      <input
+        id="searchInput"
+        class="search-input"
+        type="search"
+        autocomplete="off"
+        placeholder="Search people...">
+    </div>
+
+    <div id="searchResults" class="search-results">
+      <div class="empty">
+        Search for people on Poll Pulse.
+      </div>
+    </div>
+
+  `;
+
+  $("searchInput")
+    .addEventListener(
+      "input",
+      searchAll
+    );
+}
+
+
 async function searchAll(){
 
   const input =
@@ -4070,635 +2339,617 @@ async function searchAll(){
   const box =
     $("searchResults");
 
+  if(!input || !box) return;
 
-  if(
-    !input ||
-    !box ||
-    !currentUser
-  ){
-    return;
-  }
+  const term =
+    input.value.trim();
 
-
-  const query =
-    input.value
-    .trim()
-    .toLowerCase();
-
-
-  if(!query){
+  if(!term){
 
     box.innerHTML =
-      '<div class="empty">Search for people by name or username.</div>';
+      '<div class="empty">Search for people on Poll Pulse.</div>';
 
     return;
   }
-
-
-  const profiles =
-    await loadAllProfiles();
-
-
-  const matches =
-    profiles
-    .filter(
-      profile =>
-
-        profile.id !== currentUser.id &&
-
-        (
-          String(
-            profile.display_name || ""
-          )
-          .toLowerCase()
-          .includes(query)
-
-          ||
-
-          String(
-            profile.username || ""
-          )
-          .toLowerCase()
-          .includes(query)
-        )
-
-    )
-    .slice(0,30);
-
-
-  if(!matches.length){
-
-    box.innerHTML =
-      '<div class="empty">No users found.</div>';
-
-    return;
-  }
-
-
-  const html =
-    await Promise.all(
-
-      matches.map(
-        async profile => {
-
-          const following =
-            await isFollowing(
-              profile.id
-            );
-
-
-          return `
-
-            <div class="search-result">
-
-              ${avatarHtml(profile)}
-
-              <div class="search-result-info">
-
-                <strong>
-                  ${escapeHtml(
-                    profile.display_name ||
-                    profile.username ||
-                    "User"
-                  )}
-                </strong>
-
-                <span>
-                  @${escapeHtml(
-                    profile.username ||
-                    "user"
-                  )}
-                </span>
-
-              </div>
-
-              <button
-                class="mini-follow"
-                data-search-follow="${escapeHtml(profile.id)}"
-                type="button">
-
-                ${
-                  following
-                  ? "Following"
-                  : "Follow"
-                }
-
-              </button>
-
-            </div>
-
-          `;
-
-        }
-      )
-
-    );
-
 
   box.innerHTML =
-    html.join("");
-
-
-  box
-    .querySelectorAll(
-      "[data-search-follow]"
-    )
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () =>
-            toggleFollow(
-              button.dataset.searchFollow,
-              button
-            )
-        );
-
-      }
-    );
-}
-
-
-/* =========================================================
-   CHAT
-========================================================= */
-
-async function loadChatList(){
-
-  const box =
-    $("chatList");
-
-
-  if(
-    !box ||
-    !currentUser
-  ){
-    return;
-  }
-
-
-  box.innerHTML =
-    '<div class="loading">Loading chats...</div>';
-
+    '<div class="empty">Searching...</div>';
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
-
-    const result =
+    const {data,error} =
       await sb
-      .from("messages")
-      .select("*")
-      .or(
-        `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
+        .from("profiles")
+        .select("*")
+        .or(
+          "username.ilike.%" +
+          term +
+          "%,full_name.ilike.%" +
+          term +
+          "%"
+        )
+        .neq("id",currentUser.id)
+        .limit(30);
 
+    if(error) throw error;
 
-    if(result.error){
-      throw result.error;
-    }
-
-
-    const messages =
-      result.data || [];
-
-
-    if(!messages.length){
+    if(!data?.length){
 
       box.innerHTML =
-        '<div class="empty">No chats yet.<br>Search someone and start a conversation.</div>';
-
-      updateChatBadge(0);
+        '<div class="empty">No users found.</div>';
 
       return;
     }
 
-
-    const profiles =
-      await loadAllProfiles();
-
-
-    const map = {};
-
-    profiles.forEach(
-      p => {
-        map[p.id] = p;
-      }
-    );
-
-
-    const seen =
-      new Set();
-
-
-    const chats = [];
-
-
-    messages.forEach(
-      message => {
-
-        const otherId =
-          message.sender_id ===
-          currentUser.id
-
-          ? message.receiver_id
-
-          : message.sender_id;
-
-
-        if(
-          otherId &&
-          !seen.has(otherId)
-        ){
-
-          seen.add(
-            otherId
-          );
-
-
-          chats.push({
-
-            user:
-              map[otherId] ||
-              {
-                id:otherId,
-                display_name:"User",
-                username:"user"
-              },
-
-            message:
-              message
-
-          });
-
-        }
-
-      }
-    );
-
-
     box.innerHTML =
-      chats.map(
-        chat => `
+      data.map(user=>`
 
-          <button
-            class="chat-row"
-            data-chat-user="${escapeHtml(chat.user.id)}"
-            type="button">
+        <div class="search-item">
 
-            ${avatarHtml(chat.user)}
+          <div class="search-user">
 
-            <div class="chat-info">
+            <img
+              class="avatar"
+              src="${avatarURL(
+                user.avatar_url,
+                user.username
+              )}"
+              alt="">
 
-              <strong>
-                ${escapeHtml(
-                  chat.user.display_name ||
-                  chat.user.username ||
+            <div>
+              <div class="user-name">
+                ${escapeHTML(
+                  user.full_name ||
+                  user.username ||
                   "User"
-                )}
-              </strong>
-
-              <div class="chat-preview">
-                ${escapeHtml(
-                  chat.message.content || ""
                 )}
               </div>
 
+              <div class="username">
+                @${escapeHTML(
+                  user.username || ""
+                )}
+              </div>
             </div>
 
-            <div class="chat-time">
-              ${timeAgo(
-                chat.message.created_at
-              )}
-            </div>
+          </div>
 
+          <button
+            class="follow-btn"
+            type="button"
+            data-follow-id="${user.id}">
+            Follow
           </button>
 
-        `
-      )
-      .join("");
+        </div>
 
+      `).join("");
 
-    box
-      .querySelectorAll(
-        "[data-chat-user]"
-      )
-      .forEach(
-        button => {
-
-          button.addEventListener(
-            "click",
-            () =>
-              openChat(
-                button.dataset.chatUser
-              )
-          );
-
-        }
-      );
-
-
-    updateChatBadge(
-      await countUnreadMessages()
-    );
-
+    await updateFollowButtons();
 
   }catch(error){
 
     console.error(
-      "CHAT LIST:",
+      "SEARCH ERROR:",
       error
     );
 
     box.innerHTML =
-      '<div class="empty">Chat load nahi ho paya.</div>';
+      `<div class="empty">
+        Search failed.<br>
+        <small>${escapeHTML(error.message)}</small>
+      </div>`;
 
   }
 }
 
 
-async function openChat(
-  userId
-){
+/* =========================================================
+   CREATE POLL
+========================================================= */
 
-  if(
-    !userId ||
-    !currentUser
-  ){
+function loadCreate(){
+
+  $("mainContent").innerHTML = `
+
+    <div class="section-head">
+      <h3>Create a poll</h3>
+    </div>
+
+    <div class="create-card">
+
+      <div class="field">
+        <label>Question</label>
+
+        <textarea
+          id="pollQuestion"
+          placeholder="What do you want to ask?"></textarea>
+      </div>
+
+      <div class="field">
+
+        <label>Options</label>
+
+        <input
+          class="option-input"
+          id="option1"
+          placeholder="Option 1">
+
+        <input
+          class="option-input"
+          id="option2"
+          placeholder="Option 2">
+
+        <input
+          class="option-input"
+          id="option3"
+          placeholder="Option 3">
+
+        <input
+          class="option-input"
+          id="option4"
+          placeholder="Option 4">
+
+      </div>
+
+      <button
+        id="createPollButton"
+        class="primary-btn"
+        type="button">
+        Publish poll
+      </button>
+
+    </div>
+  `;
+
+  $("createPollButton")
+    .addEventListener(
+      "click",
+      createPoll
+    );
+}
+
+
+async function createPoll(){
+
+  const question =
+    $("pollQuestion")
+      .value
+      .trim();
+
+  const options =
+    [
+      $("option1").value.trim(),
+      $("option2").value.trim(),
+      $("option3").value.trim(),
+      $("option4").value.trim()
+    ].filter(Boolean);
+
+  if(!question){
+
+    showToast("Question likho.");
     return;
   }
 
+  if(options.length < 2){
 
-  const profiles =
-    await loadAllProfiles();
+    showToast("Kam se kam 2 options chahiye.");
+    return;
+  }
+
+  const button =
+    $("createPollButton");
+
+  button.disabled = true;
+  button.textContent = "Publishing...";
+
+  try{
+
+    const sb = await initSupabase();
+
+    const result =
+      await sb
+        .from("polls")
+        .insert({
+          question:question,
+          options:options,
+          user_id:currentUser.id
+        });
+
+    if(result.error) throw result.error;
+
+    showToast("Poll published!");
+
+    await loadPage("home");
+
+  }catch(error){
+
+    console.error(
+      "CREATE POLL ERROR:",
+      error
+    );
+
+    showToast(
+      error?.message ||
+      "Poll create nahi hua."
+    );
+
+  }finally{
+
+    button.disabled = false;
+    button.textContent = "Publish poll";
+
+  }
+}
 
 
-  currentChatUser =
-    profiles.find(
-      p => p.id === userId
-    ) || {
+/* =========================================================
+   CHAT LIST
+========================================================= */
 
-      id:userId,
+async function loadChatList(){
 
-      display_name:"User",
+  const main =
+    $("mainContent");
 
-      username:"user"
+  main.innerHTML = `
 
-    };
+    <div class="section-head">
+      <h3>Messages</h3>
+    </div>
+
+    <div id="chatList" class="chat-list">
+      <div class="empty">Loading chats...</div>
+    </div>
+
+  `;
+
+  const box =
+    $("chatList");
+
+  try{
+
+    const sb = await initSupabase();
+
+    /*
+      conversations/messages schema agar different hai
+      to query ko apne Supabase schema ke according adjust
+      karna padega.
+    */
+
+    const {data,error} =
+      await sb
+        .from("messages")
+        .select("*")
+        .or(
+          "sender_id.eq." +
+          currentUser.id +
+          ",receiver_id.eq." +
+          currentUser.id
+        )
+        .order("created_at",{ascending:false})
+        .limit(100);
+
+    if(error) throw error;
+
+    const userIds = new Set();
+
+    (data || []).forEach(message=>{
+
+      if(
+        message.sender_id &&
+        message.sender_id !== currentUser.id
+      ){
+        userIds.add(message.sender_id);
+      }
+
+      if(
+        message.receiver_id &&
+        message.receiver_id !== currentUser.id
+      ){
+        userIds.add(message.receiver_id);
+      }
+
+    });
+
+    if(!userIds.size){
+
+      box.innerHTML =
+        '<div class="empty">No conversations yet.</div>';
+
+      return;
+    }
+
+    const {data:users,error:userError} =
+      await sb
+        .from("profiles")
+        .select("*")
+        .in("id",[...userIds]);
+
+    if(userError) throw userError;
+
+    const map = {};
+
+    (users || []).forEach(u=>{
+      map[u.id] = u;
+    });
+
+    const seen = new Set();
+
+    box.innerHTML =
+      (data || [])
+        .filter(message=>{
+
+          const other =
+            message.sender_id === currentUser.id
+              ? message.receiver_id
+              : message.sender_id;
+
+          if(!other || seen.has(other))
+            return false;
+
+          seen.add(other);
+          return true;
+
+        })
+        .map(message=>{
+
+          const other =
+            message.sender_id === currentUser.id
+              ? message.receiver_id
+              : message.sender_id;
+
+          const user =
+            map[other] || {};
+
+          return `
+
+            <button
+              class="chat-item"
+              type="button"
+              data-chat-user="${other}">
+
+              <img
+                class="avatar"
+                src="${avatarURL(
+                  user.avatar_url,
+                  user.username
+                )}"
+                alt="">
+
+              <div class="chat-item-info">
+
+                <div class="user-name">
+                  ${escapeHTML(
+                    user.full_name ||
+                    user.username ||
+                    "User"
+                  )}
+                </div>
+
+                <div class="chat-last">
+                  ${escapeHTML(
+                    message.content || ""
+                  )}
+                </div>
+
+              </div>
+
+            </button>
+          `;
+
+        })
+        .join("");
+
+  }catch(error){
+
+    console.error(
+      "CHAT LIST ERROR:",
+      error
+    );
+
+    box.innerHTML =
+      `<div class="empty">
+        Messages unavailable.<br>
+        <small>${escapeHTML(error.message)}</small>
+      </div>`;
+
+  }
+}
 
 
-  $("chatHeaderName")
-    .textContent =
-      currentChatUser.display_name ||
+/* =========================================================
+   OPEN CHAT
+========================================================= */
+
+async function openChat(userId){
+
+  try{
+
+    const sb = await initSupabase();
+
+    const {data:user,error:userError} =
+      await sb
+        .from("profiles")
+        .select("*")
+        .eq("id",userId)
+        .maybeSingle();
+
+    if(userError) throw userError;
+
+    currentChatUser =
+      user || {
+        id:userId,
+        username:"User"
+      };
+
+    $("chatName").textContent =
+      currentChatUser.full_name ||
       currentChatUser.username ||
       "User";
 
+    $("chatUsername").textContent =
+      currentChatUser.username
+        ? "@"+currentChatUser.username
+        : "";
 
-  $("chatHeaderAvatar")
-    .innerHTML =
-      currentChatUser.avatar_url
+    $("chatAvatar").src =
+      avatarURL(
+        currentChatUser.avatar_url,
+        currentChatUser.username
+      );
 
-      ? `
-        <img
-          src="${escapeHtml(
-            currentChatUser.avatar_url
-          )}"
-          alt="">
-      `
+    $("chatWindow")
+      .classList.remove("hidden");
 
-      : escapeHtml(
-          initials(
-            currentChatUser.display_name ||
-            currentChatUser.username
-          )
-        );
+    await loadMessages();
 
+    subscribeChat();
 
-  $("chatWindow")
-    .classList
-    .add("open");
+  }catch(error){
 
+    console.error(
+      "OPEN CHAT ERROR:",
+      error
+    );
 
-  await loadMessages();
+    showToast(
+      error?.message ||
+      "Chat open nahi hua."
+    );
 
-
-  subscribeToCurrentChat();
-
-
-  setTimeout(
-    () =>
-      $("messageInput")?.focus(),
-    150
-  );
-}
-
-
-function closeChat(){
-
-  $("chatWindow")
-    .classList
-    .remove("open");
-
-
-  if(currentChatChannel){
-
-    try{
-
-      supabaseClient
-        ?.removeChannel(
-          currentChatChannel
-        );
-
-    }catch(error){}
-
-    currentChatChannel =
-      null;
   }
-
-
-  currentChatUser =
-    null;
 }
 
+
+/* =========================================================
+   LOAD MESSAGES
+========================================================= */
 
 async function loadMessages(){
+
+  if(!currentChatUser) return;
 
   const box =
     $("chatMessages");
 
-
-  if(
-    !box ||
-    !currentChatUser
-  ){
-    return;
-  }
-
-
   box.innerHTML =
-    '<div class="loading">Loading messages...</div>';
-
+    '<div class="empty">Loading...</div>';
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
+    const me =
+      currentUser.id;
 
-    const result =
+    const other =
+      currentChatUser.id;
+
+    const {data,error} =
       await sb
-      .from("messages")
-      .select("*")
-      .or(
-        `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
-      )
-      .order(
-        "created_at",
-        {
-          ascending:true
-        }
-      );
+        .from("messages")
+        .select("*")
+        .or(
+          "and(sender_id.eq."+me+",receiver_id.eq."+other+"),"+
+          "and(sender_id.eq."+other+",receiver_id.eq."+me+")"
+        )
+        .order("created_at",{ascending:true});
 
+    if(error) throw error;
 
-    if(result.error){
-      throw result.error;
-    }
-
-
-    const messages =
-      result.data || [];
-
-
-    if(!messages.length){
+    if(!data?.length){
 
       box.innerHTML =
         '<div class="empty">Start the conversation 👋</div>';
 
-    }else{
-
-      box.innerHTML =
-        messages
-        .map(
-          message => `
-
-            <div
-              class="bubble ${
-                message.sender_id ===
-                currentUser.id
-                ? "me"
-                : "them"
-              }">
-
-              ${escapeHtml(
-                message.content || ""
-              )}
-
-            </div>
-
-          `
-        )
-        .join("");
-
+      return;
     }
 
+    box.innerHTML =
+      data.map(message=>`
 
-    scrollChatBottom();
+        <div class="message ${
+          message.sender_id === me
+            ? "mine"
+            : "theirs"
+        }">
 
+          ${escapeHTML(
+            message.content || ""
+          )}
+
+        </div>
+
+      `).join("");
+
+    box.scrollTop =
+      box.scrollHeight;
 
   }catch(error){
 
     console.error(
-      "MESSAGES:",
+      "MESSAGE LOAD ERROR:",
       error
     );
 
     box.innerHTML =
-      '<div class="empty">Messages load nahi hue.</div>';
+      `<div class="empty">
+        Messages load nahi hue.<br>
+        <small>${escapeHTML(error.message)}</small>
+      </div>`;
 
   }
 }
 
 
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
 async function sendMessage(){
 
-  if(
-    !currentChatUser ||
-    !currentUser
-  ){
-    return;
-  }
-
-
   const input =
-    $("messageInput");
-
+    $("chatInput");
 
   const content =
     input.value.trim();
 
-
-  if(!content){
+  if(!content || !currentChatUser)
     return;
-  }
-
 
   input.value = "";
 
-
   try{
 
-    const sb =
-      await initSupabase();
-
+    const sb = await initSupabase();
 
     const result =
       await sb
-      .from("messages")
-      .insert({
+        .from("messages")
+        .insert({
+          sender_id:currentUser.id,
+          receiver_id:currentChatUser.id,
+          content:content
+        });
 
-        sender_id:
-          currentUser.id,
-
-        receiver_id:
-          currentChatUser.id,
-
-        content:
-          content
-
-      });
-
-
-    if(result.error){
-      throw result.error;
-    }
-
+    if(result.error) throw result.error;
 
     await loadMessages();
 
-
   }catch(error){
 
-    input.value =
-      content;
-
-
     console.error(
-      "SEND MESSAGE:",
+      "SEND MESSAGE ERROR:",
       error
     );
 
+    input.value = content;
 
     showToast(
-      error.message ||
+      error?.message ||
       "Message send nahi hua."
     );
 
@@ -4706,334 +2957,62 @@ async function sendMessage(){
 }
 
 
-function handleMessageKey(
-  event
-){
+/* =========================================================
+   REALTIME CHAT
+========================================================= */
 
-  if(
-    event.key === "Enter" &&
-    !event.shiftKey
-  ){
+function subscribeChat(){
 
-    event.preventDefault();
-
-    sendMessage();
-
-  }
-}
-
-
-function scrollChatBottom(){
-
-  const box =
-    $("chatMessages");
-
-
-  if(box){
-
-    setTimeout(
-      () => {
-
-        box.scrollTop =
-          box.scrollHeight;
-
-      },
-      30
-    );
-
-  }
-}
-
-
-function subscribeToCurrentChat(){
-
-  if(
-    !currentChatUser ||
-    !supabaseClient
-  ){
-    return;
-  }
-
-
-  if(currentChatChannel){
-
+  if(chatChannel){
     try{
-
-      supabaseClient
-        .removeChannel(
-          currentChatChannel
-        );
-
-    }catch(error){}
-
+      chatChannel.unsubscribe();
+    }catch{}
   }
 
+  if(!supabaseClient || !currentChatUser)
+    return;
 
-  try{
+  const ids = [
+    currentUser.id,
+    currentChatUser.id
+  ].sort();
 
-    currentChatChannel =
-
-      supabaseClient
-
+  chatChannel =
+    supabaseClient
       .channel(
-        "chat-" +
-        currentUser.id +
-        "-" +
-        currentChatUser.id +
-        "-" +
-        Date.now()
+        "chat-"+ids.join("-")
       )
-
       .on(
         "postgres_changes",
         {
-          event:"INSERT",
+          event:"*",
           schema:"public",
           table:"messages"
         },
-        payload => {
+        payload=>{
 
-          const message =
+          const row =
             payload.new;
 
+          if(!row) return;
 
-          if(!message){
-            return;
-          }
-
-
-          if(
-
+          const relevant =
             (
-              message.sender_id ===
-              currentUser.id &&
-
-              message.receiver_id ===
-              currentChatUser.id
-            )
-
-            ||
-
+              row.sender_id === currentUser.id &&
+              row.receiver_id === currentChatUser.id
+            ) ||
             (
-              message.sender_id ===
-              currentChatUser.id &&
+              row.sender_id === currentChatUser.id &&
+              row.receiver_id === currentUser.id
+            );
 
-              message.receiver_id ===
-              currentUser.id
-            )
-
-          ){
-
+          if(relevant){
             loadMessages();
-
           }
 
         }
       )
-
       .subscribe();
-
-
-  }catch(error){
-
-    console.warn(
-      "Realtime chat:",
-      error
-    );
-
-  }
-}
-
-
-async function countUnreadMessages(){
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("messages")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "receiver_id",
-        currentUser.id
-      )
-      .eq(
-        "read",
-        false
-      );
-
-
-    return result.error
-      ? 0
-      : result.count || 0;
-
-
-  }catch(error){
-
-    return 0;
-
-  }
-}
-
-
-function updateChatBadge(
-  count
-){
-
-  const badge =
-    $("chatBadge");
-
-
-  if(!badge){
-    return;
-  }
-
-
-  badge.classList.toggle(
-    "hidden",
-    !count
-  );
-
-
-  if(count){
-
-    badge.textContent =
-      count > 99
-      ? "99+"
-      : String(count);
-
-  }
-}
-
-
-/* =========================================================
-   PROFILE COUNTS
-========================================================= */
-
-async function countFollowers(
-  userId
-){
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("follows")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "following_id",
-        userId
-      );
-
-
-    return result.error
-      ? 0
-      : result.count || 0;
-
-
-  }catch(error){
-
-    return 0;
-
-  }
-}
-
-
-async function countFollowing(
-  userId
-){
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("follows")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "follower_id",
-        userId
-      );
-
-
-    return result.error
-      ? 0
-      : result.count || 0;
-
-
-  }catch(error){
-
-    return 0;
-
-  }
-}
-
-
-async function countUserPolls(
-  userId
-){
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
-      .from("polls")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "user_id",
-        userId
-      );
-
-
-    return result.error
-      ? 0
-      : result.count || 0;
-
-
-  }catch(error){
-
-    return 0;
-
-  }
 }
 
 
@@ -5043,260 +3022,143 @@ async function countUserPolls(
 
 async function loadProfile(){
 
-  const box =
-    $("profileContent");
+  await ensureProfile();
 
+  const p =
+    currentProfile || {};
 
-  if(
-    !box ||
-    !currentUser
-  ){
-    return;
-  }
+  $("mainContent").innerHTML = `
 
+    <div class="section-head">
+      <h3>Profile</h3>
+    </div>
 
-  try{
+    <div class="profile-card">
 
-    currentProfile =
-      await ensureProfile(
-        currentUser
-      );
+      <div class="profile-avatar-wrap">
 
+        <img
+          id="profileAvatar"
+          class="profile-avatar"
+          src="${avatarURL(
+            p.avatar_url,
+            p.username
+          )}"
+          alt="Profile">
 
-    const followers =
-      await countFollowers(
-        currentUser.id
-      );
+        <button
+          id="editPhotoButton"
+          class="photo-edit"
+          type="button">
+          ✎
+        </button>
 
+      </div>
 
-    const following =
-      await countFollowing(
-        currentUser.id
-      );
+      <div class="user-name" style="font-size:19px">
+        ${escapeHTML(
+          p.full_name ||
+          p.username ||
+          "User"
+        )}
+      </div>
 
+      <div class="username">
+        @${escapeHTML(
+          p.username || ""
+        )}
+      </div>
 
-    const pollCount =
-      await countUserPolls(
-        currentUser.id
-      );
+      <div class="profile-stats">
 
-
-    box.innerHTML = `
-
-      <div class="profile-card">
-
-        <div class="profile-top">
-
-          ${avatarHtml(
-            currentProfile,
-            "profile-avatar"
-          )}
-
-          <div class="profile-main">
-
-            <h2>
-              ${escapeHtml(
-                currentProfile.display_name ||
-                currentProfile.username ||
-                "User"
-              )}
-            </h2>
-
-            <p>
-              @${escapeHtml(
-                currentProfile.username ||
-                "user"
-              )}
-            </p>
-
-            <p>
-              ${escapeHtml(
-                currentProfile.bio ||
-                "Welcome to Poll Pulse!"
-              )}
-            </p>
-
-          </div>
-
+        <div class="stat">
+          <strong id="followersCount">0</strong>
+          <span>Followers</span>
         </div>
 
-
-        <div class="profile-stats">
-
-          <div class="stat">
-            <strong>
-              ${pollCount}
-            </strong>
-            <span>
-              Polls
-            </span>
-          </div>
-
-          <div class="stat">
-            <strong>
-              ${followers}
-            </strong>
-            <span>
-              Followers
-            </span>
-          </div>
-
-          <div class="stat">
-            <strong>
-              ${following}
-            </strong>
-            <span>
-              Following
-            </span>
-          </div>
-
-        </div>
-
-
-        <div class="profile-actions">
-
-          <button
-            id="photoOpenButton"
-            class="profile-btn primary"
-            type="button">
-            📷 Change photo
-          </button>
-
-          <button
-            id="logoutButton"
-            class="profile-btn"
-            type="button">
-            🚪 Logout
-          </button>
-
+        <div class="stat">
+          <strong id="followingCount">0</strong>
+          <span>Following</span>
         </div>
 
       </div>
 
+      <div class="profile-actions">
 
-      <div class="section-title-row">
-
-        <h3 class="section-title">
-          Your polls
-        </h3>
-
-      </div>
-
-
-      <div id="myPolls">
-
-        <div class="loading">
-          Loading...
-        </div>
+        <button
+          id="logoutButton"
+          class="secondary-btn"
+          type="button">
+          Logout
+        </button>
 
       </div>
 
-    `;
+    </div>
 
+  `;
 
-    $("photoOpenButton")
-      .addEventListener(
-        "click",
-        openPhotoModal
-      );
-
-
-    $("logoutButton")
-      .addEventListener(
-        "click",
-        logoutUser
-      );
-
-
-    await loadMyPolls();
-
-
-  }catch(error){
-
-    console.error(
-      "PROFILE:",
-      error
+  $("editPhotoButton")
+    .addEventListener(
+      "click",
+      ()=>{
+        $("photoModal")
+          .classList.remove("hidden");
+      }
     );
 
+  $("logoutButton")
+    .addEventListener(
+      "click",
+      logoutUser
+    );
 
-    box.innerHTML =
-      '<div class="empty">Profile load nahi hua.</div>';
-
-  }
+  await loadFollowCounts();
 }
 
 
-async function loadMyPolls(){
+/* =========================================================
+   FOLLOW COUNTS
+========================================================= */
 
-  const box =
-    $("myPolls");
-
-
-  if(!box){
-    return;
-  }
-
+async function loadFollowCounts(){
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
-
-    const result =
+    const followers =
       await sb
-      .from("polls")
-      .select("*")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
+        .from("follows")
+        .select("id",{count:"exact",head:true})
+        .eq(
+          "following_id",
+          currentUser.id
+        );
 
+    const following =
+      await sb
+        .from("follows")
+        .select("id",{count:"exact",head:true})
+        .eq(
+          "follower_id",
+          currentUser.id
+        );
 
-    if(result.error){
-      throw result.error;
-    }
+    $("followersCount")
+      .textContent =
+      followers.count || 0;
 
-
-    const polls =
-      result.data || [];
-
-
-    if(!polls.length){
-
-      box.innerHTML =
-        '<div class="empty">You haven\'t created any polls yet.</div>';
-
-      return;
-    }
-
-
-    const cards =
-      await Promise.all(
-        polls.map(
-          poll =>
-            renderPoll(
-              poll,
-              currentProfile
-            )
-        )
-      );
-
-
-    box.innerHTML =
-      cards.join("");
-
+    $("followingCount")
+      .textContent =
+      following.count || 0;
 
   }catch(error){
 
-    box.innerHTML =
-      '<div class="empty">Your polls load nahi hue.</div>';
+    console.warn(
+      "FOLLOW COUNT ERROR:",
+      error
+    );
 
   }
 }
@@ -5306,87 +3168,42 @@ async function loadMyPolls(){
    PROFILE PHOTO
 ========================================================= */
 
-function openPhotoModal(){
-
-  $("photoModal")
-    .classList
-    .add("open");
-
-}
-
-
-function closeModal(
-  id
-){
-
-  $(id)
-    ?.classList
-    .remove("open");
-
-}
-
-
 async function uploadProfilePhoto(){
 
-  const input =
-    $("photoInput");
-
-
   const file =
-    input?.files?.[0];
-
+    $("photoInput").files[0];
 
   if(!file){
 
-    showToast(
+    setPhotoMessage(
       "Pehle photo select karo."
     );
 
     return;
   }
 
+  if(!file.type.startsWith("image/")){
 
-  if(
-    !file.type.startsWith(
-      "image/"
-    )
-  ){
-
-    showToast(
+    setPhotoMessage(
       "Sirf image select karo."
     );
 
     return;
   }
 
+  const button =
+    $("uploadPhotoButton");
 
-  if(
-    file.size >
-    5 * 1024 * 1024
-  ){
-
-    showToast(
-      "Photo 5MB se chhoti honi chahiye."
-    );
-
-    return;
-  }
-
+  button.disabled = true;
+  button.textContent = "Uploading...";
 
   try{
 
-    const sb =
-      await initSupabase();
-
+    const sb = await initSupabase();
 
     const extension =
-      file.name.includes(".")
-      ? file.name
-          .split(".")
-          .pop()
-          .toLowerCase()
-      : "jpg";
-
+      file.name.split(".").pop()
+        .toLowerCase();
 
     const path =
       currentUser.id +
@@ -5395,105 +3212,77 @@ async function uploadProfilePhoto(){
       "." +
       extension;
 
-
     const upload =
-      await sb
-      .storage
-      .from("avatars")
-      .upload(
-        path,
-        file,
-        {
-          cacheControl:"3600",
-          upsert:false
-        }
-      );
+      await sb.storage
+        .from("avatars")
+        .upload(
+          path,
+          file,
+          {
+            upsert:true,
+            contentType:file.type
+          }
+        );
 
-
-    if(upload.error){
+    if(upload.error)
       throw upload.error;
-    }
-
 
     const publicUrl =
-      sb
-      .storage
-      .from("avatars")
-      .getPublicUrl(
-        path
-      )
-      ?.data
-      ?.publicUrl;
+      sb.storage
+        .from("avatars")
+        .getPublicUrl(path)
+        .data
+        .publicUrl;
 
-
-    if(!publicUrl){
-
-      throw new Error(
-        "Photo URL nahi mili."
-      );
-
-    }
-
-
-    const result =
+    const update =
       await sb
-      .from("profiles")
-      .update({
-        avatar_url:
-          publicUrl
-      })
-      .eq(
-        "id",
-        currentUser.id
-      );
+        .from("profiles")
+        .update({
+          avatar_url:publicUrl
+        })
+        .eq(
+          "id",
+          currentUser.id
+        );
 
-
-    if(result.error){
-      throw result.error;
-    }
-
+    if(update.error)
+      throw update.error;
 
     currentProfile.avatar_url =
       publicUrl;
 
-
-    input.value = "";
-
-
-    closeModal(
-      "photoModal"
+    setPhotoMessage(
+      "Profile photo updated!"
     );
-
 
     showToast(
-      "Profile photo updated ✓"
+      "Profile photo updated!"
     );
 
+    setTimeout(()=>{
+      $("photoModal")
+        .classList.add("hidden");
 
-    await loadProfile();
-
-
-    allProfiles = [];
-
-
-    await loadSuggestions();
-
+      loadProfile();
+    },600);
 
   }catch(error){
 
     console.error(
-      "PHOTO UPLOAD:",
+      "PHOTO ERROR:",
       error
     );
 
-
-    showToast(
-      "Photo upload failed: " +
-      (
-        error.message ||
-        "avatars bucket/RLS check karo."
-      )
+    setPhotoMessage(
+      error?.message ||
+      "Photo upload failed."
     );
+
+  }finally{
+
+    button.disabled = false;
+    button.textContent =
+      "Upload photo";
 
   }
 }
@@ -5503,54 +3292,52 @@ async function uploadProfilePhoto(){
    NOTIFICATIONS
 ========================================================= */
 
-async function createNotification(
-  userId,
-  message
-){
+async function updateNotificationCount(){
 
-  if(
-    !userId ||
-    !currentUser
-  ){
-    return;
-  }
-
+  if(!currentUser) return;
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
-
-    const result =
+    const {count,error} =
       await sb
-      .from("notifications")
-      .insert({
+        .from("notifications")
+        .select("id",{
+          count:"exact",
+          head:true
+        })
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .eq(
+          "read",
+          false
+        );
 
-        user_id:
-          userId,
+    if(error) throw error;
 
-        actor_id:
-          currentUser.id,
+    const badge =
+      $("notificationBadge");
 
-        message:
-          message
+    if(count > 0){
 
-      });
+      badge.textContent =
+        count > 99 ? "99+" : count;
 
+      badge.classList.remove("hidden");
 
-    if(result.error){
+    }else{
 
-      console.warn(
-        "Notification:",
-        result.error
-      );
+      badge.classList.add("hidden");
 
     }
 
   }catch(error){
 
     console.warn(
+      "NOTIFICATION ERROR:",
       error
     );
 
@@ -5558,330 +3345,65 @@ async function createNotification(
 }
 
 
-async function loadNotifications(){
-
-  const box =
-    $("notificationList");
-
-
-  if(
-    !box ||
-    !currentUser
-  ){
-    return;
-  }
-
-
-  box.innerHTML =
-    '<div class="loading">Loading...</div>';
-
+async function showNotifications(){
 
   try{
 
-    const sb =
-      await initSupabase();
+    const sb = await initSupabase();
 
-
-    const result =
+    const {data,error} =
       await sb
-      .from("notifications")
-      .select("*")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(50);
+        .from("notifications")
+        .select("*")
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .order(
+          "created_at",
+          {ascending:false}
+        )
+        .limit(30);
 
+    if(error) throw error;
 
-    if(result.error){
-      throw result.error;
-    }
+    if(!data?.length){
 
-
-    notifications =
-      result.data || [];
-
-
-    if(!notifications.length){
-
-      box.innerHTML =
-        '<div class="empty">No notifications yet.</div>';
-
-      updateNotificationBadge(0);
-
+      showToast("No notifications.");
       return;
     }
 
+    const text =
+      data
+        .slice(0,5)
+        .map(n=>
+          n.message ||
+          n.content ||
+          "New notification"
+        )
+        .join(" • ");
 
-    const profiles =
-      await loadAllProfiles();
+    showToast(text);
 
-
-    const map = {};
-
-
-    profiles.forEach(
-      p => {
-        map[p.id] = p;
-      }
-    );
-
-
-    box.innerHTML =
-      notifications
-      .map(
-        notification => {
-
-          const actor =
-            map[
-              notification.actor_id
-            ];
-
-
-          return `
-
-            <div class="notification-card">
-
-              ${avatarHtml(actor)}
-
-              <div class="notification-text">
-
-                <strong>
-                  ${escapeHtml(
-                    actor
-                    ? (
-                      actor.display_name ||
-                      actor.username
-                    )
-                    : "Someone"
-                  )}
-                </strong>
-
-                ${escapeHtml(
-                  notification.message ||
-                  ""
-                )}
-
-                <span>
-                  ${timeAgo(
-                    notification.created_at
-                  )}
-                </span>
-
-              </div>
-
-            </div>
-
-          `;
-
-        }
-      )
-      .join("");
-
-
-    updateNotificationBadge(
-      notifications.filter(
-        n => n.read !== true
-      ).length
-    );
-
-
-  }catch(error){
-
-    console.error(
-      "NOTIFICATIONS:",
-      error
-    );
-
-
-    box.innerHTML =
-      '<div class="empty">Notifications load nahi hui.</div>';
-
-
-    updateNotificationBadge(
-      0
-    );
-
-  }
-}
-
-
-function updateNotificationBadge(
-  count
-){
-
-  const badge =
-    $("notificationBadge");
-
-
-  if(!badge){
-    return;
-  }
-
-
-  badge.classList.toggle(
-    "hidden",
-    !count
-  );
-
-
-  if(count){
-
-    badge.textContent =
-      count > 99
-      ? "99+"
-      : String(count);
-
-  }
-}
-
-
-async function markNotificationsRead(){
-
-  try{
-
-    const sb =
-      await initSupabase();
-
-
-    const result =
-      await sb
+    await sb
       .from("notifications")
-      .update({
-        read:true
-      })
+      .update({read:true})
       .eq(
         "user_id",
         currentUser.id
-      )
-      .eq(
-        "read",
-        false
       );
 
-
-    if(result.error){
-      throw result.error;
-    }
-
-
-    showToast(
-      "Notifications marked as read."
-    );
-
-
-    await loadNotifications();
-
-
-  }catch(error){
-
-    showToast(
-      "Read status update nahi ho paya."
-    );
-
-  }
-}
-
-
-/* =========================================================
-   REALTIME
-========================================================= */
-
-function setupRealtime(){
-
-  if(
-    !currentUser ||
-    !supabaseClient
-  ){
-    return;
-  }
-
-
-  if(appRealtimeChannel){
-
-    try{
-
-      supabaseClient
-        .removeChannel(
-          appRealtimeChannel
-        );
-
-    }catch(error){}
-
-  }
-
-
-  try{
-
-    appRealtimeChannel =
-
-      supabaseClient
-
-      .channel(
-        "app-" +
-        currentUser.id +
-        "-" +
-        Date.now()
-      )
-
-      .on(
-        "postgres_changes",
-        {
-          event:"*",
-          schema:"public",
-          table:"notifications",
-          filter:
-            "user_id=eq." +
-            currentUser.id
-        },
-        () =>
-          loadNotifications()
-      )
-
-      .on(
-        "postgres_changes",
-        {
-          event:"INSERT",
-          schema:"public",
-          table:"messages",
-          filter:
-            "receiver_id=eq." +
-            currentUser.id
-        },
-        payload => {
-
-          if(
-            currentChatUser &&
-            payload.new &&
-            payload.new.sender_id ===
-            currentChatUser.id
-          ){
-
-            loadMessages();
-
-          }else{
-
-            loadChatList();
-
-          }
-
-        }
-      )
-
-      .subscribe();
-
+    updateNotificationCount();
 
   }catch(error){
 
     console.warn(
-      "Realtime:",
+      "NOTIFICATION LOAD:",
       error
+    );
+
+    showToast(
+      "Notifications unavailable."
     );
 
   }
@@ -5896,220 +3418,106 @@ async function logoutUser(){
 
   try{
 
-    const sb =
-      await initSupabase();
-
+    const sb = await initSupabase();
 
     await sb.auth.signOut();
-
 
   }catch(error){
 
     console.error(
+      "LOGOUT ERROR:",
       error
     );
 
   }
-
 
   currentUser = null;
   currentProfile = null;
 
-  allProfiles = [];
-  allPolls = [];
-
-
   $("appScreen")
-    .classList
-    .add("hidden");
-
+    .classList.add("hidden");
 
   $("authScreen")
-    .classList
-    .remove("hidden");
+    .classList.remove("hidden");
 
+  $("emailInput").value = "";
+  $("passwordInput").value = "";
+  $("usernameInput").value = "";
 
-  showAuthMode(
-    "login"
-  );
+  setAuthMode("login");
 
+  showToast("Logged out.");
 
-  setAuthMessage(
-    "Logged out.",
-    "success"
-  );
 }
 
 
 /* =========================================================
-   AUTH LISTENER
+   EVENT DELEGATION
 ========================================================= */
 
-async function setupAuthListener(){
+document.addEventListener(
+  "click",
+  async event=>{
 
-  if(authListenerReady){
-    return;
-  }
-
-
-  authListenerReady = true;
-
-
-  const sb =
-    await initSupabase();
-
-
-  sb.auth.onAuthStateChange(
-    function(
-      event,
-      session
-    ){
-
-      console.log(
-        "AUTH EVENT:",
-        event
+    const followButton =
+      event.target.closest(
+        "[data-follow-id]"
       );
 
+    if(followButton){
 
-      if(
-        session &&
-        session.user
-      ){
+      await toggleFollow(
+        followButton.dataset.followId,
+        followButton
+      );
 
-        currentUser =
-          session.user;
-
-
-        if(
-          $("appScreen")
-          .classList
-          .contains("hidden") &&
-          !appStarting
-        ){
-
-          openApp(
-            session.user
-          );
-
-        }
-
-      }else{
-
-        currentUser = null;
-
-        currentProfile = null;
-
-
-        $("appScreen")
-          .classList
-          .add("hidden");
-
-
-        $("authScreen")
-          .classList
-          .remove("hidden");
-
-      }
-
+      return;
     }
-  );
-}
+
+    const voteButton =
+      event.target.closest(
+        "[data-vote-poll]"
+      );
+
+    if(voteButton){
+
+      await votePoll(
+        voteButton.dataset.votePoll,
+        Number(
+          voteButton.dataset.voteIndex
+        )
+      );
+
+      return;
+    }
+
+    const chatButton =
+      event.target.closest(
+        "[data-chat-user]"
+      );
+
+    if(chatButton){
+
+      await openChat(
+        chatButton.dataset.chatUser
+      );
+
+      return;
+    }
+
+  }
+);
 
 
 /* =========================================================
-   START APP
-========================================================= */
-
-async function startApp(){
-
-  $("authScreen")
-    .classList
-    .remove("hidden");
-
-
-  $("appScreen")
-    .classList
-    .add("hidden");
-
-
-  try{
-
-    await initSupabase();
-
-
-    await setupAuthListener();
-
-
-    const result =
-      await supabaseClient
-      .auth
-      .getSession();
-
-
-    if(result.error){
-      throw result.error;
-    }
-
-
-    if(
-      result.data &&
-      result.data.session &&
-      result.data.session.user
-    ){
-
-      currentUser =
-        result.data.session.user;
-
-
-      await openApp(
-        currentUser
-      );
-
-    }
-
-
-  }catch(error){
-
-    console.error(
-      "START ERROR:",
-      error
-    );
-
-
-    setAuthMessage(
-      "Login system start nahi ho paya. Internet connection check karo.",
-      "error"
-    );
-
-  }
-}
-
-
-/* =========================================================
-   EVENT LISTENERS
+   DOM READY
 ========================================================= */
 
 document.addEventListener(
   "DOMContentLoaded",
-  function(){
+  ()=>{
 
     /* AUTH */
-
-    $("loginTab")
-      .addEventListener(
-        "click",
-        () =>
-          showAuthMode("login")
-      );
-
-
-    $("signupTab")
-      .addEventListener(
-        "click",
-        () =>
-          showAuthMode("signup")
-      );
-
 
     $("loginButton")
       .addEventListener(
@@ -6117,152 +3525,106 @@ document.addEventListener(
         loginUser
       );
 
-
     $("signupButton")
       .addEventListener(
         "click",
         signupUser
       );
 
-
-    $("resetButton")
+    $("forgotButton")
       .addEventListener(
         "click",
         resetPassword
       );
 
-
-    /* SEARCH */
-
-    $("searchInput")
-      .addEventListener(
-        "input",
-        searchAll
-      );
-
-
-    /* HOME */
-
-    $("refreshSuggestions")
+    $("modeButton")
       .addEventListener(
         "click",
-        loadSuggestions
-      );
-
-
-    $("refreshHome")
-      .addEventListener(
-        "click",
-        loadHome
-      );
-
-
-    /* CREATE */
-
-    $("addOptionButton")
-      .addEventListener(
-        "click",
-        addPollOption
-      );
-
-
-    $("createPollButton")
-      .addEventListener(
-        "click",
-        createPoll
-      );
-
-
-    /* TOP */
-
-    $("notificationButton")
-      .addEventListener(
-        "click",
-        openNotifications
-      );
-
-
-    $("profileButton")
-      .addEventListener(
-        "click",
-        openProfile
+        ()=>{
+          setAuthMode(
+            authMode === "login"
+              ? "signup"
+              : "login"
+          );
+        }
       );
 
 
     /* NAV */
 
-    $("navHome")
+    document
+      .querySelectorAll(".nav-btn")
+      .forEach(button=>{
+
+        button.addEventListener(
+          "click",
+          ()=>loadPage(
+            button.dataset.page
+          )
+        );
+
+      });
+
+
+    /* NOTIFICATIONS */
+
+    $("notificationButton")
       .addEventListener(
         "click",
-        () =>
-          showSection("home")
-      );
-
-
-    $("navSearch")
-      .addEventListener(
-        "click",
-        () =>
-          showSection("search")
-      );
-
-
-    $("navCreate")
-      .addEventListener(
-        "click",
-        () =>
-          showSection("create")
-      );
-
-
-    $("navChat")
-      .addEventListener(
-        "click",
-        () =>
-          showSection("chat")
-      );
-
-
-    $("navProfile")
-      .addEventListener(
-        "click",
-        () =>
-          showSection("profile")
+        showNotifications
       );
 
 
     /* CHAT */
 
-    $("chatBackButton")
+    $("closeChatButton")
       .addEventListener(
         "click",
-        closeChat
+        ()=>{
+
+          $("chatWindow")
+            .classList.add("hidden");
+
+          if(chatChannel){
+
+            try{
+              chatChannel.unsubscribe();
+            }catch{}
+
+            chatChannel = null;
+
+          }
+
+          currentChatUser = null;
+
+        }
       );
 
 
-    $("sendButton")
+    $("chatForm")
       .addEventListener(
-        "click",
-        sendMessage
-      );
+        "submit",
+        event=>{
 
+          event.preventDefault();
 
-    $("messageInput")
-      .addEventListener(
-        "keydown",
-        handleMessageKey
+          sendMessage();
+
+        }
       );
 
 
     /* PHOTO */
 
-    $("closePhotoButton")
+    $("closePhotoModal")
       .addEventListener(
         "click",
-        () =>
-          closeModal(
-            "photoModal"
-          )
+        ()=>{
+
+          $("photoModal")
+            .classList.add("hidden");
+
+        }
       );
 
 
@@ -6271,76 +3633,6 @@ document.addEventListener(
         "click",
         uploadProfilePhoto
       );
-
-
-    /* NOTIFICATIONS */
-
-    $("markNotificationsButton")
-      .addEventListener(
-        "click",
-        markNotificationsRead
-      );
-
-
-    /* GENERATED POLL BUTTONS */
-
-    document.addEventListener(
-      "click",
-      function(event){
-
-        const vote =
-          event.target.closest(
-            "[data-vote-poll]"
-          );
-
-
-        if(vote){
-
-          votePoll(
-            vote.dataset.votePoll,
-            Number(
-              vote.dataset.option
-            )
-          );
-
-          return;
-
-        }
-
-
-        const like =
-          event.target.closest(
-            "[data-like-poll]"
-          );
-
-
-        if(like){
-
-          likePoll(
-            like.dataset.likePoll
-          );
-
-          return;
-
-        }
-
-
-        const deleteButton =
-          event.target.closest(
-            "[data-delete-poll]"
-          );
-
-
-        if(deleteButton){
-
-          deletePoll(
-            deleteButton.dataset.deletePoll
-          );
-
-        }
-
-      }
-    );
 
 
     /* START */
@@ -6352,25 +3644,80 @@ document.addEventListener(
 
 
 /* =========================================================
-   GLOBAL ERROR HANDLERS
+   START APP
+========================================================= */
+
+async function startApp(){
+
+  $("authScreen")
+    .classList.remove("hidden");
+
+  $("appScreen")
+    .classList.add("hidden");
+
+  try{
+
+    await initSupabase();
+
+    await setupAuthListener();
+
+    const result =
+      await supabaseClient.auth.getSession();
+
+    if(result.error){
+      throw result.error;
+    }
+
+    const session =
+      result.data?.session;
+
+    if(session?.user){
+
+      currentUser =
+        session.user;
+
+      await openApp(
+        session.user
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "START ERROR:",
+      error
+    );
+
+    setAuthMessage(
+      "Login system start nahi hua. Internet connection check karo.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   GLOBAL ERROR HANDLING
 ========================================================= */
 
 window.addEventListener(
   "error",
-  function(event){
+  event=>{
 
     console.error(
-      "GLOBAL ERROR:",
+      "GLOBAL JS ERROR:",
       event.error || event.message
     );
 
   }
 );
 
-
 window.addEventListener(
   "unhandledrejection",
-  function(event){
+  event=>{
 
     console.error(
       "PROMISE ERROR:",
@@ -6382,66 +3729,19 @@ window.addEventListener(
 
 
 /* =========================================================
-   GLOBAL EXPORTS
-   Required for compatibility with old inline handlers
+   EXPOSE FUNCTIONS
 ========================================================= */
 
-window.showAuthMode =
-  showAuthMode;
-
-window.loginUser =
-  loginUser;
-
-window.signupUser =
-  signupUser;
-
-window.resetPassword =
-  resetPassword;
-
-window.openProfile =
-  openProfile;
-
-window.openNotifications =
-  openNotifications;
-
-window.showSection =
-  showSection;
-
-window.toggleFollow =
-  toggleFollow;
-
-window.votePoll =
-  votePoll;
-
-window.likePoll =
-  likePoll;
-
-window.createPoll =
-  createPoll;
-
-window.deletePoll =
-  deletePoll;
-
-window.openChat =
-  openChat;
-
-window.closeChat =
-  closeChat;
-
-window.sendMessage =
-  sendMessage;
-
-window.openPhotoModal =
-  openPhotoModal;
-
-window.closeModal =
-  closeModal;
-
-window.uploadProfilePhoto =
-  uploadProfilePhoto;
-
-window.logoutUser =
-  logoutUser;
+window.loginUser = loginUser;
+window.signupUser = signupUser;
+window.logoutUser = logoutUser;
+window.searchAll = searchAll;
+window.votePoll = votePoll;
+window.toggleFollow = toggleFollow;
+window.openChat = openChat;
+window.sendMessage = sendMessage;
+window.createPoll = createPoll;
+window.uploadProfilePhoto = uploadProfilePhoto;
 
 </script>
 
