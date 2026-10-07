@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <title>Poll Pulse Chats</title>
+  <title>Poll Pulse • Chats</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -15,11 +15,38 @@
       padding: 0;
     }
 
+    :root {
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --text: #111111;
+      --muted: #8a8a8f;
+      --line: #ececef;
+      --search: #f1f1f3;
+      --blue: #0095f6;
+      --blue-dark: #0077cc;
+      --received: #eeeeF0;
+      --sent: #3797f0;
+    }
+
+    html,
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f5f5f5;
-      color: #111;
-      min-height: 100vh;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
     }
 
     button,
@@ -30,38 +57,68 @@
     button {
       border: 0;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
+
+    input {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* =====================================================
+       APP SHELL
+    ===================================================== */
 
     .app {
       width: 100%;
-      max-width: 600px;
-      min-height: 100vh;
+      max-width: 620px;
+      min-height: 100dvh;
       margin: auto;
       background: #fff;
       position: relative;
       overflow: hidden;
     }
 
-    /* =========================
+    @media (min-width: 700px) {
+      body {
+        padding: 18px 0;
+      }
+
+      .app {
+        min-height: calc(100dvh - 36px);
+        border-radius: 22px;
+        box-shadow: 0 12px 50px rgba(0, 0, 0, .10);
+      }
+    }
+
+    /* =====================================================
        INBOX
-    ========================== */
+    ===================================================== */
 
     .inbox {
-      min-height: 100vh;
+      min-height: 100dvh;
       background: #fff;
     }
 
     .topbar {
-      height: 62px;
+      height: 66px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 18px;
-      border-bottom: 1px solid #eee;
+      padding:
+        env(safe-area-inset-top)
+        17px
+        0
+        17px;
+
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .96);
+
       position: sticky;
       top: 0;
-      background: rgba(255,255,255,.97);
-      z-index: 10;
+      z-index: 20;
+
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
     }
 
     .topbar-left {
@@ -71,49 +128,194 @@
     }
 
     .topbar-title {
-      font-size: 21px;
-      font-weight: 700;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.4px;
+    }
+
+    .topbar-subtitle {
+      display: block;
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
     }
 
     .topbar-icon {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      background: transparent;
+      background: #f3f3f5;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 23px;
+      font-size: 21px;
+      transition: transform .15s, background .15s;
     }
 
     .topbar-icon:active {
-      background: #f2f2f2;
+      transform: scale(.92);
+      background: #e8e8ea;
     }
 
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
     .search-wrap {
-      padding: 14px 16px 8px;
+      padding: 14px 16px 7px;
+      background: #fff;
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+      font-size: 16px;
+      pointer-events: none;
     }
 
     .search-box {
       width: 100%;
-      height: 42px;
+      height: 44px;
+
       border: 0;
       outline: 0;
-      border-radius: 12px;
-      background: #f1f1f1;
-      padding: 0 15px;
+      border-radius: 13px;
+
+      background: var(--search);
+
+      padding:
+        0
+        15px
+        0
+        40px;
+
       font-size: 15px;
+      color: #111;
+
+      transition: background .2s, box-shadow .2s;
+    }
+
+    .search-box::placeholder {
+      color: #888;
+    }
+
+    .search-box:focus {
+      background: #e9e9eb;
+      box-shadow: 0 0 0 2px rgba(0, 149, 246, .10);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 17px 17px 8px;
     }
 
     .section-title {
-      padding: 15px 16px 8px;
       font-size: 14px;
+      font-weight: 800;
+    }
+
+    .section-count {
+      color: #999;
+      font-size: 12px;
+    }
+
+    /* =====================================================
+       SEARCH RESULTS
+    ===================================================== */
+
+    .search-results {
+      background: #fff;
+    }
+
+    .search-result {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      padding: 11px 17px;
+
+      background: #fff;
+      text-align: left;
+
+      transition: background .15s;
+    }
+
+    .search-result:hover {
+      background: #f8f8f8;
+    }
+
+    .search-result:active {
+      background: #eeeeee;
+    }
+
+    .search-result-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .search-result-name {
+      font-size: 15px;
       font-weight: 700;
     }
 
-    /* =========================
+    .search-result-username {
+      color: #888;
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    /* =====================================================
+       AVATARS
+    ===================================================== */
+
+    .avatar {
+      width: 58px;
+      height: 58px;
+      flex: 0 0 58px;
+
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e8e8e8,
+          #d0d0d0
+        );
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+
+      color: #555;
+      font-weight: 800;
+      font-size: 19px;
+
+      position: relative;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* =====================================================
        CHAT LIST
-    ========================== */
+    ===================================================== */
 
     .chat-list {
       padding-bottom: 20px;
@@ -121,41 +323,28 @@
 
     .chat-item {
       width: 100%;
+
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 11px 16px;
+      gap: 13px;
+
+      padding: 11px 17px;
+
       background: #fff;
       text-align: left;
-      transition: background .15s;
+
+      transition:
+        background .15s,
+        transform .08s;
     }
 
     .chat-item:hover {
-      background: #f8f8f8;
+      background: #fafafa;
     }
 
     .chat-item:active {
       background: #f1f1f1;
-    }
-
-    .avatar {
-      width: 58px;
-      height: 58px;
-      flex: 0 0 58px;
-      border-radius: 50%;
-      background: #ddd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      font-weight: 700;
-      font-size: 20px;
-    }
-
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      transform: scale(.995);
     }
 
     .chat-info {
@@ -171,29 +360,36 @@
     }
 
     .chat-name {
+      min-width: 0;
+
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
+
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .chat-time {
-      color: #8e8e8e;
-      font-size: 12px;
+      color: #999;
+      font-size: 11px;
       flex: 0 0 auto;
     }
 
     .chat-preview-row {
       display: flex;
       align-items: center;
-      gap: 6px;
-      margin-top: 4px;
+      gap: 7px;
+
+      margin-top: 5px;
     }
 
     .chat-preview {
-      color: #737373;
-      font-size: 14px;
+      min-width: 0;
+
+      color: #777;
+      font-size: 13.5px;
+
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -202,45 +398,76 @@
     .unread-dot {
       width: 8px;
       height: 8px;
-      border-radius: 50%;
-      background: #0095f6;
       flex: 0 0 8px;
+
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 3px rgba(0, 149, 246, .10);
     }
+
+    /* =====================================================
+       EMPTY / LOADING / ERROR
+    ===================================================== */
 
     .empty {
       text-align: center;
-      padding: 60px 25px;
-      color: #777;
+      padding: 65px 25px;
+      color: #858585;
       font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .empty-icon {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 12px;
+
+      border-radius: 50%;
+
+      background: #f1f1f3;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 25px;
     }
 
     .loading {
       text-align: center;
       padding: 45px 20px;
-      color: #777;
+      color: #888;
       font-size: 14px;
     }
 
     .error-box {
       margin: 20px 16px;
       padding: 14px;
-      border-radius: 12px;
+
+      border-radius: 13px;
+
       background: #fff0f0;
-      color: #d00;
+      color: #d00000;
+
       font-size: 13px;
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
-    /* =========================
+    /* =====================================================
        CHAT SCREEN
-    ========================== */
+    ===================================================== */
 
     .chat-screen {
       display: none;
+
       position: fixed;
       inset: 0;
+
       background: #fff;
+
       z-index: 100;
+
+      overflow: hidden;
     }
 
     .chat-screen.active {
@@ -249,49 +476,79 @@
     }
 
     .chat-topbar {
-      height: 64px;
+      min-height: 68px;
+
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 0 12px;
-      border-bottom: 1px solid #eee;
-      background: #fff;
+
+      padding:
+        env(safe-area-inset-top)
+        10px
+        0
+        10px;
+
+      border-bottom: 1px solid var(--line);
+
+      background: rgba(255,255,255,.97);
+
       flex-shrink: 0;
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .back-btn {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+
       border-radius: 50%;
+
       background: transparent;
-      font-size: 30px;
+
+      font-size: 35px;
+      font-weight: 300;
       line-height: 1;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
+      color: #111;
+
+      transition: background .15s, transform .1s;
     }
 
     .back-btn:active {
-      background: #f2f2f2;
+      background: #f0f0f0;
+      transform: scale(.92);
     }
 
     .chat-user-avatar {
-      width: 40px;
-      height: 40px;
-      flex: 0 0 40px;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+
       border-radius: 50%;
+
       overflow: hidden;
+
       background: #ddd;
+
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
+
+      font-weight: 800;
+      color: #555;
     }
 
     .chat-user-avatar img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
 
     .chat-user-info {
@@ -301,7 +558,8 @@
 
     .chat-user-name {
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 800;
+
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -309,38 +567,73 @@
 
     .chat-user-status {
       color: #777;
-      font-size: 12px;
-      margin-top: 2px;
+      font-size: 11px;
+      margin-top: 3px;
     }
 
     .header-action {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+
       border-radius: 50%;
+
       background: transparent;
+
       font-size: 21px;
+
+      transition: background .15s, transform .1s;
     }
 
-    /* =========================
+    .header-action:active {
+      background: #f1f1f1;
+      transform: scale(.92);
+    }
+
+    /* =====================================================
        MESSAGES
-    ========================== */
+    ===================================================== */
 
     .messages {
       flex: 1;
+
       overflow-y: auto;
-      padding: 18px 14px;
-      background: #fff;
+      overflow-x: hidden;
+
+      padding: 20px 13px 14px;
+
+      background:
+        radial-gradient(
+          circle at top,
+          #ffffff 0,
+          #ffffff 55%,
+          #fafafa 100%
+        );
+
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
+
       overscroll-behavior: contain;
+
+      scrollbar-width: thin;
     }
 
     .date-label {
-      text-align: center;
-      color: #999;
-      font-size: 11px;
-      margin: 8px 0 15px;
+      align-self: center;
+
+      padding: 5px 11px;
+
+      border-radius: 20px;
+
+      background: #f0f0f2;
+
+      color: #888;
+
+      font-size: 10px;
+      font-weight: 600;
+
+      margin: 3px 0 13px;
     }
 
     .message-row {
@@ -357,39 +650,69 @@
     }
 
     .message {
-      max-width: 78%;
-      padding: 10px 14px;
+      max-width: min(78%, 340px);
+
+      padding: 10px 13px;
+
       border-radius: 20px;
+
       font-size: 15px;
-      line-height: 1.35;
+      line-height: 1.4;
+
       word-break: break-word;
       white-space: pre-wrap;
+
+      box-shadow: 0 1px 1px rgba(0,0,0,.03);
     }
 
     .received .message {
-      background: #efefef;
+      background: var(--received);
       color: #111;
+
       border-bottom-left-radius: 6px;
     }
 
     .sent .message {
-      background: #3797f0;
+      background:
+        linear-gradient(
+          135deg,
+          #45a8f5,
+          #168ee8
+        );
+
       color: #fff;
+
       border-bottom-right-radius: 6px;
+
+      box-shadow:
+        0 2px 5px rgba(0, 149, 246, .16);
+    }
+
+    .message img {
+      display: block;
+      max-width: 230px;
+      max-height: 320px;
+      border-radius: 15px;
+      object-fit: cover;
     }
 
     .message-meta {
-      font-size: 10px;
+      font-size: 9px;
       margin-top: 4px;
       text-align: right;
       opacity: .68;
+      line-height: 1;
     }
 
     .typing {
       display: none;
-      padding: 4px 16px 8px;
+
+      padding: 4px 17px 8px;
+
       color: #888;
+
       font-size: 12px;
+
       background: #fff;
     }
 
@@ -397,130 +720,185 @@
       display: block;
     }
 
-    /* =========================
-       INPUT
-    ========================== */
+    /* =====================================================
+       INPUT BAR
+    ===================================================== */
 
     .message-input-area {
-      padding: 9px 10px;
-      border-top: 1px solid #eee;
-      background: #fff;
+      padding:
+        8px
+        10px
+        calc(8px + env(safe-area-inset-bottom))
+        10px;
+
+      border-top: 1px solid var(--line);
+
+      background: rgba(255,255,255,.98);
+
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
+
       flex-shrink: 0;
-      padding-bottom: calc(9px + env(safe-area-inset-bottom));
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .input-icon {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+
       border-radius: 50%;
-      background: transparent;
-      font-size: 21px;
-      flex: 0 0 38px;
+
+      background: #f2f2f4;
+
+      font-size: 20px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      transition: transform .1s, background .15s;
+    }
+
+    .input-icon:active {
+      transform: scale(.9);
+      background: #e7e7e9;
     }
 
     .message-input {
       flex: 1;
       min-width: 0;
-      height: 40px;
-      border: 1px solid #ddd;
+
+      height: 42px;
+
+      border: 1px solid #dedee1;
       border-radius: 22px;
+
       outline: none;
+
       padding: 0 15px;
+
       font-size: 14px;
+
       background: #fafafa;
+
+      color: #111;
+
+      transition:
+        border .2s,
+        background .2s,
+        box-shadow .2s;
+    }
+
+    .message-input::placeholder {
+      color: #999;
     }
 
     .message-input:focus {
-      border-color: #bbb;
+      border-color: #c7c7ca;
       background: #fff;
+
+      box-shadow:
+        0 0 0 3px rgba(0,149,246,.06);
     }
 
     .send-btn {
-      height: 40px;
-      padding: 0 13px;
-      border-radius: 20px;
-      background: #0095f6;
-      color: white;
-      font-size: 14px;
-      font-weight: 700;
-    }
+      height: 42px;
 
-    .send-btn:disabled {
-      opacity: .55;
-      cursor: default;
+      min-width: 62px;
+
+      padding: 0 14px;
+
+      border-radius: 21px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #20a0f6,
+          #007fe0
+        );
+
+      color: #fff;
+
+      font-size: 13px;
+      font-weight: 800;
+
+      box-shadow:
+        0 3px 8px rgba(0,149,246,.20);
+
+      transition:
+        transform .1s,
+        opacity .15s;
     }
 
     .send-btn:active {
-      transform: scale(.97);
+      transform: scale(.94);
     }
 
-    /* =========================
-       SEARCH USERS
-    ========================== */
-
-    .search-results {
-      background: #fff;
-      border-top: 1px solid #eee;
+    .send-btn:disabled {
+      opacity: .5;
+      cursor: default;
+      box-shadow: none;
     }
 
-    .search-result {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 16px;
-      background: #fff;
-      text-align: left;
-    }
-
-    .search-result:hover {
-      background: #f7f7f7;
-    }
-
-    .search-result-info {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .search-result-name {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .search-result-username {
-      color: #777;
-      font-size: 13px;
-      margin-top: 3px;
-    }
-
-    /* =========================
-       RESPONSIVE
-    ========================== */
+    /* =====================================================
+       DESKTOP CHAT WIDTH
+    ===================================================== */
 
     @media (min-width: 700px) {
-      body {
-        background: #f5f5f5;
+      .chat-screen {
+        position: absolute;
+        inset: 0;
+        border-radius: 22px;
       }
 
-      .app {
-        min-height: 100vh;
-        box-shadow: 0 0 20px rgba(0,0,0,.06);
+      .message {
+        max-width: 65%;
       }
     }
 
     @media (max-width: 380px) {
       .avatar {
-        width: 52px;
-        height: 52px;
-        flex-basis: 52px;
+        width: 53px;
+        height: 53px;
+        flex-basis: 53px;
       }
 
       .message {
         max-width: 84%;
       }
+
+      .send-btn {
+        min-width: 54px;
+        padding: 0 11px;
+      }
+
+      .topbar-title {
+        font-size: 20px;
+      }
+    }
+
+    /* =====================================================
+       SMALL ANIMATION
+    ===================================================== */
+
+    @keyframes messageIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px) scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .message-row {
+      animation: messageIn .16s ease-out;
     }
   </style>
 </head>
@@ -529,18 +907,26 @@
 
   <div class="app">
 
-    <!-- =========================
+    <!-- =================================================
          INBOX
-    ========================== -->
+    ================================================= -->
 
     <main class="inbox" id="inbox">
 
       <header class="topbar">
 
         <div class="topbar-left">
-          <div class="topbar-title">
-            Chats
+
+          <div>
+            <div class="topbar-title">
+              Chats
+            </div>
+
+            <span class="topbar-subtitle">
+              Poll Pulse messages
+            </span>
           </div>
+
         </div>
 
         <button
@@ -557,22 +943,42 @@
 
       <div class="search-wrap">
 
-        <input
-          id="searchInput"
-          class="search-box"
-          type="text"
-          placeholder="Search people..."
-          autocomplete="off"
-        >
+        <div class="search-container">
+
+          <span class="search-icon">
+            🔎
+          </span>
+
+          <input
+            id="searchInput"
+            class="search-box"
+            type="text"
+            placeholder="Search people..."
+            autocomplete="off"
+          >
+
+        </div>
 
       </div>
 
 
-      <div id="searchResults" class="search-results"></div>
+      <div
+        id="searchResults"
+        class="search-results"
+      ></div>
 
 
-      <div class="section-title">
-        Messages
+      <div class="section-header">
+
+        <div class="section-title">
+          Messages
+        </div>
+
+        <div
+          class="section-count"
+          id="chatCount"
+        ></div>
+
       </div>
 
 
@@ -580,17 +986,19 @@
         class="chat-list"
         id="chatList"
       >
+
         <div class="loading">
           Loading chats...
         </div>
+
       </div>
 
     </main>
 
 
-    <!-- =========================
+    <!-- =================================================
          CHAT SCREEN
-    ========================== -->
+    ================================================= -->
 
     <section
       class="chat-screen"
@@ -630,7 +1038,7 @@
             class="chat-user-status"
             id="chatUserStatus"
           >
-            Chat
+            Message
           </div>
 
         </div>
@@ -712,7 +1120,14 @@
     const supabaseClient =
       window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_KEY
+        SUPABASE_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        }
       );
 
 
@@ -727,7 +1142,7 @@
 
 
     /* =====================================================
-       ELEMENTS
+       ELEMENT HELPER
     ===================================================== */
 
     const $ = id =>
@@ -743,17 +1158,37 @@
       try {
 
         const {
-          data: {
-            session
-          }
-        } = await supabaseClient.auth.getSession();
+          data,
+          error
+        } =
+          await supabaseClient.auth.getSession();
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        const session =
+          data?.session;
 
 
         if (!session) {
 
           $("chatList").innerHTML = `
             <div class="empty">
-              Please login first.
+
+              <div class="empty-icon">
+                🔐
+              </div>
+
+              <strong>Please login first.</strong>
+
+              <br>
+
+              Open Poll Pulse and login,
+              then return here.
+
             </div>
           `;
 
@@ -786,7 +1221,7 @@
 
 
     /* =====================================================
-       LOAD CHAT LIST
+       LOAD CHATS
     ===================================================== */
 
     async function loadChats() {
@@ -840,21 +1275,28 @@
 
         if (!data || data.length === 0) {
 
+          $("chatCount").textContent = "";
+
           list.innerHTML = `
             <div class="empty">
-              No chats yet.<br>
-              Search someone above to start chatting.
+
+              <div class="empty-icon">
+                💬
+              </div>
+
+              <strong>No chats yet</strong>
+
+              <br>
+
+              Search someone above
+              to start chatting.
+
             </div>
           `;
 
           return;
         }
 
-
-        /*
-          Keep only the newest message
-          for each conversation.
-        */
 
         const conversations =
           new Map();
@@ -884,18 +1326,6 @@
           [...conversations.keys()];
 
 
-        if (!userIds.length) {
-
-          list.innerHTML = `
-            <div class="empty">
-              No chats yet.
-            </div>
-          `;
-
-          return;
-        }
-
-
         const {
           data: profiles,
           error: profileError
@@ -919,9 +1349,6 @@
         }
 
 
-        list.innerHTML = "";
-
-
         const profileMap =
           new Map(
             (profiles || []).map(
@@ -930,6 +1357,18 @@
                 profile
               ]
             )
+          );
+
+
+        list.innerHTML = "";
+
+
+        $("chatCount").textContent =
+          userIds.length +
+          (
+            userIds.length === 1
+              ? " chat"
+              : " chats"
           );
 
 
@@ -945,14 +1384,12 @@
           if (!profile) return;
 
 
-          const item =
+          list.appendChild(
             createChatItem(
               profile,
               message
-            );
-
-
-          list.appendChild(item);
+            )
+          );
 
         });
 
@@ -1065,13 +1502,8 @@
         );
 
 
-      nameRow.appendChild(
-        name
-      );
-
-      nameRow.appendChild(
-        time
-      );
+      nameRow.appendChild(name);
+      nameRow.appendChild(time);
 
 
       const previewRow =
@@ -1124,7 +1556,8 @@
       ) {
 
         previewText =
-          "You: " + previewText;
+          "You: " +
+          previewText;
 
       }
 
@@ -1159,30 +1592,20 @@
       }
 
 
-      info.appendChild(
-        nameRow
-      );
-
-      info.appendChild(
-        previewRow
-      );
+      info.appendChild(nameRow);
+      info.appendChild(previewRow);
 
 
-      item.appendChild(
-        avatar
-      );
-
-      item.appendChild(
-        info
-      );
+      item.appendChild(avatar);
+      item.appendChild(info);
 
 
       item.addEventListener(
         "click",
         () => {
-          openChat(
-            profile
-          );
+
+          openChat(profile);
+
         }
       );
 
@@ -1196,9 +1619,7 @@
        OPEN CHAT
     ===================================================== */
 
-    async function openChat(
-      profile
-    ) {
+    async function openChat(profile) {
 
       if (!currentUser) return;
 
@@ -1214,7 +1635,9 @@
 
 
       $("chatUserStatus").textContent =
-        "Chat";
+        profile.username
+          ? "@" + profile.username
+          : "Message";
 
 
       setAvatar(
@@ -1228,6 +1651,10 @@
         .add("active");
 
 
+      document.body.style.overflow =
+        "hidden";
+
+
       $("messages").innerHTML = `
         <div class="loading">
           Loading messages...
@@ -1236,6 +1663,16 @@
 
 
       await loadMessages();
+
+
+      setTimeout(
+        () => {
+
+          $("messageInput").focus();
+
+        },
+        100
+      );
 
     }
 
@@ -1253,6 +1690,10 @@
       $("chatScreen")
         .classList
         .remove("active");
+
+
+      document.body.style.overflow =
+        "";
 
     }
 
@@ -1316,8 +1757,17 @@
 
           box.innerHTML = `
             <div class="empty">
-              No messages yet.<br>
-              Say hi 👋
+
+              <div class="empty-icon">
+                👋
+              </div>
+
+              <strong>Start the conversation</strong>
+
+              <br>
+
+              Send your first message.
+
             </div>
           `;
 
@@ -1334,167 +1784,167 @@
           "date-label";
 
         dateLabel.textContent =
-          "Today";
+          getDateLabel(
+            data[0].created_at
+          );
 
         box.appendChild(
           dateLabel
         );
 
 
-        data.forEach(
-          message => {
+        data.forEach(message => {
 
-            const row =
+          const row =
+            document.createElement(
+              "div"
+            );
+
+
+          const mine =
+            message.sender_id ===
+            currentUser.id;
+
+
+          row.className =
+            "message-row " +
+            (
+              mine
+                ? "sent"
+                : "received"
+            );
+
+
+          const bubble =
+            document.createElement(
+              "div"
+            );
+
+          bubble.className =
+            "message";
+
+
+          if (
+            message.message_type ===
+              "image" &&
+            message.media_url
+          ) {
+
+            const image =
               document.createElement(
-                "div"
+                "img"
               );
 
+            image.src =
+              message.media_url;
 
-            const mine =
-              message.sender_id ===
-              currentUser.id;
-
-
-            row.className =
-              "message-row " +
-              (
-                mine
-                  ? "sent"
-                  : "received"
-              );
+            image.alt =
+              "Image";
 
 
-            const bubble =
-              document.createElement(
-                "div"
-              );
+            image.onerror =
+              () => {
 
-            bubble.className =
-              "message";
+                image.style.display =
+                  "none";
 
-
-            /*
-              Text / image message
-            */
-
-            if (
-              message.message_type ===
-                "image" &&
-              message.media_url
-            ) {
-
-              const image =
-                document.createElement(
-                  "img"
-                );
-
-              image.src =
-                message.media_url;
-
-              image.alt =
-                "Image";
-
-              image.style.maxWidth =
-                "220px";
-
-              image.style.borderRadius =
-                "14px";
-
-              bubble.appendChild(
-                image
-              );
-
-
-              if (
-                message.message
-              ) {
-
-                const text =
-                  document.createElement(
-                    "div"
-                  );
-
-                text.textContent =
-                  message.message;
-
-                text.style.marginTop =
-                  "6px";
-
-                bubble.appendChild(
-                  text
-                );
-
-              }
-
-            } else {
-
-              bubble.textContent =
-                message.message ||
-                "";
-
-            }
-
-
-            const meta =
-              document.createElement(
-                "div"
-              );
-
-            meta.className =
-              "message-meta";
-
-
-            let status =
-              "";
-
-
-            if (mine) {
-
-              if (message.read) {
-
-                status =
-                  " · Seen";
-
-              } else if (
-                message.delivered_at
-              ) {
-
-                status =
-                  " · Delivered";
-
-              } else {
-
-                status =
-                  " · Sent";
-
-              }
-
-            }
-
-
-            meta.textContent =
-              formatMessageTime(
-                message.created_at
-              ) +
-              status;
+              };
 
 
             bubble.appendChild(
-              meta
+              image
             );
 
 
-            row.appendChild(
-              bubble
-            );
+            if (
+              message.message
+            ) {
 
+              const text =
+                document.createElement(
+                  "div"
+                );
 
-            box.appendChild(
-              row
-            );
+              text.textContent =
+                message.message;
+
+              text.style.marginTop =
+                "7px";
+
+              bubble.appendChild(
+                text
+              );
+
+            }
+
+          } else {
+
+            bubble.textContent =
+              message.message ||
+              "";
 
           }
-        );
+
+
+          const meta =
+            document.createElement(
+              "div"
+            );
+
+          meta.className =
+            "message-meta";
+
+
+          let status =
+            "";
+
+
+          if (mine) {
+
+            if (message.read) {
+
+              status =
+                " · Seen";
+
+            } else if (
+              message.delivered_at
+            ) {
+
+              status =
+                " · Delivered";
+
+            } else {
+
+              status =
+                " · Sent";
+
+            }
+
+          }
+
+
+          meta.textContent =
+            formatMessageTime(
+              message.created_at
+            ) +
+            status;
+
+
+          bubble.appendChild(
+            meta
+          );
+
+
+          row.appendChild(
+            bubble
+          );
+
+
+          box.appendChild(
+            row
+          );
+
+        });
 
 
         await markMessagesRead(
@@ -1511,6 +1961,7 @@
           error
         );
 
+
         box.innerHTML = `
           <div class="error-box">
             ${escapeHtml(error.message)}
@@ -1523,12 +1974,10 @@
 
 
     /* =====================================================
-       MARK AS READ
+       MARK READ
     ===================================================== */
 
-    async function markMessagesRead(
-      messages
-    ) {
+    async function markMessagesRead(messages) {
 
       if (!currentUser) return;
 
@@ -1560,8 +2009,7 @@
           .update({
             read: true,
             read_at:
-              new Date()
-                .toISOString()
+              new Date().toISOString()
           })
           .in(
             "id",
@@ -1590,11 +2038,7 @@
       if (
         !currentUser ||
         !currentChatUser
-      ) {
-
-        return;
-
-      }
+      ) return;
 
 
       const input =
@@ -1641,8 +2085,7 @@
                 "text",
 
               delivered_at:
-                new Date()
-                  .toISOString()
+                new Date().toISOString()
 
             });
 
@@ -1660,6 +2103,8 @@
         await loadChats();
 
 
+        input.focus();
+
       } catch (error) {
 
         console.error(
@@ -1672,7 +2117,6 @@
           "Message error: " +
           error.message
         );
-
 
       } finally {
 
@@ -1688,7 +2132,7 @@
        SEARCH USERS
     ===================================================== */
 
-    async function searchUsers() {
+    function searchUsers() {
 
       clearTimeout(
         searchTimer
@@ -1779,6 +2223,9 @@
 
           results.innerHTML = `
             <div class="empty">
+              <div class="empty-icon">
+                🔎
+              </div>
               No users found.
             </div>
           `;
@@ -1788,117 +2235,105 @@
         }
 
 
-        data.forEach(
-          profile => {
+        data.forEach(profile => {
 
-            const item =
-              document.createElement(
-                "button"
-              );
-
-            item.className =
-              "search-result";
-
-            item.type =
-              "button";
-
-
-            const avatar =
-              document.createElement(
-                "div"
-              );
-
-            avatar.className =
-              "avatar";
-
-
-            setAvatar(
-              avatar,
-              profile
+          const item =
+            document.createElement(
+              "button"
             );
 
+          item.className =
+            "search-result";
 
-            const info =
-              document.createElement(
-                "div"
-              );
-
-            info.className =
-              "search-result-info";
+          item.type =
+            "button";
 
 
-            const name =
-              document.createElement(
-                "div"
-              );
+          const avatar =
+            document.createElement(
+              "div"
+            );
 
-            name.className =
-              "search-result-name";
+          avatar.className =
+            "avatar";
 
-            name.textContent =
-              profile.display_name ||
+
+          setAvatar(
+            avatar,
+            profile
+          );
+
+
+          const info =
+            document.createElement(
+              "div"
+            );
+
+          info.className =
+            "search-result-info";
+
+
+          const name =
+            document.createElement(
+              "div"
+            );
+
+          name.className =
+            "search-result-name";
+
+          name.textContent =
+            profile.display_name ||
+            profile.username ||
+            "User";
+
+
+          const username =
+            document.createElement(
+              "div"
+            );
+
+          username.className =
+            "search-result-username";
+
+          username.textContent =
+            "@" +
+            (
               profile.username ||
-              "User";
+              "user"
+            );
 
 
-            const username =
-              document.createElement(
-                "div"
+          info.appendChild(name);
+          info.appendChild(username);
+
+
+          item.appendChild(avatar);
+          item.appendChild(info);
+
+
+          item.addEventListener(
+            "click",
+            async () => {
+
+              $("searchInput")
+                .value = "";
+
+              results.innerHTML =
+                "";
+
+              await openChat(
+                profile
               );
 
-            username.className =
-              "search-result-username";
-
-            username.textContent =
-              "@" +
-              (
-                profile.username ||
-                "user"
-              );
+            }
+          );
 
 
-            info.appendChild(
-              name
-            );
+          results.appendChild(
+            item
+          );
 
-            info.appendChild(
-              username
-            );
-
-
-            item.appendChild(
-              avatar
-            );
-
-            item.appendChild(
-              info
-            );
-
-
-            item.addEventListener(
-              "click",
-              async () => {
-
-                $("searchInput")
-                  .value = "";
-
-                results.innerHTML =
-                  "";
-
-                await openChat(
-                  profile
-                );
-
-              }
-            );
-
-
-            results.appendChild(
-              item
-            );
-
-          }
-        );
+        });
 
       } catch (error) {
 
@@ -1999,6 +2434,7 @@
         img.alt =
           "";
 
+
         img.onerror =
           () => {
 
@@ -2029,9 +2465,7 @@
     }
 
 
-    function getInitial(
-      profile
-    ) {
+    function getInitial(profile) {
 
       return (
         (
@@ -2039,15 +2473,15 @@
           profile?.username ||
           "U"
         )
-        .charAt(0)
-        .toUpperCase()
+          .charAt(0)
+          .toUpperCase()
       );
 
     }
 
 
     /* =====================================================
-       SEARCH INPUT
+       EVENTS
     ===================================================== */
 
     $("searchInput")
@@ -2057,20 +2491,12 @@
       );
 
 
-    /* =====================================================
-       SEND BUTTON
-    ===================================================== */
-
     $("sendBtn")
       .addEventListener(
         "click",
         sendMessage
       );
 
-
-    /* =====================================================
-       ENTER TO SEND
-    ===================================================== */
 
     $("messageInput")
       .addEventListener(
@@ -2091,10 +2517,6 @@
       );
 
 
-    /* =====================================================
-       BACK BUTTON
-    ===================================================== */
-
     $("backBtn")
       .addEventListener(
         "click",
@@ -2102,25 +2524,21 @@
       );
 
 
-    /* =====================================================
-       NEW CHAT BUTTON
-    ===================================================== */
-
     $("newChatBtn")
       .addEventListener(
         "click",
         () => {
 
-          $("searchInput")
-            .focus();
+          $("searchInput").focus();
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
 
         }
       );
 
-
-    /* =====================================================
-       EMOJI BUTTON
-    ===================================================== */
 
     $("emojiBtn")
       .addEventListener(
@@ -2130,7 +2548,14 @@
           const input =
             $("messageInput");
 
-          input.value += " 😊";
+
+          input.value +=
+            (
+              input.value
+                ? " 😊"
+                : "😊"
+            );
+
 
           input.focus();
 
@@ -2139,12 +2564,31 @@
 
 
     /* =====================================================
-       FORMAT TIME
+       ESCAPE CHAT WITH ESC KEY
     ===================================================== */
 
-    function formatChatTime(
-      date
-    ) {
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Escape" &&
+          currentChatUser
+        ) {
+
+          closeChat();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       TIME
+    ===================================================== */
+
+    function formatChatTime(date) {
 
       const d =
         new Date(date);
@@ -2155,30 +2599,20 @@
       const diff =
         now - d;
 
+
       const minutes =
         Math.floor(
           diff / 60000
         );
 
 
-      if (
-        minutes < 1
-      ) {
-
+      if (minutes < 1) {
         return "now";
-
       }
 
 
-      if (
-        minutes < 60
-      ) {
-
-        return (
-          minutes +
-          "m"
-        );
-
+      if (minutes < 60) {
+        return minutes + "m";
       }
 
 
@@ -2188,15 +2622,8 @@
         );
 
 
-      if (
-        hours < 24
-      ) {
-
-        return (
-          hours +
-          "h"
-        );
-
+      if (hours < 24) {
+        return hours + "h";
       }
 
 
@@ -2206,37 +2633,80 @@
         );
 
 
-      if (
-        days < 7
-      ) {
-
-        return (
-          days +
-          "d"
-        );
-
+      if (days < 7) {
+        return days + "d";
       }
 
 
-      return d.toLocaleDateString();
+      return d.toLocaleDateString(
+        [],
+        {
+          day: "numeric",
+          month: "short"
+        }
+      );
 
     }
 
 
-    function formatMessageTime(
-      date
-    ) {
+    function formatMessageTime(date) {
 
       return new Date(
         date
       ).toLocaleTimeString(
         [],
         {
-          hour:
-            "numeric",
+          hour: "numeric",
+          minute: "2-digit"
+        }
+      );
 
-          minute:
-            "2-digit"
+    }
+
+
+    function getDateLabel(date) {
+
+      const d =
+        new Date(date);
+
+      const now =
+        new Date();
+
+
+      const sameDay =
+        d.toDateString() ===
+        now.toDateString();
+
+
+      if (sameDay) {
+        return "Today";
+      }
+
+
+      const yesterday =
+        new Date(now);
+
+      yesterday.setDate(
+        now.getDate() - 1
+      );
+
+
+      if (
+        d.toDateString() ===
+        yesterday.toDateString()
+      ) {
+
+        return "Yesterday";
+
+      }
+
+
+      return d.toLocaleDateString(
+        [],
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
         }
       );
 
@@ -2247,9 +2717,7 @@
        ESCAPE HTML
     ===================================================== */
 
-    function escapeHtml(
-      value
-    ) {
+    function escapeHtml(value) {
 
       return String(
         value || ""
@@ -2304,9 +2772,7 @@
        ERROR
     ===================================================== */
 
-    function showError(
-      message
-    ) {
+    function showError(message) {
 
       $("chatList").innerHTML = `
         <div class="error-box">
@@ -2318,7 +2784,7 @@
 
 
     /* =====================================================
-       START APP
+       START
     ===================================================== */
 
     init();
