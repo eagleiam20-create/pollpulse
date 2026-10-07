@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
 
   <meta name="theme-color" content="#6c5ce7">
 
-  <title>Poll Pulse • Profile Picture</title>
+  <title>Poll Pulse - Change DP</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -23,13 +24,16 @@
     body {
       margin: 0;
       padding: 0;
+      width: 100%;
       min-height: 100%;
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(circle at top left, #eee9ff 0, transparent 35%),
-        radial-gradient(circle at bottom right, #e6f5ff 0, transparent 35%),
-        #f7f7fb;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+      background: #f5f4fb;
       color: #171725;
     }
 
@@ -37,14 +41,13 @@
       min-height: 100vh;
     }
 
-    button,
-    input {
-      font: inherit;
-    }
-
     button {
+      font: inherit;
+      border: 0;
       cursor: pointer;
       touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .page {
@@ -52,18 +55,16 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      padding: 20px 14px 40px;
+      padding: 20px;
     }
 
     .card {
       width: min(100%, 520px);
       min-height: calc(100vh - 40px);
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(255, 255, 255, 0.95);
+      background: #fff;
       border-radius: 30px;
-      box-shadow: 0 20px 70px rgba(35, 30, 80, 0.12);
-      padding: 24px 20px 30px;
-      backdrop-filter: blur(20px);
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(40, 35, 90, .12);
       display: flex;
       flex-direction: column;
     }
@@ -71,57 +72,56 @@
     .topbar {
       display: flex;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 28px;
+      gap: 13px;
     }
 
     .back-btn {
-      width: 44px;
-      height: 44px;
-      border: 0;
+      width: 45px;
+      height: 45px;
+      flex: 0 0 45px;
       border-radius: 14px;
-      background: #f2f1f8;
-      color: #242438;
-      font-size: 22px;
+      background: #f1f0f7;
+      color: #29283a;
+      font-size: 23px;
       display: grid;
       place-items: center;
     }
 
     .back-btn:active {
-      transform: scale(.95);
+      transform: scale(.94);
     }
 
     .brand {
-      flex: 1;
+      min-width: 0;
     }
 
     .brand-title {
       font-size: 19px;
       font-weight: 800;
-      letter-spacing: -.3px;
     }
 
     .brand-subtitle {
       margin-top: 2px;
+      color: #9090a2;
       font-size: 12px;
-      color: #85859a;
     }
 
-    .heading {
+    .content {
+      width: 100%;
       text-align: center;
-      margin-top: 10px;
+      padding-top: 28px;
     }
 
-    .heading h1 {
+    h1 {
       margin: 0;
       font-size: 27px;
-      letter-spacing: -.8px;
+      letter-spacing: -.7px;
     }
 
-    .heading p {
+    .description {
       margin: 8px auto 0;
-      max-width: 330px;
-      color: #85859a;
+      max-width: 340px;
+      color: #88889b;
       font-size: 14px;
       line-height: 1.5;
     }
@@ -129,168 +129,174 @@
     .avatar-area {
       display: flex;
       justify-content: center;
-      margin: 30px 0 24px;
+      margin: 30px 0 20px;
     }
 
     .avatar-wrap {
       position: relative;
-      width: 150px;
-      height: 150px;
+      width: 155px;
+      height: 155px;
+    }
+
+    .avatar,
+    .placeholder {
+      width: 155px;
+      height: 155px;
+      border-radius: 50%;
     }
 
     .avatar {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
       object-fit: cover;
-      display: block;
-      background: linear-gradient(135deg, #6c5ce7, #9b8cff);
+      background: #eee;
       border: 5px solid #fff;
       box-shadow:
-        0 12px 35px rgba(108, 92, 231, .25),
-        0 0 0 1px rgba(108, 92, 231, .12);
+        0 12px 35px rgba(108, 92, 231, .22),
+        0 0 0 1px #eee;
     }
 
-    .avatar-placeholder {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
+    .placeholder {
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, #6c5ce7, #9b8cff);
-      color: white;
+      background: linear-gradient(
+        135deg,
+        #6c5ce7,
+        #927ff2
+      );
+      color: #fff;
       font-size: 58px;
       font-weight: 800;
-      border: 5px solid white;
-      box-shadow: 0 12px 35px rgba(108, 92, 231, .25);
+      border: 5px solid #fff;
+      box-shadow:
+        0 12px 35px rgba(108, 92, 231, .22);
     }
 
     .camera-btn {
       position: absolute;
-      right: 1px;
-      bottom: 2px;
-      width: 48px;
-      height: 48px;
-      border: 4px solid white;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       background: #6c5ce7;
-      color: white;
+      color: #fff;
+      border: 4px solid #fff;
+      font-size: 21px;
       display: grid;
       place-items: center;
-      font-size: 21px;
-      box-shadow: 0 7px 20px rgba(108, 92, 231, .3);
-      z-index: 10;
+      box-shadow: 0 8px 22px rgba(108, 92, 231, .3);
+      z-index: 5;
     }
 
     .camera-btn:active {
-      transform: scale(.92);
+      transform: scale(.9);
     }
 
-    #avatarFile {
-      display: none;
-    }
-
-    .user-info {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .display-name {
+    .user-name {
       font-size: 20px;
       font-weight: 800;
     }
 
-    .username {
+    .user-username {
       margin-top: 4px;
-      color: #8b8b9d;
+      color: #9292a3;
       font-size: 13px;
     }
 
-    .upload-box {
-      background: #f8f7fc;
-      border: 1px dashed #d8d5e8;
-      border-radius: 20px;
-      padding: 18px;
-      text-align: center;
-      margin-bottom: 18px;
+    /*
+      IMPORTANT:
+      File input ko display:none nahi kar rahe.
+      Mobile browsers par hidden input kabhi-kabhi
+      programmatic click ko block kar dete hain.
+    */
+    #avatarFile {
+      position: fixed;
+      left: -10000px;
+      top: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0.01;
     }
 
-    .upload-box strong {
-      display: block;
+    .info-box {
+      margin-top: 25px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #f8f7fc;
+      border: 1px solid #eceaf5;
+    }
+
+    .info-title {
       font-size: 14px;
+      font-weight: 800;
       margin-bottom: 5px;
     }
 
-    .upload-box span {
-      display: block;
+    .info-text {
+      color: #8c8c9e;
       font-size: 12px;
-      color: #8b8b9d;
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
-    .upload-btn {
+    .main-btn {
       width: 100%;
-      min-height: 54px;
-      border: 0;
+      min-height: 55px;
+      margin-top: 16px;
       border-radius: 17px;
-      background: linear-gradient(135deg, #6c5ce7, #806ff0);
+      background: #6c5ce7;
       color: white;
-      font-size: 15px;
       font-weight: 800;
-      box-shadow: 0 10px 25px rgba(108, 92, 231, .24);
+      font-size: 15px;
+      box-shadow: 0 10px 25px rgba(108, 92, 231, .23);
     }
 
-    .upload-btn:active {
-      transform: translateY(1px) scale(.99);
+    .main-btn:active {
+      transform: scale(.985);
     }
 
-    .upload-btn:disabled {
+    .main-btn:disabled {
       opacity: .65;
-      cursor: not-allowed;
     }
 
     .status {
-      min-height: 24px;
-      margin-top: 16px;
-      text-align: center;
+      min-height: 22px;
+      margin-top: 15px;
       font-size: 13px;
-      line-height: 1.45;
+      line-height: 1.4;
     }
 
-    .status.success {
-      color: #16834b;
+    .success {
+      color: #15834a;
     }
 
-    .status.error {
-      color: #d53b55;
+    .error {
+      color: #d53d56;
     }
 
-    .status.loading {
+    .loading {
       color: #6c5ce7;
-    }
-
-    .login-box {
-      margin-top: auto;
-      padding-top: 30px;
-      text-align: center;
-      color: #85859a;
-      font-size: 13px;
     }
 
     .hidden {
       display: none !important;
     }
 
+    .login-message {
+      text-align: center;
+      margin-top: 80px;
+      color: #77778a;
+      font-size: 14px;
+    }
+
     .spinner {
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255,255,255,.4);
-      border-top-color: white;
-      border-radius: 50%;
       display: inline-block;
+      width: 17px;
+      height: 17px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
       vertical-align: -4px;
       margin-right: 7px;
-      animation: spin .7s linear infinite;
     }
 
     @keyframes spin {
@@ -299,7 +305,7 @@
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 600px) {
       .page {
         padding: 0;
       }
@@ -308,15 +314,14 @@
         width: 100%;
         min-height: 100vh;
         border-radius: 0;
-        border: 0;
-        box-shadow: none;
         padding:
           max(18px, env(safe-area-inset-top))
           17px
           max(25px, env(safe-area-inset-bottom));
+        box-shadow: none;
       }
 
-      .heading h1 {
+      h1 {
         font-size: 25px;
       }
     }
@@ -325,107 +330,141 @@
 
 <body>
 
-  <main class="page">
-    <section class="card">
+<div class="page">
 
-      <header class="topbar">
-        <button
-          class="back-btn"
-          id="backBtn"
-          type="button"
-          aria-label="Go back"
-        >
-          ←
-        </button>
+  <main class="card">
 
-        <div class="brand">
-          <div class="brand-title">Poll Pulse</div>
-          <div class="brand-subtitle">Profile picture</div>
-        </div>
-      </header>
+    <div class="topbar">
 
-      <div id="appContent">
+      <button
+        id="backBtn"
+        class="back-btn"
+        type="button"
+        aria-label="Back"
+      >
+        ←
+      </button>
 
-        <div class="heading">
-          <h1>Update your DP</h1>
-          <p>
-            Choose a profile picture from your phone and make your profile yours.
-          </p>
+      <div class="brand">
+        <div class="brand-title">
+          Poll Pulse
         </div>
 
-        <div class="avatar-area">
-          <div class="avatar-wrap">
-
-            <div id="avatarPlaceholder" class="avatar-placeholder">
-              ?
-            </div>
-
-            <img
-              id="avatarPreview"
-              class="avatar hidden"
-              alt="Profile picture preview"
-            >
-
-            <button
-              id="cameraBtn"
-              class="camera-btn"
-              type="button"
-              aria-label="Choose profile picture"
-            >
-              📷
-            </button>
-
-          </div>
+        <div class="brand-subtitle">
+          Profile picture
         </div>
+      </div>
 
-        <div class="user-info">
-          <div id="displayName" class="display-name">
-            Loading...
+    </div>
+
+
+    <div id="loginMessage" class="login-message hidden">
+      Please login to Poll Pulse first.
+    </div>
+
+
+    <section id="content" class="content hidden">
+
+      <h1>
+        Change your DP
+      </h1>
+
+      <p class="description">
+        Select a photo from your phone and set it as your
+        Poll Pulse profile picture.
+      </p>
+
+
+      <div class="avatar-area">
+
+        <div class="avatar-wrap">
+
+          <div
+            id="placeholder"
+            class="placeholder"
+          >
+            ?
           </div>
 
-          <div id="username" class="username">
-            Loading profile
-          </div>
+          <img
+            id="avatarPreview"
+            class="avatar hidden"
+            alt="Profile picture"
+          >
+
+          <button
+            id="cameraBtn"
+            class="camera-btn"
+            type="button"
+            aria-label="Select photo"
+          >
+            📷
+          </button>
+
         </div>
-
-        <div class="upload-box">
-          <strong>Profile picture</strong>
-          <span>
-            JPG, PNG or WEBP · Maximum 5 MB
-          </span>
-        </div>
-
-        <input
-          id="avatarFile"
-          type="file"
-          accept="image/*"
-          capture="user"
-        >
-
-        <button
-          id="uploadBtn"
-          class="upload-btn"
-          type="button"
-        >
-          Choose Photo
-        </button>
-
-        <div id="status" class="status"></div>
 
       </div>
 
-      <div id="loginBox" class="login-box hidden">
-        Please log in to Poll Pulse first.
+
+      <div id="displayName" class="user-name">
+        Loading...
       </div>
+
+      <div id="username" class="user-username">
+        Loading...
+      </div>
+
+
+      <div class="info-box">
+
+        <div class="info-title">
+          Choose your photo
+        </div>
+
+        <div class="info-text">
+          JPG, PNG, WEBP or GIF · Maximum 5 MB
+        </div>
+
+      </div>
+
+
+      <!--
+        IMPORTANT:
+        This input is intentionally NOT display:none.
+        It is hidden outside the screen so mobile browsers
+        can still open the file picker.
+      -->
+      <input
+        id="avatarFile"
+        type="file"
+        accept="image/*"
+      >
+
+
+      <button
+        id="chooseBtn"
+        class="main-btn"
+        type="button"
+      >
+        Choose Photo
+      </button>
+
+
+      <div
+        id="status"
+        class="status"
+      ></div>
 
     </section>
+
   </main>
+
+</div>
 
 
 <script>
   /* =========================================================
-     POLL PULSE - PROFILE DP UPLOADER
-     Uses the SAME Supabase project/session as index.html
+     SUPABASE CONFIG
      ========================================================= */
 
   const SUPABASE_URL =
@@ -434,195 +473,254 @@
   const SUPABASE_KEY =
     "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
 
+
+  /* =========================================================
+     VARIABLES
+     ========================================================= */
+
   let sb = null;
   let currentUser = null;
   let currentProfile = null;
   let selectedFile = null;
 
 
-  /* ---------------------------------------------------------
-     DOM
-     --------------------------------------------------------- */
+  /* =========================================================
+     ELEMENTS
+     ========================================================= */
+
+  const content =
+    document.getElementById("content");
+
+  const loginMessage =
+    document.getElementById("loginMessage");
 
   const avatarFile =
     document.getElementById("avatarFile");
 
-  const avatarPreview =
-    document.getElementById("avatarPreview");
-
-  const avatarPlaceholder =
-    document.getElementById("avatarPlaceholder");
-
   const cameraBtn =
     document.getElementById("cameraBtn");
 
-  const uploadBtn =
-    document.getElementById("uploadBtn");
+  const chooseBtn =
+    document.getElementById("chooseBtn");
 
-  const statusEl =
-    document.getElementById("status");
+  const avatarPreview =
+    document.getElementById("avatarPreview");
 
-  const displayNameEl =
+  const placeholder =
+    document.getElementById("placeholder");
+
+  const displayName =
     document.getElementById("displayName");
 
-  const usernameEl =
+  const username =
     document.getElementById("username");
 
-  const loginBox =
-    document.getElementById("loginBox");
-
-  const appContent =
-    document.getElementById("appContent");
+  const status =
+    document.getElementById("status");
 
   const backBtn =
     document.getElementById("backBtn");
 
 
-  /* ---------------------------------------------------------
-     SUPABASE
-     --------------------------------------------------------- */
+  /* =========================================================
+     SUPABASE INIT
+     ========================================================= */
 
   function initSupabase() {
+
     if (!window.supabase) {
-      showStatus(
-        "Supabase load nahi hua. Internet connection check karo.",
+
+      setStatus(
+        "Supabase load nahi hua. Internet check karo.",
         "error"
       );
+
       return false;
     }
 
-    sb = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
+    sb =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
         }
-      }
-    );
+      );
 
     return true;
   }
 
 
-  /* ---------------------------------------------------------
+  /* =========================================================
      STATUS
-     --------------------------------------------------------- */
+     ========================================================= */
 
-  function showStatus(message, type = "") {
-    statusEl.className = "status " + type;
-    statusEl.textContent = message;
+  function setStatus(text, type) {
+
+    status.textContent = text;
+
+    status.className =
+      "status " + (type || "");
   }
 
 
-  function setUploadingState(uploading) {
-    uploadBtn.disabled = uploading;
-    cameraBtn.disabled = uploading;
-
-    if (uploading) {
-      uploadBtn.innerHTML =
-        '<span class="spinner"></span>Uploading...';
-    } else {
-      uploadBtn.textContent =
-        selectedFile ? "Upload DP" : "Choose Photo";
-    }
-  }
-
-
-  /* ---------------------------------------------------------
-     FILE PICKER
-     --------------------------------------------------------- */
+  /* =========================================================
+     MOBILE FILE PICKER
+     ========================================================= */
 
   function openFilePicker() {
+
+    if (!avatarFile) {
+      return;
+    }
+
     /*
-      IMPORTANT FOR MOBILE:
-      input.click() must happen directly from the
-      user's button tap.
+      IMPORTANT:
+      No setTimeout.
+      No Promise.
+      No async function here.
+
+      This is called directly from the tap event,
+      which is safer for iPhone/Android browsers.
     */
 
     avatarFile.value = "";
+
     avatarFile.click();
   }
 
 
-  cameraBtn.addEventListener("click", function () {
-    openFilePicker();
-  });
+  /*
+    Camera icon
+  */
 
+  cameraBtn.addEventListener(
+    "click",
+    function(event) {
 
-  uploadBtn.addEventListener("click", function () {
+      event.preventDefault();
 
-    if (!selectedFile) {
       openFilePicker();
-      return;
-    }
-
-    uploadAvatar();
-  });
+    },
+    false
+  );
 
 
-  avatarFile.addEventListener("change", function (event) {
+  /*
+    Main Choose Photo button
+  */
 
-    const file =
-      event.target.files && event.target.files[0];
+  chooseBtn.addEventListener(
+    "click",
+    function(event) {
 
-    if (!file) return;
+      event.preventDefault();
 
-    const allowedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-      "image/gif"
-    ];
+      if (!selectedFile) {
 
-    if (!allowedTypes.includes(file.type)) {
-      selectedFile = null;
+        openFilePicker();
 
-      showStatus(
-        "Sirf JPG, PNG, WEBP ya GIF image select karo.",
-        "error"
+      } else {
+
+        uploadAvatar();
+
+      }
+    },
+    false
+  );
+
+
+  /* =========================================================
+     FILE SELECTED
+     ========================================================= */
+
+  avatarFile.addEventListener(
+    "change",
+    function(event) {
+
+      const files =
+        event.target.files;
+
+      if (!files || !files.length) {
+        return;
+      }
+
+      const file =
+        files[0];
+
+      if (!file.type.startsWith("image/")) {
+
+        selectedFile = null;
+
+        setStatus(
+          "Please image file select karo.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (
+        file.size >
+        5 * 1024 * 1024
+      ) {
+
+        selectedFile = null;
+
+        setStatus(
+          "Image 5 MB se chhoti honi chahiye.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      selectedFile = file;
+
+
+      /*
+        Preview
+      */
+
+      const url =
+        URL.createObjectURL(file);
+
+      avatarPreview.src = url;
+
+      avatarPreview.classList.remove(
+        "hidden"
       );
 
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      selectedFile = null;
-
-      showStatus(
-        "Image 5 MB se chhoti honi chahiye.",
-        "error"
+      placeholder.classList.add(
+        "hidden"
       );
 
-      return;
-    }
 
-    selectedFile = file;
-
-    const previewUrl =
-      URL.createObjectURL(file);
-
-    avatarPreview.src = previewUrl;
-
-    avatarPreview.classList.remove("hidden");
-    avatarPlaceholder.classList.add("hidden");
-
-    uploadBtn.textContent = "Upload DP";
-
-    showStatus(
-      "Photo select ho gayi. Ab Upload DP dabao.",
-      "success"
-    );
-  });
+      chooseBtn.textContent =
+        "Upload DP";
 
 
-  /* ---------------------------------------------------------
-     LOAD CURRENT SESSION
-     --------------------------------------------------------- */
+      setStatus(
+        "Photo select ho gayi. Ab Upload DP dabao.",
+        "success"
+      );
 
-  async function init() {
+    },
+    false
+  );
+
+
+  /* =========================================================
+     GET SESSION
+     ========================================================= */
+
+  async function start() {
 
     if (!initSupabase()) {
       return;
@@ -630,30 +728,42 @@
 
     try {
 
-      const {
-        data,
-        error
-      } = await sb.auth.getSession();
+      const result =
+        await sb.auth.getSession();
 
-      if (error) {
-        throw error;
+      if (result.error) {
+        throw result.error;
       }
 
       currentUser =
-        data?.session?.user || null;
+        result.data &&
+        result.data.session
+          ? result.data.session.user
+          : null;
+
 
       if (!currentUser) {
 
-        appContent.classList.add("hidden");
-        loginBox.classList.remove("hidden");
+        content.classList.add(
+          "hidden"
+        );
 
-        showStatus(
-          "Pehle Poll Pulse me login karo.",
-          "error"
+        loginMessage.classList.remove(
+          "hidden"
         );
 
         return;
       }
+
+
+      content.classList.remove(
+        "hidden"
+      );
+
+      loginMessage.classList.add(
+        "hidden"
+      );
+
 
       await loadProfile();
 
@@ -661,41 +771,45 @@
 
       console.error(error);
 
-      showStatus(
-        error.message || "Profile load nahi ho saki.",
+      setStatus(
+        error.message ||
+        "Session load nahi hui.",
         "error"
       );
     }
   }
 
 
-  /* ---------------------------------------------------------
+  /* =========================================================
      LOAD PROFILE
-     --------------------------------------------------------- */
+     ========================================================= */
 
   async function loadProfile() {
 
-    const {
-      data,
-      error
-    } = await sb
-      .from("profiles")
-      .select("*")
-      .eq("id", currentUser.id)
-      .maybeSingle();
+    const result =
+      await sb
+        .from("profiles")
+        .select("*")
+        .eq("id", currentUser.id)
+        .maybeSingle();
 
-    if (error) {
-      console.error(error);
 
-      showStatus(
-        "Profile data load nahi ho saka.",
+    if (result.error) {
+
+      console.error(result.error);
+
+      setStatus(
+        "Profile load nahi ho saki.",
         "error"
       );
 
       return;
     }
 
-    currentProfile = data || {};
+
+    currentProfile =
+      result.data || {};
+
 
     const name =
       currentProfile.display_name ||
@@ -703,304 +817,368 @@
       currentUser.email?.split("@")[0] ||
       "User";
 
-    const username =
+
+    const userName =
       currentProfile.username
         ? "@" + currentProfile.username
         : "";
 
-    displayNameEl.textContent = name;
-    usernameEl.textContent = username;
+
+    displayName.textContent =
+      name;
+
+    username.textContent =
+      userName;
+
 
     if (currentProfile.avatar_url) {
 
       avatarPreview.src =
-        currentProfile.avatar_url;
+        currentProfile.avatar_url +
+        (
+          currentProfile.avatar_url.includes("?")
+            ? "&"
+            : "?"
+        ) +
+        "v=" +
+        Date.now();
 
-      avatarPreview.classList.remove("hidden");
-      avatarPlaceholder.classList.add("hidden");
+      avatarPreview.classList.remove(
+        "hidden"
+      );
+
+      placeholder.classList.add(
+        "hidden"
+      );
 
     } else {
 
-      avatarPreview.classList.add("hidden");
-      avatarPlaceholder.classList.remove("hidden");
+      placeholder.textContent =
+        name
+          .charAt(0)
+          .toUpperCase();
 
-      avatarPlaceholder.textContent =
-        name.charAt(0).toUpperCase();
+      placeholder.classList.remove(
+        "hidden"
+      );
+
+      avatarPreview.classList.add(
+        "hidden"
+      );
     }
   }
 
 
-  /* ---------------------------------------------------------
-     UPLOAD AVATAR
-     --------------------------------------------------------- */
+  /* =========================================================
+     UPLOAD
+     ========================================================= */
 
   async function uploadAvatar() {
 
     if (!currentUser) {
 
-      showStatus(
-        "Pehle login karo.",
+      setStatus(
+        "Please login first.",
         "error"
       );
 
       return;
     }
+
 
     if (!selectedFile) {
 
-      showStatus(
-        "Pehle photo select karo.",
-        "error"
-      );
+      openFilePicker();
 
       return;
     }
 
-    setUploadingState(true);
 
-    showStatus(
+    chooseBtn.disabled = true;
+
+    cameraBtn.disabled = true;
+
+
+    chooseBtn.innerHTML =
+      '<span class="spinner"></span>Uploading...';
+
+
+    setStatus(
       "DP upload ho rahi hai...",
       "loading"
     );
 
+
     try {
 
       /*
-        Unique file name.
-
-        Same user's old DP ko overwrite nahi karte,
-        isliye mobile caching problem bhi kam hoti hai.
+        Safe extension
       */
 
-      const extension =
-        getExtension(selectedFile);
+      let extension = "jpg";
 
-      const fileName =
-        currentUser.id +
-        "-" +
-        Date.now() +
-        "." +
-        extension;
+      if (
+        selectedFile.type ===
+        "image/png"
+      ) {
+        extension = "png";
+      }
+
+      if (
+        selectedFile.type ===
+        "image/webp"
+      ) {
+        extension = "webp";
+      }
+
+      if (
+        selectedFile.type ===
+        "image/gif"
+      ) {
+        extension = "gif";
+      }
+
+
+      /*
+        Unique path
+      */
 
       const filePath =
         currentUser.id +
         "/" +
-        fileName;
+        Date.now() +
+        "." +
+        extension;
 
 
-      /* ---------------------------------------------
-         Upload to Supabase Storage
-         --------------------------------------------- */
+      /* -----------------------------------------
+         STORAGE UPLOAD
+         ----------------------------------------- */
 
-      const {
-        error: uploadError
-      } = await sb
-        .storage
-        .from("avatars")
-        .upload(
-          filePath,
-          selectedFile,
-          {
-            cacheControl: "3600",
-            upsert: false,
-            contentType: selectedFile.type
-          }
+      const upload =
+        await sb
+          .storage
+          .from("avatars")
+          .upload(
+            filePath,
+            selectedFile,
+            {
+              cacheControl: "3600",
+              upsert: false,
+              contentType:
+                selectedFile.type
+            }
+          );
+
+
+      if (upload.error) {
+
+        console.error(
+          "Storage error:",
+          upload.error
         );
 
-
-      if (uploadError) {
-
-        console.error(uploadError);
-
-        throw new Error(
-          "Storage upload failed: " +
-          uploadError.message
-        );
+        throw upload.error;
       }
 
 
-      /* ---------------------------------------------
-         Get public URL
-         --------------------------------------------- */
+      /* -----------------------------------------
+         PUBLIC URL
+         ----------------------------------------- */
 
-      const {
-        data: publicData
-      } = sb
-        .storage
-        .from("avatars")
-        .getPublicUrl(filePath);
+      const publicResult =
+        sb
+          .storage
+          .from("avatars")
+          .getPublicUrl(filePath);
 
 
       const publicUrl =
-        publicData?.publicUrl;
+        publicResult.data?.publicUrl;
 
 
       if (!publicUrl) {
+
         throw new Error(
-          "Avatar URL generate nahi hui."
+          "Public avatar URL nahi mili."
         );
       }
 
 
-      /* ---------------------------------------------
-         Update profiles table
-         --------------------------------------------- */
+      /* -----------------------------------------
+         UPDATE PROFILE
+         ----------------------------------------- */
 
-      const {
-        error: profileError
-      } = await sb
-        .from("profiles")
-        .update({
-          avatar_url: publicUrl
-        })
-        .eq("id", currentUser.id);
+      const update =
+        await sb
+          .from("profiles")
+          .update({
+            avatar_url: publicUrl
+          })
+          .eq(
+            "id",
+            currentUser.id
+          );
 
 
-      if (profileError) {
+      if (update.error) {
 
-        console.error(profileError);
-
-        throw new Error(
-          "Profile update failed: " +
-          profileError.message
+        console.error(
+          "Profile update error:",
+          update.error
         );
+
+        throw update.error;
       }
 
 
-      /* ---------------------------------------------
-         Success
-         --------------------------------------------- */
+      /* -----------------------------------------
+         SHOW NEW DP
+         ----------------------------------------- */
 
       avatarPreview.src =
         publicUrl +
         "?v=" +
         Date.now();
 
-      avatarPreview.classList.remove("hidden");
-      avatarPlaceholder.classList.add("hidden");
+
+      avatarPreview.classList.remove(
+        "hidden"
+      );
+
+      placeholder.classList.add(
+        "hidden"
+      );
+
 
       selectedFile = null;
 
       avatarFile.value = "";
 
-      uploadBtn.textContent =
+
+      chooseBtn.textContent =
         "Choose New Photo";
 
-      showStatus(
-        "✅ DP successfully update ho gayi!",
+
+      setStatus(
+        "✓ DP successfully update ho gayi!",
         "success"
       );
+
 
     } catch (error) {
 
       console.error(
-        "Avatar upload error:",
+        "UPLOAD ERROR:",
         error
       );
 
-      showStatus(
+
+      setStatus(
         error.message ||
         "DP upload nahi ho payi.",
         "error"
       );
 
+
+      chooseBtn.textContent =
+        selectedFile
+          ? "Upload DP"
+          : "Choose Photo";
+
     } finally {
 
-      setUploadingState(false);
+      chooseBtn.disabled = false;
 
-      if (!selectedFile) {
-        uploadBtn.textContent =
-          "Choose New Photo";
-      }
+      cameraBtn.disabled = false;
     }
   }
 
 
-  /* ---------------------------------------------------------
-     FILE EXTENSION
-     --------------------------------------------------------- */
-
-  function getExtension(file) {
-
-    if (file.type === "image/png") {
-      return "png";
-    }
-
-    if (file.type === "image/webp") {
-      return "webp";
-    }
-
-    if (file.type === "image/gif") {
-      return "gif";
-    }
-
-    return "jpg";
-  }
-
-
-  /* ---------------------------------------------------------
-     BACK BUTTON
-     --------------------------------------------------------- */
-
-  backBtn.addEventListener("click", function () {
-
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      window.location.href = "index.html";
-    }
-
-  });
-
-
-  /* ---------------------------------------------------------
+  /* =========================================================
      AUTH STATE
-     --------------------------------------------------------- */
+     ========================================================= */
 
-  function setupAuthListener() {
+  function listenForAuth() {
 
-    if (!sb) return;
+    if (!sb) {
+      return;
+    }
+
 
     sb.auth.onAuthStateChange(
-      async (event, session) => {
-
-        if (event === "SIGNED_OUT") {
-
-          currentUser = null;
-
-          appContent.classList.add("hidden");
-          loginBox.classList.remove("hidden");
-
-          showStatus(
-            "Session expire ho gayi. Dobara login karo.",
-            "error"
-          );
-        }
+      function(event, session) {
 
         if (
           event === "SIGNED_IN" &&
-          session?.user
+          session
         ) {
 
           currentUser =
             session.user;
 
-          appContent.classList.remove("hidden");
-          loginBox.classList.add("hidden");
+          loginMessage.classList.add(
+            "hidden"
+          );
 
-          await loadProfile();
+          content.classList.remove(
+            "hidden"
+          );
+
+          loadProfile();
+        }
+
+
+        if (
+          event === "SIGNED_OUT"
+        ) {
+
+          currentUser = null;
+
+          content.classList.add(
+            "hidden"
+          );
+
+          loginMessage.classList.remove(
+            "hidden"
+          );
         }
       }
     );
   }
 
 
-  /* ---------------------------------------------------------
-     START
-     --------------------------------------------------------- */
+  /* =========================================================
+     BACK
+     ========================================================= */
 
-  init().then(() => {
-    setupAuthListener();
+  backBtn.addEventListener(
+    "click",
+    function() {
+
+      if (
+        window.history.length > 1
+      ) {
+
+        window.history.back();
+
+      } else {
+
+        window.location.href =
+          "index.html";
+      }
+    }
+  );
+
+
+  /* =========================================================
+     START APP
+     ========================================================= */
+
+  start().then(function() {
+
+    listenForAuth();
+
   });
 
 </script>
