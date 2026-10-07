@@ -8,6 +8,20 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+html
+<script>
+window.addEventListener("load", function(){
+    if(window.supabase){
+        console.log("Supabase library loaded");
+        initSupabase();
+    }else{
+        console.error("Supabase library failed to load");
+        authMessage("Supabase load nahi hua. Internet check karo.");
+    }
+});
+</script>
+
+    
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;background:#f5f3ff;color:#181824}
