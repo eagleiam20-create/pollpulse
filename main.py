@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, send_from_directory, jsonify
 import os
 
 app = Flask(__name__)
@@ -6,61 +6,55 @@ app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-# =========================
-# SERVE POLLPULSE APP
-# =========================
+# ==========================================
+# POLLPULSE WEBSITE
+# ==========================================
 
 @app.route("/")
-def index():
+def home():
     return send_from_directory(BASE_DIR, "index.html")
 
 
 @app.route("/index.html")
-def index_html():
+def index():
     return send_from_directory(BASE_DIR, "index.html")
 
 
-# =========================
-# OPTIONAL OLD PAGE
-# =========================
+# ==========================================
+# HEALTH CHECK
+# ==========================================
 
-@app.route("/index2.html")
-def index2():
-    return send_from_directory(BASE_DIR, "index2.html")
+@app.route("/api/health")
+def health():
+    return jsonify({
+        "ok": True,
+        "app": "PollPulse",
+        "message": "PollPulse is running"
+    })
 
 
-# =========================
+# ==========================================
 # APP CONFIG
-# =========================
+# ==========================================
 
 @app.route("/api/config")
 def config():
     return jsonify({
         "app": "PollPulse",
         "version": "2.0.0",
-        "backend": "python",
         "status": "online"
     })
 
 
-# =========================
-# HEALTH CHECK
-# =========================
-
-@app.route("/api/health")
-def health():
-    return jsonify({
-        "ok": True,
-        "message": "PollPulse backend connected"
-    })
-
-
-# =========================
+# ==========================================
 # START SERVER
-# =========================
+# ==========================================
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+
+    port = int(
+        os.environ.get("PORT", 5000)
+    )
 
     app.run(
         host="0.0.0.0",
