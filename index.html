@@ -1,183 +1,230 @@
-<!-- =========================================================
-     POLL PULSE — PROFESSIONAL CHAT MODULE
-     Replace your old Chat module with this entire block.
-========================================================= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Poll Pulse — Messages</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 /* =========================================================
-   ROOT
+   POLL PULSE — PROFESSIONAL CHAT APP
 ========================================================= */
 
-#chatPage,
-#chatPage * {
-  box-sizing: border-box;
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface-2: #f1f3f7;
+  --text: #111318;
+  --muted: #7b8190;
+  --border: #e8eaf0;
+  --primary: #5b5cf0;
+  --primary-dark: #4647d9;
+  --mine: #5b5cf0;
+  --theirs: #eef0f5;
+  --success: #20c878;
+  --danger: #e5484d;
+  --shadow: 0 12px 40px rgba(20, 24, 40, .08);
 }
 
-#chatPage {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: none;
-  flex-direction: column;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
   width: 100%;
-  max-width: 560px;
-  margin: auto;
-  overflow: hidden;
-  background: #fff;
-  color: #111;
+  height: 100%;
   font-family:
     Inter,
+    ui-sans-serif,
+    system-ui,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-#chatPage.active {
-  display: flex;
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 /* =========================================================
-   INBOX
+   APP
 ========================================================= */
 
-#chatInbox {
+#app {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 1100px;
+  height: 100dvh;
+  background: var(--surface);
+  display: flex;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+  width: 350px;
+  min-width: 350px;
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  background: #fff;
+  background: var(--surface);
 }
 
-.chat-inbox-head {
-  padding: 18px 18px 12px;
-  background: #fff;
+.brand {
+  padding: 24px 22px 12px;
 }
 
-.chat-inbox-title-row {
+.brand-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
 }
 
-.chat-inbox-title {
-  font-size: 26px;
-  line-height: 1;
-  font-weight: 800;
-  letter-spacing: -0.7px;
+.brand-name {
+  font-size: 24px;
+  font-weight: 850;
+  letter-spacing: -.8px;
 }
 
-.chat-inbox-subtitle {
-  margin-top: 6px;
-  color: #8b8b8b;
-  font-size: 12px;
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-weight: 900;
+  background:
+    linear-gradient(135deg, #5b5cf0, #9b5cf6);
 }
 
-.chat-new-btn {
-  width: 40px;
-  height: 40px;
-  border: 0;
-  border-radius: 50%;
-  background: #111;
-  color: #fff;
-  cursor: pointer;
-  font-size: 19px;
-  transition: transform .18s ease, opacity .18s ease;
+.search-box {
+  padding: 12px 16px 16px;
 }
 
-.chat-new-btn:active {
-  transform: scale(.92);
+.search-inner {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 13px;
+  background: var(--surface-2);
+  border-radius: 13px;
+  border: 1px solid transparent;
+  transition: .2s;
 }
 
-.chat-search-wrap {
-  padding: 4px 14px 12px;
+.search-inner:focus-within {
+  border-color: rgba(91,92,240,.35);
+  background: white;
 }
 
-.chat-search-box {
-  position: relative;
-}
-
-.chat-search-icon {
-  position: absolute;
-  left: 13px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #888;
-  font-size: 14px;
-  pointer-events: none;
+.search-icon {
+  color: var(--muted);
+  font-size: 17px;
 }
 
 #chatSearch {
   width: 100%;
-  height: 42px;
-  border: 1px solid transparent;
+  border: 0;
   outline: 0;
-  border-radius: 13px;
-  padding: 0 13px 0 37px;
-  background: #f3f3f4;
-  color: #111;
-  font: inherit;
-  font-size: 14px;
-  transition: .18s ease;
+  background: transparent;
+  color: var(--text);
 }
 
-#chatSearch:focus {
-  border-color: #d7d7d7;
-  background: #fff;
+#chatSearch::placeholder {
+  color: #9ca1ad;
+}
+
+.inbox-title {
+  padding: 0 20px 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
 
 #chatUsers {
   flex: 1;
-  min-height: 0;
   overflow-y: auto;
-  overscroll-behavior: contain;
+  padding-bottom: 15px;
 }
+
+/* =========================================================
+   CHAT USER ROW
+========================================================= */
 
 .chat-user-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 16px;
-  min-height: 72px;
+  gap: 13px;
+  padding: 11px 17px;
+  margin: 2px 7px;
+  border-radius: 15px;
   cursor: pointer;
-  transition: background .15s ease;
+  transition: background .18s, transform .12s;
 }
 
 .chat-user-row:hover {
-  background: #f7f7f7;
+  background: var(--surface-2);
 }
 
 .chat-user-row:active {
-  background: #eeeeee;
+  transform: scale(.985);
 }
 
-.chat-avatar-wrap {
+.avatar-wrap {
+  width: 52px;
+  height: 52px;
   position: relative;
-  width: 50px;
-  height: 50px;
-  flex: 0 0 50px;
+  flex-shrink: 0;
 }
 
-.chat-avatar {
-  width: 100%;
-  height: 100%;
-  display: block;
+.avatar {
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  background: #ededed;
+  display: block;
+  background: #e9ebf0;
 }
 
-.chat-online-dot {
+.online-dot {
   position: absolute;
-  right: 0;
+  right: 1px;
   bottom: 1px;
-  width: 12px;
-  height: 12px;
-  border: 2px solid #fff;
+  width: 13px;
+  height: 13px;
+  background: var(--success);
+  border: 3px solid white;
   border-radius: 50%;
-  background: #22c55e;
-  display: none;
 }
 
 .chat-row-info {
@@ -194,223 +241,183 @@
 .chat-row-name {
   min-width: 0;
   flex: 1;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 750;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chat-row-time {
-  flex: 0 0 auto;
-  color: #999;
+  color: #9a9eaa;
   font-size: 10px;
+  flex-shrink: 0;
 }
 
 .chat-row-bottom {
   display: flex;
   align-items: center;
   gap: 7px;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
 .chat-last-message {
-  min-width: 0;
   flex: 1;
-  overflow: hidden;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
-  color: #8b8b8b;
-  font-size: 13px;
 }
 
-.chat-unread {
+.unread {
   min-width: 20px;
   height: 20px;
   padding: 0 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50px;
-  background: #111;
-  color: #fff;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  color: white;
+  background: var(--primary);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 /* =========================================================
    EMPTY / LOADING
 ========================================================= */
 
-.chat-empty {
-  padding: 70px 25px;
+.empty {
+  padding: 55px 25px;
   text-align: center;
-  color: #999;
-  font-size: 13px;
+  color: var(--muted);
 }
 
-.chat-empty-icon {
-  width: 58px;
-  height: 58px;
+.empty-icon {
+  width: 64px;
+  height: 64px;
   margin: 0 auto 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #f2f2f2;
-  font-size: 24px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  font-size: 28px;
 }
 
-.chat-empty-title {
-  color: #222;
-  font-size: 15px;
-  font-weight: 700;
+.empty-title {
+  color: var(--text);
+  font-weight: 800;
+  margin-bottom: 5px;
 }
 
-.chat-empty-text {
-  margin-top: 5px;
-  color: #999;
+.empty-text {
   font-size: 12px;
+  line-height: 1.5;
 }
 
-.chat-skeleton {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-}
-
-.chat-skeleton-avatar,
-.chat-skeleton-line {
+.skeleton {
+  height: 74px;
+  margin: 5px 12px;
+  border-radius: 14px;
   background:
     linear-gradient(
       90deg,
-      #eeeeee 25%,
-      #f7f7f7 50%,
-      #eeeeee 75%
+      #f0f1f4 25%,
+      #fafafa 37%,
+      #f0f1f4 63%
     );
-  background-size: 200% 100%;
-  animation: chatShimmer 1.2s infinite;
+  background-size: 400% 100%;
+  animation: skeleton 1.4s infinite;
 }
 
-.chat-skeleton-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-
-.chat-skeleton-content {
-  flex: 1;
-}
-
-.chat-skeleton-line {
-  height: 10px;
-  width: 65%;
-  margin-bottom: 9px;
-  border-radius: 10px;
-}
-
-.chat-skeleton-line.small {
-  width: 42%;
-}
-
-@keyframes chatShimmer {
-  from {
-    background-position: 200% 0;
-  }
-  to {
-    background-position: -200% 0;
-  }
+@keyframes skeleton {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
 /* =========================================================
    CONVERSATION
 ========================================================= */
 
-#chatConversation {
-  display: none;
+.conversation {
+  flex: 1;
+  min-width: 0;
+  display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  background: #fff;
+  background: #fbfbfd;
 }
 
-#chatConversation.active {
+.conversation.hidden {
   display: flex;
 }
 
-.chat-top {
-  position: relative;
-  z-index: 5;
+.conversation-header {
+  height: 72px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 64px;
-  padding: 8px 12px;
-  border-bottom: 1px solid #ededed;
-  background: rgba(255,255,255,.96);
-  backdrop-filter: blur(15px);
+  gap: 11px;
+  padding: 10px 18px;
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
 }
 
-.chat-back {
+.back-btn {
   width: 40px;
   height: 40px;
-  flex: 0 0 40px;
+  display: none;
+  place-items: center;
   border: 0;
-  border-radius: 50%;
+  border-radius: 12px;
   background: transparent;
-  color: #111;
-  cursor: pointer;
-  font-size: 30px;
-  line-height: 1;
+  font-size: 27px;
+  color: var(--text);
 }
 
-.chat-back:hover {
-  background: #f3f3f3;
-}
-
-.chat-header-avatar-wrap {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  flex: 0 0 40px;
-}
-
-.chat-header-avatar {
-  width: 40px;
-  height: 40px;
+.header-avatar {
+  width: 43px;
+  height: 43px;
   border-radius: 50%;
   object-fit: cover;
-  background: #eee;
 }
 
-.chat-header-info {
+.header-info {
   min-width: 0;
   flex: 1;
 }
 
-.chat-header-name {
-  overflow: hidden;
+.header-name {
+  font-size: 14px;
+  font-weight: 800;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 15px;
-  font-weight: 750;
 }
 
-.chat-header-status {
-  margin-top: 2px;
-  color: #888;
+.header-status {
+  color: var(--muted);
   font-size: 11px;
+  margin-top: 2px;
 }
 
-.chat-header-action {
+.header-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.header-action {
   width: 38px;
   height: 38px;
   border: 0;
-  border-radius: 50%;
   background: transparent;
-  cursor: pointer;
-  font-size: 19px;
+  border-radius: 12px;
+  font-size: 18px;
+}
+
+.header-action:hover {
+  background: var(--surface-2);
 }
 
 /* =========================================================
@@ -419,140 +426,135 @@
 
 #chatMessages {
   flex: 1;
-  min-height: 0;
   overflow-y: auto;
-  padding: 14px 12px 8px;
-  background:
-    radial-gradient(
-      circle at top,
-      rgba(0,0,0,.025),
-      transparent 35%
-    ),
-    #fff;
-  overscroll-behavior: contain;
+  padding: 18px 18px 12px;
   scroll-behavior: smooth;
 }
 
-.chat-day {
-  width: fit-content;
-  margin: 15px auto;
-  padding: 5px 10px;
-  border-radius: 20px;
-  background: #f2f2f2;
-  color: #999;
+.day-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  color: #9b9fab;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
+  justify-content: center;
 }
 
-.chat-message-line {
+.day-divider::before,
+.day-divider::after {
+  content: "";
+  height: 1px;
+  width: 38px;
+  background: var(--border);
+}
+
+.message-line {
   display: flex;
   margin: 3px 0;
 }
 
-.chat-message-line.mine {
+.message-line.mine {
   justify-content: flex-end;
 }
 
-.chat-message-line.theirs {
+.message-line.theirs {
   justify-content: flex-start;
 }
 
-.chat-bubble {
-  position: relative;
-  max-width: 78%;
-  padding: 9px 12px;
+.message-stack {
+  max-width: min(76%, 460px);
+}
+
+.bubble {
+  padding: 10px 13px;
   border-radius: 19px;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.45;
   word-break: break-word;
-  animation: chatMessageIn .16s ease-out;
+  box-shadow: 0 1px 1px rgba(0,0,0,.03);
+  user-select: text;
 }
 
-@keyframes chatMessageIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.mine .chat-bubble {
+.mine .bubble {
+  color: white;
+  background: linear-gradient(
+    135deg,
+    var(--mine),
+    #6e5df5
+  );
   border-bottom-right-radius: 5px;
-  background: #111;
-  color: #fff;
 }
 
-.theirs .chat-bubble {
+.theirs .bubble {
+  color: var(--text);
+  background: var(--theirs);
   border-bottom-left-radius: 5px;
-  background: #eeeeef;
-  color: #111;
 }
 
-.chat-text {
-  white-space: normal;
+.message-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 4px 5px 0;
+  color: #9b9eaa;
+  font-size: 9px;
 }
 
-.chat-deleted {
+.mine .message-meta {
+  justify-content: flex-end;
+}
+
+.read-status {
+  font-weight: 800;
+}
+
+.photo {
+  display: block;
+  width: min(260px, 100%);
+  max-height: 330px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.deleted {
   font-style: italic;
   opacity: .55;
 }
 
-.chat-photo {
-  display: block;
-  width: auto;
-  max-width: 245px;
-  max-height: 320px;
-  border-radius: 14px;
-  object-fit: cover;
-  cursor: pointer;
-}
-
-.chat-reply-preview {
-  margin: -2px -2px 7px;
+.reply-preview {
+  margin-bottom: 7px;
   padding: 7px 9px;
   border-left: 3px solid currentColor;
+  background: rgba(255,255,255,.15);
   border-radius: 7px;
-  background: rgba(127,127,127,.13);
-  font-size: 11px;
-  opacity: .78;
+  font-size: 10px;
+  opacity: .82;
 }
 
-.chat-meta {
+.theirs .reply-preview {
+  background: rgba(0,0,0,.06);
+}
+
+.reactions {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 5px;
-  margin-top: 4px;
-  font-size: 9px;
-  opacity: .58;
-}
-
-.chat-status-read {
-  letter-spacing: -2px;
-}
-
-.chat-reactions {
-  display: flex;
-  flex-wrap: wrap;
   gap: 4px;
-  margin-top: -1px;
+  flex-wrap: wrap;
+  margin-top: -3px;
 }
 
-.mine .chat-reactions {
+.mine .reactions {
   justify-content: flex-end;
 }
 
-.chat-reaction {
+.reaction {
+  border: 1px solid var(--border);
+  background: white;
   padding: 3px 7px;
-  border: 1px solid #dedede;
   border-radius: 20px;
-  background: #fff;
-  color: #222;
-  box-shadow: 0 2px 5px rgba(0,0,0,.06);
   font-size: 11px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
 }
 
 /* =========================================================
@@ -560,85 +562,89 @@
 ========================================================= */
 
 #chatTyping {
-  min-height: 19px;
-  padding: 0 16px;
-  color: #888;
+  height: 22px;
+  padding: 0 20px;
+  color: #888c99;
   font-size: 10px;
 }
 
-.chat-typing-dots {
+.typing-dots {
   display: inline-flex;
-  align-items: center;
   gap: 3px;
+  vertical-align: middle;
 }
 
-.chat-typing-dots span {
+.typing-dots span {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #999;
-  animation: typingDot 1s infinite;
+  background: #9296a3;
+  animation: typing 1s infinite;
 }
 
-.chat-typing-dots span:nth-child(2) {
+.typing-dots span:nth-child(2) {
   animation-delay: .15s;
 }
 
-.chat-typing-dots span:nth-child(3) {
+.typing-dots span:nth-child(3) {
   animation-delay: .3s;
 }
 
-@keyframes typingDot {
+@keyframes typing {
   0%, 60%, 100% {
     transform: translateY(0);
   }
+
   30% {
     transform: translateY(-3px);
   }
 }
 
 /* =========================================================
-   REPLY BAR
+   REPLY
 ========================================================= */
 
 #chatReplyBar {
   display: none;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
-  border-top: 1px solid #ededed;
-  background: #f7f7f7;
+  padding: 8px 15px;
+  background: white;
+  border-top: 1px solid var(--border);
 }
 
 #chatReplyBar.show {
   display: flex;
 }
 
-.chat-reply-accent {
-  width: 3px;
-  height: 34px;
-  flex: 0 0 3px;
-  border-radius: 5px;
-  background: #111;
+.reply-bar-icon {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #edeefd;
+  color: var(--primary);
 }
 
-.chat-reply-text {
+.reply-bar-text {
   min-width: 0;
   flex: 1;
 }
 
-.chat-reply-title {
+.reply-bar-title {
+  color: var(--primary);
   font-size: 10px;
   font-weight: 800;
 }
 
 #chatReplyContent {
   margin-top: 2px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: #777;
+  color: var(--muted);
   font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #cancelReply {
@@ -646,103 +652,98 @@
   height: 30px;
   border: 0;
   border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-  font-size: 20px;
+  background: var(--surface-2);
+  font-size: 18px;
 }
 
 /* =========================================================
    COMPOSER
 ========================================================= */
 
-.chat-composer {
+.composer {
   display: flex;
   align-items: flex-end;
   gap: 7px;
-  padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
-  border-top: 1px solid #ededed;
-  background: #fff;
+  padding: 9px 13px calc(10px + env(safe-area-inset-bottom));
+  background: white;
+  border-top: 1px solid var(--border);
 }
 
-.chat-icon-btn {
+.composer-btn {
   width: 39px;
   height: 39px;
-  flex: 0 0 39px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
   border: 0;
   border-radius: 50%;
-  background: #f1f1f2;
-  color: #222;
-  cursor: pointer;
-  font-size: 18px;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  transition: .15s;
 }
 
-.chat-icon-btn:active {
-  transform: scale(.94);
+.composer-btn:hover {
+  background: #e7e9ef;
 }
 
 #chatInput {
-  width: 100%;
+  flex: 1;
   min-width: 0;
-  min-height: 40px;
-  max-height: 115px;
+  max-height: 120px;
   resize: none;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 9px 13px;
   outline: 0;
-  border: 1px solid #dedede;
-  border-radius: 21px;
-  padding: 10px 13px;
-  background: #fff;
-  color: #111;
-  font: inherit;
-  font-size: 14px;
+  background: #fafbfc;
+  color: var(--text);
+  font-size: 13px;
   line-height: 18px;
-  overflow-y: auto;
 }
 
 #chatInput:focus {
-  border-color: #bdbdbd;
+  background: white;
+  border-color: rgba(91,92,240,.35);
 }
 
 #sendMessageBtn {
   width: 40px;
   height: 40px;
-  flex: 0 0 40px;
+  flex-shrink: 0;
   border: 0;
   border-radius: 50%;
-  background: #111;
-  color: #fff;
-  cursor: pointer;
+  color: white;
+  background: var(--primary);
+  display: grid;
+  place-items: center;
   font-size: 17px;
-  transition: transform .15s ease, opacity .15s ease;
+  transition: .15s;
 }
 
-#sendMessageBtn:active {
-  transform: scale(.92);
+#sendMessageBtn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
 }
 
 #sendMessageBtn:disabled {
-  opacity: .4;
-  cursor: default;
+  opacity: .45;
+  transform: none;
 }
 
 /* =========================================================
-   REACTION MENU
+   REACTION POPUP
 ========================================================= */
 
 #reactionMenu {
   position: fixed;
-  z-index: 10020;
   display: none;
-  align-items: center;
-  gap: 2px;
-  padding: 5px 7px;
-  border: 1px solid #e3e3e3;
+  z-index: 10000;
+  padding: 7px 9px;
+  gap: 3px;
+  background: white;
+  border: 1px solid var(--border);
   border-radius: 30px;
-  background: rgba(255,255,255,.98);
-  box-shadow: 0 10px 35px rgba(0,0,0,.17);
-  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 35px rgba(0,0,0,.16);
 }
 
 #reactionMenu.show {
@@ -750,539 +751,617 @@
 }
 
 .reaction-choice {
-  width: 34px;
-  height: 34px;
+  width: 35px;
+  height: 35px;
   border: 0;
-  border-radius: 50%;
   background: transparent;
-  cursor: pointer;
+  border-radius: 50%;
   font-size: 19px;
-  transition: transform .15s ease, background .15s ease;
 }
 
 .reaction-choice:hover {
-  background: #f1f1f1;
-  transform: scale(1.12);
+  background: var(--surface-2);
+  transform: scale(1.08);
 }
 
 /* =========================================================
    ACTION SHEET
 ========================================================= */
 
-#chatActionOverlay {
+#actionOverlay {
   position: fixed;
   inset: 0;
-  z-index: 10030;
+  z-index: 10001;
   display: none;
   align-items: flex-end;
   justify-content: center;
-  background: rgba(0,0,0,.35);
+  background: rgba(10,12,20,.28);
+  backdrop-filter: blur(4px);
 }
 
-#chatActionOverlay.show {
+#actionOverlay.show {
   display: flex;
 }
 
-.chat-action-sheet {
-  width: min(100%, 560px);
-  padding: 8px 10px calc(10px + env(safe-area-inset-bottom));
+.action-sheet {
+  width: min(430px, 100%);
+  background: white;
   border-radius: 22px 22px 0 0;
-  background: #fff;
-  box-shadow: 0 -10px 40px rgba(0,0,0,.16);
-  animation: actionUp .18s ease-out;
+  padding: 8px 10px calc(10px + env(safe-area-inset-bottom));
+  box-shadow: 0 -15px 50px rgba(0,0,0,.15);
 }
 
-@keyframes actionUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.chat-action-handle {
-  width: 38px;
+.action-handle {
+  width: 40px;
   height: 4px;
-  margin: 3px auto 10px;
-  border-radius: 10px;
-  background: #ddd;
+  margin: 4px auto 10px;
+  border-radius: 5px;
+  background: #dfe1e6;
 }
 
-.chat-action-btn {
+.action-btn {
   width: 100%;
-  height: 46px;
+  height: 48px;
   border: 0;
-  border-radius: 12px;
+  border-radius: 13px;
   background: transparent;
   text-align: left;
   padding: 0 14px;
-  color: #222;
-  cursor: pointer;
-  font: inherit;
   font-size: 14px;
 }
 
-.chat-action-btn:hover {
-  background: #f4f4f4;
+.action-btn:hover {
+  background: var(--surface-2);
 }
 
-.chat-action-btn.danger {
-  color: #d22;
+.action-btn.danger {
+  color: var(--danger);
 }
 
 /* =========================================================
    TOAST
 ========================================================= */
 
-#chatToast {
+#toast {
   position: fixed;
   left: 50%;
-  bottom: calc(75px + env(safe-area-inset-bottom));
-  z-index: 10050;
-  transform: translate(-50%, 15px);
-  max-width: calc(100vw - 30px);
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: #111;
-  color: #fff;
+  bottom: 25px;
+  z-index: 20000;
+  transform: translate(-50%, 20px);
   opacity: 0;
   pointer-events: none;
+  padding: 10px 15px;
+  color: white;
+  background: #171923;
+  border-radius: 12px;
   font-size: 12px;
-  box-shadow: 0 8px 25px rgba(0,0,0,.2);
-  transition: .2s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  transition: .25s;
 }
 
-#chatToast.show {
+#toast.show {
   opacity: 1;
   transform: translate(-50%, 0);
 }
 
 /* =========================================================
-   DESKTOP
+   WELCOME PANEL
 ========================================================= */
 
-@media (min-width: 700px) {
-  #chatPage {
-    max-width: 900px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    border-left: 1px solid #e8e8e8;
-    border-right: 1px solid #e8e8e8;
-    box-shadow: 0 0 40px rgba(0,0,0,.08);
+.welcome {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+
+.welcome-inner {
+  max-width: 330px;
+}
+
+.welcome-logo {
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 27px;
+  color: white;
+  font-size: 35px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #5b5cf0, #9b5cf6);
+  box-shadow: 0 15px 35px rgba(91,92,240,.25);
+}
+
+.welcome h1 {
+  margin: 0 0 8px;
+  font-size: 25px;
+  letter-spacing: -.6px;
+}
+
+.welcome p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  body {
+    background: white;
   }
 
-  .chat-bubble {
-    max-width: 65%;
+  .app-shell {
+    height: 100dvh;
+    box-shadow: none;
   }
 
-  .chat-action-sheet {
-    border-radius: 18px;
-    margin-bottom: 20px;
+  .sidebar {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .conversation {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: none;
+  }
+
+  .conversation.mobile-open {
+    display: flex;
+  }
+
+  .back-btn {
+    display: grid;
+  }
+
+  .welcome {
+    display: none;
+  }
+
+  .brand {
+    padding-top: calc(18px + env(safe-area-inset-top));
+  }
+
+  #chatMessages {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .message-stack {
+    max-width: 82%;
+  }
+
+  .header-actions {
+    display: none;
   }
 }
 
 /* =========================================================
-   DARK MODE SUPPORT
+   SCROLLBAR
 ========================================================= */
 
-@media (prefers-color-scheme: dark) {
-  #chatPage {
-    background: #0f0f10;
-    color: #f5f5f5;
-  }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d9dce4 transparent;
+}
 
-  #chatInbox,
-  .chat-inbox-head,
-  .chat-top,
-  .chat-composer {
-    background: #0f0f10;
-  }
+::-webkit-scrollbar {
+  width: 5px;
+}
 
-  #chatSearch {
-    background: #1c1c1e;
-    color: #fff;
-  }
-
-  .chat-user-row:hover {
-    background: #19191b;
-  }
-
-  .chat-user-row:active {
-    background: #202023;
-  }
-
-  .chat-last-message,
-  .chat-row-time,
-  .chat-header-status,
-  #chatTyping {
-    color: #888;
-  }
-
-  #chatMessages {
-    background: #0f0f10;
-  }
-
-  .theirs .chat-bubble {
-    background: #252527;
-    color: #f5f5f5;
-  }
-
-  .chat-day {
-    background: #202023;
-  }
-
-  #chatInput {
-    background: #171719;
-    border-color: #333;
-    color: #fff;
-  }
-
-  .chat-icon-btn {
-    background: #222225;
-    color: #fff;
-  }
-
-  .chat-reaction {
-    background: #1c1c1e;
-    border-color: #333;
-    color: #fff;
-  }
-
-  #chatReplyBar {
-    background: #19191b;
-    border-color: #29292c;
-  }
-
-  #reactionMenu,
-  .chat-action-sheet {
-    background: #1b1b1d;
-    border-color: #333;
-    color: #fff;
-  }
-
-  .chat-action-btn {
-    color: #fff;
-  }
-
-  .chat-action-btn:hover {
-    background: #252527;
-  }
-
-  .chat-header-action,
-  .chat-back {
-    color: #fff;
-  }
+::-webkit-scrollbar-thumb {
+  background: #d9dce4;
+  border-radius: 10px;
 }
 </style>
+</head>
 
+<body>
 
-<!-- =========================================================
-     CHAT HTML
-========================================================= -->
+<div id="app">
 
-<div id="chatPage">
+  <div class="app-shell">
 
-  <!-- ================= INBOX ================= -->
+    <!-- =====================================================
+         INBOX
+    ====================================================== -->
 
-  <section id="chatInbox">
+    <aside class="sidebar">
 
-    <div class="chat-inbox-head">
+      <div class="brand">
 
-      <div class="chat-inbox-title-row">
+        <div class="brand-row">
 
-        <div>
-          <div class="chat-inbox-title">
-            Messages
+          <div class="brand-name">
+            Poll Pulse
           </div>
 
-          <div class="chat-inbox-subtitle">
-            Stay connected with the Poll Pulse community
+          <div class="brand-mark">
+            P
           </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="search-box">
+
+        <div class="search-inner">
+
+          <span class="search-icon">⌕</span>
+
+          <input
+            id="chatSearch"
+            type="search"
+            placeholder="Search people or messages..."
+            autocomplete="off"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="inbox-title">
+        Messages
+      </div>
+
+
+      <div id="chatUsers">
+
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         WELCOME
+    ====================================================== -->
+
+    <main id="welcomePanel" class="welcome">
+
+      <div class="welcome-inner">
+
+        <div class="welcome-logo">
+          P
+        </div>
+
+        <h1>
+          Your messages
+        </h1>
+
+        <p>
+          Select a conversation to start chatting with people
+          from your Poll Pulse community.
+        </p>
+
+      </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         CONVERSATION
+    ====================================================== -->
+
+    <main
+      id="conversation"
+      class="conversation"
+    >
+
+      <header class="conversation-header">
+
+        <button
+          id="backBtn"
+          class="back-btn"
+          type="button"
+        >
+          ‹
+        </button>
+
+
+        <div style="position:relative">
+
+          <img
+            id="headerAvatar"
+            class="header-avatar"
+            src=""
+            alt=""
+          >
+
+          <span
+            id="headerOnline"
+            class="online-dot"
+            style="display:none"
+          ></span>
+
+        </div>
+
+
+        <div class="header-info">
+
+          <div
+            id="headerName"
+            class="header-name"
+          >
+            Chat
+          </div>
+
+          <div
+            id="headerStatus"
+            class="header-status"
+          >
+            Message
+          </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+          <button
+            class="header-action"
+            type="button"
+            title="Search"
+          >
+            ⌕
+          </button>
+
+          <button
+            class="header-action"
+            type="button"
+            title="More"
+          >
+            ⋯
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <div id="chatMessages"></div>
+
+
+      <div id="chatTyping"></div>
+
+
+      <!-- REPLY -->
+
+      <div id="chatReplyBar">
+
+        <div class="reply-bar-icon">
+          ↩
+        </div>
+
+        <div class="reply-bar-text">
+
+          <div class="reply-bar-title">
+            Replying to message
+          </div>
+
+          <div id="chatReplyContent"></div>
+
         </div>
 
         <button
-          id="chatRefreshBtn"
-          class="chat-new-btn"
+          id="cancelReply"
           type="button"
-          title="Refresh"
-        >↻</button>
+        >
+          ×
+        </button>
 
       </div>
 
-    </div>
 
+      <!-- COMPOSER -->
 
-    <div class="chat-search-wrap">
+      <div class="composer">
 
-      <div class="chat-search-box">
-
-        <span class="chat-search-icon">⌕</span>
-
-        <input
-          id="chatSearch"
-          type="search"
-          placeholder="Search conversations..."
-          autocomplete="off"
+        <label
+          class="composer-btn"
+          title="Send image"
         >
 
-      </div>
+          ＋
 
-    </div>
+          <input
+            id="chatImageInput"
+            type="file"
+            accept="image/*"
+            hidden
+          >
 
-
-    <div id="chatUsers">
-
-      <div class="chat-skeleton">
-        <div class="chat-skeleton-avatar"></div>
-        <div class="chat-skeleton-content">
-          <div class="chat-skeleton-line"></div>
-          <div class="chat-skeleton-line small"></div>
-        </div>
-      </div>
-
-      <div class="chat-skeleton">
-        <div class="chat-skeleton-avatar"></div>
-        <div class="chat-skeleton-content">
-          <div class="chat-skeleton-line"></div>
-          <div class="chat-skeleton-line small"></div>
-        </div>
-      </div>
-
-    </div>
-
-  </section>
+        </label>
 
 
-  <!-- ================= CONVERSATION ================= -->
-
-  <section id="chatConversation">
-
-    <header class="chat-top">
-
-      <button
-        id="chatBackBtn"
-        class="chat-back"
-        type="button"
-        aria-label="Back"
-      >‹</button>
+        <textarea
+          id="chatInput"
+          rows="1"
+          maxlength="2000"
+          placeholder="Message..."
+        ></textarea>
 
 
-      <div class="chat-header-avatar-wrap">
-
-        <img
-          id="chatHeaderAvatar"
-          class="chat-header-avatar"
-          src=""
-          alt=""
+        <button
+          id="sendMessageBtn"
+          type="button"
+          disabled
         >
-
-        <span
-          id="chatHeaderOnline"
-          class="chat-online-dot"
-        ></span>
+          ➤
+        </button>
 
       </div>
 
-
-      <div class="chat-header-info">
-
-        <div
-          id="chatHeaderName"
-          class="chat-header-name"
-        >
-          Chat
-        </div>
-
-        <div
-          id="chatHeaderStatus"
-          class="chat-header-status"
-        >
-          Message
-        </div>
-
-      </div>
-
-
-      <button
-        id="chatHeaderMore"
-        class="chat-header-action"
-        type="button"
-        aria-label="More"
-      >•••</button>
-
-    </header>
-
-
-    <div id="chatMessages"></div>
-
-
-    <div id="chatTyping"></div>
-
-
-    <!-- REPLY -->
-
-    <div id="chatReplyBar">
-
-      <div class="chat-reply-accent"></div>
-
-      <div class="chat-reply-text">
-
-        <div class="chat-reply-title">
-          Replying
-        </div>
-
-        <div id="chatReplyContent"></div>
-
-      </div>
-
-      <button
-        id="cancelReply"
-        type="button"
-      >×</button>
-
-    </div>
-
-
-    <!-- COMPOSER -->
-
-    <div class="chat-composer">
-
-      <label
-        class="chat-icon-btn"
-        title="Send photo"
-      >
-        ＋
-
-        <input
-          id="chatImageInput"
-          type="file"
-          accept="image/*"
-          hidden
-        >
-
-      </label>
-
-
-      <textarea
-        id="chatInput"
-        rows="1"
-        maxlength="2000"
-        placeholder="Message..."
-      ></textarea>
-
-
-      <button
-        id="sendMessageBtn"
-        type="button"
-        disabled
-        aria-label="Send"
-      >➤</button>
-
-    </div>
-
-  </section>
-
-
-  <!-- ================= REACTION MENU ================= -->
-
-  <div id="reactionMenu">
-
-    <button
-      class="reaction-choice"
-      data-reaction="❤️"
-    >❤️</button>
-
-    <button
-      class="reaction-choice"
-      data-reaction="😂"
-    >😂</button>
-
-    <button
-      class="reaction-choice"
-      data-reaction="😍"
-    >😍</button>
-
-    <button
-      class="reaction-choice"
-      data-reaction="😮"
-    >😮</button>
-
-    <button
-      class="reaction-choice"
-      data-reaction="👍"
-    >👍</button>
+    </main>
 
   </div>
-
-
-  <!-- ================= ACTION SHEET ================= -->
-
-  <div id="chatActionOverlay">
-
-    <div class="chat-action-sheet">
-
-      <div class="chat-action-handle"></div>
-
-      <button
-        class="chat-action-btn"
-        data-chat-action="reply"
-      >
-        ↩️ &nbsp; Reply
-      </button>
-
-      <button
-        class="chat-action-btn"
-        data-chat-action="react"
-      >
-        ❤️ &nbsp; React
-      </button>
-
-      <button
-        class="chat-action-btn danger"
-        data-chat-action="delete"
-        style="display:none"
-      >
-        🗑️ &nbsp; Delete message
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div id="chatToast"></div>
 
 </div>
 
 
 <!-- =========================================================
-     CHAT ENGINE
+     REACTION MENU
 ========================================================= -->
 
+<div id="reactionMenu">
+
+  <button
+    class="reaction-choice"
+    data-reaction="❤️"
+  >
+    ❤️
+  </button>
+
+  <button
+    class="reaction-choice"
+    data-reaction="😂"
+  >
+    😂
+  </button>
+
+  <button
+    class="reaction-choice"
+    data-reaction="😍"
+  >
+    😍
+  </button>
+
+  <button
+    class="reaction-choice"
+    data-reaction="😮"
+  >
+    😮
+  </button>
+
+  <button
+    class="reaction-choice"
+    data-reaction="👍"
+  >
+    👍
+  </button>
+
+</div>
+
+
+<!-- =========================================================
+     ACTION SHEET
+========================================================= -->
+
+<div id="actionOverlay">
+
+  <div class="action-sheet">
+
+    <div class="action-handle"></div>
+
+    <button
+      id="actionReply"
+      class="action-btn"
+      type="button"
+    >
+      ↩ &nbsp; Reply
+    </button>
+
+    <button
+      id="actionReact"
+      class="action-btn"
+      type="button"
+    >
+      ❤️ &nbsp; React
+    </button>
+
+    <button
+      id="actionDelete"
+      class="action-btn danger"
+      type="button"
+      style="display:none"
+    >
+      🗑 &nbsp; Delete message
+    </button>
+
+    <button
+      id="actionCancel"
+      class="action-btn"
+      type="button"
+    >
+      Cancel
+    </button>
+
+  </div>
+
+</div>
+
+
+<div id="toast"></div>
+
+
 <script>
-(function () {
+/* =========================================================
+   POLL PULSE CHAT
+========================================================= */
+
+(() => {
 
   "use strict";
 
+
   /* =======================================================
-     SUPABASE CLIENT
+     SUPABASE
   ======================================================= */
 
-  if (typeof supabase === "undefined") {
-    console.error("Poll Pulse Chat: Supabase library not found.");
+  if (
+    typeof window.supabase === "undefined"
+  ) {
+
+    document.body.innerHTML = `
+      <div style="
+        padding:40px;
+        font-family:system-ui;
+        text-align:center;
+      ">
+        <h2>Supabase failed to load</h2>
+        <p>Please check your internet connection.</p>
+      </div>
+    `;
+
     return;
+
   }
 
-  const chatSB =
+
+  const SUPABASE_URL =
+    "https://dbpbkvfaxgifjeveijqf.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
+
+
+  /*
+    If another part of your app already exposes a client,
+    use it.
+  */
+
+  const sb =
     window.sb ||
     window.supabaseClient ||
-    supabase.createClient(
-      "https://dbpbkvfaxgifjeveijqf.supabase.co",
-      "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7"
+    window.pollPulseSupabase ||
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
     );
 
 
@@ -1290,34 +1369,33 @@
      STATE
   ======================================================= */
 
-  let chatCurrentUser = null;
-  let chatTargetUser = null;
+  let currentUser = null;
+  let targetUser = null;
 
-  let chatMessages = [];
-  let chatProfileCache = {};
+  let messages = [];
 
-  let chatReplyTo = null;
-  let chatReactionMessage = null;
-  let chatActionMessage = null;
+  let profiles = {};
 
-  let chatChannel = null;
-  let inboxChannel = null;
+  let replyMessage = null;
+
+  let selectedMessage = null;
+
+  let conversationChannel = null;
 
   let typingTimeout = null;
-  let presenceTimer = null;
-  let inboxTimer = null;
 
-  let searchText = "";
-  let inboxRows = [];
+  let presenceInterval = null;
 
+  let searchValue = "";
+
+
+  /* =======================================================
+     HELPERS
+  ======================================================= */
 
   const $ = id =>
     document.getElementById(id);
 
-
-  /* =======================================================
-     UTILITIES
-  ======================================================= */
 
   function escapeHTML(value) {
 
@@ -1331,102 +1409,12 @@
   }
 
 
-  function timeText(date) {
-
-    if (!date) return "";
-
-    return new Date(date).toLocaleTimeString([], {
-      hour: "numeric",
-      minute: "2-digit"
-    });
-
-  }
-
-
-  function dateText(date) {
-
-    if (!date) return "";
-
-    const d = new Date(date);
-    const now = new Date();
-
-    const startToday =
-      new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-      );
-
-    const startDate =
-      new Date(
-        d.getFullYear(),
-        d.getMonth(),
-        d.getDate()
-      );
-
-    const diff =
-      Math.round(
-        (startToday - startDate) / 86400000
-      );
-
-    if (diff === 0) return "Today";
-    if (diff === 1) return "Yesterday";
-
-    return d.toLocaleDateString([], {
-      day: "numeric",
-      month: "short",
-      year:
-        d.getFullYear() !== now.getFullYear()
-          ? "numeric"
-          : undefined
-    });
-
-  }
-
-
-  function avatarURL(profile) {
-
-    if (profile?.avatar_url) {
-      return profile.avatar_url;
-    }
-
-    return "data:image/svg+xml;charset=UTF-8," +
-      encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="100"
-             height="100"
-             viewBox="0 0 100 100">
-          <rect width="100" height="100" rx="50"
-                fill="#eeeeee"/>
-          <circle cx="50" cy="38" r="18"
-                  fill="#aaaaaa"/>
-          <path
-            d="M20 88c4-22 17-31 30-31s26 9 30 31"
-            fill="#aaaaaa"/>
-        </svg>
-      `);
-
-  }
-
-
-  function displayName(profile) {
-
-    return (
-      profile?.display_name ||
-      profile?.username ||
-      "User"
-    );
-
-  }
-
-
   function showToast(message) {
 
-    const toast = $("chatToast");
-
-    if (!toast) return;
+    const toast = $("toast");
 
     toast.textContent = message;
+
     toast.classList.add("show");
 
     clearTimeout(showToast.timer);
@@ -1439,65 +1427,169 @@
   }
 
 
-  function scrollMessages(force = false) {
+  function fallbackAvatar() {
 
-    const box = $("chatMessages");
+    return "data:image/svg+xml;charset=UTF-8," +
+      encodeURIComponent(`
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100"
+          height="100"
+          viewBox="0 0 100 100"
+        >
+          <rect
+            width="100"
+            height="100"
+            fill="#e9ebf0"
+          />
 
-    if (!box) return;
+          <circle
+            cx="50"
+            cy="37"
+            r="18"
+            fill="#a8acb7"
+          />
 
-    if (force) {
-      requestAnimationFrame(() => {
-        box.scrollTop = box.scrollHeight;
+          <path
+            d="M19 90c4-23 18-34 31-34s27 11 31 34"
+            fill="#a8acb7"
+          />
+        </svg>
+      `);
+
+  }
+
+
+  function avatarURL(profile) {
+
+    return profile?.avatar_url ||
+      fallbackAvatar();
+
+  }
+
+
+  function nameOf(profile) {
+
+    return (
+      profile?.display_name ||
+      profile?.username ||
+      "User"
+    );
+
+  }
+
+
+  function formatTime(date) {
+
+    if (!date) return "";
+
+    return new Date(date)
+      .toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
       });
-      return;
-    }
 
-    const distance =
-      box.scrollHeight -
-      box.scrollTop -
-      box.clientHeight;
+  }
 
-    if (distance < 220) {
-      requestAnimationFrame(() => {
-        box.scrollTop = box.scrollHeight;
-      });
-    }
+
+  function formatDate(date) {
+
+    const d = new Date(date);
+    const now = new Date();
+
+    const today =
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+      );
+
+    const msgDay =
+      new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getDate()
+      );
+
+    const diff =
+      Math.round(
+        (today - msgDay) / 86400000
+      );
+
+    if (diff === 0)
+      return "Today";
+
+    if (diff === 1)
+      return "Yesterday";
+
+    return d.toLocaleDateString([], {
+      day: "numeric",
+      month: "short",
+      year:
+        d.getFullYear() ===
+        now.getFullYear()
+          ? undefined
+          : "numeric"
+    });
+
+  }
+
+
+  function scrollBottom() {
+
+    const box =
+      $("chatMessages");
+
+    requestAnimationFrame(() => {
+
+      box.scrollTop =
+        box.scrollHeight;
+
+    });
 
   }
 
 
   /* =======================================================
-     USER / PROFILE
+     AUTH
   ======================================================= */
 
-  async function getCurrentUser() {
+  async function getUser() {
 
     const {
       data,
       error
-    } = await chatSB.auth.getUser();
+    } = await sb.auth.getUser();
 
-    if (error || !data?.user) {
+    if (error) {
+
+      console.error(error);
+
       return null;
+
     }
 
-    return data.user;
+    return data?.user || null;
 
   }
 
+
+  /* =======================================================
+     PROFILE
+  ======================================================= */
 
   async function getProfile(id) {
 
     if (!id) return null;
 
-    if (chatProfileCache[id]) {
-      return chatProfileCache[id];
-    }
+    if (profiles[id])
+      return profiles[id];
+
 
     const {
       data,
       error
-    } = await chatSB
+    } = await sb
       .from("profiles")
       .select(
         "id,username,display_name,avatar_url"
@@ -1505,11 +1597,24 @@
       .eq("id", id)
       .maybeSingle();
 
-    if (!error && data) {
-      chatProfileCache[id] = data;
+
+    if (error) {
+
+      console.warn(
+        "Profile error:",
+        error
+      );
+
+      return null;
+
     }
 
-    return data || null;
+
+    if (data)
+      profiles[id] = data;
+
+
+    return data;
 
   }
 
@@ -1520,106 +1625,92 @@
 
   async function openChat(userId) {
 
-    chatCurrentUser =
-      chatCurrentUser ||
-      await getCurrentUser();
+    if (!currentUser) {
 
-    if (!chatCurrentUser) {
-
-      showToast("Please login first.");
+      showToast(
+        "Please login first"
+      );
 
       return;
 
     }
 
+
     if (
       !userId ||
-      userId === chatCurrentUser.id
+      userId === currentUser.id
     ) {
       return;
     }
 
-    chatTargetUser =
+
+    const profile =
       await getProfile(userId);
 
-    if (!chatTargetUser) {
 
-      showToast("User profile not found.");
+    if (!profile) {
+
+      showToast(
+        "Profile not found"
+      );
 
       return;
 
     }
 
 
-    $("chatPage")
-      .classList.add("active");
+    targetUser = profile;
 
-    $("chatInbox")
+
+    $("welcomePanel")
       .style.display = "none";
 
-    $("chatConversation")
-      .classList.add("active");
+
+    $("conversation")
+      .classList.add("mobile-open");
 
 
-    $("chatHeaderAvatar").src =
-      avatarURL(chatTargetUser);
-
-    $("chatHeaderName").textContent =
-      displayName(chatTargetUser);
-
-    $("chatHeaderStatus").textContent =
-      "Loading...";
+    $("headerAvatar").src =
+      avatarURL(profile);
 
 
-    cancelReply();
-    hideReactionMenu();
-    hideActionSheet();
+    $("headerName").textContent =
+      nameOf(profile);
 
 
     await loadConversation();
 
-    subscribeConversation();
-
     updateOnlineStatus();
 
+    subscribeConversation();
+
   }
 
 
-  function closeChatConversation() {
+  function closeChat() {
 
-    destroyConversationChannel();
+    targetUser = null;
 
-    chatTargetUser = null;
-    chatMessages = [];
+    if (conversationChannel) {
 
-    $("chatConversation")
-      .classList.remove("active");
+      sb.removeChannel(
+        conversationChannel
+      );
 
-    $("chatInbox")
-      .style.display = "flex";
+      conversationChannel = null;
+
+    }
+
+
+    $("conversation")
+      .classList.remove("mobile-open");
+
+
+    $("welcomePanel")
+      .style.display = "";
+
 
     loadInbox();
-
-  }
-
-
-  function closeChatPage() {
-
-    destroyConversationChannel();
-
-    $("chatPage")
-      .classList.remove("active");
-
-    $("chatInbox")
-      .style.display = "flex";
-
-    $("chatConversation")
-      .classList.remove("active");
-
-    chatTargetUser = null;
-
-    hideReactionMenu();
-    hideActionSheet();
 
   }
 
@@ -1630,17 +1721,21 @@
 
   async function loadInbox() {
 
-    chatCurrentUser =
-      chatCurrentUser ||
-      await getCurrentUser();
+    if (!currentUser)
+      return;
 
-    if (!chatCurrentUser) return;
+
+    $("chatUsers").innerHTML = `
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    `;
 
 
     const {
-      data: messages,
+      data,
       error
-    } = await chatSB
+    } = await sb
       .from("messages")
       .select(`
         id,
@@ -1653,29 +1748,27 @@
         deleted_at
       `)
       .or(
-        `sender_id.eq.${chatCurrentUser.id},receiver_id.eq.${chatCurrentUser.id}`
+        `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
       )
-      .order("created_at", {
-        ascending: false
-      })
+      .order(
+        "created_at",
+        { ascending: false }
+      )
       .limit(500);
 
 
     if (error) {
 
-      console.error(
-        "Inbox error:",
-        error
-      );
+      console.error(error);
 
       $("chatUsers").innerHTML = `
-        <div class="chat-empty">
-          <div class="chat-empty-icon">⚠️</div>
-          <div class="chat-empty-title">
+        <div class="empty">
+          <div class="empty-icon">!</div>
+          <div class="empty-title">
             Couldn't load messages
           </div>
-          <div class="chat-empty-text">
-            Please try again.
+          <div class="empty-text">
+            Check your messages table and RLS policies.
           </div>
         </div>
       `;
@@ -1686,18 +1779,22 @@
 
 
     const conversations = {};
-    const partnerIds = new Set();
+
+    const partnerIds =
+      new Set();
 
 
-    (messages || []).forEach(message => {
+    (data || []).forEach(message => {
 
       const partner =
-        message.sender_id ===
-        chatCurrentUser.id
+        message.sender_id === currentUser.id
           ? message.receiver_id
           : message.sender_id;
 
-      if (!partner) return;
+
+      if (!partner)
+        return;
+
 
       partnerIds.add(partner);
 
@@ -1714,8 +1811,8 @@
 
       if (
         message.receiver_id ===
-        chatCurrentUser.id &&
-        message.read === false
+          currentUser.id &&
+        !message.read
       ) {
 
         conversations[partner].unread++;
@@ -1725,42 +1822,41 @@
     });
 
 
-    /* Include followers/following */
+    /* Add people from follows */
 
     try {
 
       const {
         data: follows
-      } = await chatSB
+      } = await sb
         .from("follows")
         .select(
           "follower_id,following_id"
         )
         .or(
-          `follower_id.eq.${chatCurrentUser.id},following_id.eq.${chatCurrentUser.id}`
+          `follower_id.eq.${currentUser.id},following_id.eq.${currentUser.id}`
         )
         .limit(200);
 
 
-      (follows || []).forEach(follow => {
+      (follows || [])
+        .forEach(f => {
 
-        const id =
-          follow.follower_id ===
-          chatCurrentUser.id
-            ? follow.following_id
-            : follow.follower_id;
+          const id =
+            f.follower_id === currentUser.id
+              ? f.following_id
+              : f.follower_id;
 
-        if (id) {
-          partnerIds.add(id);
-        }
+          if (id)
+            partnerIds.add(id);
 
-      });
+        });
 
-    } catch (error) {
+    } catch (e) {
 
       console.warn(
-        "Follow lookup skipped:",
-        error
+        "Could not load follows",
+        e
       );
 
     }
@@ -1768,7 +1864,19 @@
 
     if (!partnerIds.size) {
 
-      renderInbox([]);
+      $("chatUsers").innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">💬</div>
+
+          <div class="empty-title">
+            No conversations yet
+          </div>
+
+          <div class="empty-text">
+            Follow people and start a conversation.
+          </div>
+        </div>
+      `;
 
       return;
 
@@ -1780,8 +1888,9 @@
 
 
     const {
-      data: profiles
-    } = await chatSB
+      data: people,
+      error: profileError
+    } = await sb
       .from("profiles")
       .select(
         "id,username,display_name,avatar_url"
@@ -1789,112 +1898,120 @@
       .in("id", ids);
 
 
-    (profiles || []).forEach(profile => {
+    if (profileError) {
 
-      chatProfileCache[profile.id] =
-        profile;
+      console.error(
+        profileError
+      );
 
-    });
+    }
 
 
-    inboxRows =
-      ids
-        .map(id => {
+    (people || [])
+      .forEach(profile => {
 
-          const profile =
-            chatProfileCache[id];
+        profiles[profile.id] =
+          profile;
 
-          if (!profile) return null;
+      });
 
-          return {
-            id,
-            profile,
-            conversation:
-              conversations[id] || null
-          };
 
-        })
-        .filter(Boolean)
-        .sort((a, b) => {
+    let rows =
+      ids.map(id => ({
 
-          const dateA =
-            a.conversation?.latest?.created_at;
+        id,
 
-          const dateB =
-            b.conversation?.latest?.created_at;
+        profile:
+          profiles[id],
 
-          if (!dateA && !dateB) return 0;
-          if (!dateA) return 1;
-          if (!dateB) return -1;
+        conversation:
+          conversations[id]
+
+      }))
+      .filter(row => row.profile);
+
+
+    /* Search */
+
+    if (searchValue) {
+
+      const q =
+        searchValue.toLowerCase();
+
+
+      rows =
+        rows.filter(row => {
+
+          const p =
+            row.profile;
+
+          const latest =
+            row.conversation?.latest;
+
 
           return (
-            new Date(dateB) -
-            new Date(dateA)
+            nameOf(p)
+              .toLowerCase()
+              .includes(q) ||
+
+            String(
+              p.username || ""
+            )
+              .toLowerCase()
+              .includes(q) ||
+
+            String(
+              latest?.message || ""
+            )
+              .toLowerCase()
+              .includes(q)
           );
 
         });
 
+    }
 
-    renderInbox(inboxRows);
+
+    /* Latest first */
+
+    rows.sort((a, b) => {
+
+      const da =
+        a.conversation?.latest?.created_at ||
+        0;
+
+      const db =
+        b.conversation?.latest?.created_at ||
+        0;
+
+      return (
+        new Date(db) -
+        new Date(da)
+      );
+
+    });
+
+
+    renderInbox(rows);
 
   }
 
 
   function renderInbox(rows) {
 
-    const filtered =
-      rows.filter(row => {
-
-        if (!searchText) {
-          return true;
-        }
-
-        const p = row.profile;
-
-        const latest =
-          row.conversation?.latest;
-
-        const search =
-          (
-            displayName(p) +
-            " " +
-            (p.username || "") +
-            " " +
-            (latest?.message || "")
-          ).toLowerCase();
-
-        return search.includes(
-          searchText.toLowerCase()
-        );
-
-      });
-
-
-    if (!filtered.length) {
+    if (!rows.length) {
 
       $("chatUsers").innerHTML = `
-        <div class="chat-empty">
+        <div class="empty">
+          <div class="empty-icon">⌕</div>
 
-          <div class="chat-empty-icon">
-            ${searchText ? "⌕" : "💬"}
+          <div class="empty-title">
+            No results
           </div>
 
-          <div class="chat-empty-title">
-            ${
-              searchText
-                ? "No users found"
-                : "No conversations yet"
-            }
+          <div class="empty-text">
+            Try another name or username.
           </div>
-
-          <div class="chat-empty-text">
-            ${
-              searchText
-                ? "Try another name or username."
-                : "Follow someone and start a conversation."
-            }
-          </div>
-
         </div>
       `;
 
@@ -1904,14 +2021,21 @@
 
 
     $("chatUsers").innerHTML =
-      filtered.map(row => {
+      rows.map(row => {
 
-        const p = row.profile;
+        const profile =
+          row.profile;
+
         const latest =
           row.conversation?.latest;
 
+        const unread =
+          row.conversation?.unread || 0;
+
+
         let preview =
           "Start a conversation";
+
 
         if (latest) {
 
@@ -1920,14 +2044,19 @@
             preview =
               "Message deleted";
 
-          } else if (
-            latest.message_type === "image"
+          }
+
+          else if (
+            latest.message_type ===
+            "image"
           ) {
 
             preview =
               "📷 Photo";
 
-          } else {
+          }
+
+          else {
 
             preview =
               latest.message ||
@@ -1938,21 +2067,17 @@
         }
 
 
-        const unread =
-          row.conversation?.unread || 0;
-
-
         return `
           <div
             class="chat-user-row"
             data-user-id="${escapeHTML(row.id)}"
           >
 
-            <div class="chat-avatar-wrap">
+            <div class="avatar-wrap">
 
               <img
-                class="chat-avatar"
-                src="${avatarURL(p)}"
+                class="avatar"
+                src="${avatarURL(profile)}"
                 alt=""
               >
 
@@ -1963,16 +2088,18 @@
 
               <div class="chat-row-top">
 
-                <span class="chat-row-name">
-                  ${escapeHTML(displayName(p))}
-                </span>
+                <div class="chat-row-name">
+                  ${escapeHTML(nameOf(profile))}
+                </div>
 
                 ${
                   latest
                     ? `
-                      <span class="chat-row-time">
-                        ${timeText(latest.created_at)}
-                      </span>
+                      <div class="chat-row-time">
+                        ${formatTime(
+                          latest.created_at
+                        )}
+                      </div>
                     `
                     : ""
                 }
@@ -1982,20 +2109,20 @@
 
               <div class="chat-row-bottom">
 
-                <span class="chat-last-message">
+                <div class="chat-last-message">
                   ${escapeHTML(preview)}
-                </span>
+                </div>
 
                 ${
                   unread
                     ? `
-                      <span class="chat-unread">
+                      <div class="unread">
                         ${
                           unread > 99
                             ? "99+"
                             : unread
                         }
-                      </span>
+                      </div>
                     `
                     : ""
                 }
@@ -2017,9 +2144,11 @@
         row.addEventListener(
           "click",
           () => {
+
             openChat(
               row.dataset.userId
             );
+
           }
         );
 
@@ -2029,22 +2158,22 @@
 
 
   /* =======================================================
-     CONVERSATION
+     LOAD CONVERSATION
   ======================================================= */
 
   async function loadConversation() {
 
     if (
-      !chatTargetUser ||
-      !chatCurrentUser
+      !currentUser ||
+      !targetUser
     ) {
       return;
     }
 
 
     $("chatMessages").innerHTML = `
-      <div class="chat-empty">
-        Loading messages...
+      <div class="empty">
+        Loading conversation...
       </div>
     `;
 
@@ -2052,7 +2181,7 @@
     const {
       data,
       error
-    } = await chatSB
+    } = await sb
       .from("messages")
       .select(`
         id,
@@ -2069,36 +2198,30 @@
         created_at
       `)
       .or(
-        `and(sender_id.eq.${chatCurrentUser.id},receiver_id.eq.${chatTargetUser.id}),and(sender_id.eq.${chatTargetUser.id},receiver_id.eq.${chatCurrentUser.id})`
+        `and(sender_id.eq.${currentUser.id},receiver_id.eq.${targetUser.id}),and(sender_id.eq.${targetUser.id},receiver_id.eq.${currentUser.id})`
       )
-      .order("created_at", {
-        ascending: true
-      })
+      .order(
+        "created_at",
+        { ascending: true }
+      )
       .limit(500);
 
 
     if (error) {
 
-      console.error(
-        "Conversation error:",
-        error
-      );
+      console.error(error);
 
       $("chatMessages").innerHTML = `
-        <div class="chat-empty">
+        <div class="empty">
+          <div class="empty-icon">!</div>
 
-          <div class="chat-empty-icon">
-            ⚠️
-          </div>
-
-          <div class="chat-empty-title">
+          <div class="empty-title">
             Couldn't load chat
           </div>
 
-          <div class="chat-empty-text">
-            Check your Supabase permissions.
+          <div class="empty-text">
+            ${escapeHTML(error.message)}
           </div>
-
         </div>
       `;
 
@@ -2107,7 +2230,7 @@
     }
 
 
-    chatMessages =
+    messages =
       data || [];
 
 
@@ -2128,25 +2251,20 @@
       $("chatMessages");
 
 
-    if (!chatMessages.length) {
+    if (!messages.length) {
 
       box.innerHTML = `
-        <div class="chat-empty">
+        <div class="empty">
+          <div class="empty-icon">👋</div>
 
-          <div class="chat-empty-icon">
-            👋
+          <div class="empty-title">
+            Say hello
           </div>
 
-          <div class="chat-empty-title">
-            Start the conversation
+          <div class="empty-text">
+            Start the conversation with
+            ${escapeHTML(nameOf(targetUser))}.
           </div>
-
-          <div class="chat-empty-text">
-            Send a message to ${escapeHTML(
-              displayName(chatTargetUser)
-            )}.
-          </div>
-
         </div>
       `;
 
@@ -2157,132 +2275,94 @@
 
     const messageMap = {};
 
-    chatMessages.forEach(message => {
+    messages.forEach(m => {
+
       messageMap[
-        String(message.id)
-      ] = message;
+        String(m.id)
+      ] = m;
+
     });
 
 
-    box.innerHTML = "";
+    let html = "";
 
-    let previousDate = "";
-
-
-    for (
-      const message of chatMessages
-    ) {
-
-      const currentDate =
-        dateText(message.created_at);
+    let lastDate = "";
 
 
-      if (
-        currentDate !==
-        previousDate
-      ) {
+    messages.forEach(message => {
 
-        const day =
-          document.createElement("div");
+      const date =
+        formatDate(
+          message.created_at
+        );
 
-        day.className =
-          "chat-day";
 
-        day.textContent =
-          currentDate;
+      if (date !== lastDate) {
 
-        box.appendChild(day);
+        html += `
+          <div class="day-divider">
+            ${escapeHTML(date)}
+          </div>
+        `;
 
-        previousDate =
-          currentDate;
+        lastDate = date;
 
       }
 
 
       const mine =
         message.sender_id ===
-        chatCurrentUser.id;
+        currentUser.id;
 
 
-      const line =
-        document.createElement("div");
-
-      line.className =
-        "chat-message-line " +
-        (
-          mine
-            ? "mine"
-            : "theirs"
-        );
+      let content = "";
 
 
-      const bubble =
-        document.createElement("div");
-
-      bubble.className =
-        "chat-bubble";
-
-      bubble.dataset.messageId =
-        message.id;
-
-
-      /* ================= REPLY PREVIEW ================= */
+      /* Reply preview */
 
       if (message.reply_to) {
 
-        const replied =
+        const original =
           messageMap[
             String(message.reply_to)
           ];
 
 
-        if (replied) {
+        if (original) {
 
-          let replyText =
-            replied.message ||
-            "Photo";
-
-
-          if (
-            replied.message_type ===
-            "image"
-          ) {
-            replyText = "📷 Photo";
-          }
+          const replyText =
+            original.message_type === "image"
+              ? "📷 Photo"
+              : (
+                  original.message ||
+                  "Message"
+                );
 
 
-          const reply =
-            document.createElement("div");
-
-          reply.className =
-            "chat-reply-preview";
-
-          reply.textContent =
-            replyText.length > 100
-              ? replyText.slice(0, 100) + "..."
-              : replyText;
-
-          bubble.appendChild(reply);
+          content += `
+            <div class="reply-preview">
+              ${escapeHTML(
+                replyText.length > 90
+                  ? replyText.slice(0, 90) + "..."
+                  : replyText
+              )}
+            </div>
+          `;
 
         }
 
       }
 
 
-      /* ================= CONTENT ================= */
+      /* Message content */
 
       if (message.deleted_at) {
 
-        const deleted =
-          document.createElement("div");
-
-        deleted.className =
-          "chat-deleted";
-
-        deleted.textContent =
-          "Message deleted";
-
-        bubble.appendChild(deleted);
+        content += `
+          <div class="deleted">
+            Message deleted
+          </div>
+        `;
 
       }
 
@@ -2292,76 +2372,40 @@
         message.media_url
       ) {
 
-        const image =
-          document.createElement("img");
-
-        image.className =
-          "chat-photo";
-
-        image.alt =
-          "Photo";
-
-        image.dataset.mediaPath =
-          message.media_url;
-
-        if (
+        const src =
           message.media_url
             .startsWith("http")
-        ) {
-
-          image.src =
-            message.media_url;
-
-        }
+            ? message.media_url
+            : "";
 
 
-        image.addEventListener(
-          "click",
-          () => {
-
-            if (image.src) {
-              window.open(
-                image.src,
-                "_blank"
-              );
-            }
-
-          }
-        );
-
-
-        bubble.appendChild(image);
+        content += `
+          <img
+            class="photo"
+            data-media-path="${escapeHTML(
+              message.media_url
+            )}"
+            src="${src}"
+            alt="Photo"
+          >
+        `;
 
       }
 
       else {
 
-        const text =
-          document.createElement("div");
-
-        text.className =
-          "chat-text";
-
-        text.innerHTML =
-          escapeHTML(
-            message.message
-          ).replace(
-            /\n/g,
-            "<br>"
-          );
-
-        bubble.appendChild(text);
+        content += `
+          <div>
+            ${escapeHTML(
+              message.message || ""
+            ).replace(
+              /\n/g,
+              "<br>"
+            )}
+          </div>
+        `;
 
       }
-
-
-      /* ================= META ================= */
-
-      const meta =
-        document.createElement("div");
-
-      meta.className =
-        "chat-meta";
 
 
       let status = "";
@@ -2372,131 +2416,188 @@
         if (message.read) {
 
           status =
-            '<span class="chat-status-read">✓✓</span>';
+            `<span class="read-status">✓✓</span>`;
 
         }
 
-        else if (
-          message.delivered_at
-        ) {
+        else if (message.delivered_at) {
 
-          status = "✓✓";
+          status =
+            `<span>✓✓</span>`;
 
         }
 
         else {
 
-          status = "✓";
+          status =
+            `<span>✓</span>`;
 
         }
 
       }
 
 
-      meta.innerHTML = `
-        <span>
-          ${timeText(message.created_at)}
-        </span>
+      html += `
+        <div
+          class="message-line ${
+            mine ? "mine" : "theirs"
+          }"
+          data-message-id="${escapeHTML(
+            String(message.id)
+          )}"
+        >
 
-        ${
-          mine
-            ? `<span>${status}</span>`
-            : ""
-        }
+          <div class="message-stack">
+
+            <div
+              class="bubble"
+              data-id="${escapeHTML(
+                String(message.id)
+              )}"
+            >
+
+              ${content}
+
+            </div>
+
+
+            <div class="message-meta">
+
+              <span>
+                ${formatTime(
+                  message.created_at
+                )}
+              </span>
+
+              ${status}
+
+            </div>
+
+
+            <div
+              class="reactions"
+              data-reactions-for="${escapeHTML(
+                String(message.id)
+              )}"
+            ></div>
+
+          </div>
+
+        </div>
       `;
 
-
-      bubble.appendChild(meta);
-
-
-      /* ================= ACTIONS ================= */
-
-      let pressTimer = null;
+    });
 
 
-      bubble.addEventListener(
-        "contextmenu",
-        event => {
+    box.innerHTML = html;
 
-          event.preventDefault();
 
-          showActionSheet(
-            message
+    /* Add interactions */
+
+    box
+      .querySelectorAll(".bubble")
+      .forEach(bubble => {
+
+        const id =
+          bubble.dataset.id;
+
+
+        const message =
+          messages.find(
+            m =>
+              String(m.id) ===
+              String(id)
           );
 
-        }
-      );
+
+        if (!message)
+          return;
 
 
-      bubble.addEventListener(
-        "touchstart",
-        event => {
+        /* Desktop right click */
 
-          pressTimer =
-            setTimeout(() => {
+        bubble.addEventListener(
+          "contextmenu",
+          e => {
 
-              showActionSheet(
-                message
-              );
+            e.preventDefault();
 
-            }, 500);
+            openActionSheet(
+              message
+            );
 
-        },
-        {
-          passive: true
-        }
-      );
+          }
+        );
 
 
-      bubble.addEventListener(
-        "touchend",
-        () => {
+        /* Mobile long press */
 
-          clearTimeout(
-            pressTimer
-          );
-
-        }
-      );
+        let timer = null;
 
 
-      bubble.addEventListener(
-        "touchmove",
-        () => {
+        bubble.addEventListener(
+          "touchstart",
+          e => {
 
-          clearTimeout(
-            pressTimer
-          );
+            timer =
+              setTimeout(() => {
 
-        }
-      );
+                const touch =
+                  e.touches[0];
 
 
-      line.appendChild(bubble);
+                openActionSheet(
+                  message
+                );
 
-      box.appendChild(line);
+              }, 500);
 
-    }
+          },
+          { passive: true }
+        );
+
+
+        bubble.addEventListener(
+          "touchend",
+          () => {
+
+            clearTimeout(timer);
+
+          }
+        );
+
+
+        bubble.addEventListener(
+          "touchmove",
+          () => {
+
+            clearTimeout(timer);
+
+          },
+          { passive: true }
+        );
+
+      });
 
 
     await hydrateImages();
 
-    await renderAllReactions();
+    await loadAllReactions();
 
-    scrollMessages(true);
+    scrollBottom();
 
   }
 
 
   /* =======================================================
-     IMAGE HYDRATION
+     IMAGE URL
   ======================================================= */
 
   async function hydrateImages() {
 
     const images =
       document.querySelectorAll(
-        "#chatMessages img[data-media-path]"
+        "img[data-media-path]"
       );
 
 
@@ -2521,7 +2622,7 @@
         const {
           data,
           error
-        } = await chatSB.storage
+        } = await sb.storage
           .from("chat-media")
           .createSignedUrl(
             path,
@@ -2539,11 +2640,11 @@
 
         }
 
-      } catch (error) {
+      } catch (e) {
 
         console.warn(
-          "Image hydration failed:",
-          error
+          "Image URL error",
+          e
         );
 
       }
@@ -2557,138 +2658,127 @@
      REACTIONS
   ======================================================= */
 
-  async function renderAllReactions() {
-
-    if (!chatMessages.length) {
-      return;
-    }
-
+  async function loadAllReactions() {
 
     const ids =
-      chatMessages.map(
-        message =>
-          String(message.id)
+      messages.map(
+        m => String(m.id)
       );
 
 
-    let data = null;
+    if (!ids.length)
+      return;
 
 
     try {
 
-      const result =
-        await chatSB
-          .from("message_reactions")
-          .select(
-            "message_id,reaction,user_id"
-          )
-          .in(
-            "message_id",
-            ids
-          );
-
-      data =
-        result.data || [];
-
-    } catch (error) {
-
-      return;
-
-    }
+      const {
+        data,
+        error
+      } = await sb
+        .from("message_reactions")
+        .select(
+          "message_id,reaction,user_id"
+        )
+        .in(
+          "message_id",
+          ids
+        );
 
 
-    if (!data.length) {
-      return;
-    }
+      if (error) {
 
+        /*
+          Reaction table may not exist yet.
+          Chat still works without it.
+        */
 
-    const grouped = {};
+        console.warn(
+          "Reactions unavailable:",
+          error.message
+        );
 
+        return;
 
-    data.forEach(row => {
-
-      const id =
-        String(row.message_id);
-
-      if (!grouped[id]) {
-        grouped[id] = {};
       }
 
-      grouped[id][row.reaction] =
-        (
-          grouped[id][row.reaction] ||
-          0
-        ) + 1;
 
-    });
+      const grouped = {};
 
 
-    Object.entries(grouped)
-      .forEach(([messageId, reactions]) => {
+      (data || []).forEach(row => {
 
-        const bubble =
-          document.querySelector(
-            `.chat-bubble[data-message-id="${CSS.escape(messageId)}"]`
-          );
+        const id =
+          String(row.message_id);
 
 
-        if (!bubble) return;
+        if (!grouped[id])
+          grouped[id] = {};
 
 
-        const line =
-          bubble.parentElement;
-
-
-        const wrap =
-          document.createElement("div");
-
-        wrap.className =
-          "chat-reactions";
-
-
-        Object.entries(reactions)
-          .forEach(
-            ([emoji, count]) => {
-
-              const el =
-                document.createElement("span");
-
-              el.className =
-                "chat-reaction";
-
-              el.textContent =
-                emoji +
-                " " +
-                count;
-
-              wrap.appendChild(el);
-
-            }
-          );
-
-
-        line.appendChild(wrap);
+        grouped[id][row.reaction] =
+          (grouped[id][row.reaction] || 0) + 1;
 
       });
+
+
+      Object.entries(grouped)
+        .forEach(
+          ([messageId, reactions]) => {
+
+            const wrap =
+              document.querySelector(
+                `[data-reactions-for="${CSS.escape(
+                  messageId
+                )}"]`
+              );
+
+
+            if (!wrap)
+              return;
+
+
+            wrap.innerHTML =
+              Object.entries(reactions)
+                .map(
+                  ([emoji, count]) => `
+                    <span class="reaction">
+                      ${escapeHTML(emoji)}
+                      ${count}
+                    </span>
+                  `
+                )
+                .join("");
+
+          }
+        );
+
+    } catch (e) {
+
+      console.warn(
+        "Reaction rendering skipped",
+        e
+      );
+
+    }
 
   }
 
 
   async function addReaction(
     messageId,
-    reaction
+    emoji
   ) {
 
-    if (!chatCurrentUser) {
+    if (!currentUser)
       return;
-    }
 
 
     try {
 
       const {
         data: existing
-      } = await chatSB
+      } = await sb
         .from("message_reactions")
         .select(
           "id,reaction"
@@ -2699,18 +2789,17 @@
         )
         .eq(
           "user_id",
-          chatCurrentUser.id
+          currentUser.id
         )
         .maybeSingle();
 
 
       if (
         existing &&
-        existing.reaction ===
-          reaction
+        existing.reaction === emoji
       ) {
 
-        await chatSB
+        await sb
           .from("message_reactions")
           .delete()
           .eq(
@@ -2722,10 +2811,10 @@
 
       else if (existing) {
 
-        await chatSB
+        await sb
           .from("message_reactions")
           .update({
-            reaction
+            reaction: emoji
           })
           .eq(
             "id",
@@ -2736,108 +2825,42 @@
 
       else {
 
-        await chatSB
+        await sb
           .from("message_reactions")
           .insert({
+
             message_id:
               String(messageId),
+
             user_id:
-              chatCurrentUser.id,
-            reaction
+              currentUser.id,
+
+            reaction:
+              emoji
+
           });
 
       }
 
 
       hideReactionMenu();
-      hideActionSheet();
+
+      closeActionSheet();
 
       await loadConversation();
 
-    } catch (error) {
+    } catch (e) {
 
-      console.error(
-        "Reaction error:",
-        error
+      console.warn(
+        "Reaction failed:",
+        e
       );
 
       showToast(
-        "Reactions table/RLS check karo."
+        "Reactions table is not configured"
       );
 
     }
-
-  }
-
-
-  /* =======================================================
-     REACTION MENU
-  ======================================================= */
-
-  function showReactionMenu(
-    message,
-    x,
-    y
-  ) {
-
-    chatReactionMessage =
-      message;
-
-
-    const menu =
-      $("reactionMenu");
-
-
-    menu.classList.add("show");
-
-
-    const width =
-      menu.offsetWidth || 230;
-
-    const height =
-      menu.offsetHeight || 50;
-
-
-    const left =
-      Math.max(
-        8,
-        Math.min(
-          x,
-          window.innerWidth -
-            width -
-            8
-        )
-      );
-
-
-    const top =
-      Math.max(
-        8,
-        Math.min(
-          y - height - 8,
-          window.innerHeight -
-            height -
-            8
-        )
-      );
-
-
-    menu.style.left =
-      left + "px";
-
-    menu.style.top =
-      top + "px";
-
-  }
-
-
-  function hideReactionMenu() {
-
-    $("reactionMenu")
-      .classList.remove("show");
-
-    chatReactionMessage =
-      null;
 
   }
 
@@ -2846,377 +2869,31 @@
      ACTION SHEET
   ======================================================= */
 
-  function showActionSheet(
-    message
-  ) {
+  function openActionSheet(message) {
 
-    chatActionMessage =
+    selectedMessage =
       message;
 
 
-    const deleteButton =
-      document.querySelector(
-        '[data-chat-action="delete"]'
-      );
+    $("actionDelete").style.display =
+      message.sender_id ===
+      currentUser.id
+        ? "block"
+        : "none";
 
 
-    if (deleteButton) {
-
-      deleteButton.style.display =
-        message.sender_id ===
-        chatCurrentUser.id
-          ? "block"
-          : "none";
-
-    }
-
-
-    hideReactionMenu();
-
-
-    $("chatActionOverlay")
+    $("actionOverlay")
       .classList.add("show");
 
   }
 
 
-  function hideActionSheet() {
+  function closeActionSheet() {
 
-    $("chatActionOverlay")
+    $("actionOverlay")
       .classList.remove("show");
 
-    chatActionMessage =
-      null;
-
-  }
-
-
-  /* =======================================================
-     SEND TEXT
-  ======================================================= */
-
-  async function sendMessage() {
-
-    if (
-      !chatCurrentUser ||
-      !chatTargetUser
-    ) {
-      return;
-    }
-
-
-    const input =
-      $("chatInput");
-
-    const text =
-      input.value.trim();
-
-
-    if (!text) {
-      return;
-    }
-
-
-    const button =
-      $("sendMessageBtn");
-
-    button.disabled =
-      true;
-
-
-    try {
-
-      const payload = {
-
-        sender_id:
-          chatCurrentUser.id,
-
-        receiver_id:
-          chatTargetUser.id,
-
-        message:
-          text,
-
-        message_type:
-          "text",
-
-        reply_to:
-          chatReplyTo
-            ? String(
-                chatReplyTo.id
-              )
-            : null
-
-      };
-
-
-      const {
-        error
-      } = await chatSB
-        .from("messages")
-        .insert(payload);
-
-
-      if (error) {
-        throw error;
-      }
-
-
-      input.value = "";
-
-      input.style.height =
-        "auto";
-
-      updateSendButton();
-
-      cancelReply();
-
-      await loadConversation();
-
-
-    } catch (error) {
-
-      console.error(
-        "Send message error:",
-        error
-      );
-
-      showToast(
-        "Message send nahi hua."
-      );
-
-    } finally {
-
-      button.disabled =
-        !input.value.trim();
-
-    }
-
-  }
-
-
-  /* =======================================================
-     SEND IMAGE
-  ======================================================= */
-
-  async function sendImage(file) {
-
-    if (
-      !file ||
-      !chatCurrentUser ||
-      !chatTargetUser
-    ) {
-      return;
-    }
-
-
-    if (
-      !file.type.startsWith(
-        "image/"
-      )
-    ) {
-
-      showToast(
-        "Only images are allowed."
-      );
-
-      return;
-
-    }
-
-
-    if (
-      file.size >
-      8 * 1024 * 1024
-    ) {
-
-      showToast(
-        "Image must be smaller than 8 MB."
-      );
-
-      return;
-
-    }
-
-
-    showToast(
-      "Uploading photo..."
-    );
-
-
-    const safeName =
-      file.name
-        .replace(
-          /[^a-zA-Z0-9._-]/g,
-          "_"
-        );
-
-
-    const randomId =
-      typeof crypto !==
-        "undefined" &&
-      crypto.randomUUID
-        ? crypto.randomUUID()
-        : Date.now();
-
-
-    const path =
-      chatCurrentUser.id +
-      "/" +
-      randomId +
-      "-" +
-      safeName;
-
-
-    try {
-
-      const {
-        error: uploadError
-      } = await chatSB.storage
-        .from("chat-media")
-        .upload(
-          path,
-          file,
-          {
-            contentType:
-              file.type,
-            upsert:
-              false
-          }
-        );
-
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-
-      const {
-        error
-      } = await chatSB
-        .from("messages")
-        .insert({
-
-          sender_id:
-            chatCurrentUser.id,
-
-          receiver_id:
-            chatTargetUser.id,
-
-          message:
-            "📷 Photo",
-
-          message_type:
-            "image",
-
-          media_url:
-            path,
-
-          reply_to:
-            chatReplyTo
-              ? String(
-                  chatReplyTo.id
-                )
-              : null
-
-        });
-
-
-      if (error) {
-        throw error;
-      }
-
-
-      cancelReply();
-
-      await loadConversation();
-
-
-    } catch (error) {
-
-      console.error(
-        "Image send error:",
-        error
-      );
-
-      showToast(
-        "Photo upload failed."
-      );
-
-    }
-
-  }
-
-
-  /* =======================================================
-     READ RECEIPTS
-  ======================================================= */
-
-  async function markMessagesRead() {
-
-    if (
-      !chatCurrentUser ||
-      !chatTargetUser
-    ) {
-      return;
-    }
-
-
-    const unread =
-      chatMessages.filter(
-        message =>
-          message.receiver_id ===
-            chatCurrentUser.id &&
-          message.sender_id ===
-            chatTargetUser.id &&
-          !message.read
-      );
-
-
-    if (!unread.length) {
-      return;
-    }
-
-
-    const ids =
-      unread.map(
-        message =>
-          message.id
-      );
-
-
-    const now =
-      new Date().toISOString();
-
-
-    try {
-
-      await chatSB
-        .from("messages")
-        .update({
-          read: true,
-          read_at: now
-        })
-        .in("id", ids)
-        .eq(
-          "receiver_id",
-          chatCurrentUser.id
-        );
-
-
-      unread.forEach(message => {
-        message.read = true;
-        message.read_at = now;
-      });
-
-    } catch (error) {
-
-      console.warn(
-        "Read receipt failed:",
-        error
-      );
-
-    }
+    selectedMessage = null;
 
   }
 
@@ -3225,17 +2902,15 @@
      REPLY
   ======================================================= */
 
-  function startReply(
-    message
-  ) {
+  function startReply(message) {
 
-    chatReplyTo =
+    replyMessage =
       message;
 
 
     let text =
       message.message ||
-      "Photo";
+      "Message";
 
 
     if (
@@ -3251,9 +2926,8 @@
 
     $("chatReplyContent")
       .textContent =
-      text.length > 90
-        ? text.slice(0, 90) +
-          "..."
+      text.length > 100
+        ? text.slice(0, 100) + "..."
         : text;
 
 
@@ -3265,116 +2939,426 @@
       .focus();
 
 
-    hideActionSheet();
+    closeActionSheet();
 
   }
 
 
   function cancelReply() {
 
-    chatReplyTo =
-      null;
-
+    replyMessage = null;
 
     $("chatReplyBar")
       .classList.remove("show");
 
-
     $("chatReplyContent")
-      .textContent =
-      "";
+      .textContent = "";
 
   }
 
 
   /* =======================================================
-     DELETE
+     SEND TEXT
   ======================================================= */
 
-  async function deleteMessage(
-    message
-  ) {
+  async function sendMessage() {
 
     if (
-      !chatCurrentUser ||
-      !message
+      !currentUser ||
+      !targetUser
     ) {
       return;
     }
+
+
+    const input =
+      $("chatInput");
+
+
+    const text =
+      input.value.trim();
+
+
+    if (!text)
+      return;
+
+
+    const button =
+      $("sendMessageBtn");
+
+
+    button.disabled = true;
+
+
+    const payload = {
+
+      sender_id:
+        currentUser.id,
+
+      receiver_id:
+        targetUser.id,
+
+      message:
+        text,
+
+      message_type:
+        "text",
+
+      reply_to:
+        replyMessage
+          ? String(replyMessage.id)
+          : null
+
+    };
+
+
+    const {
+      error
+    } = await sb
+      .from("messages")
+      .insert(payload);
+
+
+    button.disabled = false;
+
+
+    if (error) {
+
+      console.error(error);
+
+      showToast(
+        "Message send nahi hua"
+      );
+
+      return;
+
+    }
+
+
+    input.value = "";
+
+    input.style.height =
+      "auto";
+
+
+    updateSendButton();
+
+    cancelReply();
+
+    await loadConversation();
+
+    await loadInbox();
+
+  }
+
+
+  /* =======================================================
+     SEND IMAGE
+  ======================================================= */
+
+  async function sendImage(file) {
+
+    if (
+      !file ||
+      !currentUser ||
+      !targetUser
+    ) {
+      return;
+    }
+
+
+    if (
+      !file.type.startsWith(
+        "image/"
+      )
+    ) {
+
+      showToast(
+        "Only images are allowed"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      file.size >
+      8 * 1024 * 1024
+    ) {
+
+      showToast(
+        "Image must be under 8 MB"
+      );
+
+      return;
+
+    }
+
+
+    const safeName =
+      file.name
+        .replace(
+          /[^a-zA-Z0-9._-]/g,
+          "_"
+        );
+
+
+    const path =
+      currentUser.id +
+      "/" +
+      crypto.randomUUID() +
+      "-" +
+      safeName;
+
+
+    showToast(
+      "Uploading photo..."
+    );
+
+
+    const {
+      error: uploadError
+    } = await sb.storage
+      .from("chat-media")
+      .upload(
+        path,
+        file,
+        {
+          contentType:
+            file.type,
+
+          upsert:
+            false
+        }
+      );
+
+
+    if (uploadError) {
+
+      console.error(
+        uploadError
+      );
+
+      showToast(
+        "Photo upload failed"
+      );
+
+      return;
+
+    }
+
+
+    const {
+      error
+    } = await sb
+      .from("messages")
+      .insert({
+
+        sender_id:
+          currentUser.id,
+
+        receiver_id:
+          targetUser.id,
+
+        message:
+          "📷 Photo",
+
+        message_type:
+          "image",
+
+        media_url:
+          path,
+
+        reply_to:
+          replyMessage
+            ? String(
+                replyMessage.id
+              )
+            : null
+
+      });
+
+
+    if (error) {
+
+      console.error(error);
+
+      showToast(
+        "Photo message failed"
+      );
+
+      return;
+
+    }
+
+
+    cancelReply();
+
+    await loadConversation();
+
+    await loadInbox();
+
+  }
+
+
+  /* =======================================================
+     READ RECEIPTS
+  ======================================================= */
+
+  async function markMessagesRead() {
+
+    if (
+      !currentUser ||
+      !targetUser
+    ) {
+      return;
+    }
+
+
+    const unread =
+      messages.filter(m =>
+
+        m.receiver_id ===
+          currentUser.id &&
+
+        m.sender_id ===
+          targetUser.id &&
+
+        !m.read
+
+      );
+
+
+    if (!unread.length)
+      return;
+
+
+    const ids =
+      unread.map(
+        m => m.id
+      );
+
+
+    const {
+      error
+    } = await sb
+      .from("messages")
+      .update({
+
+        read:
+          true,
+
+        read_at:
+          new Date()
+            .toISOString()
+
+      })
+      .in(
+        "id",
+        ids
+      )
+      .eq(
+        "receiver_id",
+        currentUser.id
+      );
+
+
+    if (error) {
+
+      console.warn(
+        "Read update failed:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    unread.forEach(m => {
+
+      m.read = true;
+
+    });
+
+  }
+
+
+  /* =======================================================
+     DELETE MESSAGE
+  ======================================================= */
+
+  async function deleteMessage() {
+
+    const message =
+      selectedMessage;
+
+
+    if (!message)
+      return;
 
 
     if (
       message.sender_id !==
-      chatCurrentUser.id
+      currentUser.id
     ) {
-
-      showToast(
-        "You can only delete your own messages."
-      );
 
       return;
 
     }
 
 
-    hideActionSheet();
+    closeActionSheet();
 
 
-    if (
-      !window.confirm(
+    const okay =
+      window.confirm(
         "Delete this message?"
-      )
-    ) {
+      );
+
+
+    if (!okay)
       return;
+
+
+    const {
+      error
+    } = await sb
+      .from("messages")
+      .update({
+
+        deleted_at:
+          new Date()
+            .toISOString()
+
+      })
+      .eq(
+        "id",
+        message.id
+      )
+      .eq(
+        "sender_id",
+        currentUser.id
+      );
+
+
+    if (error) {
+
+      console.error(error);
+
+      showToast(
+        "Could not delete message"
+      );
+
+      return;
+
     }
 
 
-    try {
+    await loadConversation();
 
-      const {
-        error
-      } = await chatSB
-        .from("messages")
-        .update({
-          deleted_at:
-            new Date()
-              .toISOString()
-        })
-        .eq(
-          "id",
-          message.id
-        )
-        .eq(
-          "sender_id",
-          chatCurrentUser.id
-        );
-
-
-      if (error) {
-        throw error;
-      }
-
-
-      showToast(
-        "Message deleted"
-      );
-
-
-      await loadConversation();
-
-
-    } catch (error) {
-
-      console.error(
-        "Delete error:",
-        error
-      );
-
-      showToast(
-        "Message delete nahi hua."
-      );
-
-    }
+    await loadInbox();
 
   }
 
@@ -3386,30 +3370,37 @@
   function subscribeConversation() {
 
     if (
-      !chatCurrentUser ||
-      !chatTargetUser
+      !currentUser ||
+      !targetUser
     ) {
       return;
     }
 
 
-    destroyConversationChannel();
+    if (conversationChannel) {
+
+      sb.removeChannel(
+        conversationChannel
+      );
+
+    }
 
 
     const channelName =
       "poll-pulse-chat-" +
-      chatCurrentUser.id +
+      currentUser.id +
       "-" +
-      chatTargetUser.id;
+      targetUser.id;
 
 
-    chatChannel =
-      chatSB.channel(
+    conversationChannel =
+      sb.channel(
         channelName
       );
 
 
-    chatChannel
+    conversationChannel
+
       .on(
         "postgres_changes",
         {
@@ -3424,46 +3415,37 @@
             payload.old;
 
 
-          if (!message) return;
+          if (!message)
+            return;
 
 
           const relevant =
             (
               message.sender_id ===
-                chatCurrentUser.id &&
+                currentUser.id &&
               message.receiver_id ===
-                chatTargetUser.id
+                targetUser.id
             ) ||
             (
               message.sender_id ===
-                chatTargetUser.id &&
+                targetUser.id &&
               message.receiver_id ===
-                chatCurrentUser.id
+                currentUser.id
             );
 
 
-          if (!relevant) {
+          if (!relevant)
             return;
-          }
 
 
           loadConversation();
 
-        }
-      )
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "message_reactions"
-        },
-        () => {
-
-          loadConversation();
+          loadInbox();
 
         }
       )
+
+
       .on(
         "broadcast",
         {
@@ -3473,24 +3455,22 @@
 
           if (
             payload.payload?.user_id !==
-            chatTargetUser.id
+            targetUser.id
           ) {
             return;
           }
 
 
           $("chatTyping").innerHTML = `
-            <span class="chat-typing-dots">
+            ${escapeHTML(
+              nameOf(targetUser)
+            )}
+            is typing
+            <span class="typing-dots">
               <span></span>
               <span></span>
               <span></span>
             </span>
-            &nbsp;
-            ${escapeHTML(
-              displayName(
-                chatTargetUser
-              )
-            )} is typing...
           `;
 
 
@@ -3503,68 +3483,14 @@
             setTimeout(() => {
 
               $("chatTyping")
-                .innerHTML =
-                "";
+                .textContent = "";
 
             }, 1800);
 
         }
       )
-      .subscribe();
-
-  }
 
 
-  function destroyConversationChannel() {
-
-    if (chatChannel) {
-
-      chatSB.removeChannel(
-        chatChannel
-      );
-
-      chatChannel = null;
-
-    }
-
-  }
-
-
-  /* =======================================================
-     INBOX REALTIME
-  ======================================================= */
-
-  function subscribeInbox() {
-
-    if (
-      !chatCurrentUser ||
-      inboxChannel
-    ) {
-      return;
-    }
-
-
-    inboxChannel =
-      chatSB.channel(
-        "poll-pulse-inbox-" +
-        chatCurrentUser.id
-      );
-
-
-    inboxChannel
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "messages"
-        },
-        () => {
-
-          loadInbox();
-
-        }
-      )
       .subscribe();
 
   }
@@ -3577,15 +3503,15 @@
   function sendTyping() {
 
     if (
-      !chatChannel ||
-      !chatCurrentUser ||
-      !chatTargetUser
+      !conversationChannel ||
+      !currentUser ||
+      !targetUser
     ) {
       return;
     }
 
 
-    chatChannel.send({
+    conversationChannel.send({
 
       type:
         "broadcast",
@@ -3594,8 +3520,10 @@
         "typing",
 
       payload: {
+
         user_id:
-          chatCurrentUser.id
+          currentUser.id
+
       }
 
     });
@@ -3609,19 +3537,18 @@
 
   async function updatePresence() {
 
-    if (!chatCurrentUser) {
+    if (!currentUser)
       return;
-    }
 
 
     try {
 
-      await chatSB
+      await sb
         .from("user_presence")
         .upsert({
 
           user_id:
-            chatCurrentUser.id,
+            currentUser.id,
 
           is_online:
             true,
@@ -3632,13 +3559,15 @@
 
         });
 
-    } catch (error) {
+    } catch (e) {
 
       /*
         Presence is optional.
-        Chat continues even if
-        this table doesn't exist.
       */
+
+      console.warn(
+        "Presence unavailable"
+      );
 
     }
 
@@ -3647,37 +3576,34 @@
 
   async function updateOnlineStatus() {
 
-    if (!chatTargetUser) {
+    if (!targetUser)
       return;
-    }
 
 
     try {
 
       const {
         data
-      } = await chatSB
+      } = await sb
         .from("user_presence")
         .select(
           "is_online,last_seen"
         )
         .eq(
           "user_id",
-          chatTargetUser.id
+          targetUser.id
         )
         .maybeSingle();
 
 
       const dot =
-        $("chatHeaderOnline");
+        $("headerOnline");
 
       const status =
-        $("chatHeaderStatus");
+        $("headerStatus");
 
 
-      if (
-        data?.is_online
-      ) {
+      if (data?.is_online) {
 
         dot.style.display =
           "block";
@@ -3685,22 +3611,18 @@
         status.textContent =
           "Active now";
 
-        return;
-
       }
 
-
-      dot.style.display =
-        "none";
-
-
-      if (
+      else if (
         data?.last_seen
       ) {
 
+        dot.style.display =
+          "none";
+
         status.textContent =
-          "Last seen " +
-          timeText(
+          "Active " +
+          formatTime(
             data.last_seen
           );
 
@@ -3708,18 +3630,21 @@
 
       else {
 
+        dot.style.display =
+          "none";
+
         status.textContent =
           "Message";
 
       }
 
-    } catch (error) {
+    } catch (e) {
 
-      $("chatHeaderOnline")
+      $("headerOnline")
         .style.display =
         "none";
 
-      $("chatHeaderStatus")
+      $("headerStatus")
         .textContent =
         "Message";
 
@@ -3729,20 +3654,21 @@
 
 
   /* =======================================================
-     SEND BUTTON STATE
+     COMPOSER
   ======================================================= */
 
   function updateSendButton() {
 
-    const input =
-      $("chatInput");
+    const hasText =
+      $("chatInput")
+        .value
+        .trim()
+        .length > 0;
 
-    const button =
-      $("sendMessageBtn");
 
-
-    button.disabled =
-      !input.value.trim();
+    $("sendMessageBtn")
+      .disabled =
+      !hasText;
 
   }
 
@@ -3751,10 +3677,10 @@
      EVENTS
   ======================================================= */
 
-  $("chatBackBtn")
+  $("backBtn")
     .addEventListener(
       "click",
-      closeChatConversation
+      closeChat
     );
 
 
@@ -3788,7 +3714,7 @@
         input.style.height =
           Math.min(
             input.scrollHeight,
-            115
+            120
           ) + "px";
 
 
@@ -3803,15 +3729,14 @@
   $("chatInput")
     .addEventListener(
       "keydown",
-      event => {
+      e => {
 
         if (
-          event.key ===
-            "Enter" &&
-          !event.shiftKey
+          e.key === "Enter" &&
+          !e.shiftKey
         ) {
 
-          event.preventDefault();
+          e.preventDefault();
 
           sendMessage();
 
@@ -3824,10 +3749,10 @@
   $("chatImageInput")
     .addEventListener(
       "change",
-      async event => {
+      async e => {
 
         const file =
-          event.target.files?.[0];
+          e.target.files?.[0];
 
 
         if (file) {
@@ -3839,8 +3764,7 @@
         }
 
 
-        event.target.value =
-          "";
+        e.target.value = "";
 
       }
     );
@@ -3849,35 +3773,18 @@
   $("chatSearch")
     .addEventListener(
       "input",
-      event => {
+      e => {
 
-        searchText =
-          event.target.value.trim();
+        searchValue =
+          e.target.value.trim();
 
-        renderInbox(
-          inboxRows
-        );
+        loadInbox();
 
       }
     );
 
 
-  $("chatRefreshBtn")
-    .addEventListener(
-      "click",
-      async () => {
-
-        showToast(
-          "Refreshing..."
-        );
-
-        await loadInbox();
-
-      }
-    );
-
-
-  /* ================= REACTION BUTTONS ================= */
+  /* Reaction buttons */
 
   document
     .querySelectorAll(
@@ -3889,15 +3796,12 @@
         "click",
         async () => {
 
-          if (
-            !chatReactionMessage
-          ) {
+          if (!selectedMessage)
             return;
-          }
 
 
           await addReaction(
-            chatReactionMessage.id,
+            selectedMessage.id,
             button.dataset.reaction
           );
 
@@ -3907,81 +3811,20 @@
     });
 
 
-  /* ================= ACTION SHEET ================= */
+  /* Action sheet */
 
-  document
-    .querySelectorAll(
-      ".chat-action-btn"
-    )
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          const action =
-            button.dataset.chatAction;
-
-          const message =
-            chatActionMessage;
-
-
-          if (!message) {
-            return;
-          }
-
-
-          if (
-            action === "reply"
-          ) {
-
-            startReply(
-              message
-            );
-
-          }
-
-          else if (
-            action === "react"
-          ) {
-
-            hideActionSheet();
-
-            showReactionMenu(
-              message,
-              window.innerWidth / 2,
-              window.innerHeight / 2
-            );
-
-          }
-
-          else if (
-            action === "delete"
-          ) {
-
-            await deleteMessage(
-              message
-            );
-
-          }
-
-        }
-      );
-
-    });
-
-
-  $("chatActionOverlay")
+  $("actionReply")
     .addEventListener(
       "click",
-      event => {
+      () => {
 
         if (
-          event.target ===
-          $("chatActionOverlay")
+          selectedMessage
         ) {
 
-          hideActionSheet();
+          startReply(
+            selectedMessage
+          );
 
         }
 
@@ -3989,45 +3832,114 @@
     );
 
 
+  $("actionReact")
+    .addEventListener(
+      "click",
+      () => {
+
+        if (
+          selectedMessage
+        ) {
+
+          closeActionSheet();
+
+          showReactionMenu();
+
+        }
+
+      }
+    );
+
+
+  $("actionDelete")
+    .addEventListener(
+      "click",
+      deleteMessage
+    );
+
+
+  $("actionCancel")
+    .addEventListener(
+      "click",
+      closeActionSheet
+    );
+
+
+  $("actionOverlay")
+    .addEventListener(
+      "click",
+      e => {
+
+        if (
+          e.target ===
+          $("actionOverlay")
+        ) {
+
+          closeActionSheet();
+
+        }
+
+      }
+    );
+
+
+  /* =======================================================
+     REACTION MENU
+  ======================================================= */
+
+  function showReactionMenu() {
+
+    const menu =
+      $("reactionMenu");
+
+
+    menu.classList.add(
+      "show"
+    );
+
+
+    const width =
+      menu.offsetWidth || 230;
+
+
+    menu.style.left =
+      Math.max(
+        8,
+        (window.innerWidth -
+          width) / 2
+      ) + "px";
+
+
+    menu.style.top =
+      "90px";
+
+  }
+
+
+  function hideReactionMenu() {
+
+    $("reactionMenu")
+      .classList.remove(
+        "show"
+      );
+
+  }
+
+
   document.addEventListener(
     "click",
-    event => {
+    e => {
 
       if (
-        !event.target.closest(
+        !e.target.closest(
           "#reactionMenu"
+        ) &&
+        !e.target.closest(
+          ".bubble"
         )
       ) {
 
         hideReactionMenu();
-
-      }
-
-    }
-  );
-
-
-  /* =======================================================
-     PAGE VISIBILITY
-  ======================================================= */
-
-  document.addEventListener(
-    "visibilitychange",
-    () => {
-
-      if (
-        !document.hidden
-      ) {
-
-        updatePresence();
-
-        if (
-          chatTargetUser
-        ) {
-
-          updateOnlineStatus();
-
-        }
 
       }
 
@@ -4043,7 +3955,7 @@
     openChat;
 
   window.closeChat =
-    closeChatPage;
+    closeChat;
 
   window.loadChatInbox =
     loadInbox;
@@ -4053,31 +3965,50 @@
      INITIALIZE
   ======================================================= */
 
-  (async function initChat() {
+  async function init() {
 
-    chatCurrentUser =
-      await getCurrentUser();
+    currentUser =
+      await getUser();
 
 
-    if (!chatCurrentUser) {
+    if (!currentUser) {
 
       $("chatUsers").innerHTML = `
-        <div class="chat-empty">
+        <div class="empty">
 
-          <div class="chat-empty-icon">
+          <div class="empty-icon">
             🔐
           </div>
 
-          <div class="chat-empty-title">
+          <div class="empty-title">
             Login required
           </div>
 
-          <div class="chat-empty-text">
-            Login to use messages.
+          <div class="empty-text">
+            Please login to use Poll Pulse messages.
           </div>
 
         </div>
       `;
+
+      $("welcomePanel")
+        .innerHTML = `
+          <div class="welcome-inner">
+
+            <div class="welcome-logo">
+              P
+            </div>
+
+            <h1>
+              Welcome to Poll Pulse
+            </h1>
+
+            <p>
+              Login to start using messages.
+            </p>
+
+          </div>
+        `;
 
       return;
 
@@ -4088,37 +4019,65 @@
 
     await loadInbox();
 
-    subscribeInbox();
 
-
-    presenceTimer =
+    presenceInterval =
       setInterval(
         updatePresence,
         30000
       );
 
 
-    inboxTimer =
-      setInterval(
-        () => {
+    setInterval(
+      () => {
 
-          if (
-            $("chatPage")
-              .classList
-              .contains("active") &&
-            !chatTargetUser
-          ) {
+        if (
+          !targetUser
+        ) {
 
-            loadInbox();
+          loadInbox();
 
-          }
+        }
 
-        },
-        15000
-      );
+        else {
 
-  })();
+          updateOnlineStatus();
+
+        }
+
+      },
+      15000
+    );
+
+  }
+
+
+  init();
+
+
+  /* =======================================================
+     CLEANUP
+  ======================================================= */
+
+  window.addEventListener(
+    "beforeunload",
+    () => {
+
+      if (
+        conversationChannel
+      ) {
+
+        sb.removeChannel(
+          conversationChannel
+        );
+
+      }
+
+    }
+  );
 
 
 })();
 </script>
+
+</body>
+</html>
