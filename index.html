@@ -1,10 +1,9 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#6c5ce7">
+<meta name="theme-color" content="#0b0d12">
 <title>Poll Pulse</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,33 +11,35 @@
 <style>
 *{
   box-sizing:border-box;
-  font-family:Inter,Arial,sans-serif;
+  margin:0;
+  padding:0;
   -webkit-tap-highlight-color:transparent;
 }
 
 :root{
-  --primary:#6c5ce7;
-  --primary2:#8b7cf6;
-  --pink:#ff4f8b;
-  --bg:#f7f7fb;
-  --card:#ffffff;
-  --text:#181824;
-  --muted:#77758a;
-  --border:#ecebf3;
-  --soft:#f0edff;
-  --danger:#e74c3c;
-  --success:#19a974;
+  --bg:#090b10;
+  --card:#11141c;
+  --card2:#171b25;
+  --border:#252a36;
+  --text:#f7f8fb;
+  --muted:#8d95a7;
+  --primary:#6c63ff;
+  --primary2:#8b7cff;
+  --green:#35d07f;
+  --red:#ff5d72;
+  --shadow:0 12px 35px rgba(0,0,0,.28);
 }
 
 html,body{
-  margin:0;
-  padding:0;
+  width:100%;
+  min-height:100%;
   background:var(--bg);
   color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 body{
-  min-height:100vh;
+  overflow-x:hidden;
 }
 
 button,input,textarea{
@@ -46,562 +47,81 @@ button,input,textarea{
 }
 
 button{
+  border:0;
   cursor:pointer;
-}
-
-button:disabled{
-  opacity:.55;
-  cursor:not-allowed;
 }
 
 .hidden{
   display:none!important;
 }
 
-.app{
-  width:100%;
-  max-width:560px;
-  min-height:100vh;
-  margin:auto;
-  padding-bottom:92px;
-}
+/* AUTH */
 
-/* =========================
-   AUTH
-========================= */
-
-.auth{
+#authScreen{
   min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:22px;
   background:
-    radial-gradient(circle at top left,#e7e2ff 0,transparent 35%),
-    radial-gradient(circle at bottom right,#ffe2ed 0,transparent 35%),
+    radial-gradient(circle at 20% 10%,rgba(108,99,255,.24),transparent 32%),
+    radial-gradient(circle at 90% 90%,rgba(53,208,127,.10),transparent 28%),
     var(--bg);
 }
 
-.box{
+.authBox{
   width:100%;
-  max-width:430px;
-  padding:30px 24px;
-  background:rgba(255,255,255,.94);
-  border:1px solid #fff;
-  border-radius:30px;
-  box-shadow:0 20px 60px rgba(48,39,100,.14);
+  max-width:420px;
+  padding:30px 22px;
+  border:1px solid var(--border);
+  border-radius:28px;
+  background:rgba(17,20,28,.92);
+  box-shadow:var(--shadow);
 }
 
 .logo{
   text-align:center;
-  font-size:35px;
-  font-weight:900;
+  margin-bottom:28px;
+}
+
+.logoMark{
+  width:68px;
+  height:68px;
+  border-radius:21px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 14px;
+  font-size:32px;
+  background:linear-gradient(135deg,var(--primary),#a08cff);
+  box-shadow:0 12px 35px rgba(108,99,255,.35);
+}
+
+.logo h1{
+  font-size:30px;
   letter-spacing:-1px;
-  background:linear-gradient(135deg,var(--primary),var(--pink));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
 }
 
-.sub{
-  text-align:center;
+.logo p{
   color:var(--muted);
-  margin:8px 0 26px;
-  font-size:14px;
-}
-
-input,textarea{
-  width:100%;
-  padding:14px 15px;
-  margin:6px 0;
-  border:1px solid var(--border);
-  border-radius:15px;
-  outline:none;
-  background:#fafafe;
-  color:var(--text);
-  transition:.2s;
-}
-
-input:focus,textarea:focus{
-  border-color:var(--primary2);
-  background:white;
-  box-shadow:0 0 0 4px rgba(108,92,231,.08);
-}
-
-textarea{
-  resize:vertical;
-  min-height:100px;
-}
-
-.btn{
-  border:0;
-  border-radius:15px;
-  padding:12px 16px;
-  background:linear-gradient(135deg,var(--primary),var(--primary2));
-  color:white;
-  font-weight:800;
-  box-shadow:0 7px 18px rgba(108,92,231,.2);
-  transition:.2s;
-}
-
-.btn:active{
-  transform:scale(.98);
-}
-
-.wide{
-  width:100%;
-  margin-top:9px;
-}
-
-.link{
-  width:100%;
-  border:0;
-  background:none;
-  color:var(--primary);
-  font-weight:800;
-  margin-top:13px;
-}
-
-.msg{
-  text-align:center;
-  min-height:20px;
-  margin-top:12px;
-  color:var(--danger);
-  font-size:13px;
-}
-
-/* =========================
-   TOP HEADER
-========================= */
-
-header{
-  position:relative;
-  padding:22px 18px 24px;
-  color:white;
-  background:
-    radial-gradient(circle at 90% 0,#ff8eb5 0,transparent 30%),
-    linear-gradient(135deg,#6252df,#795eea 48%,#ff4f8b);
-  border-radius:0 0 30px 30px;
-  overflow:hidden;
-}
-
-header:after{
-  content:"";
-  position:absolute;
-  width:150px;
-  height:150px;
-  border:25px solid rgba(255,255,255,.08);
-  border-radius:50%;
-  right:-50px;
-  bottom:-80px;
-}
-
-.header-top{
-  position:relative;
-  z-index:2;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-header h1{
-  margin:0;
-  font-size:28px;
-  letter-spacing:-.8px;
-}
-
-header p{
-  margin:6px 0 0;
-  font-size:13px;
-  opacity:.9;
-}
-
-.header-pill{
-  position:relative;
-  z-index:2;
-  padding:8px 11px;
-  border-radius:14px;
-  background:rgba(255,255,255,.16);
-  backdrop-filter:blur(10px);
-  font-size:12px;
-  font-weight:800;
-}
-
-/* =========================
-   CONTENT
-========================= */
-
-.content{
-  padding:16px;
-}
-
-.card{
-  background:var(--card);
-  padding:17px;
-  margin-bottom:14px;
-  border-radius:23px;
-  border:1px solid rgba(20,20,50,.035);
-  box-shadow:0 7px 24px rgba(25,20,70,.06);
-}
-
-.hero-card{
-  padding:20px;
-  background:
-    linear-gradient(135deg,#f0edff,#fff5fa);
-}
-
-.hero-title{
-  margin:0;
-  font-size:20px;
-  font-weight:900;
-}
-
-.hero-text{
-  margin:7px 0 0;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.5;
-}
-
-.section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin:4px 2px 12px;
-}
-
-.section-title h2{
-  margin:0;
-  font-size:18px;
-}
-
-.section-title span{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.grow{
-  flex:1;
-  min-width:0;
-}
-
-.avatar{
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,var(--primary),var(--pink));
-  color:white;
-  font-weight:900;
-  flex:none;
-  box-shadow:0 5px 15px rgba(108,92,231,.2);
-}
-
-.small{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.tiny{
-  color:#888;
-  font-size:10px;
-  word-break:break-all;
-}
-
-/* =========================
-   POLLS
-========================= */
-
-.poll-card{
-  position:relative;
-  overflow:hidden;
-}
-
-.creator{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:14px;
-}
-
-.creator-avatar{
-  width:38px;
-  height:38px;
-  border-radius:13px;
-  background:linear-gradient(135deg,var(--primary),var(--pink));
-  color:white;
-  display:grid;
-  place-items:center;
-  font-size:13px;
-  font-weight:900;
-  flex:none;
-}
-
-.creator-name{
-  font-size:14px;
-  font-weight:900;
-}
-
-.poll-title{
-  font-size:19px;
-  font-weight:900;
-  line-height:1.3;
-  margin-bottom:13px;
-  letter-spacing:-.25px;
-}
-
-.option{
-  width:100%;
-  padding:13px 14px;
-  margin:5px 0;
-  border:1px solid #e5e1ff;
-  border-radius:15px;
-  background:#f3f0ff;
-  color:#5145b5;
-  font-weight:800;
-  text-align:left;
-  transition:.18s;
-}
-
-.option:active{
-  transform:scale(.99);
-}
-
-.option.selected{
-  background:linear-gradient(135deg,var(--primary),var(--primary2));
-  border-color:transparent;
-  color:white;
-}
-
-.result{
-  margin:7px 0 10px;
-}
-
-.result-top{
-  display:flex;
-  justify-content:space-between;
-  font-size:12px;
-  margin-bottom:5px;
-}
-
-.resultbar{
-  height:8px;
-  background:#eeeef5;
-  border-radius:20px;
-  overflow:hidden;
-}
-
-.resultbar i{
-  display:block;
-  height:100%;
-  background:linear-gradient(90deg,var(--primary),var(--pink));
-  border-radius:20px;
-}
-
-.poll-total{
-  margin-top:10px;
-}
-
-.poll-actions{
-  display:flex;
-  gap:8px;
-  margin-top:13px;
-  flex-wrap:wrap;
-}
-
-.poll-action{
-  border:0;
-  background:#f2efff;
-  color:#5145b5;
-  padding:9px 12px;
-  border-radius:13px;
-  font-weight:800;
-  font-size:12px;
-}
-
-.delete-poll{
-  background:#fff0f0;
-  color:var(--danger);
-}
-
-/* =========================
-   SUGGESTIONS
-========================= */
-
-.suggestion{
-  background:linear-gradient(135deg,#f0edff,#fff);
-  border:1px solid #e3ddff;
-  padding:17px;
-  border-radius:22px;
-  margin-bottom:14px;
-}
-
-.suggestion h3{
-  margin:0 0 4px;
-  font-size:17px;
-}
-
-.user{
-  padding:12px 2px;
-  border-bottom:1px solid var(--border);
-}
-
-.user:last-child{
-  border-bottom:0;
-}
-
-.follow{
-  padding:8px 13px;
-  white-space:nowrap;
-  font-size:12px;
-}
-
-.following{
-  background:var(--success);
-}
-
-/* =========================
-   SEARCH
-========================= */
-
-.search-box{
-  position:relative;
-}
-
-.search-box input{
-  padding-left:43px;
-}
-
-.search-icon{
-  position:absolute;
-  left:15px;
-  top:20px;
-  z-index:2;
-  color:var(--muted);
-}
-
-.search-result-title{
-  margin:20px 0 7px;
-  font-size:14px;
-  font-weight:900;
-}
-
-/* =========================
-   CREATE
-========================= */
-
-.create-head{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:16px;
-}
-
-.create-icon{
-  width:48px;
-  height:48px;
-  border-radius:16px;
-  display:grid;
-  place-items:center;
-  background:var(--soft);
-  font-size:23px;
-}
-
-.create-head h2{
-  margin:0;
-}
-
-.create-head p{
-  margin:4px 0 0;
-  color:var(--muted);
-  font-size:12px;
-}
-
-/* =========================
-   PROFILE
-========================= */
-
-.profile-top{
-  text-align:center;
-}
-
-.profile-big-avatar{
-  width:72px;
-  height:72px;
-  margin:auto;
-  border-radius:24px;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,var(--primary),var(--pink));
-  color:white;
-  font-size:25px;
-  font-weight:900;
-  box-shadow:0 10px 25px rgba(108,92,231,.22);
-}
-
-.profile-top h2{
-  margin:10px 0 2px;
-}
-
-.profile-stats{
-  display:flex;
-  margin-top:20px;
-  padding-top:16px;
-  border-top:1px solid var(--border);
-}
-
-.profile-stat{
-  text-align:center;
-  flex:1;
-}
-
-.profile-stat strong{
-  display:block;
-  font-size:20px;
-}
-
-.profile-stat span{
-  font-size:11px;
-  color:var(--muted);
-}
-
-.notice{
-  padding:13px;
-  background:#f7f6ff;
-  border:1px solid #ebe8ff;
-  border-radius:15px;
-  margin:7px 0;
-  font-size:13px;
+  margin-top:6px;
 }
 
 .tabs{
   display:flex;
-  gap:7px;
-  overflow:auto;
-  margin:17px 0 13px;
-  scrollbar-width:none;
-}
-
-.tabs::-webkit-scrollbar{
-  display:none;
+  gap:6px;
+  background:#0d1016;
+  padding:5px;
+  border-radius:14px;
+  margin-bottom:20px;
 }
 
 .tabs button{
-  border:0;
-  border-radius:18px;
-  padding:9px 14px;
-  background:#f0eff4;
-  color:#666;
-  white-space:nowrap;
-  font-size:12px;
-  font-weight:800;
+  flex:1;
+  padding:11px;
+  border-radius:10px;
+  color:var(--muted);
+  background:transparent;
 }
 
 .tabs button.active{
@@ -609,210 +129,738 @@ header p{
   color:white;
 }
 
-/* =========================
-   CHAT
-========================= */
+.field{
+  margin-bottom:13px;
+}
 
-.chat-header{
+.field label{
+  display:block;
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:7px;
+}
+
+.field input,
+.field textarea,
+.searchInput{
+  width:100%;
+  border:1px solid var(--border);
+  outline:none;
+  background:#0d1016;
+  color:var(--text);
+  border-radius:13px;
+  padding:13px 14px;
+}
+
+.field input:focus,
+.field textarea:focus,
+.searchInput:focus{
+  border-color:var(--primary);
+}
+
+.primaryBtn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  color:#fff;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  box-shadow:0 8px 22px rgba(108,99,255,.22);
+}
+
+.secondaryBtn{
+  padding:11px 15px;
+  border-radius:12px;
+  color:var(--text);
+  background:var(--card2);
+  border:1px solid var(--border);
+}
+
+.authMsg{
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+  margin-top:13px;
+}
+
+/* APP */
+
+#app{
+  min-height:100vh;
+  padding-bottom:80px;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:20;
+  height:64px;
   display:flex;
   align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  background:rgba(9,11,16,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-weight:800;
+  font-size:20px;
+}
+
+.brandIcon{
+  width:34px;
+  height:34px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--primary),#927cff);
+}
+
+.topActions{
+  display:flex;
+  gap:7px;
+}
+
+.iconBtn{
+  width:39px;
+  height:39px;
+  border-radius:12px;
+  background:var(--card);
+  color:var(--text);
+  border:1px solid var(--border);
+  position:relative;
+}
+
+.badge{
+  position:absolute;
+  top:-4px;
+  right:-3px;
+  min-width:17px;
+  height:17px;
+  padding:0 4px;
+  border-radius:9px;
+  background:var(--red);
+  color:#fff;
+  font-size:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* CONTENT */
+
+.container{
+  width:100%;
+  max-width:720px;
+  margin:auto;
+  padding:18px 14px;
+}
+
+.pageTitle{
+  font-size:27px;
+  font-weight:800;
+  letter-spacing:-.7px;
+}
+
+.pageSub{
+  color:var(--muted);
+  font-size:14px;
+  margin-top:4px;
+}
+
+.section{
+  margin-top:22px;
+}
+
+/* QUICK ACTIONS */
+
+.quickGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
   gap:10px;
-  padding:4px 0 14px;
-  border-bottom:1px solid var(--border);
+}
+
+.quickCard{
+  padding:17px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:linear-gradient(145deg,#141823,#0f1219);
+}
+
+.quickIcon{
+  font-size:23px;
   margin-bottom:10px;
 }
 
-.chat-header-info{
+.quickCard strong{
+  display:block;
+}
+
+.quickCard span{
+  color:var(--muted);
+  font-size:12px;
+  display:block;
+  margin-top:4px;
+}
+
+/* POLL */
+
+.pollCard{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:21px;
+  padding:16px;
+  margin-bottom:13px;
+  box-shadow:0 8px 24px rgba(0,0,0,.14);
+}
+
+.pollHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.userInfo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:39px;
+  height:39px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#454bff,#9b75ff);
+  font-weight:800;
+  flex-shrink:0;
+}
+
+.userName{
+  font-size:14px;
+  font-weight:700;
+}
+
+.time{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:2px;
+}
+
+.moreBtn{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  color:var(--muted);
+  background:transparent;
+}
+
+.pollQuestion{
+  font-size:18px;
+  line-height:1.4;
+  font-weight:750;
+  margin:17px 0 14px;
+}
+
+.option{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+  text-align:left;
+  color:var(--text);
+  background:#0d1016;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:13px 14px;
+  margin-top:8px;
+}
+
+.option:hover{
+  border-color:#41485b;
+}
+
+.optionBar{
+  position:absolute;
+  inset:0 auto 0 0;
+  background:rgba(108,99,255,.17);
+  width:0;
+  transition:.3s;
+}
+
+.optionContent{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.optionText{
+  font-size:14px;
+}
+
+.percent{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.pollStats{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+}
+
+.pollActions{
+  display:flex;
+  gap:6px;
+  margin-top:9px;
+}
+
+.actionBtn{
+  flex:1;
+  padding:10px;
+  border-radius:11px;
+  color:var(--muted);
+  background:transparent;
+}
+
+.actionBtn:hover{
+  background:var(--card2);
+  color:var(--text);
+}
+
+.actionBtn.liked{
+  color:#ff5d72;
+}
+
+/* SEARCH */
+
+.searchBox{
+  position:relative;
+  margin-top:15px;
+}
+
+.searchIcon{
+  position:absolute;
+  left:13px;
+  top:12px;
+  color:var(--muted);
+}
+
+.searchBox input{
+  padding-left:39px;
+}
+
+/* CREATE */
+
+.createCard{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:18px;
+}
+
+.createCard textarea{
+  resize:none;
+  min-height:100px;
+}
+
+.optionRow{
+  display:flex;
+  gap:8px;
+  margin-top:9px;
+}
+
+.optionRow input{
+  flex:1;
+}
+
+.removeOption{
+  width:43px;
+  border-radius:12px;
+  color:var(--red);
+  background:#21131a;
+}
+
+.addOption{
+  margin-top:10px;
+  color:var(--primary2);
+  background:transparent;
+}
+
+/* PROFILE */
+
+.profileHero{
+  text-align:center;
+  padding:18px 0 8px;
+}
+
+.profileHero .avatar{
+  width:80px;
+  height:80px;
+  margin:auto;
+  font-size:27px;
+}
+
+.profileHero h2{
+  margin-top:12px;
+}
+
+.profileHero p{
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.profileStats{
+  display:flex;
+  justify-content:center;
+  gap:35px;
+  margin-top:18px;
+}
+
+.profileStats div{
+  text-align:center;
+}
+
+.profileStats strong{
+  display:block;
+  font-size:19px;
+}
+
+.profileStats span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.profileTabs{
+  display:flex;
+  border-bottom:1px solid var(--border);
+  margin:20px 0 14px;
+}
+
+.profileTabs button{
+  flex:1;
+  background:transparent;
+  color:var(--muted);
+  padding:12px;
+}
+
+.profileTabs button.active{
+  color:var(--text);
+  border-bottom:2px solid var(--primary);
+}
+
+/* CHAT */
+
+.chatList{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.chatItem{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+}
+
+.chatPreview{
   flex:1;
   min-width:0;
 }
 
-.chat-header-name{
-  font-size:16px;
-  font-weight:900;
+.chatPreview strong{
+  display:block;
 }
 
-.chat-header-status{
-  font-size:11px;
+.chatPreview span{
   color:var(--muted);
-  margin-top:3px;
-}
-
-.chat-user{
-  padding:12px 4px;
-  border-bottom:1px solid var(--border);
-  cursor:pointer;
-}
-
-.chat-user:hover{
-  background:#f8f7ff;
-  border-radius:13px;
-}
-
-.chat-preview{
   font-size:12px;
-  color:var(--muted);
-  margin-top:3px;
+  display:block;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 
-.chatbox{
-  height:340px;
-  overflow:auto;
-  background:#f5f3ff;
-  border-radius:17px;
-  padding:10px;
+.chatWindow{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  background:var(--bg);
+  display:flex;
+  flex-direction:column;
 }
 
-.bubble{
-  max-width:78%;
-  padding:10px 13px;
-  background:white;
-  border-radius:16px;
-  margin:7px 0;
-  word-break:break-word;
-  box-shadow:0 3px 10px rgba(0,0,0,.04);
-}
-
-.mine{
-  margin-left:auto;
-  background:linear-gradient(135deg,var(--primary),var(--primary2));
-  color:white;
-}
-
-/* =========================
-   NOTIFICATIONS
-========================= */
-
-.notification-card{
-  padding:11px 0;
+.chatHeader{
+  height:62px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 14px;
   border-bottom:1px solid var(--border);
 }
 
-.notification-card:last-child{
-  border-bottom:0;
+.chatMessages{
+  flex:1;
+  overflow-y:auto;
+  padding:15px;
 }
 
-/* =========================
-   BOTTOM NAV
-========================= */
+.message{
+  max-width:78%;
+  padding:10px 13px;
+  border-radius:15px;
+  margin-bottom:8px;
+  font-size:14px;
+  line-height:1.35;
+}
 
-.bottom{
+.message.mine{
+  margin-left:auto;
+  background:var(--primary);
+  border-bottom-right-radius:4px;
+}
+
+.message.theirs{
+  background:var(--card2);
+  border-bottom-left-radius:4px;
+}
+
+.chatInput{
+  display:flex;
+  gap:8px;
+  padding:10px;
+  border-top:1px solid var(--border);
+  background:var(--card);
+}
+
+.chatInput input{
+  flex:1;
+  background:#0c0f15;
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:13px;
+  padding:12px;
+  outline:none;
+}
+
+.sendBtn{
+  width:48px;
+  border-radius:13px;
+  background:var(--primary);
+  color:#fff;
+}
+
+/* NOTIFICATIONS */
+
+.notice{
+  display:flex;
+  gap:11px;
+  padding:14px;
+  border-bottom:1px solid var(--border);
+}
+
+.noticeIcon{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--card2);
+}
+
+.noticeText{
+  flex:1;
+  font-size:13px;
+}
+
+.noticeText span{
+  display:block;
+  color:var(--muted);
+  margin-top:3px;
+  font-size:11px;
+}
+
+/* EMPTY */
+
+.empty{
+  text-align:center;
+  padding:45px 20px;
+  color:var(--muted);
+}
+
+.emptyIcon{
+  font-size:40px;
+  margin-bottom:12px;
+}
+
+/* BOTTOM NAV */
+
+.bottomNav{
   position:fixed;
   bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(560px,100%);
-  height:78px;
-  padding:7px 8px calc(7px + env(safe-area-inset-bottom));
-  background:rgba(255,255,255,.96);
-  backdrop-filter:blur(18px);
+  left:0;
+  right:0;
+  z-index:30;
+  height:68px;
   display:flex;
   justify-content:space-around;
-  align-items:center;
-  box-shadow:0 -5px 25px rgba(20,15,60,.09);
-  z-index:100;
-  border-top:1px solid rgba(0,0,0,.04);
+  background:rgba(12,14,20,.94);
+  backdrop-filter:blur(18px);
+  border-top:1px solid var(--border);
+  padding-bottom:env(safe-area-inset-bottom);
 }
 
-.nav{
-  min-width:52px;
-  border:0;
-  background:none;
-  color:#85838f;
-  font-size:21px;
+.navBtn{
   position:relative;
-  padding:5px;
-}
-
-.nav b{
-  display:block;
+  flex:1;
+  background:transparent;
+  color:#737b8d;
   font-size:10px;
-  margin-top:3px;
-  font-weight:800;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
 }
 
-.nav.active{
-  color:var(--primary);
+.navBtn span:first-child{
+  font-size:20px;
 }
 
-.create{
+.navBtn.active{
+  color:#fff;
+}
+
+.createNav{
+  margin-top:-17px;
+}
+
+.createCircle{
   width:52px;
   height:52px;
   border-radius:18px;
-  font-size:29px;
-  color:white;
-  background:linear-gradient(135deg,var(--primary),var(--pink));
-  box-shadow:0 8px 20px rgba(108,92,231,.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--primary),#957cff);
+  box-shadow:0 10px 25px rgba(108,99,255,.35);
+  font-size:25px;
 }
 
-.badge{
-  position:absolute;
-  top:-3px;
-  right:0;
-  min-width:17px;
-  background:var(--danger);
-  color:white;
-  border-radius:20px;
-  padding:2px 5px;
-  font-size:9px;
-  font-weight:900;
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:60;
+  background:rgba(0,0,0,.65);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
 }
 
-/* =========================
-   TOAST
-========================= */
+.modalBox{
+  width:100%;
+  max-width:720px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px 24px 0 0;
+  padding:18px;
+}
+
+.modalBox h3{
+  margin-bottom:14px;
+}
+
+.modalAction{
+  width:100%;
+  text-align:left;
+  background:transparent;
+  color:var(--text);
+  padding:14px;
+  border-radius:12px;
+}
+
+.modalAction:hover{
+  background:var(--card2);
+}
+
+.modalAction.danger{
+  color:var(--red);
+}
+
+/* TOAST */
 
 .toast{
-  display:none;
   position:fixed;
-  top:16px;
   left:50%;
-  transform:translateX(-50%);
-  width:min(450px,92%);
-  background:#181824;
-  color:white;
-  padding:13px 15px;
-  border-radius:15px;
-  z-index:1000;
-  text-align:center;
+  bottom:82px;
+  transform:translateX(-50%) translateY(20px);
+  z-index:100;
+  background:#f7f8fb;
+  color:#111;
+  padding:11px 16px;
+  border-radius:12px;
   font-size:13px;
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  font-weight:600;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
 }
 
-/* =========================
-   LOADING
-========================= */
-
-.loading{
-  padding:20px;
-  text-align:center;
-  color:var(--muted);
-  font-size:13px;
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
 }
 
-/* =========================
-   SMALL SCREENS
-========================= */
+/* LOADER */
 
-@media(max-width:380px){
-  .content{
-    padding:12px;
-  }
+.loader{
+  display:flex;
+  justify-content:center;
+  padding:35px;
+}
 
-  .card{
-    padding:15px;
-  }
+.spinner{
+  width:27px;
+  height:27px;
+  border:3px solid var(--border);
+  border-top-color:var(--primary);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
 
-  header{
-    padding-left:15px;
-    padding-right:15px;
-  }
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
 
-  .poll-title{
-    font-size:17px;
+@media(min-width:700px){
+  .bottomNav{
+    left:50%;
+    transform:translateX(-50%);
+    width:720px;
+    border-left:1px solid var(--border);
+    border-right:1px solid var(--border);
   }
 }
 </style>
@@ -820,454 +868,198 @@ header p{
 
 <body>
 
-<!-- =========================
-     AUTH
-========================= -->
+<!-- AUTH -->
 
-<div id="authScreen" class="app">
+<section id="authScreen">
 
-<div class="auth">
+  <div class="authBox">
 
-<div class="box">
+    <div class="logo">
+      <div class="logoMark">⚡</div>
+      <h1>Poll Pulse</h1>
+      <p>Your opinion. Your pulse.</p>
+    </div>
 
-<div class="logo">Poll Pulse</div>
+    <div class="tabs">
+      <button id="loginTab" class="active" onclick="showAuth('login')">
+        Login
+      </button>
+      <button id="signupTab" onclick="showAuth('signup')">
+        Sign up
+      </button>
+    </div>
 
-<div class="sub">
-Everyone has an opinion.
-</div>
+    <div id="loginForm">
 
-<input id="email" type="email" placeholder="Email">
+      <div class="field">
+        <label>Email</label>
+        <input id="loginEmail" type="email" placeholder="you@example.com">
+      </div>
 
-<input id="password" type="password" placeholder="Password">
+      <div class="field">
+        <label>Password</label>
+        <input id="loginPassword" type="password" placeholder="Password">
+      </div>
 
-<input id="username" class="hidden" placeholder="Username">
+      <button class="primaryBtn" onclick="login()">
+        Login
+      </button>
 
-<button id="loginBtn" class="btn wide" onclick="login()">
-Login
-</button>
+      <button
+        class="secondaryBtn"
+        style="width:100%;margin-top:10px"
+        onclick="resetPassword()">
+        Forgot password?
+      </button>
 
-<button id="signupBtn" class="btn wide hidden" onclick="signup()">
-Create Account
-</button>
+    </div>
 
-<button id="authToggleBtn" class="link" onclick="toggleAuth()">
-Create new account
-</button>
+    <div id="signupForm" class="hidden">
 
-<button class="link" onclick="resetPassword()">
-Forgot password?
-</button>
+      <div class="field">
+        <label>Username</label>
+        <input id="signupUsername" placeholder="@username">
+      </div>
 
-<div id="authMsg" class="msg"></div>
+      <div class="field">
+        <label>Display name</label>
+        <input id="signupName" placeholder="Your name">
+      </div>
 
-</div>
+      <div class="field">
+        <label>Email</label>
+        <input id="signupEmail" type="email" placeholder="you@example.com">
+      </div>
 
-</div>
+      <div class="field">
+        <label>Password</label>
+        <input id="signupPassword" type="password" placeholder="Create password">
+      </div>
 
-</div>
+      <button class="primaryBtn" onclick="signup()">
+        Create account
+      </button>
 
+    </div>
 
-<!-- =========================
-     APP
-========================= -->
+    <div id="authMsg" class="authMsg"></div>
 
-<div id="homeScreen" class="app hidden">
-
-<header>
-
-<div class="header-top">
-
-<div>
-<h1>Poll Pulse</h1>
-<p id="hello">Welcome 👋</p>
-</div>
-
-<div class="header-pill">
-LIVE
-</div>
-
-</div>
-
-</header>
-
-
-<main class="content">
-
-<!-- =========================
-     HOME
-========================= -->
-
-<section id="homePage">
-
-<div class="card hero-card">
-
-<div class="hero-title">
-🔥 What's your opinion?
-</div>
-
-<div class="hero-text">
-Vote on interesting questions, discover people and share your own thoughts.
-</div>
-
-</div>
-
-<div class="section-title">
-<h2>Poll Feed</h2>
-<span>Latest</span>
-</div>
-
-<div id="polls">
-<div class="loading">Loading polls...</div>
-</div>
+  </div>
 
 </section>
 
 
-<!-- =========================
-     SEARCH
-========================= -->
+<!-- APP -->
 
-<section id="searchPage" class="hidden">
+<section id="app" class="hidden">
 
-<div class="card">
+  <header class="topbar">
 
-<h2 style="margin-top:0">🔎 Search</h2>
+    <div class="brand">
+      <div class="brandIcon">⚡</div>
+      Poll Pulse
+    </div>
 
-<div class="search-box">
+    <div class="topActions">
 
-<span class="search-icon">🔎</span>
+      <button class="iconBtn" onclick="showPage('search')">
+        🔎
+      </button>
 
-<input
-id="searchInput"
-placeholder="Search username or poll..."
-oninput="searchAll()"
->
+      <button class="iconBtn" onclick="showPage('notifications')">
+        🔔
+        <span id="notificationBadge" class="badge hidden">0</span>
+      </button>
 
-</div>
+    </div>
 
-<div id="searchResults">
-<div class="notice">Search something...</div>
-</div>
-
-</div>
-
-</section>
+  </header>
 
 
-<!-- =========================
-     CREATE
-========================= -->
+  <main id="content"></main>
 
-<section id="createPage" class="hidden">
 
-<div class="card">
+  <nav class="bottomNav">
 
-<div class="create-head">
+    <button class="navBtn active" data-page="home" onclick="showPage('home')">
+      <span>🏠</span>
+      Home
+    </button>
 
-<div class="create-icon">
-🗳️
-</div>
+    <button class="navBtn" data-page="search" onclick="showPage('search')">
+      <span>🔎</span>
+      Search
+    </button>
 
-<div>
-<h2>Create Poll</h2>
-<p>Ask the community what they think.</p>
-</div>
+    <button class="navBtn createNav" data-page="create" onclick="showPage('create')">
+      <span class="createCircle">＋</span>
+      Create
+    </button>
 
-</div>
+    <button class="navBtn" data-page="chat" onclick="showPage('chat')">
+      <span>💬</span>
+      Chat
+      <span id="chatBadge" class="badge hidden">0</span>
+    </button>
 
-<input
-id="question"
-placeholder="Ask your question..."
->
+    <button class="navBtn" data-page="profile" onclick="showPage('profile')">
+      <span>👤</span>
+      Profile
+    </button>
 
-<input
-id="option1"
-placeholder="Option 1"
->
-
-<input
-id="option2"
-placeholder="Option 2"
->
-
-<input
-id="option3"
-placeholder="Option 3 (optional)"
->
-
-<input
-id="option4"
-placeholder="Option 4 (optional)"
->
-
-<button class="btn wide" onclick="createPoll()">
-Publish Poll
-</button>
-
-</div>
+  </nav>
 
 </section>
 
 
-<!-- =========================
-     CHAT
-========================= -->
+<!-- CHAT WINDOW -->
 
-<section id="chatPage" class="hidden">
+<div id="chatWindow" class="chatWindow hidden">
 
-<div class="card">
+  <header class="chatHeader">
 
-<h2 style="margin-top:0">💬 Chats</h2>
+    <button class="iconBtn" onclick="closeChat()">←</button>
 
-<input
-id="chatSearch"
-placeholder="Search username..."
-oninput="searchChatUsers()"
->
+    <div class="userInfo">
+      <div id="chatAvatar" class="avatar">U</div>
 
-<div id="chatUsers">
-<div class="notice">
-Search a user to start chatting.
-</div>
-</div>
+      <div>
+        <div id="chatName" class="userName">User</div>
+        <div class="time">Chat</div>
+      </div>
+    </div>
 
+  </header>
 
-<div id="chatArea" class="hidden">
+  <div id="chatMessages" class="chatMessages"></div>
 
-<div class="chat-header">
+  <div class="chatInput">
 
-<button class="btn" onclick="closeChat()">
-←
-</button>
+    <input
+      id="messageInput"
+      placeholder="Write a message..."
+      onkeydown="if(event.key==='Enter')sendMessage()">
 
-<div id="chatAvatar" class="avatar">
-U
-</div>
+    <button class="sendBtn" onclick="sendMessage()">
+      ➤
+    </button>
 
-<div class="chat-header-info">
-
-<div id="chatTitle" class="chat-header-name">
-User
-</div>
-
-<div id="chatStatus" class="chat-header-status">
-Chat
-</div>
-
-</div>
+  </div>
 
 </div>
 
 
-<div id="messages" class="chatbox"></div>
+<!-- MODAL -->
 
+<div id="modal" class="modal hidden" onclick="closeModal(event)">
 
-<div class="row">
+  <div class="modalBox" onclick="event.stopPropagation()">
 
-<input
-id="chatInput"
-class="grow"
-placeholder="Message..."
-onkeydown="handleChatEnter(event)"
->
+    <h3 id="modalTitle">Options</h3>
 
-<button class="btn" onclick="sendMessage()">
-Send
-</button>
+    <div id="modalContent"></div>
 
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     PROFILE
-========================= -->
-
-<section id="profilePage" class="hidden">
-
-<div class="card">
-
-<div class="profile-top">
-
-<div id="avatar" class="profile-big-avatar">
-U
-</div>
-
-<h2 id="profileName">
-User
-</h2>
-
-<div id="profileUsername" class="small"></div>
-
-</div>
-
-
-<div class="profile-stats">
-
-<div class="profile-stat">
-
-<strong id="followersCount">
-0
-</strong>
-
-<span>Followers</span>
-
-</div>
-
-<div class="profile-stat">
-
-<strong id="followingCount">
-0
-</strong>
-
-<span>Following</span>
-
-</div>
-
-<div class="profile-stat">
-
-<strong id="myPollCount">
-0
-</strong>
-
-<span>Polls</span>
-
-</div>
-
-</div>
-
-
-<div class="notice" style="margin-top:18px">
-
-<b>🆔 My User ID</b>
-
-<div id="profileId" class="tiny"></div>
-
-</div>
-
-
-<div class="tabs">
-
-<button class="active" onclick="profileTab('polls',this)">
-My Polls
-</button>
-
-<button onclick="profileTab('votes',this)">
-My Votes
-</button>
-
-<button onclick="profileTab('followers',this)">
-Followers
-</button>
-
-<button onclick="profileTab('following',this)">
-Following
-</button>
-
-</div>
-
-
-<div id="profileContent">
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3 style="margin-top:0">
-🔔 Notifications
-</h3>
-
-<div id="notifications">
-<div class="loading">Loading...</div>
-</div>
-
-</div>
-
-
-<button
-class="btn wide"
-style="background:linear-gradient(135deg,#e74c3c,#ff6b6b)"
-onclick="logout()"
->
-Logout
-</button>
-
-</section>
-
-</main>
-
-
-<!-- =========================
-     NAVIGATION
-========================= -->
-
-<nav class="bottom">
-
-<button
-id="navHome"
-class="nav active"
-onclick="showPage('home')"
->
-🏠
-<b>Home</b>
-</button>
-
-
-<button
-id="navSearch"
-class="nav"
-onclick="showPage('search')"
->
-🔎
-<b>Search</b>
-</button>
-
-
-<button
-class="nav create"
-onclick="showPage('create')"
->
-＋
-</button>
-
-
-<button
-id="navChat"
-class="nav"
-onclick="showPage('chat')"
->
-💬
-<b>Chat</b>
-
-<span id="chatBadge" class="badge hidden">
-0
-</span>
-
-</button>
-
-
-<button
-id="navProfile"
-class="nav"
-onclick="showPage('profile')"
->
-👤
-<b>Profile</b>
-
-<span id="notificationBadge" class="badge hidden">
-0
-</span>
-
-</button>
-
-</nav>
+  </div>
 
 </div>
 
@@ -1287,146 +1079,136 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
 
-let sb = null;
+let supabaseClient = null;
 let currentUser = null;
+let currentProfile = null;
+let currentPage = "home";
 let currentChatUser = null;
-let searchTimer = null;
-let chatTimer = null;
+let messageSubscription = null;
+
+function initSupabase(){
+
+  if(!window.supabase){
+    showAuthMessage("Supabase failed to load.");
+    return false;
+  }
+
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+  return true;
+}
 
 
 /* =========================
    HELPERS
 ========================= */
 
-function authMessage(text){
+function esc(value){
 
-    const el =
-        document.getElementById("authMsg");
-
-    if(el){
-        el.textContent = text || "";
-    }
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
+function initials(name){
 
-function toast(text){
+  const n = String(name || "U").trim();
 
-    const t =
-        document.getElementById("toast");
+  if(!n) return "U";
 
-    if(!t)return;
-
-    t.textContent = text;
-
-    t.style.display = "block";
-
-    clearTimeout(window.toastTimer);
-
-    window.toastTimer =
-        setTimeout(
-            ()=>{
-                t.style.display = "none";
-            },
-            3000
-        );
+  return n
+    .split(/\s+/)
+    .slice(0,2)
+    .map(x=>x[0])
+    .join("")
+    .toUpperCase();
 }
 
+function timeAgo(date){
 
-function esc(text){
+  if(!date) return "";
 
-    return String(text ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+  const seconds =
+    Math.floor((Date.now()-new Date(date).getTime())/1000);
+
+  if(seconds < 60) return "now";
+
+  if(seconds < 3600)
+    return Math.floor(seconds/60)+"m";
+
+  if(seconds < 86400)
+    return Math.floor(seconds/3600)+"h";
+
+  if(seconds < 604800)
+    return Math.floor(seconds/86400)+"d";
+
+  return new Date(date).toLocaleDateString();
 }
 
+function showToast(message){
 
-function getInitial(name){
+  const t = document.getElementById("toast");
 
-    return String(name || "U")
-        .charAt(0)
-        .toUpperCase();
+  t.textContent = message;
+  t.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(()=>t.classList.remove("show"),2200);
 }
 
+function showAuthMessage(message){
 
-/* =========================
-   SUPABASE INIT
-========================= */
-
-function initSupabase(){
-
-    if(!window.supabase){
-
-        authMessage(
-            "Supabase load nahi hua. Internet check karo."
-        );
-
-        return false;
-    }
-
-    try{
-
-        sb =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
-
-        console.log("SUPABASE CONNECTED");
-
-        return true;
-
-    }catch(error){
-
-        console.error(
-            "SUPABASE INIT ERROR:",
-            error
-        );
-
-        authMessage(
-            "Supabase start nahi ho saka."
-        );
-
-        return false;
-    }
+  document.getElementById("authMsg").textContent =
+    message;
 }
 
 
 /* =========================
-   AUTH TOGGLE
+   AUTH UI
 ========================= */
 
-function toggleAuth(){
+function showAuth(type){
 
-    const username =
-        document.getElementById("username");
+  const login =
+    document.getElementById("loginForm");
 
-    const loginBtn =
-        document.getElementById("loginBtn");
+  const signup =
+    document.getElementById("signupForm");
 
-    const signupBtn =
-        document.getElementById("signupBtn");
+  const loginTab =
+    document.getElementById("loginTab");
 
-    const toggleBtn =
-        document.getElementById("authToggleBtn");
+  const signupTab =
+    document.getElementById("signupTab");
 
-    const signupMode =
-        !username.classList.contains("hidden");
+  if(type==="login"){
 
-    username.classList.toggle("hidden");
-    loginBtn.classList.toggle("hidden");
-    signupBtn.classList.toggle("hidden");
+    login.classList.remove("hidden");
+    signup.classList.add("hidden");
 
-    toggleBtn.textContent =
-        signupMode
-        ?
-        "Create new account"
-        :
-        "Already have an account? Login";
+    loginTab.classList.add("active");
+    signupTab.classList.remove("active");
 
-    authMessage("");
+  }else{
+
+    signup.classList.remove("hidden");
+    login.classList.add("hidden");
+
+    signupTab.classList.add("active");
+    loginTab.classList.remove("active");
+
+  }
+
+  showAuthMessage("");
 }
 
 
@@ -1436,170 +1218,72 @@ function toggleAuth(){
 
 async function signup(){
 
-    if(!sb){
+  const username =
+    document.getElementById("signupUsername").value.trim();
 
-        authMessage(
-            "Supabase ready nahi hai."
-        );
+  const displayName =
+    document.getElementById("signupName").value.trim();
 
-        return;
-    }
+  const email =
+    document.getElementById("signupEmail").value.trim();
 
-    const email =
-        document
-        .getElementById("email")
-        .value
-        .trim()
-        .toLowerCase();
+  const password =
+    document.getElementById("signupPassword").value;
 
-    const password =
-        document
-        .getElementById("password")
-        .value;
+  if(!username || !email || !password){
 
-    const username =
-        document
-        .getElementById("username")
-        .value
-        .trim()
-        .toLowerCase();
+    showAuthMessage("Please fill all required fields.");
+    return;
+  }
 
-    if(!email || !password || !username){
+  if(password.length < 6){
 
-        authMessage(
-            "Email, password aur username required hai."
-        );
+    showAuthMessage("Password should be at least 6 characters.");
+    return;
+  }
 
-        return;
-    }
+  showAuthMessage("Creating your account...");
 
-    if(password.length < 6){
+  const {data,error} =
+    await supabaseClient.auth.signUp({
+      email,
+      password
+    });
 
-        authMessage(
-            "Password minimum 6 characters."
-        );
+  if(error){
 
-        return;
-    }
+    showAuthMessage(error.message);
+    return;
+  }
 
-    if(!/^[a-z0-9_]{3,25}$/.test(username)){
+  if(data.user){
 
-        authMessage(
-            "Username 3-25 characters ka ho."
-        );
+    const {error:profileError} =
+      await supabaseClient
+      .from("profiles")
+      .upsert({
+        id:data.user.id,
+        email,
+        username:username.replace(/^@/,""),
+        display_name:displayName || username
+      });
 
-        return;
-    }
+    if(profileError){
 
-    const button =
-        document.getElementById("signupBtn");
+      console.log(profileError);
 
-    button.disabled = true;
+      showAuthMessage(
+        "Account created, but profile setup needs attention."
+      );
 
-    authMessage("Creating account...");
+    }else{
 
-    try{
-
-        const {data,error} =
-            await sb.auth.signUp({
-
-                email,
-                password,
-
-                options:{
-                    data:{
-                        username,
-                        display_name:username
-                    }
-                }
-
-            });
-
-        if(error){
-
-            authMessage(
-                error.message
-            );
-
-            return;
-        }
-
-        if(!data?.user){
-
-            authMessage(
-                "Account create nahi hua."
-            );
-
-            return;
-        }
-
-        if(data.session){
-
-            await createProfile(
-                data.user,
-                email,
-                username
-            );
-
-            await openApp(
-                data.user
-            );
-
-        }else{
-
-            authMessage(
-                "Account ban gaya. Email verify karo, phir Login karo."
-            );
-        }
-
-    }catch(error){
-
-        console.error(error);
-
-        authMessage(
-            error?.message ||
-            "Signup failed."
-        );
-
-    }finally{
-
-        button.disabled = false;
+      showAuthMessage(
+        "Account created successfully!"
+      );
 
     }
-}
-
-
-/* =========================
-   PROFILE CREATE
-========================= */
-
-async function createProfile(
-    user,
-    email,
-    username
-){
-
-    if(!sb || !user)return;
-
-    const {error} =
-        await sb
-        .from("profiles")
-        .upsert({
-
-            id:user.id,
-            email:email,
-            username:username,
-            display_name:username
-
-        });
-
-    if(error){
-
-        console.error(
-            "PROFILE CREATE ERROR:",
-            error
-        );
-    }
+  }
 }
 
 
@@ -1609,162 +1293,70 @@ async function createProfile(
 
 async function login(){
 
-    if(!sb){
+  const email =
+    document.getElementById("loginEmail").value.trim();
 
-        authMessage(
-            "Supabase ready nahi hai. Page reload karo."
-        );
+  const password =
+    document.getElementById("loginPassword").value;
 
-        return;
-    }
+  if(!email || !password){
 
-    const email =
-        document
-        .getElementById("email")
-        .value
-        .trim()
-        .toLowerCase();
+    showAuthMessage("Enter email and password.");
+    return;
+  }
 
-    const password =
-        document
-        .getElementById("password")
-        .value;
+  showAuthMessage("Logging in...");
 
-    if(!email){
+  const {data,error} =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
 
-        authMessage("Email enter karo.");
+  if(error){
 
-        return;
-    }
+    showAuthMessage(error.message);
+    return;
+  }
 
-    if(!password){
+  currentUser = data.user;
 
-        authMessage("Password enter karo.");
+  await loadProfile();
 
-        return;
-    }
+  openApp();
 
-    const button =
-        document.getElementById("loginBtn");
-
-    button.disabled = true;
-
-    authMessage("Logging in...");
-
-    try{
-
-        const {data,error} =
-            await sb.auth.signInWithPassword({
-
-                email,
-                password
-
-            });
-
-        if(error){
-
-            authMessage(
-                error.message
-            );
-
-            return;
-        }
-
-        if(!data?.user){
-
-            authMessage(
-                "Login hua nahi."
-            );
-
-            return;
-        }
-
-        authMessage("");
-
-        await openApp(
-            data.user
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-        authMessage(
-            error?.message ||
-            "Login failed."
-        );
-
-    }finally{
-
-        button.disabled = false;
-
-    }
 }
 
 
 /* =========================
-   PASSWORD RESET
+   RESET
 ========================= */
 
 async function resetPassword(){
 
-    if(!sb){
+  const email =
+    document.getElementById("loginEmail").value.trim();
 
-        authMessage(
-            "Supabase ready nahi hai."
-        );
+  if(!email){
 
-        return;
-    }
+    showAuthMessage("Enter your email first.");
+    return;
+  }
 
-    const email =
-        document
-        .getElementById("email")
-        .value
-        .trim()
-        .toLowerCase();
+  const {error} =
+    await supabaseClient.auth.resetPasswordForEmail(email);
 
-    if(!email){
+  if(error){
 
-        authMessage(
-            "Password reset ke liye email enter karo."
-        );
+    showAuthMessage(error.message);
 
-        return;
-    }
+  }else{
 
-    authMessage(
-        "Sending reset email..."
+    showAuthMessage(
+      "Password reset link sent to your email."
     );
 
-    const redirectUrl =
-        window.location.origin +
-        window.location.pathname;
-
-    const {error} =
-        await sb.auth.resetPasswordForEmail(
-
-            email,
-
-            {
-                redirectTo:
-                    redirectUrl
-            }
-
-        );
-
-    if(error){
-
-        authMessage(
-            error.message
-        );
-
-        return;
-    }
-
-    authMessage(
-        "Reset email bhej diya. Inbox aur Spam check karo."
-    );
+  }
 }
 
 
@@ -1772,1121 +1364,444 @@ async function resetPassword(){
    PROFILE
 ========================= */
 
-async function getProfile(id){
+async function loadProfile(){
 
-    if(!sb || !id)return null;
+  if(!currentUser) return;
 
-    const {data,error} =
-        await sb
-        .from("profiles")
-        .select(
-            "id,username,display_name"
-        )
-        .eq("id",id)
-        .maybeSingle();
+  const {data,error} =
+    await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("id",currentUser.id)
+    .maybeSingle();
 
-    if(error){
+  if(error){
 
-        console.error(
-            "PROFILE READ ERROR:",
-            error
-        );
+    console.log(error);
+    return;
+  }
 
-        return null;
-    }
+  currentProfile = data;
 
-    return data || null;
-}
-
-
-async function ensureProfile(user){
-
-    if(!user)return null;
-
-    let profile =
-        await getProfile(user.id);
-
-    if(profile)return profile;
-
-    let username =
-        user.user_metadata?.username ||
-        (
-            user.email
-            ?
-            user.email.split("@")[0]
-            :
-            "user"
-        );
-
-    username =
-        username
-        .replace(
-            /[^a-zA-Z0-9_]/g,
-            ""
-        )
-        .slice(0,25);
-
-    if(username.length < 3){
-
-        username =
-            "user" +
-            user.id
-            .replace(/-/g,"")
-            .slice(0,8);
-    }
-
-    await createProfile(
-        user,
-        user.email || "",
-        username
-    );
-
-    return await getProfile(
-        user.id
-    );
 }
 
 
 /* =========================
-   OPEN APP
+   APP
 ========================= */
 
-async function openApp(user){
+function openApp(){
 
-    if(!user)return;
+  document
+    .getElementById("authScreen")
+    .classList.add("hidden");
 
-    currentUser = user;
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
 
-    document
-        .getElementById("authScreen")
-        .classList.add("hidden");
+  showPage("home");
 
-    document
-        .getElementById("homeScreen")
-        .classList.remove("hidden");
+  loadBadges();
 
-    const profile =
-        await ensureProfile(user);
+}
 
-    const username =
-        profile?.username ||
-        user.user_metadata?.username ||
-        "user";
 
-    const displayName =
-        profile?.display_name ||
-        username;
+function logout(){
 
-    document.getElementById("hello").textContent =
-        "@" + username;
+  supabaseClient.auth.signOut();
 
-    document.getElementById("profileName").textContent =
-        displayName;
+  currentUser = null;
+  currentProfile = null;
 
-    document.getElementById("profileUsername").textContent =
-        "@" + username;
+  document
+    .getElementById("app")
+    .classList.add("hidden");
 
-    document.getElementById("profileId").textContent =
-        user.id;
+  document
+    .getElementById("authScreen")
+    .classList.remove("hidden");
 
-    document.getElementById("avatar").textContent =
-        getInitial(username);
+  showAuth("login");
 
-    await updateProfileStats();
-    await loadPolls();
-    await loadNotifications();
-    await updateChatBadge();
 }
 
 
 /* =========================
-   PROFILE STATS
-========================= */
-
-async function updateProfileStats(){
-
-    if(!currentUser || !sb)return;
-
-    const followers =
-        await sb
-        .from("follows")
-        .select(
-            "id",
-            {
-                count:"exact",
-                head:true
-            }
-        )
-        .eq(
-            "following_id",
-            currentUser.id
-        );
-
-    const following =
-        await sb
-        .from("follows")
-        .select(
-            "id",
-            {
-                count:"exact",
-                head:true
-            }
-        )
-        .eq(
-            "follower_id",
-            currentUser.id
-        );
-
-    const polls =
-        await sb
-        .from("polls")
-        .select(
-            "id",
-            {
-                count:"exact",
-                head:true
-            }
-        )
-        .eq(
-            "user_id",
-            currentUser.id
-        );
-
-    document.getElementById(
-        "followersCount"
-    ).textContent =
-        followers.count || 0;
-
-    document.getElementById(
-        "followingCount"
-    ).textContent =
-        following.count || 0;
-
-    document.getElementById(
-        "myPollCount"
-    ).textContent =
-        polls.count || 0;
-}
-
-
-/* =========================
-   NAVIGATION
+   PAGE NAVIGATION
 ========================= */
 
 function showPage(page){
 
-    [
-        "homePage",
-        "searchPage",
-        "createPage",
-        "chatPage",
-        "profilePage"
-    ]
-    .forEach(
-        id =>
-        document
-        .getElementById(id)
-        .classList.add("hidden")
-    );
+  currentPage = page;
 
-    [
-        "navHome",
-        "navSearch",
-        "navChat",
-        "navProfile"
-    ]
-    .forEach(
-        id =>
-        document
-        .getElementById(id)
-        .classList.remove("active")
-    );
+  document
+    .querySelectorAll(".navBtn")
+    .forEach(btn=>{
+      btn.classList.toggle(
+        "active",
+        btn.dataset.page===page
+      );
+    });
 
-    if(page==="home"){
+  const content =
+    document.getElementById("content");
 
-        document
-        .getElementById("homePage")
-        .classList.remove("hidden");
+  content.innerHTML =
+    `<div class="loader">
+       <div class="spinner"></div>
+     </div>`;
 
-        document
-        .getElementById("navHome")
-        .classList.add("active");
+  if(page==="home") loadHome();
+  else if(page==="search") loadSearch();
+  else if(page==="create") loadCreate();
+  else if(page==="chat") loadChat();
+  else if(page==="profile") loadProfilePage();
+  else if(page==="notifications") loadNotifications();
 
-        loadPolls();
-    }
-
-    if(page==="search"){
-
-        document
-        .getElementById("searchPage")
-        .classList.remove("hidden");
-
-        document
-        .getElementById("navSearch")
-        .classList.add("active");
-    }
-
-    if(page==="create"){
-
-        document
-        .getElementById("createPage")
-        .classList.remove("hidden");
-    }
-
-    if(page==="chat"){
-
-        document
-        .getElementById("chatPage")
-        .classList.remove("hidden");
-
-        document
-        .getElementById("navChat")
-        .classList.add("active");
-
-        updateChatBadge();
-    }
-
-    if(page==="profile"){
-
-        document
-        .getElementById("profilePage")
-        .classList.remove("hidden");
-
-        document
-        .getElementById("navProfile")
-        .classList.add("active");
-
-        updateProfileStats();
-        loadNotifications();
-
-        const firstTab =
-            document.querySelector(
-                ".tabs button"
-            );
-
-        profileTab(
-            "polls",
-            firstTab
-        );
-    }
 }
 
 
 /* =========================
-   FOLLOWING IDS
+   HOME
 ========================= */
 
-async function getFollowingIds(){
+async function loadHome(){
 
-    if(!currentUser || !sb){
-        return [];
-    }
+  const content =
+    document.getElementById("content");
 
-    const {data,error} =
-        await sb
-        .from("follows")
-        .select("following_id")
-        .eq(
-            "follower_id",
-            currentUser.id
-        );
+  const {data,error} =
+    await supabaseClient
+    .from("polls")
+    .select("*")
+    .order("created_at",{ascending:false});
 
-    if(error){
+  if(error){
 
-        console.error(
-            "FOLLOWING ERROR:",
-            error
-        );
+    content.innerHTML =
+      `<div class="container">
+        <div class="empty">
+          <div class="emptyIcon">⚠️</div>
+          Unable to load polls.
+        </div>
+      </div>`;
 
-        return [];
-    }
+    console.log(error);
+    return;
+  }
 
-    return (data || [])
-        .map(
-            x => x.following_id
-        );
+  let polls = data || [];
+
+  content.innerHTML = `
+
+    <div class="container">
+
+      <div>
+        <div class="pageTitle">Good to see you 👋</div>
+        <div class="pageSub">
+          See what everyone is thinking today.
+        </div>
+      </div>
+
+      <div class="section">
+
+        <div class="quickGrid">
+
+          <button class="quickCard"
+            onclick="showPage('create')">
+
+            <div class="quickIcon">🗳️</div>
+
+            <strong>Create a poll</strong>
+
+            <span>Ask the crowd</span>
+
+          </button>
+
+          <button class="quickCard"
+            onclick="showPage('search')">
+
+            <div class="quickIcon">🔥</div>
+
+            <strong>Explore</strong>
+
+            <span>Find new opinions</span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+
+          <strong style="font-size:18px">
+            Latest polls
+          </strong>
+
+          <span style="font-size:12px;color:var(--muted)">
+            ${polls.length} polls
+          </span>
+
+        </div>
+
+        <div id="pollFeed">
+
+          ${
+            polls.length
+            ? polls.map(renderPoll).join("")
+            : `
+              <div class="empty">
+                <div class="emptyIcon">🗳️</div>
+                No polls yet.<br>
+                Be the first to create one.
+              </div>
+            `
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+  await enrichPolls(polls);
+
 }
 
 
 /* =========================
-   LOAD POLLS
+   POLL RENDER
 ========================= */
 
-async function loadPolls(){
+function renderPoll(poll){
 
-    const box =
-        document.getElementById("polls");
+  const options =
+    Array.isArray(poll.options)
+    ? poll.options
+    : [];
 
-    if(!box)return;
+  return `
 
-    if(!currentUser || !sb){
+    <article class="pollCard"
+      id="poll-${poll.id}">
 
-        box.innerHTML =
-            "<div class='notice'>Login required.</div>";
+      <div class="pollHead">
 
-        return;
-    }
+        <div class="userInfo">
 
-    box.innerHTML =
-        "<div class='loading'>Loading polls...</div>";
+          <div class="avatar"
+            id="avatar-${poll.id}">
+            ?
+          </div>
 
-    try{
+          <div>
 
-        const {
-            data:polls,
-            error
-        } =
-            await sb
-            .from("polls")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending:false
-                }
-            )
-            .limit(100);
-
-        if(error){
-
-            console.error(
-                "POLLS ERROR:",
-                error
-            );
-
-            box.innerHTML =
-                "<div class='notice'>" +
-                "Polls load error: " +
-                esc(error.message) +
-                "</div>";
-
-            return;
-        }
-
-        box.innerHTML = "";
-
-        let votes = [];
-        let likes = [];
-
-        const pollIds =
-            (polls || [])
-            .map(
-                p => p.id
-            );
-
-        if(pollIds.length){
-
-            const voteResult =
-                await sb
-                .from("votes")
-                .select(
-                    "poll_id,user_id,option"
-                )
-                .in(
-                    "poll_id",
-                    pollIds
-                );
-
-            if(voteResult.error){
-
-                console.error(
-                    "VOTES ERROR:",
-                    voteResult.error
-                );
-
-            }else{
-
-                votes =
-                    voteResult.data || [];
-            }
-
-            const likeResult =
-                await sb
-                .from("likes")
-                .select(
-                    "poll_id,user_id"
-                )
-                .in(
-                    "poll_id",
-                    pollIds
-                );
-
-            if(likeResult.error){
-
-                console.error(
-                    "LIKES ERROR:",
-                    likeResult.error
-                );
-
-            }else{
-
-                likes =
-                    likeResult.data || [];
-            }
-        }
-
-        if(!polls || !polls.length){
-
-            box.innerHTML =
-                "<div class='notice'>" +
-                "Abhi koi poll nahi hai. Pehla poll banao! 🗳️" +
-                "</div>";
-
-        }else{
-
-            for(const poll of polls){
-
-                const profile =
-                    await getProfile(
-                        poll.user_id
-                    );
-
-                const username =
-                    profile?.username ||
-                    "user";
-
-                const displayName =
-                    profile?.display_name ||
-                    username;
-
-                let options =
-                    poll.options;
-
-                if(typeof options === "string"){
-
-                    try{
-
-                        options =
-                            JSON.parse(options);
-
-                    }catch(e){
-
-                        options =
-                            options
-                            .split(",")
-                            .map(
-                                x => x.trim()
-                            )
-                            .filter(Boolean);
-                    }
-                }
-
-                if(!Array.isArray(options)){
-
-                    options = [];
-                }
-
-                const pollVotes =
-                    votes.filter(
-                        v =>
-                        v.poll_id === poll.id
-                    );
-
-                const totalVotes =
-                    pollVotes.length;
-
-                const myVote =
-                    pollVotes.find(
-                        v =>
-                        v.user_id ===
-                        currentUser.id
-                    );
-
-                const pollLikes =
-                    likes.filter(
-                        l =>
-                        l.poll_id === poll.id
-                    );
-
-                const liked =
-                    pollLikes.some(
-                        l =>
-                        l.user_id ===
-                        currentUser.id
-                    );
-
-                const card =
-                    document.createElement("div");
-
-                card.className =
-                    "card poll-card";
-
-                card.innerHTML = `
-
-                    <div class="creator">
-
-                        <div class="creator-avatar">
-                            ${esc(
-                                getInitial(username)
-                            )}
-                        </div>
-
-                        <div class="grow">
-
-                            <div class="creator-name">
-                                @${esc(username)}
-                            </div>
-
-                            <div class="small">
-                                ${esc(displayName)}
-                                •
-                                ${
-                                    poll.created_at
-                                    ?
-                                    new Date(
-                                        poll.created_at
-                                    ).toLocaleString()
-                                    :
-                                    ""
-                                }
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="poll-title">
-                        ${esc(
-                            poll.question ||
-                            "Poll"
-                        )}
-                    </div>
-
-                    <div class="poll-options"></div>
-
-                    <div class="small poll-total">
-                        ${totalVotes}
-                        ${
-                            totalVotes === 1
-                            ?
-                            "vote"
-                            :
-                            "votes"
-                        }
-                    </div>
-
-                    <div class="poll-actions">
-
-                        <button class="poll-action like-btn">
-                            ${
-                                liked
-                                ?
-                                "❤️ Liked"
-                                :
-                                "🤍 Like"
-                            }
-                            ${pollLikes.length}
-                        </button>
-
-                        ${
-                            poll.user_id ===
-                            currentUser.id
-                            ?
-                            `
-                            <button class="poll-action delete-poll">
-                                🗑️ Delete
-                            </button>
-                            `
-                            :
-                            ""
-                        }
-
-                    </div>
-                `;
-
-                const optionsBox =
-                    card.querySelector(
-                        ".poll-options"
-                    );
-
-                options.forEach(
-                    option => {
-
-                        const count =
-                            pollVotes.filter(
-                                v =>
-                                v.option === option
-                            ).length;
-
-                        const percent =
-                            totalVotes
-                            ?
-                            Math.round(
-                                count /
-                                totalVotes *
-                                100
-                            )
-                            :
-                            0;
-
-                        const button =
-                            document.createElement(
-                                "button"
-                            );
-
-                        button.className =
-                            "option";
-
-                        if(
-                            myVote &&
-                            myVote.option === option
-                        ){
-
-                            button.classList.add(
-                                "selected"
-                            );
-                        }
-
-                        button.textContent =
-                            myVote &&
-                            myVote.option === option
-                            ?
-                            "✓ " + option
-                            :
-                            option;
-
-                        button.onclick =
-                            async function(){
-
-                                await vote(
-                                    poll.id,
-                                    option
-                                );
-
-                            };
-
-                        optionsBox.appendChild(
-                            button
-                        );
-
-                        if(myVote){
-
-                            const result =
-                                document.createElement(
-                                    "div"
-                                );
-
-                            result.className =
-                                "result";
-
-                            result.innerHTML = `
-
-                                <div class="result-top">
-
-                                    <span>
-                                        ${esc(option)}
-                                    </span>
-
-                                    <b>
-                                        ${percent}%
-                                    </b>
-
-                                </div>
-
-                                <div class="resultbar">
-
-                                    <i
-                                        style="width:${percent}%"
-                                    ></i>
-
-                                </div>
-                            `;
-
-                            optionsBox.appendChild(
-                                result
-                            );
-                        }
-
-                    }
-                );
-
-                const likeBtn =
-                    card.querySelector(
-                        ".like-btn"
-                    );
-
-                likeBtn.onclick =
-                    async function(){
-
-                        await likePoll(
-                            poll.id
-                        );
-
-                        await loadPolls();
-
-                    };
-
-                const deleteBtn =
-                    card.querySelector(
-                        ".delete-poll"
-                    );
-
-                if(deleteBtn){
-
-                    deleteBtn.onclick =
-                        function(){
-
-                            deletePoll(
-                                poll.id
-                            );
-
-                        };
-                }
-
-                box.appendChild(
-                    card
-                );
-            }
-        }
-
-        const suggestions =
-            await loadSuggestions();
-
-        if(suggestions){
-
-            box.appendChild(
-                suggestions
-            );
-        }
-
-    }catch(error){
-
-        console.error(
-            "LOAD POLLS CRASH:",
-            error
-        );
-
-        box.innerHTML =
-            "<div class='notice'>" +
-            "Home error: " +
-            esc(
-                error?.message ||
-                error
-            ) +
-            "</div>";
-    }
-}
-
-
-/* =========================
-   RANDOM SUGGESTIONS
-========================= */
-
-async function loadSuggestions(){
-
-    if(!currentUser || !sb){
-
-        return null;
-    }
-
-    try{
-
-        const followingIds =
-            await getFollowingIds();
-
-        const {
-            data:users,
-            error
-        } =
-            await sb
-            .from("profiles")
-            .select(
-                "id,username,display_name"
-            )
-            .neq(
-                "id",
-                currentUser.id
-            )
-            .limit(200);
-
-        if(error){
-
-            console.error(
-                "SUGGESTIONS ERROR:",
-                error
-            );
-
-            return null;
-        }
-
-        let candidates =
-            (users || [])
-            .filter(
-                user =>
-                !followingIds.includes(
-                    user.id
-                )
-            );
-
-        if(!candidates.length){
-
-            return null;
-        }
-
-        for(
-            let i =
-                candidates.length - 1;
-
-            i > 0;
-
-            i--
-        ){
-
-            const j =
-                Math.floor(
-                    Math.random() *
-                    (i + 1)
-                );
-
-            [
-                candidates[i],
-                candidates[j]
-            ] =
-            [
-                candidates[j],
-                candidates[i]
-            ];
-        }
-
-        const selected =
-            candidates.slice(0,5);
-
-        const box =
-            document.createElement("div");
-
-        box.className =
-            "suggestion";
-
-        box.innerHTML = `
-
-            <h3>👥 Follow Suggestions</h3>
-
-            <div class="small">
-                New people you may know
+            <div class="userName"
+              id="user-${poll.id}">
+              Poll Pulse user
             </div>
 
-        `;
+            <div class="time">
+              ${timeAgo(poll.created_at)}
+            </div>
 
-        selected.forEach(
-            user => {
+          </div>
 
-                const row =
-                    document.createElement(
-                        "div"
-                    );
+        </div>
 
-                row.className =
-                    "row user";
+        <button class="moreBtn"
+          onclick="pollMenu('${poll.id}')">
+          ⋯
+        </button>
 
-                row.innerHTML = `
+      </div>
 
-                    <div class="avatar">
-                        ${esc(
-                            getInitial(
-                                user.username
-                            )
-                        )}
-                    </div>
+      <div class="pollQuestion">
+        ${esc(poll.question)}
+      </div>
 
-                    <div class="grow">
+      <div id="options-${poll.id}">
 
-                        <b>
-                            @${esc(
-                                user.username
-                            )}
-                        </b>
+        ${
+          options.map((option,index)=>`
 
-                        <div class="small">
-                            ${esc(
-                                user.display_name ||
-                                ""
-                            )}
-                        </div>
+            <button
+              class="option"
+              onclick="vote('${poll.id}',${index})">
 
-                    </div>
+              <div
+                class="optionBar"
+                id="bar-${poll.id}-${index}">
+              </div>
 
-                    <button class="btn follow">
-                        Follow
-                    </button>
+              <div class="optionContent">
 
-                `;
+                <span class="optionText">
+                  ${esc(option)}
+                </span>
 
-                const button =
-                    row.querySelector(
-                        ".follow"
-                    );
+                <span
+                  class="percent"
+                  id="percent-${poll.id}-${index}">
+                  —
+                </span>
 
-                button.onclick =
-                    async function(){
+              </div>
 
-                        await followUser(
-                            user.id,
-                            button
-                        );
+            </button>
 
-                        await loadPolls();
+          `).join("")
+        }
 
-                    };
+      </div>
 
-                box.appendChild(
-                    row
-                );
+      <div class="pollStats">
 
-            }
-        );
+        <span id="votes-${poll.id}">
+          Votes
+        </span>
 
-        return box;
+        <span>
+          Poll
+        </span>
 
-    }catch(error){
+      </div>
 
-        console.error(
-            "SUGGESTIONS CRASH:",
-            error
-        );
+      <div class="pollActions">
 
-        return null;
-    }
+        <button
+          class="actionBtn"
+          id="like-${poll.id}"
+          onclick="toggleLike('${poll.id}')">
+          ♡ Like
+        </button>
+
+        <button
+          class="actionBtn"
+          onclick="sharePoll('${poll.id}')">
+          ↗ Share
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
 }
 
 
 /* =========================
-   FOLLOW / UNFOLLOW
+   POLL ENRICH
 ========================= */
 
-async function followUser(
-    userId,
-    button
-){
+async function enrichPolls(polls){
 
-    if(!currentUser){
+  for(const poll of polls){
 
-        toast(
-            "Please login first."
-        );
+    if(poll.user_id){
 
-        return;
+      const {data:profile} =
+        await supabaseClient
+        .from("profiles")
+        .select("username,display_name")
+        .eq("id",poll.user_id)
+        .maybeSingle();
+
+      if(profile){
+
+        const name =
+          profile.display_name ||
+          profile.username ||
+          "User";
+
+        const userEl =
+          document.getElementById(`user-${poll.id}`);
+
+        const avatarEl =
+          document.getElementById(`avatar-${poll.id}`);
+
+        if(userEl)
+          userEl.textContent=name;
+
+        if(avatarEl)
+          avatarEl.textContent=initials(name);
+
+      }
+
     }
 
-    if(!sb){
+    await updatePollVotes(poll);
 
-        toast(
-            "Supabase connected nahi hai."
-        );
+    await updateLikeState(poll.id);
 
-        return;
-    }
+  }
 
-    if(
-        userId ===
-        currentUser.id
-    ){
+}
 
-        toast(
-            "You cannot follow yourself."
-        );
 
-        return;
-    }
+/* =========================
+   VOTES
+========================= */
 
-    if(button){
+async function updatePollVotes(poll){
 
-        button.disabled = true;
-        button.textContent = "Loading...";
-    }
+  const {data,error} =
+    await supabaseClient
+    .from("votes")
+    .select("option")
+    .eq("poll_id",poll.id);
 
-    try{
+  if(error){
+    console.log(error);
+    return;
+  }
 
-        const {
-            data:existing,
-            error:checkError
-        } =
-            await sb
-            .from("follows")
-            .select("id")
-            .eq(
-                "follower_id",
-                currentUser.id
-            )
-            .eq(
-                "following_id",
-                userId
-            )
-            .limit(1);
+  const votes = data || [];
+  const total = votes.length;
 
-        if(checkError){
+  const counts =
+    poll.options.map(
+      (_,index)=>
+        votes.filter(v=>Number(v.option)===index).length
+    );
 
-            throw checkError;
-        }
+  const totalEl =
+    document.getElementById(`votes-${poll.id}`);
 
-        if(existing?.length){
+  if(totalEl)
+    totalEl.textContent =
+      `${total} ${total===1?"vote":"votes"}`;
 
-            const {error} =
-                await sb
-                .from("follows")
-                .delete()
-                .eq(
-                    "id",
-                    existing[0].id
-                );
+  counts.forEach((count,index)=>{
 
-            if(error)throw error;
+    const percent =
+      total
+      ? Math.round(count/total*100)
+      : 0;
 
-            toast("Unfollowed");
+    const bar =
+      document.getElementById(
+        `bar-${poll.id}-${index}`
+      );
 
-        }else{
+    const text =
+      document.getElementById(
+        `percent-${poll.id}-${index}`
+      );
 
-            const {error} =
-                await sb
-                .from("follows")
-                .insert({
+    if(bar)
+      bar.style.width=percent+"%";
 
-                    follower_id:
-                        currentUser.id,
+    if(text)
+      text.textContent=percent+"%";
 
-                    following_id:
-                        userId
+  });
 
-                });
-
-            if(error)throw error;
-
-            await createNotification(
-                userId,
-                "started following you"
-            );
-
-            toast(
-                "✅ Following!"
-            );
-        }
-
-        await updateProfileStats();
-
-    }catch(error){
-
-        console.error(
-            "FOLLOW ERROR:",
-            error
-        );
-
-        toast(
-            "Follow error: " +
-            (
-                error.message ||
-                "Unknown error"
-            )
-        );
-
-    }finally{
-
-        if(button){
-
-            button.disabled = false;
-
-            button.textContent =
-                "Follow";
-        }
-    }
 }
 
 
@@ -2894,162 +1809,137 @@ async function followUser(
    VOTE
 ========================= */
 
-async function vote(
-    pollId,
-    option
-){
+async function vote(pollId,option){
 
-    if(!currentUser){
+  if(!currentUser){
 
-        toast(
-            "Please login first."
-        );
+    showToast("Please login first.");
+    return;
+  }
 
-        return;
-    }
+  const {data:existing} =
+    await supabaseClient
+    .from("votes")
+    .select("id")
+    .eq("poll_id",pollId)
+    .eq("user_id",currentUser.id)
+    .maybeSingle();
 
-    const {
-        data:old,
-        error:oldError
-    } =
-        await sb
-        .from("votes")
-        .select("id")
-        .eq(
-            "poll_id",
-            pollId
-        )
-        .eq(
-            "user_id",
-            currentUser.id
-        )
-        .limit(1);
+  if(existing){
 
-    if(oldError){
+    showToast("You already voted.");
+    return;
+  }
 
-        toast(
-            oldError.message
-        );
+  const {error} =
+    await supabaseClient
+    .from("votes")
+    .insert({
+      poll_id:pollId,
+      user_id:currentUser.id,
+      option
+    });
 
-        return;
-    }
+  if(error){
 
-    if(old?.length){
+    showToast(error.message);
+    return;
+  }
 
-        const {error} =
-            await sb
-            .from("votes")
-            .update({
-                option
-            })
-            .eq(
-                "id",
-                old[0].id
-            );
+  showToast("Vote recorded! 🗳️");
 
-        if(error){
+  const {data:poll} =
+    await supabaseClient
+    .from("polls")
+    .select("*")
+    .eq("id",pollId)
+    .single();
 
-            toast(
-                error.message
-            );
+  if(poll)
+    await updatePollVotes(poll);
 
-            return;
-        }
-
-    }else{
-
-        const {error} =
-            await sb
-            .from("votes")
-            .insert({
-
-                poll_id:pollId,
-
-                user_id:
-                    currentUser.id,
-
-                option
-
-            });
-
-        if(error){
-
-            toast(
-                error.message
-            );
-
-            return;
-        }
-    }
-
-    toast(
-        "✅ Vote saved!"
-    );
-
-    await loadPolls();
 }
 
 
 /* =========================
-   DELETE POLL
+   LIKES
 ========================= */
 
-async function deletePoll(
-    pollId
-){
+async function updateLikeState(pollId){
 
-    if(!currentUser){
+  if(!currentUser) return;
 
-        toast(
-            "Please login first."
-        );
+  const {data} =
+    await supabaseClient
+    .from("likes")
+    .select("id")
+    .eq("poll_id",pollId)
+    .eq("user_id",currentUser.id)
+    .maybeSingle();
 
-        return;
-    }
+  const btn =
+    document.getElementById(`like-${pollId}`);
 
-    if(
-        !confirm(
-            "Delete this poll?"
-        )
-    ){
+  if(!btn) return;
 
-        return;
-    }
+  if(data){
+
+    btn.classList.add("liked");
+    btn.innerHTML="♥ Liked";
+
+  }else{
+
+    btn.classList.remove("liked");
+    btn.innerHTML="♡ Like";
+
+  }
+
+}
+
+
+async function toggleLike(pollId){
+
+  if(!currentUser){
+
+    showToast("Please login first.");
+    return;
+  }
+
+  const {data:existing} =
+    await supabaseClient
+    .from("likes")
+    .select("id")
+    .eq("poll_id",pollId)
+    .eq("user_id",currentUser.id)
+    .maybeSingle();
+
+  if(existing){
+
+    await supabaseClient
+      .from("likes")
+      .delete()
+      .eq("id",existing.id);
+
+  }else{
 
     const {error} =
-        await sb
-        .from("polls")
-        .delete()
-        .eq(
-            "id",
-            pollId
-        )
-        .eq(
-            "user_id",
-            currentUser.id
-        );
+      await supabaseClient
+      .from("likes")
+      .insert({
+        poll_id:pollId,
+        user_id:currentUser.id
+      });
 
     if(error){
 
-        console.error(
-            "DELETE POLL ERROR:",
-            error
-        );
-
-        toast(
-            "Could not delete poll: " +
-            error.message
-        );
-
-        return;
+      showToast(error.message);
+      return;
     }
 
-    toast(
-        "🗑️ Poll deleted!"
-    );
+  }
 
-    await updateProfileStats();
-    await loadPolls();
+  await updateLikeState(pollId);
+
 }
 
 
@@ -3057,213 +1947,165 @@ async function deletePoll(
    CREATE POLL
 ========================= */
 
-async function createPoll(){
+function loadCreate(){
 
-    if(!currentUser){
+  document.getElementById("content").innerHTML = `
 
-        toast(
-            "Please login first."
-        );
+    <div class="container">
 
-        return;
-    }
+      <div class="pageTitle">
+        Create a poll
+      </div>
 
-    const question =
-        document
-        .getElementById("question")
-        .value
-        .trim();
+      <div class="pageSub">
+        Ask something. Let people decide.
+      </div>
 
-    const options =
-        [
-            "option1",
-            "option2",
-            "option3",
-            "option4"
-        ]
-        .map(
-            id =>
-            document
-            .getElementById(id)
-            .value
-            .trim()
-        )
-        .filter(Boolean);
+      <div class="section">
 
-    if(!question){
+        <div class="createCard">
 
-        toast(
-            "Question enter karo."
-        );
+          <div class="field">
 
-        return;
-    }
+            <label>Your question</label>
 
-    if(options.length < 2){
+            <textarea
+              id="pollQuestionInput"
+              maxlength="240"
+              placeholder="What do you want to know?">
+            </textarea>
 
-        toast(
-            "At least 2 options chahiye."
-        );
+          </div>
 
-        return;
-    }
+          <label style="font-size:13px;color:var(--muted)">
+            Options
+          </label>
 
-    if(
-        options.length !==
-        new Set(options).size
-    ){
+          <div id="createOptions">
 
-        toast(
-            "Options same nahi hone chahiye."
-        );
+            <div class="optionRow">
+              <input
+                class="createOption"
+                placeholder="Option 1">
+            </div>
 
-        return;
-    }
+            <div class="optionRow">
+              <input
+                class="createOption"
+                placeholder="Option 2">
+            </div>
 
-    const {error} =
-        await sb
-        .from("polls")
-        .insert({
+          </div>
 
-            question,
+          <button
+            class="addOption"
+            onclick="addOption()">
+            ＋ Add another option
+          </button>
 
-            options,
+          <button
+            class="primaryBtn"
+            style="margin-top:18px"
+            onclick="createPoll()">
+            Publish poll
+          </button>
 
-            user_id:
-                currentUser.id
+        </div>
 
-        });
+      </div>
 
-    if(error){
+    </div>
+  `;
 
-        toast(
-            error.message
-        );
-
-        return;
-    }
-
-    [
-        "question",
-        "option1",
-        "option2",
-        "option3",
-        "option4"
-    ]
-    .forEach(
-        id =>
-        document
-        .getElementById(id)
-        .value = ""
-    );
-
-    toast(
-        "🎉 Poll published!"
-    );
-
-    await updateProfileStats();
-
-    showPage(
-        "home"
-    );
 }
 
 
-/* =========================
-   LIKE
-========================= */
+function addOption(){
 
-async function likePoll(
-    pollId
-){
+  const box =
+    document.getElementById("createOptions");
 
-    if(!currentUser){
+  const count =
+    box.querySelectorAll(".createOption").length;
 
-        toast(
-            "Please login first."
-        );
+  if(count>=6){
 
-        return;
-    }
+    showToast("Maximum 6 options.");
+    return;
+  }
 
-    const {
-        data,
-        error
-    } =
-        await sb
-        .from("likes")
-        .select("id")
-        .eq(
-            "user_id",
-            currentUser.id
-        )
-        .eq(
-            "poll_id",
-            pollId
-        )
-        .limit(1);
+  const row =
+    document.createElement("div");
 
-    if(error){
+  row.className="optionRow";
 
-        toast(
-            error.message
-        );
+  row.innerHTML=`
 
-        return;
-    }
+    <input
+      class="createOption"
+      placeholder="Option ${count+1}">
 
-    if(data?.length){
+    <button
+      class="removeOption"
+      onclick="this.parentElement.remove()">
+      ×
+    </button>
+  `;
 
-        const {error} =
-            await sb
-            .from("likes")
-            .delete()
-            .eq(
-                "id",
-                data[0].id
-            );
+  box.appendChild(row);
 
-        if(error){
+}
 
-            toast(
-                error.message
-            );
 
-            return;
-        }
+async function createPoll(){
 
-        toast(
-            "Like removed"
-        );
+  const question =
+    document
+    .getElementById("pollQuestionInput")
+    .value.trim();
 
-    }else{
+  const options =
+    [...document.querySelectorAll(".createOption")]
+    .map(x=>x.value.trim())
+    .filter(Boolean);
 
-        const {error} =
-            await sb
-            .from("likes")
-            .insert({
+  if(!question){
 
-                user_id:
-                    currentUser.id,
+    showToast("Write a question first.");
+    return;
+  }
 
-                poll_id:
-                    pollId
+  if(options.length<2){
 
-            });
+    showToast("Add at least 2 options.");
+    return;
+  }
 
-        if(error){
+  if(options.length>6){
 
-            toast(
-                error.message
-            );
+    showToast("Maximum 6 options.");
+    return;
+  }
 
-            return;
-        }
+  const {error} =
+    await supabaseClient
+    .from("polls")
+    .insert({
+      question,
+      options,
+      user_id:currentUser.id
+    });
 
-        toast(
-            "❤️ Liked"
-        );
-    }
+  if(error){
+
+    showToast(error.message);
+    return;
+  }
+
+  showToast("Poll published! 🎉");
+
+  showPage("home");
+
 }
 
 
@@ -3271,795 +2113,443 @@ async function likePoll(
    SEARCH
 ========================= */
 
-function searchAll(){
+function loadSearch(){
 
-    clearTimeout(
-        searchTimer
-    );
+  document.getElementById("content").innerHTML = `
 
-    searchTimer =
-        setTimeout(
-            runSearch,
-            300
-        );
+    <div class="container">
+
+      <div class="pageTitle">
+        Explore
+      </div>
+
+      <div class="pageSub">
+        Find polls and people.
+      </div>
+
+      <div class="searchBox">
+
+        <span class="searchIcon">🔎</span>
+
+        <input
+          id="searchInput"
+          class="searchInput"
+          placeholder="Search polls..."
+          oninput="performSearch()">
+
+      </div>
+
+      <div id="searchResults" class="section">
+
+        <div class="empty">
+          <div class="emptyIcon">🔎</div>
+          Start searching.
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
 }
 
 
-async function runSearch(){
+async function performSearch(){
 
-    if(!currentUser || !sb)return;
+  const q =
+    document
+    .getElementById("searchInput")
+    .value.trim();
 
-    const q =
-        document
-        .getElementById("searchInput")
-        .value
-        .trim();
+  const box =
+    document.getElementById("searchResults");
 
-    const box =
-        document
-        .getElementById("searchResults");
+  if(!q){
 
-    if(!q){
+    box.innerHTML=`
+      <div class="empty">
+        <div class="emptyIcon">🔎</div>
+        Start searching.
+      </div>
+    `;
 
-        box.innerHTML =
-            "<div class='notice'>Search users or polls.</div>";
+    return;
+  }
 
-        return;
-    }
+  const {data,error} =
+    await supabaseClient
+    .from("polls")
+    .select("*")
+    .ilike("question",`%${q}%`)
+    .order("created_at",{ascending:false});
 
-    const {
-        data:users
-    } =
-        await sb
-        .from("profiles")
-        .select(
-            "id,username,display_name"
-        )
-        .ilike(
-            "username",
-            "%" + q + "%"
-        )
-        .limit(20);
+  if(error){
 
-    const {
-        data:polls
-    } =
-        await sb
-        .from("polls")
-        .select(
-            "id,question"
-        )
-        .ilike(
-            "question",
-            "%" + q + "%"
-        )
-        .limit(20);
+    box.innerHTML=
+      `<div class="empty">Search failed.</div>`;
 
-    box.innerHTML =
-        "<div class='search-result-title'>👤 Users</div>";
+    return;
+  }
 
-    for(const user of users || []){
+  if(!data.length){
 
-        const row =
-            document.createElement(
-                "div"
-            );
+    box.innerHTML=`
+      <div class="empty">
+        <div class="emptyIcon">😶</div>
+        No polls found.
+      </div>
+    `;
 
-        row.className =
-            "row user";
+    return;
+  }
 
-        const av =
-            document.createElement(
-                "div"
-            );
+  box.innerHTML =
+    data.map(renderPoll).join("");
 
-        av.className =
-            "avatar";
+  await enrichPolls(data);
 
-        av.textContent =
-            getInitial(
-                user.username
-            );
-
-        const info =
-            document.createElement(
-                "div"
-            );
-
-        info.className =
-            "grow";
-
-        info.innerHTML = `
-
-            <b>
-                @${esc(
-                    user.username
-                )}
-            </b>
-
-            <div class="small">
-                ${esc(
-                    user.display_name || ""
-                )}
-            </div>
-
-        `;
-
-        const button =
-            document.createElement(
-                "button"
-            );
-
-        button.className =
-            "btn follow";
-
-        if(
-            user.id ===
-            currentUser.id
-        ){
-
-            button.textContent =
-                "You";
-
-            button.disabled = true;
-
-        }else{
-
-            const following =
-                await isFollowing(
-                    user.id
-                );
-
-            button.textContent =
-                following
-                ?
-                "Following"
-                :
-                "Follow";
-
-            if(following){
-
-                button.classList.add(
-                    "following"
-                );
-            }
-
-            button.onclick =
-                async function(){
-
-                    await followUser(
-                        user.id,
-                        button
-                    );
-
-                };
-        }
-
-        row.appendChild(av);
-        row.appendChild(info);
-        row.appendChild(button);
-
-        box.appendChild(row);
-    }
-
-    box.innerHTML +=
-        "<div class='search-result-title'>🗳️ Polls</div>";
-
-    for(const poll of polls || []){
-
-        const div =
-            document.createElement(
-                "div"
-            );
-
-        div.className =
-            "notice";
-
-        div.textContent =
-            poll.question;
-
-        box.appendChild(div);
-    }
-
-    if(
-        !users?.length &&
-        !polls?.length
-    ){
-
-        box.innerHTML +=
-            "<div class='small'>No results found.</div>";
-    }
-}
-
-
-async function isFollowing(
-    userId
-){
-
-    if(!currentUser || !sb){
-        return false;
-    }
-
-    const {
-        data,
-        error
-    } =
-        await sb
-        .from("follows")
-        .select("id")
-        .eq(
-            "follower_id",
-            currentUser.id
-        )
-        .eq(
-            "following_id",
-            userId
-        )
-        .limit(1);
-
-    if(error){
-        return false;
-    }
-
-    return !!data?.length;
 }
 
 
 /* =========================
-   NOTIFICATIONS
+   PROFILE PAGE
 ========================= */
 
-async function createNotification(
-    userId,
-    message
-){
+async function loadProfilePage(){
 
-    if(
-        !currentUser ||
-        userId === currentUser.id
-    ){
+  await loadProfile();
 
-        return;
-    }
+  const profile =
+    currentProfile || {};
 
-    const {error} =
-        await sb
-        .from("notifications")
-        .insert({
+  const username =
+    profile.username ||
+    currentUser?.email?.split("@")[0] ||
+    "user";
 
-            user_id:userId,
+  const name =
+    profile.display_name ||
+    username;
 
-            actor_id:
-                currentUser.id,
+  const {count:pollCount} =
+    await supabaseClient
+    .from("polls")
+    .select("*",{count:"exact",head:true})
+    .eq("user_id",currentUser.id);
 
-            type:"activity",
+  const {count:followers} =
+    await supabaseClient
+    .from("follows")
+    .select("*",{count:"exact",head:true})
+    .eq("following_id",currentUser.id);
 
-            message
+  const {count:following} =
+    await supabaseClient
+    .from("follows")
+    .select("*",{count:"exact",head:true})
+    .eq("follower_id",currentUser.id);
 
-        });
+  document.getElementById("content").innerHTML=`
 
-    if(error){
+    <div class="container">
 
-        console.error(
-            "NOTIFICATION ERROR:",
-            error
-        );
-    }
+      <div class="profileHero">
+
+        <div class="avatar">
+          ${initials(name)}
+        </div>
+
+        <h2>${esc(name)}</h2>
+
+        <p>@${esc(username)}</p>
+
+        <div class="profileStats">
+
+          <div>
+            <strong>${pollCount || 0}</strong>
+            <span>Polls</span>
+          </div>
+
+          <div>
+            <strong>${followers || 0}</strong>
+            <span>Followers</span>
+          </div>
+
+          <div>
+            <strong>${following || 0}</strong>
+            <span>Following</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="profileTabs">
+
+        <button
+          class="active"
+          onclick="profileTab('polls',this)">
+          Polls
+        </button>
+
+        <button
+          onclick="profileTab('votes',this)">
+          Votes
+        </button>
+
+      </div>
+
+      <div id="profileTabContent"></div>
+
+      <button
+        class="secondaryBtn"
+        style="width:100%;margin-top:20px"
+        onclick="logout()">
+        Logout
+      </button>
+
+    </div>
+  `;
+
+  profileTab("polls");
+
 }
 
 
-async function loadNotifications(){
+async function profileTab(type,button){
 
-    if(!currentUser || !sb)return;
-
-    const {
-        data,
-        error
-    } =
-        await sb
-        .from("notifications")
-        .select("*")
-        .eq(
-            "user_id",
-            currentUser.id
-        )
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        )
-        .limit(50);
-
-    const box =
-        document.getElementById(
-            "notifications"
-        );
-
-    if(error){
-
-        box.innerHTML =
-            "<div class='notice'>" +
-            esc(error.message) +
-            "</div>";
-
-        return;
-    }
-
-    box.innerHTML = "";
-
-    if(!data?.length){
-
-        box.textContent =
-            "No notifications yet.";
-
-    }else{
-
-        data.forEach(
-            n => {
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-                div.className =
-                    "notification-card";
-
-                div.textContent =
-                    (n.message ||
-                    "Activity") +
-                    " • " +
-                    (
-                        n.created_at
-                        ?
-                        new Date(
-                            n.created_at
-                        ).toLocaleString()
-                        :
-                        ""
-                    );
-
-                box.appendChild(
-                    div
-                );
-            }
-        );
-    }
-
-    const unread =
-        (data || [])
-        .filter(
-            n => !n.read
-        )
-        .length;
-
-    const badge =
-        document.getElementById(
-            "notificationBadge"
-        );
-
-    badge.textContent =
-        unread;
-
-    badge.classList.toggle(
-        "hidden",
-        unread === 0
-    );
-}
-
-
-/* =========================
-   PROFILE TABS
-========================= */
-
-async function profileTab(
-    tab,
-    button
-){
+  if(button){
 
     document
-    .querySelectorAll(
-        ".tabs button"
-    )
-    .forEach(
-        b =>
-        b.classList.remove(
-            "active"
-        )
-    );
+      .querySelectorAll(".profileTabs button")
+      .forEach(x=>x.classList.remove("active"));
 
-    if(button){
+    button.classList.add("active");
 
-        button.classList.add(
-            "active"
-        );
+  }
+
+  const box =
+    document.getElementById("profileTabContent");
+
+  if(type==="polls"){
+
+    const {data,error} =
+      await supabaseClient
+      .from("polls")
+      .select("*")
+      .eq("user_id",currentUser.id)
+      .order("created_at",{ascending:false});
+
+    if(error){
+
+      box.innerHTML=
+        `<div class="empty">Unable to load polls.</div>`;
+
+      return;
     }
-
-    const box =
-        document.getElementById(
-            "profileContent"
-        );
 
     box.innerHTML =
-        "<div class='loading'>Loading...</div>";
+      data?.length
+      ? data.map(renderPoll).join("")
+      : `
+        <div class="empty">
+          <div class="emptyIcon">🗳️</div>
+          You haven't created a poll yet.
+        </div>
+      `;
 
-    if(tab==="polls"){
+    if(data?.length)
+      await enrichPolls(data);
 
-        const {
-            data,
-            error
-        } =
-            await sb
-            .from("polls")
-            .select(
-                "id,question,created_at"
-            )
-            .eq(
-                "user_id",
-                currentUser.id
-            )
-            .order(
-                "created_at",
-                {
-                    ascending:false
-                }
-            );
+  }else{
 
-        if(error){
+    const {data,error} =
+      await supabaseClient
+      .from("votes")
+      .select("option,polls(*)")
+      .eq("user_id",currentUser.id)
+      .order("id",{ascending:false});
 
-            box.innerHTML =
-                "<div class='notice'>" +
-                esc(error.message) +
-                "</div>";
+    if(error){
 
-            return;
-        }
+      console.log(error);
 
-        box.innerHTML = "";
+      box.innerHTML=`
+        <div class="empty">
+          Vote history unavailable.
+        </div>
+      `;
 
-        (data || []).forEach(
-            poll => {
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-                div.className =
-                    "notice";
-
-                div.textContent =
-                    poll.question;
-
-                box.appendChild(
-                    div
-                );
-            }
-        );
-
-        if(!data?.length){
-
-            box.textContent =
-                "No polls yet.";
-        }
+      return;
     }
 
-    if(tab==="votes"){
+    box.innerHTML =
+      data?.length
+      ? data.map(v=>`
 
-        const {
-            data,
-            error
-        } =
-            await sb
-            .from("votes")
-            .select(
-                "option,polls(question)"
-            )
-            .eq(
-                "user_id",
-                currentUser.id
-            );
+        <div class="pollCard">
 
-        if(error){
+          <div class="pollQuestion">
+            ${esc(v.polls?.question || "Poll")}
+          </div>
 
-            box.innerHTML =
-                "<div class='notice'>" +
-                esc(error.message) +
-                "</div>";
+          <div class="pollStats">
+            <span>Your choice</span>
+            <strong>
+              ${esc(
+                v.polls?.options?.[Number(v.option)]
+                || "Option"
+              )}
+            </strong>
+          </div>
 
-            return;
-        }
+        </div>
 
-        box.innerHTML = "";
+      `).join("")
+      : `
+        <div class="empty">
+          <div class="emptyIcon">🗳️</div>
+          You haven't voted yet.
+        </div>
+      `;
 
-        (data || []).forEach(
-            v => {
+  }
 
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-                div.className =
-                    "notice";
-
-                div.innerHTML =
-                    "<b>" +
-                    esc(
-                        v.polls?.question ||
-                        "Poll"
-                    ) +
-                    "</b><br>✓ " +
-                    esc(v.option);
-
-                box.appendChild(
-                    div
-                );
-            }
-        );
-
-        if(!data?.length){
-
-            box.textContent =
-                "No votes yet.";
-        }
-    }
-
-    if(
-        tab==="followers" ||
-        tab==="following"
-    ){
-
-        const column =
-            tab==="followers"
-            ?
-            "follower_id"
-            :
-            "following_id";
-
-        const filterColumn =
-            tab==="followers"
-            ?
-            "following_id"
-            :
-            "follower_id";
-
-        const {
-            data,
-            error
-        } =
-            await sb
-            .from("follows")
-            .select(column)
-            .eq(
-                filterColumn,
-                currentUser.id
-            );
-
-        if(error){
-
-            box.innerHTML =
-                "<div class='notice'>" +
-                esc(error.message) +
-                "</div>";
-
-            return;
-        }
-
-        box.innerHTML = "";
-
-        for(
-            const item of data || []
-        ){
-
-            const user =
-                await getProfile(
-                    item[column]
-                );
-
-            if(!user)continue;
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-            row.className =
-                "row user";
-
-            const av =
-                document.createElement(
-                    "div"
-                );
-
-            av.className =
-                "avatar";
-
-            av.textContent =
-                getInitial(
-                    user.username
-                );
-
-            const info =
-                document.createElement(
-                    "div"
-                );
-
-            info.className =
-                "grow";
-
-            info.innerHTML =
-                "<b>@" +
-                esc(user.username) +
-                "</b>";
-
-            row.appendChild(av);
-            row.appendChild(info);
-
-            box.appendChild(
-                row
-            );
-        }
-
-        if(!data?.length){
-
-            box.textContent =
-                tab==="followers"
-                ?
-                "No followers yet."
-                :
-                "Not following anyone yet.";
-        }
-    }
 }
 
 
 /* =========================
-   CHAT SEARCH
+   CHAT
 ========================= */
 
-function searchChatUsers(){
+async function loadChat(){
 
-    clearTimeout(
-        chatTimer
-    );
+  const content =
+    document.getElementById("content");
 
-    chatTimer =
-        setTimeout(
-            runChatSearch,
-            300
-        );
-}
+  const {data,error} =
+    await supabaseClient
+    .from("messages")
+    .select("*")
+    .or(
+      `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+    )
+    .order("created_at",{ascending:false});
 
+  if(error){
 
-async function runChatSearch(){
+    console.log(error);
 
-    if(!currentUser || !sb)return;
+    content.innerHTML=`
 
-    const q =
-        document
-        .getElementById("chatSearch")
-        .value
-        .trim();
+      <div class="container">
 
-    const box =
-        document
-        .getElementById("chatUsers");
+        <div class="pageTitle">Messages</div>
 
-    if(!q){
+        <div class="empty">
 
-        box.innerHTML =
-            "<div class='notice'>Search a username to start chatting.</div>";
+          <div class="emptyIcon">💬</div>
 
-        return;
-    }
+          Start a conversation from someone's profile.
 
-    const {
-        data,
-        error
-    } =
-        await sb
-        .from("profiles")
-        .select(
-            "id,username,display_name"
-        )
-        .ilike(
-            "username",
-            "%" + q + "%"
-        )
-        .neq(
-            "id",
-            currentUser.id
-        )
-        .limit(20);
+        </div>
 
-    if(error){
+      </div>
+    `;
 
-        box.innerHTML =
-            "<div class='notice'>" +
-            esc(error.message) +
-            "</div>";
+    return;
+  }
 
-        return;
-    }
+  const messages =
+    data || [];
 
-    box.innerHTML = "";
+  const ids = new Set();
 
-    if(!data?.length){
+  messages.forEach(m=>{
 
-        box.textContent =
-            "No users found.";
+    if(m.sender_id!==currentUser.id)
+      ids.add(m.sender_id);
 
-        return;
-    }
+    if(m.receiver_id!==currentUser.id)
+      ids.add(m.receiver_id);
 
-    data.forEach(
-        user => {
+  });
 
-            const row =
-                document.createElement(
-                    "div"
-                );
+  const users = [];
 
-            row.className =
-                "row chat-user";
+  for(const id of ids){
 
-            const av =
-                document.createElement(
-                    "div"
-                );
+    const {data:p} =
+      await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id",id)
+      .maybeSingle();
 
-            av.className =
-                "avatar";
+    if(p) users.push(p);
 
-            av.textContent =
-                getInitial(
-                    user.username
-                );
+  }
 
-            const info =
-                document.createElement(
-                    "div"
-                );
+  content.innerHTML=`
 
-            info.className =
-                "grow";
+    <div class="container">
 
-            info.innerHTML = `
+      <div class="pageTitle">
+        Messages
+      </div>
 
-                <b>
-                    @${esc(
-                        user.username
-                    )}
-                </b>
+      <div class="pageSub">
+        Your conversations.
+      </div>
 
-                <div class="chat-preview">
-                    ${esc(
-                        user.display_name ||
-                        "Start chatting"
-                    )}
-                </div>
+      <div class="section chatList">
 
-            `;
+        ${
+          users.length
+          ? users.map(user=>`
 
-            row.appendChild(av);
-            row.appendChild(info);
+            <button
+              class="chatItem"
+              onclick="openChat(
+                '${user.id}',
+                '${esc(user.display_name || user.username || "User")}'
+              )">
 
-            row.onclick =
-                function(){
+              <div class="avatar">
+                ${initials(user.display_name || user.username)}
+              </div>
 
-                    openChat(
-                        user
-                    );
+              <div class="chatPreview">
 
-                };
+                <strong>
+                  ${esc(user.display_name || user.username || "User")}
+                </strong>
 
-            box.appendChild(
-                row
-            );
+                <span>
+                  Open conversation
+                </span>
+
+              </div>
+
+              <span>›</span>
+
+            </button>
+
+          `).join("")
+          : `
+            <div class="empty">
+              <div class="emptyIcon">💬</div>
+              No conversations yet.
+            </div>
+          `
         }
-    );
+
+      </div>
+
+    </div>
+  `;
+
 }
 
 
@@ -4067,450 +2557,451 @@ async function runChatSearch(){
    OPEN CHAT
 ========================= */
 
-async function openChat(
-    user
-){
+async function openChat(userId,name){
 
-    if(
-        !user ||
-        !currentUser
-    ){
+  currentChatUser = {
+    id:userId,
+    name
+  };
 
-        return;
-    }
-
-    currentChatUser =
-        user;
-
-    document
-    .getElementById("chatArea")
+  document
+    .getElementById("chatWindow")
     .classList.remove("hidden");
 
-    document.getElementById(
-        "chatTitle"
-    ).textContent =
-        "@" +
-        (
-            user.username ||
-            "user"
-        );
+  document
+    .getElementById("chatName")
+    .textContent=name;
 
-    document.getElementById(
-        "chatStatus"
-    ).textContent =
-        user.display_name ||
-        "Poll Pulse user";
+  document
+    .getElementById("chatAvatar")
+    .textContent=initials(name);
 
-    document.getElementById(
-        "chatAvatar"
-    ).textContent =
-        getInitial(
-            user.username
-        );
+  await loadMessages();
 
-    await loadMessages();
+  if(messageSubscription){
+
+    supabaseClient
+      .removeChannel(messageSubscription);
+
+  }
+
+  messageSubscription =
+    supabaseClient
+    .channel("chat-"+userId)
+    .on(
+      "postgres_changes",
+      {
+        event:"INSERT",
+        schema:"public",
+        table:"messages"
+      },
+      payload=>{
+
+        const m=payload.new;
+
+        if(
+          (
+            m.sender_id===currentUser.id &&
+            m.receiver_id===userId
+          ) ||
+          (
+            m.sender_id===userId &&
+            m.receiver_id===currentUser.id
+          )
+        ){
+
+          loadMessages();
+
+        }
+
+      }
+    )
+    .subscribe();
+
 }
 
-
-/* =========================
-   CLOSE CHAT
-========================= */
 
 function closeChat(){
 
-    currentChatUser = null;
-
-    document
-    .getElementById("chatArea")
+  document
+    .getElementById("chatWindow")
     .classList.add("hidden");
+
+  currentChatUser=null;
+
+  if(messageSubscription){
+
+    supabaseClient
+      .removeChannel(messageSubscription);
+
+    messageSubscription=null;
+
+  }
+
 }
 
-
-/* =========================
-   LOAD CHAT MESSAGES
-========================= */
 
 async function loadMessages(){
 
-    if(
-        !currentUser ||
-        !currentChatUser ||
-        !sb
-    ){
+  if(!currentChatUser) return;
 
-        return;
-    }
+  const {data,error} =
+    await supabaseClient
+    .from("messages")
+    .select("*")
+    .or(
+      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
+    )
+    .order("created_at",{ascending:true});
 
-    const box =
-        document.getElementById(
-            "messages"
-        );
+  if(error){
 
-    box.innerHTML =
-        "<div class='loading'>Loading messages...</div>";
+    console.log(error);
+    return;
+  }
 
-    try{
+  const box =
+    document.getElementById("chatMessages");
 
-        const sent =
-            await sb
-            .from("messages")
-            .select("*")
-            .eq(
-                "sender_id",
-                currentUser.id
-            )
-            .eq(
-                "receiver_id",
-                currentChatUser.id
-            );
+  box.innerHTML =
+    (data || []).map(m=>`
 
-        const received =
-            await sb
-            .from("messages")
-            .select("*")
-            .eq(
-                "sender_id",
-                currentChatUser.id
-            )
-            .eq(
-                "receiver_id",
-                currentUser.id
-            );
+      <div class="message ${
+        m.sender_id===currentUser.id
+        ? "mine"
+        : "theirs"
+      }">
 
-        if(sent.error){
+        ${esc(m.message)}
 
-            console.error(
-                "SENT MESSAGES ERROR:",
-                sent.error
-            );
+      </div>
 
-            box.innerHTML =
-                "<div class='notice'>" +
-                esc(
-                    sent.error.message
-                ) +
-                "</div>";
+    `).join("");
 
-            return;
-        }
+  box.scrollTop=box.scrollHeight;
 
-        if(received.error){
-
-            console.error(
-                "RECEIVED MESSAGES ERROR:",
-                received.error
-            );
-
-            box.innerHTML =
-                "<div class='notice'>" +
-                esc(
-                    received.error.message
-                ) +
-                "</div>";
-
-            return;
-        }
-
-        const messages =
-            [
-                ...(sent.data || []),
-                ...(received.data || [])
-            ];
-
-        messages.sort(
-            (a,b) =>
-                new Date(
-                    a.created_at
-                ) -
-                new Date(
-                    b.created_at
-                )
-        );
-
-        box.innerHTML = "";
-
-        if(!messages.length){
-
-            box.innerHTML =
-                "<div class='small' style='text-align:center;padding:20px'>" +
-                "No messages yet. Say hi! 👋" +
-                "</div>";
-
-            return;
-        }
-
-        messages.forEach(
-            message => {
-
-                const bubble =
-                    document.createElement(
-                        "div"
-                    );
-
-                bubble.className =
-                    "bubble " +
-                    (
-                        message.sender_id ===
-                        currentUser.id
-                        ?
-                        "mine"
-                        :
-                        ""
-                    );
-
-                bubble.textContent =
-                    message.message ||
-                    "";
-
-                box.appendChild(
-                    bubble
-                );
-            }
-        );
-
-        box.scrollTop =
-            box.scrollHeight;
-
-    }catch(error){
-
-        console.error(
-            "CHAT CRASH:",
-            error
-        );
-
-        box.innerHTML =
-            "<div class='notice'>" +
-            esc(
-                error?.message ||
-                error
-            ) +
-            "</div>";
-    }
 }
 
-
-/* =========================
-   CHAT ENTER
-========================= */
-
-function handleChatEnter(
-    event
-){
-
-    if(
-        event.key ===
-        "Enter"
-    ){
-
-        event.preventDefault();
-
-        sendMessage();
-    }
-}
-
-
-/* =========================
-   SEND MESSAGE
-========================= */
 
 async function sendMessage(){
 
-    if(
-        !currentUser ||
-        !currentChatUser
-    ){
+  if(!currentChatUser) return;
 
-        return;
-    }
+  const input =
+    document.getElementById("messageInput");
 
-    const input =
-        document.getElementById(
-            "chatInput"
-        );
+  const message =
+    input.value.trim();
 
-    const text =
-        input.value.trim();
+  if(!message) return;
 
-    if(!text)return;
+  input.value="";
 
-    const {error} =
-        await sb
-        .from("messages")
-        .insert({
+  const {error} =
+    await supabaseClient
+    .from("messages")
+    .insert({
+      sender_id:currentUser.id,
+      receiver_id:currentChatUser.id,
+      message
+    });
 
-            sender_id:
-                currentUser.id,
+  if(error){
 
-            receiver_id:
-                currentChatUser.id,
+    showToast(error.message);
+    input.value=message;
+    return;
+  }
 
-            message:text
+  await loadMessages();
 
-        });
-
-    if(error){
-
-        toast(
-            "Message error: " +
-            error.message
-        );
-
-        return;
-    }
-
-    input.value = "";
-
-    await createNotification(
-        currentChatUser.id,
-        "sent you a message"
-    );
-
-    await loadMessages();
-
-    await updateChatBadge();
 }
 
 
 /* =========================
-   CHAT BADGE
+   NOTIFICATIONS
 ========================= */
 
-async function updateChatBadge(){
+async function loadNotifications(){
 
-    if(!currentUser || !sb)return;
+  const {data,error} =
+    await supabaseClient
+    .from("notifications")
+    .select("*")
+    .eq("user_id",currentUser.id)
+    .order("created_at",{ascending:false})
+    .limit(50);
 
-    const {
-        data,
-        error
-    } =
-        await sb
-        .from("messages")
-        .select("id")
-        .eq(
-            "receiver_id",
-            currentUser.id
-        )
-        .limit(100);
+  const content =
+    document.getElementById("content");
 
-    if(error){
+  if(error){
 
-        console.error(
-            "CHAT BADGE ERROR:",
-            error
-        );
+    content.innerHTML=`
+      <div class="container">
 
-        return;
-    }
+        <div class="pageTitle">
+          Notifications
+        </div>
 
-    const badge =
-        document.getElementById(
-            "chatBadge"
-        );
+        <div class="empty">
+          Notifications unavailable.
+        </div>
 
-    const count =
-        (data || []).length;
+      </div>
+    `;
+
+    return;
+  }
+
+  content.innerHTML=`
+
+    <div class="container">
+
+      <div class="pageTitle">
+        Notifications
+      </div>
+
+      <div class="section">
+
+        ${
+          data?.length
+          ? data.map(n=>`
+
+            <div class="notice">
+
+              <div class="noticeIcon">
+                ${
+                  n.type==="like"
+                  ? "❤️"
+                  : n.type==="follow"
+                  ? "👤"
+                  : "🔔"
+                }
+              </div>
+
+              <div class="noticeText">
+
+                ${esc(n.message || "New activity")}
+
+                <span>
+                  ${timeAgo(n.created_at)}
+                </span>
+
+              </div>
+
+            </div>
+
+          `).join("")
+          : `
+            <div class="empty">
+              <div class="emptyIcon">🔔</div>
+              You're all caught up.
+            </div>
+          `
+        }
+
+      </div>
+
+    </div>
+  `;
+
+  await supabaseClient
+    .from("notifications")
+    .update({read:true})
+    .eq("user_id",currentUser.id);
+
+  updateNotificationBadge(0);
+
+}
+
+
+/* =========================
+   BADGES
+========================= */
+
+async function loadBadges(){
+
+  if(!currentUser) return;
+
+  try{
+
+    const {count} =
+      await supabaseClient
+      .from("notifications")
+      .select("*",{count:"exact",head:true})
+      .eq("user_id",currentUser.id)
+      .eq("read",false);
+
+    updateNotificationBadge(count || 0);
+
+  }catch(e){
+
+    console.log(e);
+
+  }
+
+}
+
+
+function updateNotificationBadge(count){
+
+  const badge =
+    document.getElementById("notificationBadge");
+
+  if(!badge) return;
+
+  if(count>0){
 
     badge.textContent =
-        count;
+      count>99 ? "99+" : count;
 
-    badge.classList.toggle(
-        "hidden",
-        count === 0
-    );
+    badge.classList.remove("hidden");
+
+  }else{
+
+    badge.classList.add("hidden");
+
+  }
+
 }
 
 
 /* =========================
-   LOGOUT
+   POLL MENU
 ========================= */
 
-async function logout(){
+function pollMenu(pollId){
 
-    if(sb){
+  const isMine =
+    false;
 
-        try{
+  document.getElementById("modalTitle")
+    .textContent="Poll options";
 
-            await sb.auth.signOut();
+  document.getElementById("modalContent")
+    .innerHTML=`
 
-        }catch(error){
+      <button
+        class="modalAction"
+        onclick="sharePoll('${pollId}');closeModal()">
+        ↗ Share poll
+      </button>
 
-            console.error(
-                error
-            );
-        }
-    }
+      <button
+        class="modalAction"
+        onclick="copyPollId('${pollId}');closeModal()">
+        📋 Copy poll ID
+      </button>
 
-    currentUser = null;
-    currentChatUser = null;
+    `;
 
-    document
-    .getElementById("homeScreen")
-    .classList.add("hidden");
-
-    document
-    .getElementById("authScreen")
+  document
+    .getElementById("modal")
     .classList.remove("hidden");
 
-    document.getElementById(
-        "password"
-    ).value = "";
+}
 
-    authMessage(
-        "Logged out."
-    );
+
+function closeModal(){
+
+  document
+    .getElementById("modal")
+    .classList.add("hidden");
+
+}
+
+
+function copyPollId(id){
+
+  if(navigator.clipboard){
+
+    navigator.clipboard.writeText(id);
+
+    showToast("Poll ID copied.");
+
+  }
+
 }
 
 
 /* =========================
-   AUTH START
+   SHARE
 ========================= */
 
-async function initAuth(){
+async function sharePoll(id){
 
-    if(!sb)return;
+  const url =
+    location.origin +
+    location.pathname +
+    "?poll="+encodeURIComponent(id);
+
+  if(navigator.share){
 
     try{
 
-        const {
-            data,
-            error
-        } =
-            await sb.auth.getSession();
+      await navigator.share({
+        title:"Poll Pulse",
+        text:"Check out this poll on Poll Pulse!",
+        url
+      });
 
-        if(error){
+    }catch(e){}
 
-            console.error(
-                "SESSION ERROR:",
-                error
-            );
+  }else{
 
-            authMessage(
-                error.message
-            );
+    if(navigator.clipboard){
 
-            return;
-        }
+      await navigator.clipboard.writeText(url);
 
-        if(
-            data?.session?.user
-        ){
+      showToast("Poll link copied! 🔗");
 
-            await openApp(
-                data.session.user
-            );
-        }
-
-    }catch(error){
-
-        console.error(
-            error
-        );
-
-        authMessage(
-            error?.message ||
-            "Session load nahi hui."
-        );
     }
+
+  }
+
+}
+
+
+/* =========================
+   AUTH STATE
+========================= */
+
+async function initApp(){
+
+  if(!initSupabase()) return;
+
+  const {data} =
+    await supabaseClient.auth.getSession();
+
+  if(data.session){
+
+    currentUser=data.session.user;
+
+    await loadProfile();
+
+    openApp();
+
+  }else{
+
+    document
+      .getElementById("authScreen")
+      .classList.remove("hidden");
+
+  }
+
+  supabaseClient.auth.onAuthStateChange(
+    async(event,session)=>{
+
+      if(session){
+
+        currentUser=session.user;
+
+      }
+
+    }
+  );
+
 }
 
 
@@ -4518,68 +3009,12 @@ async function initAuth(){
    START
 ========================= */
 
-function startApp(){
-
-    if(!initSupabase()){
-
-        return;
-    }
-
-    sb.auth.onAuthStateChange(
-        async (
-            event,
-            session
-        ) => {
-
-            console.log(
-                "AUTH EVENT:",
-                event
-            );
-
-            if(
-                event ===
-                "SIGNED_IN" &&
-                session?.user &&
-                !currentUser
-            ){
-
-                await openApp(
-                    session.user
-                );
-            }
-
-            if(
-                event ===
-                "SIGNED_OUT"
-            ){
-
-                currentUser = null;
-            }
-
-        }
-    );
-
-    initAuth();
-}
-
-
-if(
-    document.readyState ===
-    "loading"
-){
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        startApp
-    );
-
-}else{
-
-    startApp();
-}
+document.addEventListener(
+  "DOMContentLoaded",
+  initApp
+);
 
 </script>
 
 </body>
 </html>
-```
