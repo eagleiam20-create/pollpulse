@@ -543,6 +543,24 @@ header p{
   box-shadow:0 10px 30px #0003;
 }
 
+.file-picker-input{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  opacity:0!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
+
+.profile-open-btn{
+  border:0;
+  background:#f4f2ff;
+  color:#584cc0;
+  padding:8px 10px;
+  border-radius:11px;
+  font-weight:800;
+}
+
 .loading{
   text-align:center;
   padding:20px;
@@ -819,6 +837,26 @@ header p{
 </section>
 
 
+<!-- USER PROFILE VIEW -->
+<section id="userViewPage" class="hidden">
+  <div class="card">
+    <div class="chat-header">
+      <button id="closeUserViewBtn" class="btn" type="button">←</button>
+      <div id="viewAvatar" class="avatar">U</div>
+      <div class="chat-header-info">
+        <div id="viewName" class="chat-header-name">User</div>
+        <div id="viewUsername" class="chat-header-status">@user</div>
+      </div>
+    </div>
+    <div id="viewStats" class="notice"></div>
+    <div class="row" style="margin-top:10px">
+      <button id="viewFollowBtn" class="btn grow" type="button">Follow</button>
+      <button id="viewMessageBtn" class="btn grow" type="button">💬 Message</button>
+    </div>
+  </div>
+</section>
+
+
 <!-- PROFILE -->
 
 <section id="profilePage" class="hidden">
@@ -849,8 +887,8 @@ header p{
       <input
         id="avatarFile"
         type="file"
-        accept="image/*"
-        class="hidden"
+        accept="image/*" capture="environment"
+        class="file-picker-input"
       >
 
       <button id="photoBtn" class="photo-upload" type="button">
@@ -1692,6 +1730,7 @@ async function openApp(user){
   await loadPolls();
   await loadNotifications();
   await updateChatBadge();
+  await loadChatHome();
 
   startBackgroundRefresh();
 
@@ -1785,7 +1824,8 @@ function showPage(page){
     "searchPage",
     "createPage",
     "chatPage",
-    "profilePage"
+    "profilePage",
+    "userViewPage"
   ];
 
   pages.forEach(id=>{
@@ -1838,10 +1878,14 @@ function showPage(page){
     $("chatPage")
       .classList.remove("hidden");
 
+    $("userViewPage")
+      .classList.add("hidden");
+
     $("navChat")
       .classList.add("active");
 
     updateChatBadge();
+    loadChatHome();
   }
 
 
@@ -3530,6 +3574,54 @@ async function likePoll(
 
 
 /* =====================================================
+   USER PROFILE VIEW
+===================================================== */
+
+async function openUserView(user){
+  if(!user) return;
+  $("homePage").classList.add("hidden");
+  $("searchPage").classList.add("hidden");
+  $("createPage").classList.add("hidden");
+  $("chatPage").classList.add("hidden");
+  $("profilePage").classList.add("hidden");
+  $("userViewPage").classList.remove("hidden");
+
+  $("viewName").textContent=user.display_name||user.username||"User";
+  $("viewUsername").textContent="@"+(user.username||"user");
+  setAvatarElement($("viewAvatar"),user);
+
+  try{
+    const [followers,following,polls]=await Promise.all([
+      sb.from("follows").select("id",{count:"exact",head:true}).eq("following_id",user.id),
+      sb.from("follows").select("id",{count:"exact",head:true}).eq("follower_id",user.id),
+      sb.from("polls").select("id",{count:"exact",head:true}).eq("user_id",user.id)
+    ]);
+    $("viewStats").innerHTML=
+      "<b>Followers:</b> "+(followers.count||0)+" &nbsp; • &nbsp; "+
+      "<b>Following:</b> "+(following.count||0)+" &nbsp; • &nbsp; "+
+      "<b>Polls:</b> "+(polls.count||0);
+  }catch(e){ $("viewStats").textContent="Profile loaded."; }
+
+  const followBtn=$("viewFollowBtn");
+  if(user.id===currentUser.id){
+    followBtn.textContent="Your Profile"; followBtn.disabled=true;
+  }else{
+    followBtn.disabled=false;
+    const following=await isFollowing(user.id);
+    followBtn.textContent=following?"Following":"Follow";
+    followBtn.classList.toggle("following",following);
+    followBtn.onclick=()=>followUser(user.id,followBtn);
+  }
+  $("viewMessageBtn").onclick=()=>{ showPage("chat"); openChat(user); };
+}
+
+function closeUserView(){
+  $("userViewPage").classList.add("hidden");
+  showPage("chat");
+}
+
+
+/* =====================================================
    CHAT SEARCH
 ===================================================== */
 
@@ -3547,126 +3639,102 @@ function searchChatUsers(){
 }
 
 
-async function runChatSearch(){
+async function renderChatUserList(users, title, box, allowProfile=true){
 
-  if(!currentUser || !sb){
-    return;
-  }
+  if(!users?.length) return;
 
-  const q =
-    $("chatSearch")
-    .value
-    .trim();
+  const heading=document.createElement("h3");
+  heading.textContent=title;
+  heading.style.margin="14px 0 4px";
+  box.appendChild(heading);
 
-  const box =
-    $("chatUsers");
+  users.forEach(user=>{
+    const row=document.createElement("div");
+    row.className="row chat-user";
 
-  if(!q){
+    const av=document.createElement("div");
+    av.className="avatar";
+    setAvatarElement(av,user);
 
-    box.innerHTML =
-      "<div class='empty'>" +
-      "Search a username to start chatting." +
-      "</div>";
+    const info=document.createElement("div");
+    info.className="grow";
+    info.innerHTML="<b>@"+esc(user.username||"user")+"</b>"+
+      "<div class='chat-preview'>"+esc(user.display_name||"Start chatting")+"</div>";
 
-    return;
-  }
-
-  box.innerHTML =
-    "<div class='loading'>Searching...</div>";
-
-  try{
-
-    const {data,error} =
-      await sb
-      .from("profiles")
-      .select(
-        "id,username,display_name,avatar_url"
-      )
-      .ilike(
-        "username",
-        "%" + q + "%"
-      )
-      .neq(
-        "id",
-        currentUser.id
-      )
-      .limit(15);
-
-    if(error) throw error;
-
-    box.innerHTML = "";
-
-    if(!data?.length){
-
-      box.innerHTML =
-        "<div class='empty'>No users found.</div>";
-
-      return;
-    }
-
-    data.forEach(user=>{
-
-      const row =
-        document.createElement("div");
-
-      row.className =
-        "row chat-user";
-
-
-      const av =
-        document.createElement("div");
-
-      av.className =
-        "avatar";
-
-      setAvatarElement(
-        av,
-        user
-      );
-
-
-      const info =
-        document.createElement("div");
-
-      info.className =
-        "grow";
-
-      info.innerHTML =
-        "<b>@" +
-        esc(user.username) +
-        "</b>" +
-        "<div class='chat-preview'>" +
-        esc(
-          user.display_name ||
-          "Start chatting"
-        ) +
-        "</div>";
-
-
-      row.appendChild(av);
-      row.appendChild(info);
-
-      row.addEventListener(
-        "click",
-        ()=>{
-          openChat(user);
-        }
-      );
-
-      box.appendChild(row);
+    const view=document.createElement("button");
+    view.type="button";
+    view.className="profile-open-btn";
+    view.textContent="View";
+    view.addEventListener("click",e=>{
+      e.stopPropagation();
+      openUserView(user);
     });
 
+    row.appendChild(av);
+    row.appendChild(info);
+    if(allowProfile) row.appendChild(view);
+    row.addEventListener("click",()=>openChat(user));
+    box.appendChild(row);
+  });
+}
+
+async function getUsersFromFollowColumn(column, filterColumn){
+  const {data,error}=await sb.from("follows").select(column).eq(filterColumn,currentUser.id);
+  if(error) throw error;
+  const ids=[...(data||[])].map(x=>x[column]).filter(Boolean);
+  if(!ids.length) return [];
+  const {data:users,error:userError}=await sb.from("profiles")
+    .select("id,username,display_name,avatar_url")
+    .in("id",ids);
+  if(userError) throw userError;
+  const map=new Map((users||[]).map(u=>[u.id,u]));
+  return ids.map(id=>map.get(id)).filter(Boolean);
+}
+
+async function loadChatHome(){
+  const box=$("chatUsers");
+  box.innerHTML="<div class='loading'>Loading chats...</div>";
+  try{
+    const [followers,following]=await Promise.all([
+      getUsersFromFollowColumn("follower_id","following_id"),
+      getUsersFromFollowColumn("following_id","follower_id")
+    ]);
+
+    box.innerHTML="";
+    const seen=new Set();
+    const uniqueFollowers=followers.filter(u=>!seen.has(u.id)&&seen.add(u.id));
+    const uniqueFollowing=following.filter(u=>!seen.has(u.id)&&seen.add(u.id));
+
+    if(uniqueFollowers.length) await renderChatUserList(uniqueFollowers,"👥 Followers",box);
+    if(uniqueFollowing.length) await renderChatUserList(uniqueFollowing,"➕ Following",box);
+
+    if(!uniqueFollowers.length && !uniqueFollowing.length){
+      box.innerHTML="<div class='empty'>Abhi followers/following nahi hain. Search karke kisi user se chat start karo.</div>";
+    }
   }catch(error){
+    console.error("CHAT HOME:",error);
+    box.innerHTML="<div class='notice'>Chat list error: "+esc(error.message)+"</div>";
+  }
+}
 
-    console.error(
-      "CHAT SEARCH:",
-      error
-    );
-
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
-      "</div>";
+async function runChatSearch(){
+  if(!currentUser || !sb) return;
+  const q=$("chatSearch").value.trim();
+  const box=$("chatUsers");
+  if(!q){ await loadChatHome(); return; }
+  box.innerHTML="<div class='loading'>Searching...</div>";
+  try{
+    const {data,error}=await sb.from("profiles")
+      .select("id,username,display_name,avatar_url")
+      .or("username.ilike.%"+q+"%,display_name.ilike.%"+q+"%")
+      .neq("id",currentUser.id).limit(20);
+    if(error) throw error;
+    box.innerHTML="";
+    if(!data?.length){ box.innerHTML="<div class='empty'>No users found.</div>"; return; }
+    await renderChatUserList(data,"🔎 Search Results",box);
+  }catch(error){
+    console.error("CHAT SEARCH:",error);
+    box.innerHTML="<div class='notice'>"+esc(error.message)+"</div>";
   }
 }
 
@@ -3676,35 +3744,23 @@ async function runChatSearch(){
 ===================================================== */
 
 async function openChat(user){
-
-  if(!user || !currentUser){
-    return;
-  }
-
-  currentChatUser =
-    user;
-
-  $("chatArea")
-    .classList.remove("hidden");
-
-  $("chatTitle")
-    .textContent =
-    "@" +
-    (user.username || "user");
-
-  $("chatStatus")
-    .textContent =
-    user.display_name ||
-    "Poll Pulse user";
-
-  setAvatarElement(
-    $("chatAvatar"),
-    user
-  );
-
+  if(!user || !currentUser) return;
+  currentChatUser=user;
+  $("chatArea").classList.remove("hidden");
+  $("chatTitle").textContent="@"+(user.username||"user");
+  $("chatStatus").textContent=user.display_name||"Poll Pulse user";
+  setAvatarElement($("chatAvatar"),user);
+  await markChatRead(user.id);
   await loadMessages();
-
   startMessageRefresh();
+}
+
+async function markChatRead(otherId){
+  if(!currentUser || !otherId) return;
+  const {error}=await sb.from("messages").update({read:true})
+    .eq("receiver_id",currentUser.id).eq("sender_id",otherId).eq("read",false);
+  if(error) console.error("MARK READ:",error);
+  await updateChatBadge();
 }
 
 
@@ -3718,6 +3774,7 @@ function closeChat(){
   clearInterval(
     messageTimer
   );
+  loadChatHome();
 }
 
 
@@ -4369,10 +4426,20 @@ function setupEvents(){
   $("photoBtn")
     .addEventListener(
       "click",
-      ()=>{
-        $("avatarFile").click();
-      }
+      event=>{
+        event.preventDefault();
+        event.stopPropagation();
+        const input=$("avatarFile");
+        if(input){
+          try{ input.value=""; }catch(e){}
+          input.click();
+        }
+      },
+      {passive:false}
     );
+
+  $("closeUserViewBtn")
+    .addEventListener("click",closeUserView);
 
 
   $("avatarFile")
@@ -4380,6 +4447,13 @@ function setupEvents(){
       "change",
       uploadAvatar
     );
+
+  $("photoBtn")
+    .addEventListener("touchend",event=>{
+      event.preventDefault();
+      const input=$("avatarFile");
+      if(input) input.click();
+    },{passive:false});
 
 
   $("logoutBtn")
