@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -152,9 +151,7 @@ textarea{
 
 header{
  width:100%;
- padding:
- calc(24px + env(safe-area-inset-top))
- 18px 18px;
+ padding:calc(24px + env(safe-area-inset-top)) 18px 18px;
  color:white;
  background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
  border-radius:0 0 26px 26px;
@@ -219,7 +216,9 @@ section{
  flex:none;
 }
 
-.avatar img{
+.avatar img,
+.creator-avatar img,
+.profile-photo-large img{
  width:100%;
  height:100%;
  object-fit:cover;
@@ -260,16 +259,11 @@ section{
  overflow:hidden;
 }
 
-.creator-avatar img{
- width:100%;
- height:100%;
- object-fit:cover;
-}
-
 .poll-title{
  font-size:18px;
  font-weight:800;
  margin-bottom:11px;
+ word-break:break-word;
 }
 
 .option{
@@ -381,10 +375,6 @@ section{
  word-break:break-all;
  margin-top:3px;
  cursor:pointer;
-}
-
-.user-id:hover{
- color:#6c5ce7;
 }
 
 .profile-stat{
@@ -574,12 +564,6 @@ section{
  font-weight:bold;
 }
 
-.profile-photo-large img{
- width:100%;
- height:100%;
- object-fit:cover;
-}
-
 .photo-btn{
  display:inline-block;
  margin-top:9px;
@@ -674,10 +658,7 @@ section{
   height:100dvh;
   min-height:100dvh;
   background:#f5f3ff;
-  padding:
-   env(safe-area-inset-top)
-   0
-   env(safe-area-inset-bottom);
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
   overflow:hidden;
  }
 
@@ -722,10 +703,6 @@ section{
  #homeScreen.chat-mobile-open #chatArea>.row{
   flex:none;
   padding-bottom:env(safe-area-inset-bottom);
- }
-
- #homeScreen.chat-mobile-open #chatInput{
-  min-width:0;
  }
 }
 
@@ -772,36 +749,51 @@ section{
 
 <body>
 
+<!-- ================= AUTH ================= -->
+
 <div id="authScreen" class="app">
+
 <div class="auth">
 <div class="box">
 
 <div class="logo">Poll Pulse</div>
 <div class="sub">Everyone has an opinion.</div>
 
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<input id="username" class="hidden" placeholder="Username">
+<input id="email"
+ type="email"
+ autocomplete="email"
+ placeholder="Email">
+
+<input id="password"
+ type="password"
+ autocomplete="current-password"
+ placeholder="Password">
+
+<input id="username"
+ class="hidden"
+ autocomplete="username"
+ placeholder="Username">
 
 <button id="loginBtn"
-class="btn wide"
-onclick="login()">
+ class="btn wide"
+ onclick="login()">
 Login
 </button>
 
 <button id="signupBtn"
-class="btn wide hidden"
-onclick="signup()">
+ class="btn wide hidden"
+ onclick="signup()">
 Create Account
 </button>
 
 <button id="authToggleBtn"
-class="link"
-onclick="toggleAuth()">
+ class="link"
+ onclick="toggleAuth()">
 Create new account
 </button>
 
-<button class="link" onclick="resetPassword()">
+<button class="link"
+ onclick="resetPassword()">
 Forgot password?
 </button>
 
@@ -812,30 +804,50 @@ Forgot password?
 </div>
 
 
+<!-- ================= APP ================= -->
+
 <div id="homeScreen" class="app hidden">
 
 <header>
+
 <h1>Poll Pulse</h1>
-<p id="hello">Welcome 👋</p>
+
+<p id="hello">
+Welcome 👋
+</p>
+
 </header>
 
 <main class="content">
 
+<!-- HOME -->
+
 <section id="homePage">
 
 <div class="card">
-<h2 style="margin-top:0">🔥 Poll Feed</h2>
-<p>Vote, discover people and follow interesting users.</p>
+
+<h2 style="margin-top:0">
+🔥 Poll Feed
+</h2>
+
+<p>
+Vote, discover people and follow interesting users.
+</p>
+
 </div>
 
 <div id="polls">
-<div class="notice">Loading polls...</div>
+<div class="notice">
+Loading polls...
+</div>
 </div>
 
 <div id="suggestions"></div>
 
 </section>
 
+
+<!-- SEARCH -->
 
 <section id="searchPage" class="hidden">
 
@@ -846,7 +858,7 @@ Forgot password?
 <input
  id="searchInput"
  placeholder="Username, name, User ID or poll..."
- oninput="searchAll">
+ oninput="searchAll()">
 
 <div id="searchResults">
 Search something...
@@ -857,19 +869,36 @@ Search something...
 </section>
 
 
+<!-- CREATE -->
+
 <section id="createPage" class="hidden">
 
 <div class="card">
 
 <h2>➕ Create Poll</h2>
 
-<input id="question" placeholder="Ask your question...">
-<input id="option1" placeholder="Option 1">
-<input id="option2" placeholder="Option 2">
-<input id="option3" placeholder="Option 3 (optional)">
-<input id="option4" placeholder="Option 4 (optional)">
+<input
+ id="question"
+ placeholder="Ask your question...">
 
-<button class="btn wide" onclick="createPoll()">
+<input
+ id="option1"
+ placeholder="Option 1">
+
+<input
+ id="option2"
+ placeholder="Option 2">
+
+<input
+ id="option3"
+ placeholder="Option 3 (optional)">
+
+<input
+ id="option4"
+ placeholder="Option 4 (optional)">
+
+<button class="btn wide"
+ onclick="createPoll()">
 Publish Poll
 </button>
 
@@ -877,6 +906,8 @@ Publish Poll
 
 </section>
 
+
+<!-- CHAT -->
 
 <section id="chatPage" class="hidden">
 
@@ -889,7 +920,8 @@ Publish Poll
  placeholder="Username, name or User ID..."
  oninput="searchChatUsers()">
 
-<div id="chatPeopleTitle" class="chat-section-title">
+<div id="chatPeopleTitle"
+ class="chat-section-title">
 👥 People
 </div>
 
@@ -899,17 +931,25 @@ Publish Poll
 
 <div class="chat-header">
 
-<button class="btn" onclick="closeChat()">←</button>
+<button class="btn"
+ onclick="closeChat()">
+←
+</button>
 
-<div id="chatAvatar" class="avatar">U</div>
+<div id="chatAvatar"
+ class="avatar">
+U
+</div>
 
 <div class="chat-header-info">
 
-<div id="chatTitle" class="chat-header-name">
+<div id="chatTitle"
+ class="chat-header-name">
 User
 </div>
 
-<div id="chatStatus" class="chat-header-status">
+<div id="chatStatus"
+ class="chat-header-status">
 Chat
 </div>
 
@@ -917,7 +957,9 @@ Chat
 
 </div>
 
-<div id="messages" class="chatbox"></div>
+<div id="messages"
+ class="chatbox">
+</div>
 
 <div class="row">
 
@@ -927,7 +969,8 @@ Chat
  placeholder="Message..."
  onkeydown="handleChatEnter(event)">
 
-<button class="btn" onclick="sendMessage()">
+<button class="btn"
+ onclick="sendMessage()">
 Send
 </button>
 
@@ -940,41 +983,41 @@ Send
 </section>
 
 
+<!-- PROFILE -->
+
 <section id="profilePage" class="hidden">
 
 <div class="card">
 
 <div class="profile-photo-box">
 
-<div id="profilePhoto" class="profile-photo-large">
+<div id="profilePhoto"
+ class="profile-photo-large">
 U
 </div>
 
 <input
  id="photoInput"
  type="file"
- accept="image/*,.jpg,.jpeg,.png,.webp"
+ accept="image/*"
  class="hidden"
  onchange="uploadProfilePhoto(event)">
 
-<label class="btn photo-btn" for="photoInput">
+<label
+ class="btn photo-btn"
+ for="photoInput">
 📷 Change Profile Picture
 </label>
 
 </div>
 
-<div class="row">
-
-<div class="grow">
-
-<h2 id="profileName" style="margin:0">
+<h2 id="profileName"
+ style="margin:0">
 User
 </h2>
 
-<div id="profileUsername" class="small"></div>
-
-</div>
-
+<div id="profileUsername"
+ class="small">
 </div>
 
 <br>
@@ -1004,13 +1047,16 @@ User
 
 <b>🆔 My User ID</b>
 
-<div id="profileId" class="tiny"></div>
+<div id="profileId"
+ class="tiny">
+</div>
 
 </div>
 
 <div class="tabs">
 
-<button class="active" onclick="profileTab('polls',this)">
+<button class="active"
+ onclick="profileTab('polls',this)">
 My Polls
 </button>
 
@@ -1054,55 +1100,66 @@ Logout
 </main>
 
 
+<!-- NAV -->
+
 <nav class="bottom">
 
 <button id="navHome"
-class="nav active"
-onclick="showPage('home')">
+ class="nav active"
+ onclick="showPage('home')">
 🏠
 <b>Home</b>
 </button>
 
 <button id="navSearch"
-class="nav"
-onclick="showPage('search')">
+ class="nav"
+ onclick="showPage('search')">
 🔎
 <b>Search</b>
 </button>
 
 <button class="nav create"
-onclick="showPage('create')">
+ onclick="showPage('create')">
 ＋
 </button>
 
 <button id="navChat"
-class="nav"
-onclick="showPage('chat')">
+ class="nav"
+ onclick="showPage('chat')">
 💬
 <b>Chat</b>
-<span id="chatBadge" class="badge hidden">0</span>
+<span id="chatBadge"
+ class="badge hidden">
+0
+</span>
 </button>
 
 <button id="navProfile"
-class="nav"
-onclick="showPage('profile')">
+ class="nav"
+ onclick="showPage('profile')">
 👤
 <b>Profile</b>
-<span id="notificationBadge" class="badge hidden">0</span>
+<span id="notificationBadge"
+ class="badge hidden">
+0
+</span>
 </button>
 
 </nav>
 
 </div>
 
-<div id="toast" class="toast"></div>
+
+<div id="toast"
+ class="toast">
+</div>
 
 
 <script>
 
-/* =========================
-SUPABASE
-========================= */
+/* =====================================================
+ SUPABASE
+===================================================== */
 
 const SUPABASE_URL =
 "https://dbpbkvfaxgifjeveijqf.supabase.co";
@@ -1113,9 +1170,9 @@ const SUPABASE_KEY =
 const AVATAR_BUCKET="avatars";
 
 
-/* =========================
-STATE
-========================= */
+/* =====================================================
+ STATE
+===================================================== */
 
 let sb=null;
 let currentUser=null;
@@ -1133,15 +1190,20 @@ let profilesCacheTime=0;
 let loadingPolls=false;
 let loadingSuggestions=false;
 let appOpening=false;
+let appStarted=false;
 
 
-/* =========================
-HELPERS
-========================= */
+/* =====================================================
+ HELPERS
+===================================================== */
 
 function authMessage(text){
+
  const el=document.getElementById("authMsg");
- if(el)el.textContent=text||"";
+
+ if(el){
+  el.textContent=text||"";
+ }
 }
 
 
@@ -1197,38 +1259,50 @@ function uniqueById(items){
 }
 
 
-function profileAvatarHTML(profile,sizeClass="avatar"){
+function profileAvatarHTML(
+ profile,
+ sizeClass="avatar"
+){
 
  if(profile?.avatar_url){
 
   return `
    <div class="${sizeClass}">
-    <img src="${esc(profile.avatar_url)}" alt="">
+    <img
+     src="${esc(profile.avatar_url)}"
+     alt="">
    </div>
   `;
  }
 
  return `
   <div class="${sizeClass}">
-   ${esc(getInitial(
-    profile?.username||
-    profile?.display_name||
-    "U"
-   ))}
+   ${esc(
+    getInitial(
+     profile?.username||
+     profile?.display_name||
+     "U"
+    )
+   )}
   </div>
  `;
 }
 
 
-/* =========================
-SUPABASE INIT
-========================= */
+/* =====================================================
+ SUPABASE INIT
+===================================================== */
 
 function initSupabase(){
 
+ if(sb)return true;
+
  if(!window.supabase){
 
-  authMessage("Supabase load nahi hua.");
+  authMessage(
+   "Supabase load nahi hua. Internet check karo."
+  );
+
   return false;
  }
 
@@ -1236,32 +1310,53 @@ function initSupabase(){
 
   sb=window.supabase.createClient(
    SUPABASE_URL,
-   SUPABASE_KEY
+   SUPABASE_KEY,
+   {
+    auth:{
+     persistSession:true,
+     autoRefreshToken:true,
+     detectSessionInUrl:true
+    }
+   }
   );
 
   return true;
 
  }catch(e){
 
-  console.error(e);
+  console.error("SUPABASE INIT ERROR",e);
 
-  authMessage("Supabase start nahi hua.");
+  authMessage(
+   "Supabase start nahi hua: "+
+   (e.message||e)
+  );
 
   return false;
  }
 }
 
 
-/* =========================
-AUTH UI
-========================= */
+/* =====================================================
+ AUTH UI
+===================================================== */
 
 function toggleAuth(){
 
- const username=document.getElementById("username");
- const loginBtn=document.getElementById("loginBtn");
- const signupBtn=document.getElementById("signupBtn");
- const toggleBtn=document.getElementById("authToggleBtn");
+ const username=
+  document.getElementById("username");
+
+ const loginBtn=
+  document.getElementById("loginBtn");
+
+ const signupBtn=
+  document.getElementById("signupBtn");
+
+ const toggleBtn=
+  document.getElementById("authToggleBtn");
+
+ if(!username||!loginBtn||!signupBtn||!toggleBtn){
+  return;
+ }
 
  const signupMode=
   !username.classList.contains("hidden");
@@ -1281,111 +1376,23 @@ function toggleAuth(){
 
 async function signup(){
 
- if(!sb){
-  return authMessage("Supabase ready nahi hai.");
+ if(!initSupabase()){
+  return;
  }
 
  const email=
   document.getElementById("email")
-   .value.trim().toLowerCase();
+   .value.trim()
+   .toLowerCase();
 
  const password=
-  document.getElementById("password").value;
+  document.getElementById("password")
+   .value;
 
  const username=
   document.getElementById("username")
-   .value.trim().toLowerCase();
-
- if(!email||!password||!username){
-  return authMessage("Sab fields required hain.");
- }
-
- if(password.length<6){
-  return authMessage("Password minimum 6 characters.");
- }
-
- if(!/^[a-z0-9_]{3,25}$/.test(username)){
-  return authMessage("Username 3-25 characters ka ho.");
- }
-
- const btn=document.getElementById("signupBtn");
- btn.disabled=true;
-
- try{
-
-  const {data,error}=await sb.auth.signUp({
-   email,
-   password,
-   options:{
-    data:{
-     username,
-     display_name:username
-    }
-   }
-  });
-
-  if(error)throw error;
-
-  if(!data?.user){
-   throw new Error("Account create nahi hua.");
-  }
-
-  if(data.session){
-
-   await createProfile(data.user,username);
-   await openApp(data.user);
-
-  }else{
-
-   authMessage(
-    "Account ban gaya. Email verify karo, phir Login karo."
-   );
-  }
-
- }catch(e){
-
-  console.error(e);
-  authMessage(e.message||"Signup failed.");
-
- }finally{
-
-  btn.disabled=false;
- }
-}
-
-
-async function createProfile(user,username){
-
- if(!sb||!user)return;
-
- const {error}=await sb
-  .from("profiles")
-  .upsert({
-   id:user.id,
-   username,
-   display_name:username
-  },{
-   onConflict:"id"
-  });
-
- if(error){
-  console.error("PROFILE CREATE ERROR",error);
- }
-}
-
-
-async function login(){
-
- if(!sb){
-  return authMessage("Supabase ready nahi hai.");
- }
-
- const email=
-  document.getElementById("email")
-   .value.trim().toLowerCase();
-
- const password=
-  document.getElementById("password").value;
+   .value.trim()
+   .toLowerCase();
 
  if(!email){
   return authMessage("Email enter karo.");
@@ -1395,30 +1402,220 @@ async function login(){
   return authMessage("Password enter karo.");
  }
 
- const btn=document.getElementById("loginBtn");
+ if(!username){
+  return authMessage("Username enter karo.");
+ }
+
+ if(password.length<6){
+  return authMessage(
+   "Password minimum 6 characters."
+  );
+ }
+
+ if(!/^[a-z0-9_]{3,25}$/.test(username)){
+  return authMessage(
+   "Username 3-25 characters ka ho."
+  );
+ }
+
+ const btn=
+  document.getElementById("signupBtn");
+
  btn.disabled=true;
 
- authMessage("Logging in...");
+ authMessage("Account create ho raha hai...");
 
  try{
 
-  const {data,error}=await sb.auth.signInWithPassword({
-   email,
-   password
-  });
+  const {data,error}=
+   await sb.auth.signUp({
+    email,
+    password,
+    options:{
+     data:{
+      username,
+      display_name:username
+     }
+    }
+   });
 
   if(error)throw error;
 
   if(!data?.user){
-   throw new Error("User session nahi mili.");
+   throw new Error(
+    "Account create nahi hua."
+   );
   }
 
-  await openApp(data.user);
+  if(data.session){
+
+   await createProfile(
+    data.user,
+    username
+   );
+
+   await openApp(
+    data.user
+   );
+
+  }else{
+
+   authMessage(
+    "Account ban gaya. Email verify karke Login karo."
+   );
+  }
 
  }catch(e){
 
-  console.error(e);
-  authMessage(e.message||"Login failed.");
+  console.error("SIGNUP ERROR",e);
+
+  authMessage(
+   e?.message||
+   "Signup failed."
+  );
+
+ }finally{
+
+  btn.disabled=false;
+ }
+}
+
+
+async function createProfile(
+ user,
+ username
+){
+
+ if(!sb||!user)return;
+
+ const {error}=
+  await sb
+   .from("profiles")
+   .upsert(
+    {
+     id:user.id,
+     username,
+     display_name:username
+    },
+    {
+     onConflict:"id"
+    }
+   );
+
+ if(error){
+  console.error(
+   "PROFILE CREATE ERROR",
+   error
+  );
+ }
+}
+
+
+/* =====================================================
+ LOGIN - ROBUST
+===================================================== */
+
+async function login(){
+
+ if(!initSupabase()){
+  return;
+ }
+
+ const email=
+  document.getElementById("email")
+   .value.trim()
+   .toLowerCase();
+
+ const password=
+  document.getElementById("password")
+   .value;
+
+ if(!email){
+  return authMessage(
+   "Email enter karo."
+  );
+ }
+
+ if(!password){
+  return authMessage(
+   "Password enter karo."
+  );
+ }
+
+ const btn=
+  document.getElementById("loginBtn");
+
+ btn.disabled=true;
+
+ authMessage(
+  "Logging in..."
+ );
+
+ try{
+
+  const result=
+   await sb.auth.signInWithPassword({
+    email,
+    password
+   });
+
+  console.log(
+   "LOGIN RESULT:",
+   result
+  );
+
+  if(result.error){
+
+   throw result.error;
+  }
+
+  const user=
+   result.data?.user;
+
+  if(!user){
+
+   throw new Error(
+    "Login hua lekin user session nahi mili."
+   );
+  }
+
+  currentUser=user;
+
+  await openApp(user);
+
+ }catch(e){
+
+  console.error(
+   "LOGIN ERROR:",
+   e
+  );
+
+  let msg=
+   e?.message||
+   "Login failed.";
+
+  const lower=
+   msg.toLowerCase();
+
+  if(lower.includes("email not confirmed")){
+
+   msg=
+    "Email verify nahi hua. Pehle email verify karo.";
+  }
+
+  if(lower.includes("invalid login credentials")){
+
+   msg=
+    "Email ya password galat hai.";
+  }
+
+  if(lower.includes("failed to fetch")){
+
+   msg=
+    "Internet/Supabase connection problem.";
+  }
+
+  authMessage(msg);
 
  }finally{
 
@@ -1429,67 +1626,91 @@ async function login(){
 
 async function resetPassword(){
 
- if(!sb){
-  return authMessage("Supabase ready nahi hai.");
+ if(!initSupabase()){
+  return;
  }
 
  const email=
   document.getElementById("email")
-   .value.trim().toLowerCase();
+   .value.trim()
+   .toLowerCase();
 
  if(!email){
-  return authMessage("Pehle email enter karo.");
+
+  return authMessage(
+   "Pehle email enter karo."
+  );
  }
 
- const {error}=
-  await sb.auth.resetPasswordForEmail(
-   email,
-   {
-    redirectTo:
-     window.location.origin+
-     window.location.pathname
-   }
+ try{
+
+  const {error}=
+   await sb.auth.resetPasswordForEmail(
+    email,
+    {
+     redirectTo:
+      window.location.origin+
+      window.location.pathname
+    }
+   );
+
+  if(error)throw error;
+
+  authMessage(
+   "Reset email bhej diya."
   );
 
- if(error){
-  return authMessage(error.message);
- }
+ }catch(e){
 
- authMessage("Reset email bhej diya.");
+  authMessage(
+   e?.message||
+   "Password reset failed."
+  );
+ }
 }
 
 
-/* =========================
-PROFILE
-========================= */
+/* =====================================================
+ PROFILE
+===================================================== */
 
 async function getProfile(id){
 
  if(!sb||!id)return null;
 
- let result=await sb
-  .from("profiles")
-  .select("id,username,display_name,avatar_url")
-  .eq("id",id)
-  .maybeSingle();
+ let result=
+  await sb
+   .from("profiles")
+   .select(
+    "id,username,display_name,avatar_url"
+   )
+   .eq("id",id)
+   .maybeSingle();
 
  if(result.error){
 
   console.warn(
-   "Avatar profile query failed:",
+   "Avatar column unavailable:",
    result.error.message
   );
 
-  result=await sb
-   .from("profiles")
-   .select("id,username,display_name")
-   .eq("id",id)
-   .maybeSingle();
+  result=
+   await sb
+    .from("profiles")
+    .select(
+     "id,username,display_name"
+    )
+    .eq("id",id)
+    .maybeSingle();
  }
 
  if(result.error){
 
-  console.error("PROFILE ERROR",result.error);
+  console.error(
+   "PROFILE ERROR",
+   result.error
+  );
+
   return null;
  }
 
@@ -1497,7 +1718,9 @@ async function getProfile(id){
 }
 
 
-async function loadAllProfiles(force=false){
+async function loadAllProfiles(
+ force=false
+){
 
  if(!currentUser||!sb)return [];
 
@@ -1511,11 +1734,14 @@ async function loadAllProfiles(force=false){
   return allProfilesCache;
  }
 
- let result=await sb
-  .from("profiles")
-  .select("id,username,display_name,avatar_url")
-  .neq("id",currentUser.id)
-  .limit(1000);
+ let result=
+  await sb
+   .from("profiles")
+   .select(
+    "id,username,display_name,avatar_url"
+   )
+   .neq("id",currentUser.id)
+   .limit(1000);
 
  if(result.error){
 
@@ -1524,20 +1750,29 @@ async function loadAllProfiles(force=false){
    result.error.message
   );
 
-  result=await sb
-   .from("profiles")
-   .select("id,username,display_name")
-   .neq("id",currentUser.id)
-   .limit(1000);
+  result=
+   await sb
+    .from("profiles")
+    .select(
+     "id,username,display_name"
+    )
+    .neq("id",currentUser.id)
+    .limit(1000);
  }
 
  if(result.error){
 
-  console.error("ALL PROFILES ERROR",result.error);
+  console.error(
+   "ALL PROFILES ERROR",
+   result.error
+  );
+
   return [];
  }
 
- allProfilesCache=uniqueById(result.data||[]);
+ allProfilesCache=
+  uniqueById(result.data||[]);
+
  profilesCacheTime=now;
 
  return allProfilesCache;
@@ -1546,7 +1781,8 @@ async function loadAllProfiles(force=false){
 
 async function ensureProfile(user){
 
- let profile=await getProfile(user.id);
+ let profile=
+  await getProfile(user.id);
 
  if(profile)return profile;
 
@@ -1555,90 +1791,123 @@ async function ensureProfile(user){
   user.email?.split("@")[0]||
   "user";
 
- username=username
-  .replace(/[^a-zA-Z0-9_]/g,"")
-  .slice(0,25);
+ username=
+  username
+   .replace(
+    /[^a-zA-Z0-9_]/g,
+    ""
+   )
+   .slice(0,25);
 
  if(username.length<3){
 
   username=
    "user"+
-   user.id.replace(/-/g,"").slice(0,8);
+   user.id
+    .replace(/-/g,"")
+    .slice(0,8);
  }
 
- await createProfile(user,username);
+ await createProfile(
+  user,
+  username
+ );
 
- return await getProfile(user.id);
+ return await getProfile(
+  user.id
+ );
 }
 
 
-/* =========================
-OPEN APP
-========================= */
+/* =====================================================
+ OPEN APP
+===================================================== */
 
 async function openApp(user){
 
  if(!user)return;
 
- if(appOpening&&currentUser?.id===user.id){
+ if(
+  appOpening&&
+  currentUser?.id===user.id
+ ){
   return;
  }
 
  appOpening=true;
+ currentUser=user;
 
  try{
-
-  currentUser=user;
 
   allProfilesCache=[];
   profilesCacheTime=0;
 
-  document.getElementById("authScreen")
+  document
+   .getElementById("authScreen")
    .classList.add("hidden");
 
-  document.getElementById("homeScreen")
+  document
+   .getElementById("homeScreen")
    .classList.remove("hidden");
 
-  const profile=await ensureProfile(user);
+  const profile=
+   await ensureProfile(user);
 
   const username=
    profile?.username||
    user.user_metadata?.username||
+   user.email?.split("@")[0]||
    "user";
 
-  document.getElementById("hello")
-   .textContent="@"+username;
-
-  document.getElementById("profileName")
+  document
+   .getElementById("hello")
    .textContent=
-    profile?.display_name||username;
+   "@"+username;
 
-  document.getElementById("profileUsername")
-   .textContent="@"+username;
+  document
+   .getElementById("profileName")
+   .textContent=
+   profile?.display_name||
+   username;
 
-  document.getElementById("profileId")
-   .textContent=user.id;
+  document
+   .getElementById("profileUsername")
+   .textContent=
+   "@"+username;
+
+  document
+   .getElementById("profileId")
+   .textContent=
+   user.id;
 
   setProfilePhoto(profile);
 
   await updateProfileStats();
+
   await loadPolls();
+
   await loadSuggestions(true);
+
   await loadNotifications();
+
   await loadChatList();
+
   await updateChatBadge();
 
-  await requestNotificationPermission();
+  requestNotificationPermission();
 
   subscribeRealtime();
 
  }catch(e){
 
-  console.error("OPEN APP ERROR",e);
+  console.error(
+   "OPEN APP ERROR",
+   e
+  );
 
   toast(
    "App load error: "+
-   (e.message||e)
+   (e?.message||e)
   );
 
  }finally{
@@ -1650,7 +1919,10 @@ async function openApp(user){
 
 function setProfilePhoto(profile){
 
- const box=document.getElementById("profilePhoto");
+ const box=
+  document.getElementById(
+   "profilePhoto"
+  );
 
  if(!box)return;
 
@@ -1671,60 +1943,91 @@ function setProfilePhoto(profile){
 }
 
 
-/* =========================
-PROFILE PHOTO
-========================= */
+/* =====================================================
+ PROFILE PHOTO
+===================================================== */
 
 async function uploadProfilePhoto(event){
 
- const input=event.target;
- const file=input.files?.[0];
+ const input=event?.target;
 
- if(!file||!currentUser||!sb){
+ const file=
+  input?.files?.[0];
 
+ if(input){
   input.value="";
+ }
+
+ if(
+  !file||
+  !currentUser||
+  !sb
+ ){
   return;
  }
 
- input.value="";
+ if(
+  !file.type||
+  !file.type.startsWith("image/")
+ ){
 
- if(!file.type.startsWith("image/")){
-  return toast("Sirf image select karo.");
+  return toast(
+   "Sirf image select karo."
+  );
  }
 
  if(file.size>15*1024*1024){
-  return toast("Image 15 MB se chhoti honi chahiye.");
+
+  return toast(
+   "Image 15 MB se chhoti honi chahiye."
+  );
  }
 
- toast("📷 Photo prepare ho rahi hai...");
+ toast(
+  "📷 Photo prepare ho rahi hai..."
+ );
 
  try{
 
-  const image=await new Promise((resolve,reject)=>{
+  const image=
+   await new Promise(
+    (resolve,reject)=>{
 
-   const reader=new FileReader();
+     const reader=
+      new FileReader();
 
-   reader.onload=()=>{
+     reader.onload=()=>{
 
-    const img=new Image();
+      const img=
+       new Image();
 
-    img.onload=()=>resolve(img);
+      img.onload=()=>{
+       resolve(img);
+      };
 
-    img.onerror=()=>reject(
-     new Error("Image read nahi ho paayi.")
-    );
+      img.onerror=()=>{
+       reject(
+        new Error(
+         "Image read nahi ho paayi."
+        )
+       );
+      };
 
-    img.src=reader.result;
-   };
+      img.src=
+       reader.result;
+     };
 
-   reader.onerror=()=>reject(
-    new Error("Image file read nahi ho paayi.")
+     reader.onerror=()=>{
+      reject(
+       new Error(
+        "Image file read nahi ho paayi."
+       )
+      );
+     };
+
+     reader.readAsDataURL(file);
+    }
    );
-
-   reader.readAsDataURL(file);
-  });
-
-  const MAX_SIZE=1280;
 
   let width=
    image.naturalWidth||
@@ -1734,29 +2037,49 @@ async function uploadProfilePhoto(event){
    image.naturalHeight||
    image.height;
 
-  if(width>MAX_SIZE||height>MAX_SIZE){
+  const MAX=1280;
+
+  if(
+   width>MAX||
+   height>MAX
+  ){
 
    if(width>=height){
 
-    height=Math.round(height*MAX_SIZE/width);
-    width=MAX_SIZE;
+    height=
+     Math.round(
+      height*MAX/width
+     );
+
+    width=MAX;
 
    }else{
 
-    width=Math.round(width*MAX_SIZE/height);
-    height=MAX_SIZE;
+    width=
+     Math.round(
+      width*MAX/height
+     );
+
+    height=MAX;
    }
   }
 
-  const canvas=document.createElement("canvas");
+  const canvas=
+   document.createElement(
+    "canvas"
+   );
 
   canvas.width=width;
   canvas.height=height;
 
-  const ctx=canvas.getContext("2d");
+  const ctx=
+   canvas.getContext("2d");
 
   if(!ctx){
-   throw new Error("Image processing unavailable.");
+
+   throw new Error(
+    "Image processing unavailable."
+   );
   }
 
   ctx.drawImage(
@@ -1767,23 +2090,32 @@ async function uploadProfilePhoto(event){
    height
   );
 
-  const blob=await new Promise(resolve=>{
-   canvas.toBlob(
-    resolve,
-    "image/jpeg",
-    0.82
+  const blob=
+   await new Promise(
+    resolve=>{
+     canvas.toBlob(
+      resolve,
+      "image/jpeg",
+      0.82
+     );
+    }
    );
-  });
 
   if(!blob){
-   throw new Error("Photo compress nahi ho paayi.");
+
+   throw new Error(
+    "Photo compress nahi ho paayi."
+   );
   }
 
-  toast("☁️ Photo upload ho rahi hai...");
+  toast(
+   "☁️ Photo upload ho rahi hai..."
+  );
 
   const path=
    currentUser.id+
-   "/avatar.jpg";
+   "/avatar-"+Date.now()+
+   ".jpg";
 
   const upload=
    await sb.storage
@@ -1792,7 +2124,7 @@ async function uploadProfilePhoto(event){
      path,
      blob,
      {
-      upsert:true,
+      upsert:false,
       contentType:"image/jpeg",
       cacheControl:"3600"
      }
@@ -1811,15 +2143,17 @@ async function uploadProfilePhoto(event){
    publicResult?.data?.publicUrl;
 
   if(!baseUrl){
-   throw new Error("Photo URL nahi mila.");
+
+   throw new Error(
+    "Photo URL nahi mila."
+   );
   }
 
   const url=
    baseUrl+
-   "?v="+
-   Date.now();
+   "?v="+Date.now();
 
-  const {error:updateError}=
+  const {error}=
    await sb
     .from("profiles")
     .update({
@@ -1830,56 +2164,64 @@ async function uploadProfilePhoto(event){
      currentUser.id
     );
 
-  if(updateError){
-   throw updateError;
-  }
+  if(error)throw error;
 
   allProfilesCache=[];
   profilesCacheTime=0;
 
-  const profile=
-   await getProfile(
-    currentUser.id
-   );
+  setProfilePhoto({
+   username:
+    currentUser
+     .user_metadata
+     ?.username||
+    "user",
+   avatar_url:url
+  });
 
-  setProfilePhoto(
-   profile||{
-    username:
-     currentUser.user_metadata?.username||
-     "user",
-    avatar_url:url
-   }
+  toast(
+   "✅ Profile picture updated!"
   );
-
-  toast("✅ Profile picture updated!");
 
   if(
    !document
     .getElementById("homePage")
-    .classList.contains("hidden")
+    .classList
+    .contains("hidden")
   ){
+
    await loadSuggestions(true);
   }
 
  }catch(e){
 
   console.error(
-   "PROFILE PHOTO ERROR",
+   "PHOTO ERROR",
    e
   );
 
-  let message=
+  let msg=
    e?.message||
    String(e);
 
-  const lower=message.toLowerCase();
+  const lower=
+   msg.toLowerCase();
 
   if(
-   lower.includes("row-level")||
+   lower.includes("bucket")||
+   lower.includes("not found")
+  ){
+
+   msg=
+    "Supabase mein avatars bucket nahi mila.";
+  }
+
+  if(
    lower.includes("policy")||
+   lower.includes("row-level")||
    lower.includes("not authorized")
   ){
-   message=
+
+   msg=
     "Photo permission problem. Supabase Storage policy check karo.";
   }
 
@@ -1887,26 +2229,19 @@ async function uploadProfilePhoto(event){
    lower.includes("avatar_url")||
    lower.includes("column")
   ){
-   message=
+
+   msg=
     "profiles table mein avatar_url column missing hai.";
   }
 
-  if(
-   lower.includes("bucket")||
-   lower.includes("not found")
-  ){
-   message=
-    "avatars Storage bucket nahi mila.";
-  }
-
-  toast("❌ "+message);
+  toast("❌ "+msg);
  }
 }
 
 
-/* =========================
-STATS
-========================= */
+/* =====================================================
+ STATS
+===================================================== */
 
 async function updateProfileStats(){
 
@@ -1915,7 +2250,13 @@ async function updateProfileStats(){
  const followers=
   await sb
    .from("follows")
-   .select("id",{count:"exact",head:true})
+   .select(
+    "id",
+    {
+     count:"exact",
+     head:true
+    }
+   )
    .eq(
     "following_id",
     currentUser.id
@@ -1924,7 +2265,13 @@ async function updateProfileStats(){
  const following=
   await sb
    .from("follows")
-   .select("id",{count:"exact",head:true})
+   .select(
+    "id",
+    {
+     count:"exact",
+     head:true
+    }
+   )
    .eq(
     "follower_id",
     currentUser.id
@@ -1933,26 +2280,38 @@ async function updateProfileStats(){
  const polls=
   await sb
    .from("polls")
-   .select("id",{count:"exact",head:true})
+   .select(
+    "id",
+    {
+     count:"exact",
+     head:true
+    }
+   )
    .eq(
     "user_id",
     currentUser.id
    );
 
- document.getElementById("followersCount")
-  .textContent=followers.count||0;
+ document
+  .getElementById("followersCount")
+  .textContent=
+   followers.count||0;
 
- document.getElementById("followingCount")
-  .textContent=following.count||0;
+ document
+  .getElementById("followingCount")
+  .textContent=
+   following.count||0;
 
- document.getElementById("myPollCount")
-  .textContent=polls.count||0;
+ document
+  .getElementById("myPollCount")
+  .textContent=
+   polls.count||0;
 }
 
 
-/* =========================
-NAVIGATION
-========================= */
+/* =====================================================
+ NAVIGATION
+===================================================== */
 
 function showPage(page){
 
@@ -1965,33 +2324,40 @@ function showPage(page){
  ];
 
  pages.forEach(id=>{
-  document.getElementById(id)
+  document
+   .getElementById(id)
    ?.classList.add("hidden");
  });
 
- const navs=[
+ [
   "navHome",
   "navSearch",
   "navChat",
   "navProfile"
- ];
-
- navs.forEach(id=>{
-  document.getElementById(id)
+ ].forEach(id=>{
+  document
+   .getElementById(id)
    ?.classList.remove("active");
  });
 
- document.getElementById("publicProfilePage")?.remove();
+ document
+  .getElementById("publicProfilePage")
+  ?.remove();
 
- document.getElementById("homeScreen")
-  ?.classList.remove("chat-mobile-open");
+ document
+  .getElementById("homeScreen")
+  ?.classList.remove(
+   "chat-mobile-open"
+  );
 
  if(page==="home"){
 
-  document.getElementById("homePage")
+  document
+   .getElementById("homePage")
    .classList.remove("hidden");
 
-  document.getElementById("navHome")
+  document
+   .getElementById("navHome")
    .classList.add("active");
 
   loadPolls();
@@ -2000,81 +2366,100 @@ function showPage(page){
 
  if(page==="search"){
 
-  document.getElementById("searchPage")
+  document
+   .getElementById("searchPage")
    .classList.remove("hidden");
 
-  document.getElementById("navSearch")
+  document
+   .getElementById("navSearch")
    .classList.add("active");
  }
 
  if(page==="create"){
 
-  document.getElementById("createPage")
+  document
+   .getElementById("createPage")
    .classList.remove("hidden");
  }
 
  if(page==="chat"){
 
-  document.getElementById("chatPage")
+  document
+   .getElementById("chatPage")
    .classList.remove("hidden");
 
-  document.getElementById("navChat")
+  document
+   .getElementById("navChat")
    .classList.add("active");
 
   closeChat();
+
   loadChatList();
   updateChatBadge();
  }
 
  if(page==="profile"){
 
-  document.getElementById("profilePage")
+  document
+   .getElementById("profilePage")
    .classList.remove("hidden");
 
-  document.getElementById("navProfile")
+  document
+   .getElementById("navProfile")
    .classList.add("active");
 
   updateProfileStats();
   loadNotifications();
 
-  const firstTab=
-   document.querySelector(".tabs button");
+  const first=
+   document.querySelector(
+    ".tabs button"
+   );
 
-  profileTab("polls",firstTab);
+  profileTab(
+   "polls",
+   first
+  );
  }
 }
 
 
-/* =========================
-FOLLOW
-========================= */
+/* =====================================================
+ FOLLOW
+===================================================== */
 
 async function isFollowing(userId){
 
  if(
   !currentUser||
   !sb||
+  !userId||
   userId===currentUser.id
  ){
   return false;
  }
 
- const {data,error}=await sb
-  .from("follows")
-  .select("id")
-  .eq(
-   "follower_id",
-   currentUser.id
-  )
-  .eq(
-   "following_id",
-   userId
-  )
-  .limit(1);
+ const {data,error}=
+  await sb
+   .from("follows")
+   .select("id")
+   .eq(
+    "follower_id",
+    currentUser.id
+   )
+   .eq(
+    "following_id",
+    userId
+   )
+   .limit(1);
 
  if(error){
 
-  console.error("FOLLOW CHECK",error);
+  console.error(
+   "FOLLOW CHECK",
+   error
+  );
+
   return false;
  }
 
@@ -2082,7 +2467,10 @@ async function isFollowing(userId){
 }
 
 
-async function followUser(userId,button){
+async function followUser(
+ userId,
+ button
+){
 
  if(
   !currentUser||
@@ -2101,7 +2489,7 @@ async function followUser(userId,button){
 
  try{
 
-  const {data:existing,error:findError}=
+  const {data,error}=
    await sb
     .from("follows")
     .select("id")
@@ -2115,22 +2503,22 @@ async function followUser(userId,button){
     )
     .limit(1);
 
-  if(findError){
-   throw findError;
-  }
+  if(error)throw error;
 
-  if(existing?.length){
+  if(data?.length){
 
-   const {error}=
+   const {error:deleteError}=
     await sb
      .from("follows")
      .delete()
      .eq(
       "id",
-      existing[0].id
+      data[0].id
      );
 
-   if(error)throw error;
+   if(deleteError){
+    throw deleteError;
+   }
 
    if(button){
 
@@ -2145,7 +2533,7 @@ async function followUser(userId,button){
 
   }else{
 
-   const {error}=
+   const {error:insertError}=
     await sb
      .from("follows")
      .insert({
@@ -2155,28 +2543,36 @@ async function followUser(userId,button){
        userId
      });
 
-   if(error){
+   if(insertError){
 
-    if(error.code==="23505"){
+    if(
+     insertError.code==="23505"
+    ){
 
      if(button){
 
-      button.textContent="Following";
+      button.textContent=
+       "Following";
 
-      button.classList.add("following");
+      button.classList.add(
+       "following"
+      );
      }
 
      return;
     }
 
-    throw error;
+    throw insertError;
    }
 
    if(button){
 
-    button.textContent="Following";
+    button.textContent=
+     "Following";
 
-    button.classList.add("following");
+    button.classList.add(
+     "following"
+    );
    }
 
    await createNotification(
@@ -2193,22 +2589,18 @@ async function followUser(userId,button){
   allProfilesCache=[];
   profilesCacheTime=0;
 
-  if(
-   !document
-    .getElementById("homePage")
-    .classList.contains("hidden")
-  ){
-
-   await loadSuggestions(true);
-  }
+  await loadSuggestions(true);
 
  }catch(e){
 
-  console.error(e);
+  console.error(
+   "FOLLOW ERROR",
+   e
+  );
 
   toast(
    "Follow error: "+
-   (e.message||e)
+   (e?.message||e)
   );
 
   if(button){
@@ -2217,7 +2609,9 @@ async function followUser(userId,button){
     await isFollowing(userId);
 
    button.textContent=
-    state?"Following":"Follow";
+    state
+     ?"Following"
+     :"Follow";
 
    button.classList.toggle(
     "following",
@@ -2234,14 +2628,18 @@ async function followUser(userId,button){
 }
 
 
-/* =========================
-SUGGESTIONS
-========================= */
+/* =====================================================
+ SUGGESTIONS
+===================================================== */
 
-async function loadSuggestions(force=false){
+async function loadSuggestions(
+ force=false
+){
 
  const box=
-  document.getElementById("suggestions");
+  document.getElementById(
+   "suggestions"
+  );
 
  if(
   !box||
@@ -2275,7 +2673,6 @@ async function loadSuggestions(force=false){
     await isFollowing(user.id);
 
    if(!following){
-
     candidates.push(user);
    }
 
@@ -2290,12 +2687,16 @@ async function loadSuggestions(force=false){
    return;
   }
 
-  const card=document.createElement("div");
+  const card=
+   document.createElement("div");
 
   card.className="suggestion";
 
   card.innerHTML=`
-   <h3>👥 Follow Suggestions</h3>
+   <h3>
+    👥 Follow Suggestions
+   </h3>
+
    <div class="small">
     New people you may know
    </div>
@@ -2303,7 +2704,8 @@ async function loadSuggestions(force=false){
 
   for(const user of candidates){
 
-   const row=document.createElement("div");
+   const row=
+    document.createElement("div");
 
    row.className="row user";
 
@@ -2313,11 +2715,15 @@ async function loadSuggestions(force=false){
     <div class="grow">
 
      <b>
-      @${esc(user.username||"user")}
+      @${esc(
+       user.username||"user"
+      )}
      </b>
 
      <div class="small">
-      ${esc(user.display_name||"")}
+      ${esc(
+       user.display_name||""
+      )}
      </div>
 
      <div class="user-id">
@@ -2327,35 +2733,53 @@ async function loadSuggestions(force=false){
     </div>
    `;
 
-   const actions=document.createElement("div");
+   const actions=
+    document.createElement("div");
 
    actions.style.display="flex";
    actions.style.gap="5px";
 
-   const view=document.createElement("button");
+   const view=
+    document.createElement("button");
 
-   view.className="btn view-btn";
+   view.className=
+    "btn view-btn";
+
    view.textContent="View";
 
    view.onclick=()=>{
     viewProfile(user.id);
    };
 
-   const follow=document.createElement("button");
+   const follow=
+    document.createElement("button");
 
-   follow.className="btn follow";
+   follow.className=
+    "btn follow";
+
    follow.textContent="Follow";
 
    follow.onclick=async()=>{
-    await followUser(user.id,follow);
+    await followUser(
+     user.id,
+     follow
+    );
    };
 
-   row.querySelector(".user-id").onclick=
-    event=>{
-     copyUserId(event,user.id);
-    };
+   row
+    .querySelector(".user-id")
+    .onclick=
+     event=>{
+      copyUserId(
+       event,
+       user.id
+      );
+     };
 
-   actions.append(view,follow);
+   actions.append(
+    view,
+    follow
+   );
 
    row.appendChild(actions);
 
@@ -2366,7 +2790,10 @@ async function loadSuggestions(force=false){
 
  }catch(e){
 
-  console.error("SUGGESTIONS ERROR",e);
+  console.error(
+   "SUGGESTIONS ERROR",
+   e
+  );
 
  }finally{
 
@@ -2375,15 +2802,16 @@ async function loadSuggestions(force=false){
 }
 
 
-/* =========================
-COPY USER ID
-========================= */
+/* =====================================================
+ COPY USER ID
+===================================================== */
 
-async function copyUserId(event,id){
+async function copyUserId(
+ event,
+ id
+){
 
- if(event){
-  event.stopPropagation();
- }
+ event?.stopPropagation();
 
  try{
 
@@ -2393,7 +2821,10 @@ async function copyUserId(event,id){
   ){
 
    await navigator.clipboard.writeText(id);
-   toast("✅ User ID copied");
+
+   toast(
+    "✅ User ID copied"
+   );
 
   }else{
 
@@ -2407,13 +2838,14 @@ async function copyUserId(event,id){
 }
 
 
-/* =========================
-POLLS
-========================= */
+/* =====================================================
+ POLLS
+===================================================== */
 
 async function loadPolls(){
 
- const box=document.getElementById("polls");
+ const box=
+  document.getElementById("polls");
 
  if(
   !box||
@@ -2431,18 +2863,22 @@ async function loadPolls(){
 
  try{
 
-  const {data,error}=await sb
-   .from("polls")
-   .select("*")
-   .order(
-    "created_at",
-    {ascending:false}
-   )
-   .limit(100);
+  const {data,error}=
+   await sb
+    .from("polls")
+    .select("*")
+    .order(
+     "created_at",
+     {
+      ascending:false
+     }
+    )
+    .limit(100);
 
   if(error)throw error;
 
-  const polls=uniqueById(data||[]);
+  const polls=
+   uniqueById(data||[]);
 
   box.innerHTML="";
 
@@ -2456,22 +2892,49 @@ async function loadPolls(){
    return;
   }
 
-  const ids=polls.map(p=>p.id);
+  const ids=
+   polls.map(p=>p.id);
 
   let votes=[];
   let likes=[];
 
   if(ids.length){
 
-   const v=await sb
-    .from("votes")
-    .select("poll_id,user_id,option")
-    .in("poll_id",ids);
+   const v=
+    await sb
+     .from("votes")
+     .select(
+      "poll_id,user_id,option"
+     )
+     .in(
+      "poll_id",
+      ids
+     );
 
-   const l=await sb
-    .from("likes")
-    .select("poll_id,user_id")
-    .in("poll_id",ids);
+   const l=
+    await sb
+     .from("likes")
+     .select(
+      "poll_id,user_id"
+     )
+     .in(
+      "poll_id",
+      ids
+     );
+
+   if(v.error){
+    console.error(
+     "VOTES LOAD",
+     v.error
+    );
+   }
+
+   if(l.error){
+    console.error(
+     "LIKES LOAD",
+     l.error
+    );
+   }
 
    votes=v.data||[];
    likes=l.data||[];
@@ -2480,25 +2943,35 @@ async function loadPolls(){
   for(const poll of polls){
 
    const profile=
-    await getProfile(poll.user_id);
+    await getProfile(
+     poll.user_id
+    );
 
    const username=
-    profile?.username||"user";
+    profile?.username||
+    "user";
 
    const displayName=
-    profile?.display_name||username;
+    profile?.display_name||
+    username;
 
-   let options=poll.options;
+   let options=
+    poll.options;
 
    if(typeof options==="string"){
 
     try{
-     options=JSON.parse(options);
+
+     options=
+      JSON.parse(options);
+
     }catch{
-     options=options
-      .split(",")
-      .map(x=>x.trim())
-      .filter(Boolean);
+
+     options=
+      options
+       .split(",")
+       .map(x=>x.trim())
+       .filter(Boolean);
     }
    }
 
@@ -2507,13 +2980,17 @@ async function loadPolls(){
    }
 
    const pv=
-    votes.filter(v=>v.poll_id===poll.id);
+    votes.filter(
+     v=>v.poll_id===poll.id
+    );
 
    const total=pv.length;
 
    const mine=
     pv.find(
-     v=>v.user_id===currentUser.id
+     v=>
+      v.user_id===
+      currentUser.id
     );
 
    const pl=
@@ -2523,10 +3000,13 @@ async function loadPolls(){
 
    const liked=
     pl.some(
-     l=>l.user_id===currentUser.id
+     l=>
+      l.user_id===
+      currentUser.id
     );
 
-   const card=document.createElement("div");
+   const card=
+    document.createElement("div");
 
    card.className="card";
 
@@ -2549,10 +3029,10 @@ async function loadPolls(){
        •
        ${
         poll.created_at
-        ?new Date(
+         ?new Date(
           poll.created_at
          ).toLocaleString()
-        :""
+         :""
        }
       </div>
 
@@ -2561,7 +3041,9 @@ async function loadPolls(){
     </div>
 
     <div class="poll-title">
-     ${esc(poll.question||"Poll")}
+     ${esc(
+      poll.question||"Poll"
+     )}
     </div>
 
     <div class="poll-options"></div>
@@ -2574,41 +3056,58 @@ async function loadPolls(){
     <div class="poll-actions">
 
      <button class="poll-action like-btn">
-      ${liked?"❤️ Liked":"🤍 Like"}
+      ${
+       liked
+        ?"❤️ Liked"
+        :"🤍 Like"
+      }
       ${pl.length}
      </button>
 
      ${
       poll.user_id===currentUser.id
-      ?`
-       <button class="poll-action delete-poll">
-        🗑️ Delete
-       </button>
-      `
-      :""
+       ?`
+        <button class="poll-action delete-poll">
+         🗑️ Delete
+        </button>
+       `
+       :""
      }
 
     </div>
    `;
 
-   card.querySelector(".creator").onclick=()=>{
-    viewProfile(poll.user_id);
+   card.querySelector(
+    ".creator"
+   ).onclick=()=>{
+    viewProfile(
+     poll.user_id
+    );
    };
 
    const optionsBox=
-    card.querySelector(".poll-options");
+    card.querySelector(
+     ".poll-options"
+    );
 
    options.forEach(option=>{
 
     const count=
-     pv.filter(v=>v.option===option).length;
+     pv.filter(
+      v=>v.option===option
+     ).length;
 
     const percent=
      total
-      ?Math.round(count/total*100)
+      ?Math.round(
+       count/total*100
+      )
       :0;
 
-    const btn=document.createElement("button");
+    const btn=
+     document.createElement(
+      "button"
+     );
 
     btn.className="option";
 
@@ -2617,19 +3116,29 @@ async function loadPolls(){
       ?"✓ "+option
       :option;
 
-    if(mine?.option===option){
-     btn.classList.add("selected");
+    if(
+     mine?.option===option
+    ){
+     btn.classList.add(
+      "selected"
+     );
     }
 
     btn.onclick=()=>{
-     vote(poll.id,option);
+     vote(
+      poll.id,
+      option
+     );
     };
 
     optionsBox.appendChild(btn);
 
     if(mine){
 
-     const result=document.createElement("div");
+     const result=
+      document.createElement(
+       "div"
+      );
 
      result.className="result";
 
@@ -2644,24 +3153,34 @@ async function loadPolls(){
       </div>
      `;
 
-     optionsBox.appendChild(result);
+     optionsBox.appendChild(
+      result
+     );
     }
    });
 
-   card.querySelector(".like-btn").onclick=
-    async()=>{
+   card.querySelector(
+    ".like-btn"
+   ).onclick=async()=>{
 
-     await likePoll(poll.id);
-     await loadPolls();
-    };
+    await likePoll(
+     poll.id
+    );
+
+    await loadPolls();
+   };
 
    const del=
-    card.querySelector(".delete-poll");
+    card.querySelector(
+     ".delete-poll"
+    );
 
    if(del){
 
     del.onclick=()=>{
-     deletePoll(poll.id);
+     deletePoll(
+      poll.id
+     );
     };
    }
 
@@ -2670,12 +3189,15 @@ async function loadPolls(){
 
  }catch(e){
 
-  console.error("POLL LOAD ERROR",e);
+  console.error(
+   "POLL LOAD ERROR",
+   e
+  );
 
   box.innerHTML=
    "<div class='notice'>"+
    "Home error: "+
-   esc(e.message||e)+
+   esc(e?.message||e)+
    "</div>";
 
  }finally{
@@ -2685,19 +3207,23 @@ async function loadPolls(){
 }
 
 
-/* =========================
-CREATE POLL
-========================= */
+/* =====================================================
+ CREATE POLL
+===================================================== */
 
 async function createPoll(){
 
  if(!currentUser||!sb){
-  return toast("Please login first.");
+
+  return toast(
+   "Please login first."
+  );
  }
 
  const question=
-  document.getElementById("question")
-   .value.trim();
+  document.getElementById(
+   "question"
+  ).value.trim();
 
  const options=[
   "option1",
@@ -2705,57 +3231,86 @@ async function createPoll(){
   "option3",
   "option4"
  ]
- .map(id=>
-  document.getElementById(id).value.trim()
+ .map(
+  id=>
+   document
+    .getElementById(id)
+    .value.trim()
  )
  .filter(Boolean);
 
  if(!question){
-  return toast("Question enter karo.");
+
+  return toast(
+   "Question enter karo."
+  );
  }
 
  if(options.length<2){
-  return toast("At least 2 options chahiye.");
+
+  return toast(
+   "At least 2 options chahiye."
+  );
  }
 
- if(options.length!==new Set(options).size){
-  return toast("Options same nahi hone chahiye.");
+ if(
+  options.length!==
+  new Set(options).size
+ ){
+
+  return toast(
+   "Options same nahi hone chahiye."
+  );
  }
 
- const {data,error}=await sb
-  .from("polls")
-  .insert({
-   question,
-   options,
-   user_id:currentUser.id
-  })
-  .select()
-  .single();
+ try{
 
- if(error){
-  return toast(error.message);
+  const {data,error}=
+   await sb
+    .from("polls")
+    .insert({
+     question,
+     options,
+     user_id:
+      currentUser.id
+    })
+    .select()
+    .single();
+
+  if(error)throw error;
+
+  await notifyFollowersAboutPoll(
+   data?.id,
+   question
+  );
+
+  [
+   "question",
+   "option1",
+   "option2",
+   "option3",
+   "option4"
+  ].forEach(id=>{
+   document
+    .getElementById(id)
+    .value="";
+  });
+
+  toast(
+   "🎉 Poll published!"
+  );
+
+  await updateProfileStats();
+
+  showPage("home");
+
+ }catch(e){
+
+  toast(
+   e?.message||
+   "Poll create nahi hua."
+  );
  }
-
- await notifyFollowersAboutPoll(
-  data?.id,
-  question
- );
-
- [
-  "question",
-  "option1",
-  "option2",
-  "option3",
-  "option4"
- ].forEach(id=>{
-  document.getElementById(id).value="";
- });
-
- toast("🎉 Poll published!");
-
- await updateProfileStats();
-
- showPage("home");
 }
 
 
@@ -2768,26 +3323,30 @@ async function notifyFollowersAboutPoll(
 
  try{
 
-  const {data,error}=await sb
-   .from("follows")
-   .select("follower_id")
-   .eq(
-    "following_id",
-    currentUser.id
-   );
+  const {data,error}=
+   await sb
+    .from("follows")
+    .select("follower_id")
+    .eq(
+     "following_id",
+     currentUser.id
+    );
 
   if(error)throw error;
 
   if(!data?.length)return;
 
-  const rows=data.map(x=>({
-   user_id:x.follower_id,
-   actor_id:currentUser.id,
-   type:"poll",
-   message:
-    "posted a new poll: "+question,
-   poll_id:pollId||null
-  }));
+  const rows=
+   data.map(x=>({
+    user_id:x.follower_id,
+    actor_id:currentUser.id,
+    type:"poll",
+    message:
+     "posted a new poll: "+
+     question,
+    poll_id:
+     pollId||null
+   }));
 
   const result=
    await sb
@@ -2795,6 +3354,7 @@ async function notifyFollowersAboutPoll(
     .insert(rows);
 
   if(result.error){
+
    console.error(
     "POLL NOTIFICATION ERROR",
     result.error
@@ -2811,29 +3371,36 @@ async function notifyFollowersAboutPoll(
 }
 
 
-/* =========================
-VOTE
-========================= */
+/* =====================================================
+ VOTE
+===================================================== */
 
-async function vote(pollId,option){
+async function vote(
+ pollId,
+ option
+){
 
  if(!currentUser||!sb)return;
 
- const {data,error}=await sb
-  .from("votes")
-  .select("id")
-  .eq(
-   "poll_id",
-   pollId
-  )
-  .eq(
-   "user_id",
-   currentUser.id
-  )
-  .limit(1);
+ const {data,error}=
+  await sb
+   .from("votes")
+   .select("id")
+   .eq(
+    "poll_id",
+    pollId
+   )
+   .eq(
+    "user_id",
+    currentUser.id
+   )
+   .limit(1);
 
  if(error){
-  return toast(error.message);
+
+  return toast(
+   error.message
+  );
  }
 
  if(data?.length){
@@ -2841,14 +3408,19 @@ async function vote(pollId,option){
   const result=
    await sb
     .from("votes")
-    .update({option})
+    .update({
+     option
+    })
     .eq(
      "id",
      data[0].id
     );
 
   if(result.error){
-   return toast(result.error.message);
+
+   return toast(
+    result.error.message
+   );
   }
 
  }else{
@@ -2858,45 +3430,56 @@ async function vote(pollId,option){
     .from("votes")
     .insert({
      poll_id:pollId,
-     user_id:currentUser.id,
+     user_id:
+      currentUser.id,
      option
     });
 
   if(result.error){
-   return toast(result.error.message);
+
+   return toast(
+    result.error.message
+   );
   }
  }
 
- toast("✅ Vote saved!");
+ toast(
+  "✅ Vote saved!"
+ );
 
  await loadPolls();
 }
 
 
-/* =========================
-LIKE
-FIXED
-========================= */
+/* =====================================================
+ LIKE
+===================================================== */
 
-async function likePoll(pollId){
+async function likePoll(
+ pollId
+){
 
  if(!currentUser||!sb)return;
 
- const {data,error}=await sb
-  .from("likes")
-  .select("id")
-  .eq(
-   "user_id",
-   currentUser.id
-  )
-  .eq(
-   "poll_id",
-   pollId
-  )
-  .limit(1);
+ const {data,error}=
+  await sb
+   .from("likes")
+   .select("id")
+   .eq(
+    "user_id",
+    currentUser.id
+   )
+   .eq(
+    "poll_id",
+    pollId
+   )
+   .limit(1);
 
  if(error){
-  return toast(error.message);
+
+  return toast(
+   error.message
+  );
  }
 
  if(data?.length){
@@ -2911,10 +3494,15 @@ async function likePoll(pollId){
     );
 
   if(result.error){
-   return toast(result.error.message);
+
+   return toast(
+    result.error.message
+   );
   }
 
-  toast("Like removed");
+  toast(
+   "Like removed"
+  );
 
  }else{
 
@@ -2922,64 +3510,83 @@ async function likePoll(pollId){
    await sb
     .from("likes")
     .insert({
-     user_id:currentUser.id,
+     user_id:
+      currentUser.id,
      poll_id:pollId
     });
 
   if(result.error){
-   return toast(result.error.message);
+
+   return toast(
+    result.error.message
+   );
   }
 
-  toast("❤️ Liked");
- }
+  toast(
+   "❤️ Liked"
+  );
 }
 
 
-/* =========================
-DELETE POLL
-========================= */
+/* =====================================================
+ DELETE POLL
+===================================================== */
 
-async function deletePoll(pollId){
+async function deletePoll(
+ pollId
+){
 
- if(!confirm("Delete this poll?")){
+ if(
+  !confirm(
+   "Delete this poll?"
+  )
+ ){
   return;
  }
 
- const {error}=await sb
-  .from("polls")
-  .delete()
-  .eq(
-   "id",
-   pollId
-  )
-  .eq(
-   "user_id",
-   currentUser.id
-  );
+ const {error}=
+  await sb
+   .from("polls")
+   .delete()
+   .eq(
+    "id",
+    pollId
+   )
+   .eq(
+    "user_id",
+    currentUser.id
+   );
 
  if(error){
-  return toast(error.message);
+
+  return toast(
+   error.message
+  );
  }
 
- toast("🗑️ Poll deleted!");
+ toast(
+  "🗑️ Poll deleted!"
+ );
 
  await updateProfileStats();
+
  await loadPolls();
 }
 
 
-/* =========================
-SEARCH
-========================= */
+/* =====================================================
+ SEARCH
+===================================================== */
 
 function searchAll(){
 
  clearTimeout(searchTimer);
 
- searchTimer=setTimeout(
-  runSearch,
-  250
- );
+ searchTimer=
+  setTimeout(
+   runSearch,
+   250
+  );
 }
 
 
@@ -2987,12 +3594,18 @@ async function runSearch(){
 
  if(!currentUser||!sb)return;
 
- const q=
-  document.getElementById("searchInput")
-   .value.trim().toLowerCase();
+ const input=
+  document.getElementById(
+   "searchInput"
+  );
 
  const box=
-  document.getElementById("searchResults");
+  document.getElementById(
+   "searchResults"
+  );
+
+ const q=
+  input.value.trim().toLowerCase();
 
  if(!q){
 
@@ -3013,13 +3626,19 @@ async function runSearch(){
   const users=
    profiles
     .filter(u=>
-     String(u.username||"")
+     String(
+      u.username||""
+     )
       .toLowerCase()
       .includes(q)||
-     String(u.display_name||"")
+     String(
+      u.display_name||""
+     )
       .toLowerCase()
       .includes(q)||
-     String(u.id||"")
+     String(
+      u.id||""
+     )
       .toLowerCase()
       .includes(q)
     )
@@ -3037,6 +3656,10 @@ async function runSearch(){
     )
     .limit(30);
 
+  if(pollResult.error){
+   throw pollResult.error;
+  }
+
   const polls=
    uniqueById(
     pollResult.data||[]
@@ -3046,17 +3669,25 @@ async function runSearch(){
 
   if(users.length){
 
-   const title=document.createElement("h3");
+   const title=
+    document.createElement(
+     "h3"
+    );
 
-   title.textContent="👤 Accounts";
+   title.textContent=
+    "👤 Accounts";
 
    box.appendChild(title);
 
    for(const user of users){
 
-    const row=document.createElement("div");
+    const row=
+     document.createElement(
+      "div"
+     );
 
-    row.className="row user";
+    row.className=
+     "row user";
 
     row.innerHTML=`
      ${profileAvatarHTML(user)}
@@ -3064,11 +3695,15 @@ async function runSearch(){
      <div class="grow">
 
       <b>
-       @${esc(user.username||"user")}
+       @${esc(
+        user.username||"user"
+       )}
       </b>
 
       <div class="small">
-       ${esc(user.display_name||"")}
+       ${esc(
+        user.display_name||""
+       )}
       </div>
 
       <div class="user-id">
@@ -3078,37 +3713,66 @@ async function runSearch(){
      </div>
     `;
 
-    row.querySelector(".user-id").onclick=
-     event=>{
-      copyUserId(event,user.id);
-     };
+    row
+     .querySelector(".user-id")
+     .onclick=
+      event=>{
+       copyUserId(
+        event,
+        user.id
+       );
+      };
 
-    const actions=document.createElement("div");
+    const actions=
+     document.createElement(
+      "div"
+     );
 
-    actions.style.display="flex";
+    actions.style.display=
+     "flex";
+
     actions.style.gap="5px";
 
-    const view=document.createElement("button");
+    const view=
+     document.createElement(
+      "button"
+     );
 
-    view.className="btn view-btn";
-    view.textContent="View";
+    view.className=
+     "btn view-btn";
+
+    view.textContent=
+     "View";
 
     view.onclick=()=>{
-     viewProfile(user.id);
+     viewProfile(
+      user.id
+     );
     };
 
-    const follow=document.createElement("button");
+    const follow=
+     document.createElement(
+      "button"
+     );
 
-    follow.className="btn follow";
+    follow.className=
+     "btn follow";
 
     const following=
-     await isFollowing(user.id);
+     await isFollowing(
+      user.id
+     );
 
     follow.textContent=
-     following?"Following":"Follow";
+     following
+      ?"Following"
+      :"Follow";
 
     if(following){
-     follow.classList.add("following");
+
+     follow.classList.add(
+      "following"
+     );
     }
 
     follow.onclick=async()=>{
@@ -3118,9 +3782,14 @@ async function runSearch(){
      );
     };
 
-    actions.append(view,follow);
+    actions.append(
+     view,
+     follow
+    );
 
-    row.appendChild(actions);
+    row.appendChild(
+     actions
+    );
 
     box.appendChild(row);
    }
@@ -3128,44 +3797,60 @@ async function runSearch(){
 
   if(polls.length){
 
-   const title=document.createElement("h3");
+   const title=
+    document.createElement(
+     "h3"
+    );
 
-   title.textContent="🗳️ Polls";
+   title.textContent=
+    "🗳️ Polls";
 
    box.appendChild(title);
 
    for(const poll of polls){
 
-    const div=document.createElement("div");
+    const div=
+     document.createElement(
+      "div"
+     );
 
     div.className="notice";
-    div.style.cursor="pointer";
+
+    div.style.cursor=
+     "pointer";
 
     div.innerHTML=`
      <b>
-      ${esc(poll.question||"Poll")}
+      ${esc(
+       poll.question||"Poll"
+      )}
      </b>
 
      <div class="small">
       ${
        poll.created_at
-       ?new Date(
+        ?new Date(
          poll.created_at
         ).toLocaleString()
-       :""
+        :""
       }
      </div>
     `;
 
     div.onclick=()=>{
-     viewProfile(poll.user_id);
+     viewProfile(
+      poll.user_id
+     );
     };
 
     box.appendChild(div);
    }
   }
 
-  if(!users.length&&!polls.length){
+  if(
+   !users.length&&
+   !polls.length
+  ){
 
    box.innerHTML=
     "<div class='notice'>"+
@@ -3175,29 +3860,37 @@ async function runSearch(){
 
  }catch(e){
 
-  console.error("SEARCH ERROR",e);
+  console.error(
+   "SEARCH ERROR",
+   e
+  );
 
   box.innerHTML=
    "<div class='notice'>"+
-   esc(e.message||e)+
+   esc(e?.message||e)+
    "</div>";
  }
 }
 
 
-/* =========================
-CHAT LIST
-========================= */
+/* =====================================================
+ CHAT LIST
+===================================================== */
 
 async function loadChatList(){
 
  const box=
-  document.getElementById("chatUsers");
+  document.getElementById(
+   "chatUsers"
+  );
 
- if(!currentUser||!sb||!box)return;
+ if(!currentUser||!sb||!box){
+  return;
+ }
 
  const search=
-  document.getElementById("chatSearch")
+  document
+   .getElementById("chatSearch")
    .value.trim();
 
  if(search)return;
@@ -3252,22 +3945,6 @@ async function loadChatList(){
     )
     .limit(100);
 
-  if(sent.error||received.error){
-
-   console.error(
-    sent.error,
-    received.error
-   );
-
-   box.innerHTML="";
-
-   profiles.forEach(user=>{
-    appendChatRow(box,user,null);
-   });
-
-   return;
-  }
-
   const all=[
    ...(sent.data||[]),
    ...(received.data||[])
@@ -3279,12 +3956,14 @@ async function loadChatList(){
     new Date(a.created_at)
   );
 
-  const latest=new Map();
+  const latest=
+   new Map();
 
   for(const m of all){
 
    const other=
-    m.sender_id===currentUser.id
+    m.sender_id===
+    currentUser.id
      ?m.receiver_id
      :m.sender_id;
 
@@ -3294,22 +3973,37 @@ async function loadChatList(){
     !latest.has(other)
    ){
 
-    latest.set(other,m);
+    latest.set(
+     other,
+     m
+    );
    }
   }
 
   const recent=
-   profiles.filter(u=>latest.has(u.id));
+   profiles.filter(
+    u=>latest.has(u.id)
+   );
 
   const people=
-   profiles.filter(u=>!latest.has(u.id));
+   profiles.filter(
+    u=>!latest.has(u.id)
+   );
+
+  box.innerHTML="";
 
   if(recent.length){
 
-   const title=document.createElement("div");
+   const title=
+    document.createElement(
+     "div"
+    );
 
-   title.className="chat-section-title";
-   title.textContent="💬 Recent Chats";
+   title.className=
+    "chat-section-title";
+
+   title.textContent=
+    "💬 Recent Chats";
 
    box.appendChild(title);
 
@@ -3332,25 +4026,37 @@ async function loadChatList(){
 
  }catch(e){
 
-  console.error("CHAT LIST ERROR",e);
+  console.error(
+   "CHAT LIST ERROR",
+   e
+  );
 
   box.innerHTML=
    "<div class='notice'>"+
-   esc(e.message||e)+
+   esc(e?.message||e)+
    "</div>";
  }
 }
 
 
-function appendChatRow(box,user,lastMessage){
+function appendChatRow(
+ box,
+ user,
+ lastMessage
+){
 
- const row=document.createElement("div");
+ const row=
+  document.createElement(
+   "div"
+  );
 
- row.className="row chat-user";
+ row.className=
+  "row chat-user";
 
  const unread=
   lastMessage&&
-  lastMessage.receiver_id===currentUser.id&&
+  lastMessage.receiver_id===
+   currentUser.id&&
   lastMessage.read===false;
 
  row.innerHTML=`
@@ -3359,7 +4065,9 @@ function appendChatRow(box,user,lastMessage){
   <div class="grow">
 
    <b>
-    @${esc(user.username||"user")}
+    @${esc(
+     user.username||"user"
+    )}
    </b>
 
    <div class="chat-preview">
@@ -3409,15 +4117,22 @@ function appendChatRow(box,user,lastMessage){
   </div>
  `;
 
- row.querySelector(".user-id").onclick=
-  event=>{
-   copyUserId(event,user.id);
-  };
+ row
+  .querySelector(".user-id")
+  .onclick=
+   event=>{
+    copyUserId(
+     event,
+     user.id
+    );
+   };
 
  row.onclick=event=>{
 
   if(
-   event.target.closest(".user-id")
+   event.target.closest(
+    ".user-id"
+   )
   ){
    return;
   }
@@ -3429,35 +4144,41 @@ function appendChatRow(box,user,lastMessage){
 }
 
 
-/* =========================
-CHAT SEARCH
-========================= */
+/* =====================================================
+ CHAT SEARCH
+===================================================== */
 
 function searchChatUsers(){
 
  clearTimeout(chatTimer);
 
- chatTimer=setTimeout(
-  runChatSearch,
-  250
- );
+ chatTimer=
+  setTimeout(
+   runChatSearch,
+   250
+  );
 }
 
 
 async function runChatSearch(){
 
  const q=
-  document.getElementById("chatSearch")
-   .value.trim().toLowerCase();
+  document
+   .getElementById("chatSearch")
+   .value.trim()
+   .toLowerCase();
 
  if(!q){
 
   await loadChatList();
+
   return;
  }
 
  const box=
-  document.getElementById("chatUsers");
+  document.getElementById(
+   "chatUsers"
+  );
 
  box.innerHTML=
   "<div class='small'>Searching...</div>";
@@ -3470,13 +4191,19 @@ async function runChatSearch(){
   const users=
    profiles
     .filter(u=>
-     String(u.username||"")
+     String(
+      u.username||""
+     )
       .toLowerCase()
       .includes(q)||
-     String(u.display_name||"")
+     String(
+      u.display_name||""
+     )
       .toLowerCase()
       .includes(q)||
-     String(u.id||"")
+     String(
+      u.id||""
+     )
       .toLowerCase()
       .includes(q)
     )
@@ -3504,19 +4231,22 @@ async function runChatSearch(){
 
  }catch(e){
 
-  console.error("CHAT SEARCH ERROR",e);
+  console.error(
+   "CHAT SEARCH ERROR",
+   e
+  );
 
   box.innerHTML=
    "<div class='notice'>"+
-   esc(e.message||e)+
+   esc(e?.message||e)+
    "</div>";
  }
 }
 
 
-/* =========================
-OPEN CHAT
-========================= */
+/* =====================================================
+ OPEN CHAT
+===================================================== */
 
 async function openChat(user){
 
@@ -3524,35 +4254,45 @@ async function openChat(user){
 
  currentChatUser=user;
 
- const homeScreen=
-  document.getElementById("homeScreen");
+ document
+  .getElementById("homeScreen")
+  .classList.add(
+   "chat-mobile-open"
+  );
 
- homeScreen.classList.add(
-  "chat-mobile-open"
- );
-
- document.getElementById("chatUsers")
+ document
+  .getElementById("chatUsers")
   .classList.add("hidden");
 
- document.getElementById("chatSearch")
+ document
+  .getElementById("chatSearch")
   .classList.add("hidden");
 
- document.getElementById("chatPeopleTitle")
+ document
+  .getElementById("chatPeopleTitle")
   .classList.add("hidden");
 
- document.getElementById("chatArea")
+ document
+  .getElementById("chatArea")
   .classList.remove("hidden");
 
- document.getElementById("chatTitle")
+ document
+  .getElementById("chatTitle")
   .textContent=
-   "@"+(user.username||"user");
+   "@"+(
+    user.username||
+    "user"
+   );
 
- document.getElementById("chatStatus")
+ document
+  .getElementById("chatStatus")
   .textContent=
    "ID: "+user.id;
 
  const avatar=
-  document.getElementById("chatAvatar");
+  document.getElementById(
+   "chatAvatar"
+  );
 
  if(user.avatar_url){
 
@@ -3562,17 +4302,23 @@ async function openChat(user){
  }else{
 
   avatar.textContent=
-   getInitial(user.username);
+   getInitial(
+    user.username
+   );
  }
 
  await loadMessages();
+
  await markChatRead();
+
  await updateChatBadge();
 
  subscribeChatRealtime();
 
  setTimeout(()=>{
-  document.getElementById("chatInput")?.focus();
+  document
+   .getElementById("chatInput")
+   ?.focus();
  },100);
 }
 
@@ -3581,32 +4327,42 @@ function closeChat(){
 
  currentChatUser=null;
 
- document.getElementById("homeScreen")
-  ?.classList.remove("chat-mobile-open");
+ document
+  .getElementById("homeScreen")
+  ?.classList.remove(
+   "chat-mobile-open"
+  );
 
  if(messageChannel){
 
-  sb.removeChannel(messageChannel);
+  sb.removeChannel(
+   messageChannel
+  );
+
   messageChannel=null;
  }
 
- document.getElementById("chatArea")
+ document
+  .getElementById("chatArea")
   .classList.add("hidden");
 
- document.getElementById("chatUsers")
+ document
+  .getElementById("chatUsers")
   .classList.remove("hidden");
 
- document.getElementById("chatSearch")
+ document
+  .getElementById("chatSearch")
   .classList.remove("hidden");
 
- document.getElementById("chatPeopleTitle")
+ document
+  .getElementById("chatPeopleTitle")
   .classList.remove("hidden");
 }
 
 
-/* =========================
-MESSAGES
-========================= */
+/* =====================================================
+ MESSAGES
+===================================================== */
 
 async function loadMessages(){
 
@@ -3619,7 +4375,9 @@ async function loadMessages(){
  }
 
  const box=
-  document.getElementById("messages");
+  document.getElementById(
+   "messages"
+  );
 
  box.innerHTML=
   "<div class='small'>Loading messages...</div>";
@@ -3650,7 +4408,10 @@ async function loadMessages(){
     currentUser.id
    );
 
- if(sent.error||received.error){
+ if(
+  sent.error||
+  received.error
+ ){
 
   console.error(
    sent.error,
@@ -3675,11 +4436,11 @@ async function loadMessages(){
   const key=
    m.id||
    m.sender_id+
-   "|"+
+   "|" +
    m.receiver_id+
-   "|"+
+   "|" +
    m.created_at+
-   "|"+
+   "|" +
    m.message;
 
   if(!map.has(key)){
@@ -3710,22 +4471,29 @@ async function loadMessages(){
  messages.forEach(m=>{
 
   const bubble=
-   document.createElement("div");
+   document.createElement(
+    "div"
+   );
 
   bubble.className=
    "bubble "+
    (
-    m.sender_id===currentUser.id
+    m.sender_id===
+    currentUser.id
      ?"mine"
      :""
    );
 
-  bubble.textContent=m.message||"";
+  bubble.textContent=
+   m.message||"";
 
-  box.appendChild(bubble);
+  box.appendChild(
+   bubble
+  );
  });
 
- box.scrollTop=box.scrollHeight;
+ box.scrollTop=
+  box.scrollHeight;
 }
 
 
@@ -3754,9 +4522,12 @@ async function sendMessage(){
  }
 
  const input=
-  document.getElementById("chatInput");
+  document.getElementById(
+   "chatInput"
+  );
 
- const text=input.value.trim();
+ const text=
+  input.value.trim();
 
  if(!text)return;
 
@@ -3764,13 +4535,16 @@ async function sendMessage(){
 
  try{
 
-  const {error}=await sb
-   .from("messages")
-   .insert({
-    sender_id:currentUser.id,
-    receiver_id:currentChatUser.id,
-    message:text
-   });
+  const {error}=
+   await sb
+    .from("messages")
+    .insert({
+     sender_id:
+      currentUser.id,
+     receiver_id:
+      currentChatUser.id,
+     message:text
+    });
 
   if(error)throw error;
 
@@ -3783,28 +4557,33 @@ async function sendMessage(){
   );
 
   await loadMessages();
+
   await updateChatBadge();
 
  }catch(e){
 
-  console.error("SEND MESSAGE ERROR",e);
+  console.error(
+   "SEND MESSAGE ERROR",
+   e
+  );
 
   toast(
    "Message error: "+
-   (e.message||e)
+   (e?.message||e)
   );
 
  }finally{
 
   input.disabled=false;
+
   input.focus();
  }
 }
 
 
-/* =========================
-READ / BADGE
-========================= */
+/* =====================================================
+ READ / BADGE
+===================================================== */
 
 async function markChatRead(){
 
@@ -3816,23 +4595,27 @@ async function markChatRead(){
   return;
  }
 
- const {error}=await sb
-  .from("messages")
-  .update({read:true})
-  .eq(
-   "receiver_id",
-   currentUser.id
-  )
-  .eq(
-   "sender_id",
-   currentChatUser.id
-  )
-  .eq(
-   "read",
-   false
-  );
+ const {error}=
+  await sb
+   .from("messages")
+   .update({
+    read:true
+   })
+   .eq(
+    "receiver_id",
+    currentUser.id
+   )
+   .eq(
+    "sender_id",
+    currentChatUser.id
+   )
+   .eq(
+    "read",
+    false
+   );
 
  if(error){
+
   console.log(
    "Read update:",
    error.message
@@ -3846,33 +4629,40 @@ async function updateChatBadge(){
  if(!currentUser||!sb)return;
 
  const badge=
-  document.getElementById("chatBadge");
-
- const {count,error}=await sb
-  .from("messages")
-  .select(
-   "id",
-   {
-    count:"exact",
-    head:true
-   }
-  )
-  .eq(
-   "receiver_id",
-   currentUser.id
-  )
-  .eq(
-   "read",
-   false
+  document.getElementById(
+   "chatBadge"
   );
+
+ const {count,error}=
+  await sb
+   .from("messages")
+   .select(
+    "id",
+    {
+     count:"exact",
+     head:true
+    }
+   )
+   .eq(
+    "receiver_id",
+    currentUser.id
+   )
+   .eq(
+    "read",
+    false
+   );
 
  if(error){
 
-  badge.classList.add("hidden");
+  badge.classList.add(
+   "hidden"
+  );
+
   return;
  }
 
- badge.textContent=count||0;
+ badge.textContent=
+  count||0;
 
  badge.classList.toggle(
   "hidden",
@@ -3881,9 +4671,9 @@ async function updateChatBadge(){
 }
 
 
-/* =========================
-CHAT REALTIME
-========================= */
+/* =====================================================
+ CHAT REALTIME
+===================================================== */
 
 function subscribeChatRealtime(){
 
@@ -3897,17 +4687,25 @@ function subscribeChatRealtime(){
 
  if(messageChannel){
 
-  sb.removeChannel(messageChannel);
+  sb.removeChannel(
+   messageChannel
+  );
+
   messageChannel=null;
  }
 
- const myId=currentUser.id;
- const otherId=currentChatUser.id;
+ const myId=
+  currentUser.id;
+
+ const otherId=
+  currentChatUser.id;
 
  messageChannel=
   sb
    .channel(
-    "chat-"+myId+"-"+otherId+"-"+Date.now()
+    "chat-"+myId+
+    "-"+otherId+
+    "-"+Date.now()
    )
    .on(
     "postgres_changes",
@@ -3918,7 +4716,8 @@ function subscribeChatRealtime(){
     },
     async payload=>{
 
-     const m=payload.new;
+     const m=
+      payload.new;
 
      const related=
       (
@@ -3932,27 +4731,23 @@ function subscribeChatRealtime(){
 
      if(!related){
 
-      if(m.receiver_id===myId){
-
-       showSystemNotification(
-        "Poll Pulse",
-        "New message received"
-       );
-      }
-
       await updateChatBadge();
+
       return;
      }
 
      await loadMessages();
 
-     if(m.sender_id===otherId){
+     if(
+      m.sender_id===otherId
+     ){
 
       await markChatRead();
 
       showSystemNotification(
        "New message",
-       m.message||"New message"
+       m.message||
+       "New message"
       );
      }
 
@@ -3963,9 +4758,9 @@ function subscribeChatRealtime(){
 }
 
 
-/* =========================
-NOTIFICATIONS
-========================= */
+/* =====================================================
+ NOTIFICATIONS
+===================================================== */
 
 async function createNotification(
  userId,
@@ -3981,20 +4776,32 @@ async function createNotification(
   return;
  }
 
- const {error}=await sb
-  .from("notifications")
-  .insert({
-   user_id:userId,
-   actor_id:currentUser.id,
-   type,
-   message
-  });
+ try{
 
- if(error){
+  const {error}=
+   await sb
+    .from("notifications")
+    .insert({
+     user_id:userId,
+     actor_id:
+      currentUser.id,
+     type,
+     message
+    });
+
+  if(error){
+
+   console.error(
+    "NOTIFICATION",
+    error
+   );
+  }
+
+ }catch(e){
 
   console.error(
-   "NOTIFICATION",
-   error
+   "NOTIFICATION ERROR",
+   e
   );
  }
 }
@@ -4005,20 +4812,25 @@ async function loadNotifications(){
  if(!currentUser||!sb)return;
 
  const box=
-  document.getElementById("notifications");
+  document.getElementById(
+   "notifications"
+  );
 
- const {data,error}=await sb
-  .from("notifications")
-  .select("*")
-  .eq(
-   "user_id",
-   currentUser.id
-  )
-  .order(
-   "created_at",
-   {ascending:false}
-  )
-  .limit(50);
+ const {data,error}=
+  await sb
+   .from("notifications")
+   .select("*")
+   .eq(
+    "user_id",
+    currentUser.id
+   )
+   .order(
+    "created_at",
+    {
+     ascending:false
+    }
+   )
+   .limit(50);
 
  if(error){
 
@@ -4034,18 +4846,23 @@ async function loadNotifications(){
 
  if(!data?.length){
 
-  box.textContent="No notifications yet.";
+  box.textContent=
+   "No notifications yet.";
 
  }else{
 
   data.forEach(n=>{
 
-   const div=document.createElement("div");
+   const div=
+    document.createElement(
+     "div"
+    );
 
    div.className="notice";
 
    div.textContent=
-    (n.message||"Activity")+
+    (n.message||
+     "Activity")+
     " • "+
     (
      n.created_at
@@ -4061,7 +4878,9 @@ async function loadNotifications(){
 
  const unread=
   (data||[])
-   .filter(n=>!n.read)
+   .filter(
+    n=>!n.read
+   )
    .length;
 
  const badge=
@@ -4069,7 +4888,8 @@ async function loadNotifications(){
    "notificationBadge"
   );
 
- badge.textContent=unread;
+ badge.textContent=
+  unread;
 
  badge.classList.toggle(
   "hidden",
@@ -4078,27 +4898,43 @@ async function loadNotifications(){
 }
 
 
-/* =========================
-PUBLIC PROFILE
-========================= */
+/* =====================================================
+ PUBLIC PROFILE
+===================================================== */
 
-async function viewProfile(userId){
+async function viewProfile(
+ userId
+){
 
  if(!currentUser||!sb)return;
 
- if(userId===currentUser.id){
+ if(
+  userId===
+  currentUser.id
+ ){
 
   showPage("profile");
+
   return;
  }
 
- const user=await getProfile(userId);
+ const user=
+  await getProfile(
+   userId
+  );
 
  if(!user){
-  return toast("Profile nahi mila.");
+
+  return toast(
+   "Profile nahi mila."
+  );
  }
 
- document.getElementById("publicProfilePage")?.remove();
+ document
+  .getElementById(
+   "publicProfilePage"
+  )
+  ?.remove();
 
  [
   "homePage",
@@ -4107,13 +4943,19 @@ async function viewProfile(userId){
   "chatPage",
   "profilePage"
  ].forEach(id=>{
-  document.getElementById(id)
+  document
+   .getElementById(id)
    ?.classList.add("hidden");
  });
 
- const section=document.createElement("section");
+ const section=
+  document.createElement(
+   "section"
+  );
 
- section.id="publicProfilePage";
+ section.id=
+  "publicProfilePage";
+
  section.className="card";
 
  const followers=
@@ -4158,12 +5000,16 @@ async function viewProfile(userId){
    )
    .order(
     "created_at",
-    {ascending:false}
+    {
+     ascending:false
+    }
    )
    .limit(50);
 
  const followingMe=
-  await isFollowing(userId);
+  await isFollowing(
+   userId
+  );
 
  section.innerHTML=`
 
@@ -4184,7 +5030,10 @@ async function viewProfile(userId){
     </div>
 
     <div>
-     @${esc(user.username||"user")}
+     @${esc(
+      user.username||
+      "user"
+     )}
     </div>
 
     <div
@@ -4202,18 +5051,30 @@ async function viewProfile(userId){
    style="margin-top:18px">
 
    <div class="profile-stat">
-    <strong>${followers.count||0}</strong>
-    <span style="color:white">Followers</span>
+    <strong>
+     ${followers.count||0}
+    </strong>
+    <span style="color:white">
+     Followers
+    </span>
    </div>
 
    <div class="profile-stat">
-    <strong>${following.count||0}</strong>
-    <span style="color:white">Following</span>
+    <strong>
+     ${following.count||0}
+    </strong>
+    <span style="color:white">
+     Following
+    </span>
    </div>
 
    <div class="profile-stat">
-    <strong>${polls.data?.length||0}</strong>
-    <span style="color:white">Polls</span>
+    <strong>
+     ${polls.data?.length||0}
+    </strong>
+    <span style="color:white">
+     Polls
+    </span>
    </div>
 
   </div>
@@ -4225,7 +5086,11 @@ async function viewProfile(userId){
     class="btn"
     style="background:white;color:#5145b5">
 
-    ${followingMe?"Following":"Follow"}
+    ${
+     followingMe
+      ?"Following"
+      :"Follow"
+    }
 
    </button>
 
@@ -4243,11 +5108,13 @@ async function viewProfile(userId){
  </div>
 
  <h3>
-  🗳️ ${esc(user.username||"User")}'s Polls
+  🗳️ ${esc(
+   user.username||
+   "User"
+  )}'s Polls
  </h3>
 
  <div id="publicPollList"></div>
-
  `;
 
  document
@@ -4255,18 +5122,29 @@ async function viewProfile(userId){
   .prepend(section);
 
  const followBtn=
-  section.querySelector("#publicFollowBtn");
+  section.querySelector(
+   "#publicFollowBtn"
+  );
 
  if(followingMe){
-  followBtn.classList.add("following");
+
+  followBtn.classList.add(
+   "following"
+  );
  }
 
  followBtn.onclick=async()=>{
-  await followUser(userId,followBtn);
+
+  await followUser(
+   userId,
+   followBtn
+  );
  };
 
  section
-  .querySelector("#publicChatBtn")
+  .querySelector(
+   "#publicChatBtn"
+  )
   .onclick=()=>{
 
    section.remove();
@@ -4277,26 +5155,39 @@ async function viewProfile(userId){
   };
 
  const list=
-  section.querySelector("#publicPollList");
+  section.querySelector(
+   "#publicPollList"
+  );
 
  const uniquePolls=
-  uniqueById(polls.data||[]);
+  uniqueById(
+   polls.data||[]
+  );
 
  if(!uniquePolls.length){
 
   list.innerHTML=
-   "<div class='notice'>No polls yet.</div>";
+   "<div class='notice'>"+
+   "No polls yet."+
+   "</div>";
 
  }else{
 
   uniquePolls.forEach(p=>{
 
-   const div=document.createElement("div");
+   const div=
+    document.createElement(
+     "div"
+    );
 
    div.className="notice";
 
    div.innerHTML=`
-    <b>${esc(p.question||"Poll")}</b>
+    <b>
+     ${esc(
+      p.question||"Poll"
+     )}
+    </b>
 
     <div class="small">
      ${
@@ -4320,41 +5211,55 @@ async function viewProfile(userId){
 }
 
 
-/* =========================
-PROFILE TABS
-========================= */
+/* =====================================================
+ PROFILE TABS
+===================================================== */
 
-async function profileTab(tab,button){
+async function profileTab(
+ tab,
+ button
+){
 
  document
-  .querySelectorAll(".tabs button")
+  .querySelectorAll(
+   ".tabs button"
+  )
   .forEach(b=>{
-   b.classList.remove("active");
+   b.classList.remove(
+    "active"
+   );
   });
 
- button?.classList.add("active");
+ button?.classList.add(
+  "active"
+ );
 
  const box=
-  document.getElementById("profileContent");
+  document.getElementById(
+   "profileContent"
+  );
 
  box.innerHTML=
   "<div class='small'>Loading...</div>";
 
  if(tab==="polls"){
 
-  const {data,error}=await sb
-   .from("polls")
-   .select(
-    "id,question,created_at"
-   )
-   .eq(
-    "user_id",
-    currentUser.id
-   )
-   .order(
-    "created_at",
-    {ascending:false}
-   );
+  const {data,error}=
+   await sb
+    .from("polls")
+    .select(
+     "id,question,created_at"
+    )
+    .eq(
+     "user_id",
+     currentUser.id
+    )
+    .order(
+     "created_at",
+     {
+      ascending:false
+     }
+    );
 
   if(error){
 
@@ -4368,34 +5273,43 @@ async function profileTab(tab,button){
 
   box.innerHTML="";
 
-  uniqueById(data||[]).forEach(p=>{
+  uniqueById(
+   data||[]
+  ).forEach(p=>{
 
-   const div=document.createElement("div");
+   const div=
+    document.createElement(
+     "div"
+    );
 
    div.className="notice";
 
-   div.textContent=p.question;
+   div.textContent=
+    p.question;
 
    box.appendChild(div);
   });
 
   if(!data?.length){
-   box.textContent="No polls yet.";
+
+   box.textContent=
+    "No polls yet.";
   }
  }
 
 
  if(tab==="votes"){
 
-  const {data,error}=await sb
-   .from("votes")
-   .select(
-    "option,polls(question)"
-   )
-   .eq(
-    "user_id",
-    currentUser.id
-   );
+  const {data,error}=
+   await sb
+    .from("votes")
+    .select(
+     "option,polls(question)"
+    )
+    .eq(
+     "user_id",
+     currentUser.id
+    );
 
   if(error){
 
@@ -4411,7 +5325,10 @@ async function profileTab(tab,button){
 
   (data||[]).forEach(v=>{
 
-   const div=document.createElement("div");
+   const div=
+    document.createElement(
+     "div"
+    );
 
    div.className="notice";
 
@@ -4428,7 +5345,9 @@ async function profileTab(tab,button){
   });
 
   if(!data?.length){
-   box.textContent="No votes yet.";
+
+   box.textContent=
+    "No votes yet.";
   }
  }
 
@@ -4448,13 +5367,14 @@ async function profileTab(tab,button){
     ?"following_id"
     :"follower_id";
 
-  const {data,error}=await sb
-   .from("follows")
-   .select(column)
-   .eq(
-    filter,
-    currentUser.id
-   );
+  const {data,error}=
+   await sb
+    .from("follows")
+    .select(column)
+    .eq(
+     filter,
+     currentUser.id
+    );
 
   if(error){
 
@@ -4471,7 +5391,9 @@ async function profileTab(tab,button){
   const ids=[
    ...new Set(
     (data||[])
-     .map(x=>x[column])
+     .map(
+      x=>x[column]
+     )
    )
   ];
 
@@ -4482,9 +5404,13 @@ async function profileTab(tab,button){
 
    if(!user)continue;
 
-   const row=document.createElement("div");
+   const row=
+    document.createElement(
+     "div"
+    );
 
-   row.className="row user";
+   row.className=
+    "row user";
 
    row.innerHTML=`
     ${profileAvatarHTML(user)}
@@ -4492,23 +5418,34 @@ async function profileTab(tab,button){
     <div class="grow">
 
      <b>
-      @${esc(user.username||"user")}
+      @${esc(
+       user.username||"user"
+      )}
      </b>
 
      <div class="small">
-      ${esc(user.display_name||"")}
+      ${esc(
+       user.display_name||""
+      )}
      </div>
 
     </div>
    `;
 
-   const view=document.createElement("button");
+   const view=
+    document.createElement(
+     "button"
+    );
 
-   view.className="btn view-btn";
+   view.className=
+    "btn view-btn";
+
    view.textContent="View";
 
    view.onclick=()=>{
-    viewProfile(user.id);
+    viewProfile(
+     user.id
+    );
    };
 
    row.appendChild(view);
@@ -4527,21 +5464,27 @@ async function profileTab(tab,button){
 }
 
 
-/* =========================
-SYSTEM NOTIFICATIONS
-========================= */
+/* =====================================================
+ SYSTEM NOTIFICATIONS
+===================================================== */
 
 async function requestNotificationPermission(){
 
  try{
 
-  if(!("Notification" in window)){
+  if(
+   !("Notification" in window)
+  ){
    return;
   }
 
-  if(Notification.permission==="default"){
+  if(
+   Notification.permission===
+   "default"
+  ){
 
-   await Notification.requestPermission();
+   await Notification
+    .requestPermission();
   }
 
  }catch(e){
@@ -4554,13 +5497,17 @@ async function requestNotificationPermission(){
 }
 
 
-function showSystemNotification(title,message){
+function showSystemNotification(
+ title,
+ message
+){
 
  try{
 
   if(
    "Notification" in window&&
-   Notification.permission==="granted"
+   Notification.permission===
+   "granted"
   ){
 
    new Notification(
@@ -4581,9 +5528,9 @@ function showSystemNotification(title,message){
 }
 
 
-/* =========================
-GLOBAL REALTIME
-========================= */
+/* =====================================================
+ GLOBAL REALTIME
+===================================================== */
 
 function subscribeRealtime(){
 
@@ -4601,7 +5548,10 @@ function subscribeRealtime(){
  notificationChannel=
   sb
    .channel(
-    "notifications-"+currentUser.id
+    "notifications-"+
+    currentUser.id+
+    "-"+
+    Date.now()
    )
    .on(
     "postgres_changes",
@@ -4615,7 +5565,8 @@ function subscribeRealtime(){
     },
     async payload=>{
 
-     const n=payload.new;
+     const n=
+      payload.new;
 
      toast(
       "🔔 "+
@@ -4632,6 +5583,7 @@ function subscribeRealtime(){
      );
 
      await loadNotifications();
+
      await updateChatBadge();
     }
    )
@@ -4639,9 +5591,9 @@ function subscribeRealtime(){
 }
 
 
-/* =========================
-LOGOUT
-========================= */
+/* =====================================================
+ LOGOUT
+===================================================== */
 
 async function logout(){
 
@@ -4669,7 +5621,10 @@ async function logout(){
 
  }catch(e){
 
-  console.error(e);
+  console.error(
+   "LOGOUT ERROR",
+   e
+  );
  }
 
  currentUser=null;
@@ -4679,22 +5634,27 @@ async function logout(){
  allProfilesCache=[];
  profilesCacheTime=0;
 
- document.getElementById("homeScreen")
+ document
+  .getElementById("homeScreen")
   .classList.add("hidden");
 
- document.getElementById("authScreen")
+ document
+  .getElementById("authScreen")
   .classList.remove("hidden");
 
- document.getElementById("password")
+ document
+  .getElementById("password")
   .value="";
 
- authMessage("Logged out.");
+ authMessage(
+  "Logged out."
+ );
 }
 
 
-/* =========================
-AUTH START
-========================= */
+/* =====================================================
+ AUTH SESSION
+===================================================== */
 
 async function initAuth(){
 
@@ -4707,11 +5667,21 @@ async function initAuth(){
 
   if(error){
 
-   authMessage(error.message);
+   console.error(
+    "GET SESSION ERROR",
+    error
+   );
+
+   authMessage(
+    error.message
+   );
+
    return;
   }
 
-  if(data?.session?.user){
+  if(
+   data?.session?.user
+  ){
 
    await openApp(
     data.session.user
@@ -4720,65 +5690,145 @@ async function initAuth(){
 
  }catch(e){
 
-  console.error(e);
+  console.error(
+   "SESSION ERROR",
+   e
+  );
 
   authMessage(
-   e.message||
+   e?.message||
    "Session load nahi hui."
+  );
+}
+
+
+/* =====================================================
+ START APP - FIXED
+===================================================== */
+
+function startApp(){
+
+ if(appStarted)return;
+
+ appStarted=true;
+
+ if(!initSupabase()){
+
+  appStarted=false;
+
+  return;
+ }
+
+ try{
+
+  sb.auth.onAuthStateChange(
+   async(event,session)=>{
+
+    console.log(
+     "AUTH EVENT:",
+     event
+    );
+
+    if(
+     event==="SIGNED_IN"&&
+     session?.user
+    ){
+
+     if(
+      !currentUser||
+      currentUser.id!==
+       session.user.id
+     ){
+
+      await openApp(
+       session.user
+      );
+     }
+    }
+
+    if(
+     event==="SIGNED_OUT"
+    ){
+
+     currentUser=null;
+     currentChatUser=null;
+     appOpening=false;
+
+     document
+      .getElementById("homeScreen")
+      ?.classList.add(
+       "hidden"
+      );
+
+     document
+      .getElementById("authScreen")
+      ?.classList.remove(
+       "hidden"
+      );
+    }
+   }
+  );
+
+  initAuth();
+
+ }catch(e){
+
+  console.error(
+   "START ERROR",
+   e
+  );
+
+  authMessage(
+   "App start error: "+
+   (e?.message||e)
   );
  }
 }
 
 
-function startApp(){
+/* =====================================================
+ GLOBAL ERROR LOGGING
+===================================================== */
 
- if(!initSupabase()){
-  return;
+window.addEventListener(
+ "error",
+ event=>{
+
+  console.error(
+   "GLOBAL JS ERROR:",
+   event.error||
+   event.message
+  );
  }
+);
 
- sb.auth.onAuthStateChange(
-  async(event,session)=>{
+window.addEventListener(
+ "unhandledrejection",
+ event=>{
 
-   if(
-    event==="SIGNED_IN"&&
-    session?.user
-   ){
-
-    if(
-     !currentUser||
-     currentUser.id!==session.user.id
-    ){
-
-     await openApp(
-      session.user
-     );
-    }
-   }
-
-   if(event==="SIGNED_OUT"){
-
-    currentUser=null;
-    currentChatUser=null;
-    appOpening=false;
-   }
-  }
- );
-
- initAuth();
-}
+  console.error(
+   "PROMISE ERROR:",
+   event.reason
+  );
+ }
+);
 
 
-/* =========================
-START
-========================= */
+/* =====================================================
+ BOOT
+===================================================== */
 
 if(
- document.readyState==="loading"
+ document.readyState===
+ "loading"
 ){
 
  document.addEventListener(
   "DOMContentLoaded",
-  startApp
+  startApp,
+  {
+   once:true
+  }
  );
 
 }else{
@@ -4790,4 +5840,3 @@ if(
 
 </body>
 </html>
-```
