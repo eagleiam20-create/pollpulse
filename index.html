@@ -1,1530 +1,2138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Poll Pulse — Chat</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --primary: #635bff;
-      --primary-dark: #5147e8;
-      --bubble: #635bff;
-      --bubble-text: #fff;
-      --other-bubble: #f0f2f5;
-      --other-text: #111827;
-      --green: #22c55e;
-      --danger: #ef4444;
-      --shadow: 0 12px 35px rgba(17, 24, 39, .08);
-    }
-
-    body.dark {
-      --bg: #0b0d12;
-      --card: #12151c;
-      --text: #f3f4f6;
-      --muted: #9ca3af;
-      --border: #252a34;
-      --other-bubble: #20252f;
-      --other-text: #f3f4f6;
-      --shadow: 0 12px 35px rgba(0,0,0,.3);
-    }
-
-    body {
-      font-family:
-        Inter, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    #app {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    /* LOGIN */
-
-    .auth-card {
-      width: 100%;
-      max-width: 430px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 32px;
-      box-shadow: var(--shadow);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .brand-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 15px;
-      background: linear-gradient(135deg, #635bff, #8b5cf6);
-      color: white;
-      display: grid;
-      place-items: center;
-      font-size: 24px;
-      font-weight: 900;
-    }
-
-    .brand-name {
-      font-size: 22px;
-      font-weight: 900;
-    }
-
-    .brand-sub {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 2px;
-    }
-
-    .auth-title {
-      font-size: 27px;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-
-    .auth-text {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-
-    .field {
-      margin-bottom: 14px;
-    }
-
-    .field label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 7px;
-    }
-
-    .field input {
-      width: 100%;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-      border-radius: 13px;
-      padding: 13px 14px;
-      outline: none;
-    }
-
-    .field input:focus {
-      border-color: var(--primary);
-    }
-
-    .primary-btn {
-      width: 100%;
-      border: 0;
-      background: var(--primary);
-      color: white;
-      border-radius: 13px;
-      padding: 13px;
-      font-weight: 800;
-      margin-top: 4px;
-    }
-
-    .primary-btn:hover {
-      background: var(--primary-dark);
-    }
-
-    .secondary-btn {
-      width: 100%;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      border-radius: 13px;
-      padding: 12px;
-      font-weight: 700;
-      margin-top: 10px;
-    }
-
-    .auth-error {
-      color: var(--danger);
-      background: rgba(239,68,68,.08);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 13px;
-      margin-bottom: 12px;
-      display: none;
-    }
-
-    /* APP */
-
-    .chat-app {
-      width: min(1180px, 100%);
-      height: min(820px, calc(100vh - 40px));
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      display: grid;
-      grid-template-columns: 360px 1fr;
-    }
-
-    /* SIDEBAR */
-
-    .sidebar {
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .sidebar-top {
-      padding: 18px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-brand {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-
-    .sidebar-brand-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .mini-logo {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #635bff, #8b5cf6);
-      color: white;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-    }
-
-    .sidebar-title {
-      font-size: 19px;
-      font-weight: 900;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    .icon-btn {
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      border-radius: 11px;
-      display: grid;
-      place-items: center;
-      font-size: 16px;
-    }
-
-    .icon-btn:hover {
-      background: var(--bg);
-    }
-
-    .search {
-      position: relative;
-    }
-
-    .search input {
-      width: 100%;
-      border: 0;
-      outline: 0;
-      background: var(--bg);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 12px 14px 12px 38px;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 13px;
-      top: 10px;
-      color: var(--muted);
-    }
-
-    .conversation-list {
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .conversation {
-      padding: 13px 16px;
-      display: flex;
-      gap: 12px;
-      cursor: pointer;
-      border-bottom: 1px solid rgba(229,231,235,.55);
-    }
-
-    body.dark .conversation {
-      border-bottom-color: rgba(255,255,255,.04);
-    }
-
-    .conversation:hover,
-    .conversation.active {
-      background: var(--bg);
-    }
-
-    .avatar {
-      width: 48px;
-      height: 48px;
-      flex: 0 0 48px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: linear-gradient(135deg,#ddd,#aaa);
-      display: grid;
-      place-items: center;
-      font-weight: 800;
-      color: #555;
-      overflow: hidden;
-    }
-
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .conversation-info {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .conversation-line {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .conversation-name {
-      font-weight: 800;
-      font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .conversation-time {
-      font-size: 11px;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    .conversation-preview {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .empty-list {
-      padding: 45px 25px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    /* CHAT */
-
-    .chat-panel {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      position: relative;
-    }
-
-    .chat-empty {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 30px;
-    }
-
-    .chat-empty-icon {
-      width: 80px;
-      height: 80px;
-      border-radius: 25px;
-      background: rgba(99,91,255,.1);
-      color: var(--primary);
-      display: grid;
-      place-items: center;
-      font-size: 36px;
-      margin-bottom: 18px;
-    }
-
-    .chat-empty h2 {
-      font-size: 21px;
-      margin-bottom: 8px;
-    }
-
-    .chat-empty p {
-      color: var(--muted);
-      max-width: 350px;
-      line-height: 1.6;
-    }
-
-    .chat-header {
-      min-height: 72px;
-      padding: 12px 18px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .back-btn {
-      display: none;
-    }
-
-    .chat-user {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .chat-user-name {
-      font-weight: 850;
-      font-size: 15px;
-    }
-
-    .chat-status {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 2px;
-    }
-
-    .messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 22px;
-      background:
-        radial-gradient(circle at top left, rgba(99,91,255,.04), transparent 35%),
-        var(--card);
-    }
-
-    .date-divider {
-      text-align: center;
-      color: var(--muted);
-      font-size: 11px;
-      margin: 10px 0 18px;
-    }
-
-    .message-row {
-      display: flex;
-      margin-bottom: 8px;
-    }
-
-    .message-row.mine {
-      justify-content: flex-end;
-    }
-
-    .message-wrap {
-      max-width: min(75%, 480px);
-    }
-
-    .message-bubble {
-      padding: 10px 13px;
-      border-radius: 17px;
-      background: var(--other-bubble);
-      color: var(--other-text);
-      font-size: 14px;
-      line-height: 1.45;
-      word-break: break-word;
-    }
-
-    .mine .message-bubble {
-      background: var(--bubble);
-      color: var(--bubble-text);
-      border-bottom-right-radius: 5px;
-    }
-
-    .message-row:not(.mine) .message-bubble {
-      border-bottom-left-radius: 5px;
-    }
-
-    .message-meta {
-      display: flex;
-      justify-content: flex-end;
-      gap: 5px;
-      align-items: center;
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 3px;
-      padding: 0 4px;
-    }
-
-    .mine .message-meta {
-      color: var(--muted);
-    }
-
-    .deleted {
-      font-style: italic;
-      opacity: .7;
-    }
-
-    .reply-preview {
-      border-left: 3px solid currentColor;
-      opacity: .75;
-      padding-left: 8px;
-      margin-bottom: 7px;
-      font-size: 12px;
-    }
-
-    .typing {
-      min-height: 23px;
-      padding: 0 22px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .composer {
-      border-top: 1px solid var(--border);
-      padding: 12px 14px;
-      display: flex;
-      gap: 9px;
-      align-items: flex-end;
-    }
-
-    .composer textarea {
-      flex: 1;
-      min-height: 44px;
-      max-height: 120px;
-      resize: none;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-      border-radius: 15px;
-      padding: 12px 13px;
-      outline: none;
-    }
-
-    .composer textarea:focus {
-      border-color: var(--primary);
-    }
-
-    .send-btn {
-      width: 45px;
-      height: 45px;
-      border: 0;
-      border-radius: 14px;
-      background: var(--primary);
-      color: white;
-      font-size: 18px;
-    }
-
-    .send-btn:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-    }
-
-    .reply-bar {
-      padding: 8px 14px;
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      display: none;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .reply-bar.show {
-      display: flex;
-    }
-
-    .reply-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .reply-label {
-      color: var(--primary);
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .reply-text {
-      font-size: 12px;
-      color: var(--muted);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    /* TOAST */
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 25px;
-      transform: translateX(-50%) translateY(20px);
-      background: #111827;
-      color: white;
-      padding: 11px 16px;
-      border-radius: 12px;
-      font-size: 13px;
-      opacity: 0;
-      pointer-events: none;
-      transition: .25s;
-      z-index: 9999;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 720px) {
-      #app {
-        padding: 0;
-      }
-
-      .chat-app {
-        width: 100%;
-        height: 100vh;
-        min-height: 100vh;
-        border: 0;
-        border-radius: 0;
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar {
-        display: flex;
-      }
-
-      .chat-panel {
-        display: none;
-      }
-
-      .chat-app.mobile-chat .sidebar {
-        display: none;
-      }
-
-      .chat-app.mobile-chat .chat-panel {
-        display: flex;
-      }
-
-      .back-btn {
-        display: grid;
-      }
-
-      .message-wrap {
-        max-width: 82%;
-      }
-
-      .auth-card {
-        border: 0;
-        box-shadow: none;
-        border-radius: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f0f0f">
+<title>Poll Pulse</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#f7f7f8;
+  --card:#fff;
+  --text:#111;
+  --muted:#737373;
+  --line:#e7e7e7;
+  --accent:#6c5ce7;
+  --accent2:#8e7dff;
+  --danger:#ef4444;
+  --green:#22c55e;
+  --shadow:0 10px 35px rgba(0,0,0,.08);
+}
+
+body.dark{
+  --bg:#0b0b0d;
+  --card:#151518;
+  --text:#f7f7f7;
+  --muted:#999;
+  --line:#29292d;
+  --shadow:0 10px 35px rgba(0,0,0,.25);
+}
+
+html,body{
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* ================= AUTH ================= */
+
+#authScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at top,#8172ff33,transparent 35%),
+    var(--bg);
+}
+
+.auth-box{
+  width:100%;
+  max-width:410px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:30px;
+  box-shadow:var(--shadow);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:26px;
+}
+
+.logo-icon{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;
+  font-size:22px;
+  font-weight:900;
+}
+
+.logo-text{
+  font-size:24px;
+  font-weight:900;
+}
+
+.auth-box h1{
+  font-size:30px;
+  margin-bottom:8px;
+}
+
+.auth-sub{
+  color:var(--muted);
+  margin-bottom:24px;
+}
+
+.field{
+  margin-bottom:14px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+.field input,
+.field textarea,
+.search-box input{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--bg);
+  color:var(--text);
+  outline:none;
+  border-radius:14px;
+  padding:13px 14px;
+}
+
+.field input:focus,
+.field textarea:focus,
+.search-box input:focus{
+  border-color:var(--accent);
+}
+
+.primary-btn{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:14px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-weight:800;
+  margin-top:8px;
+}
+
+.secondary-btn{
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--text);
+  border-radius:12px;
+  padding:10px 14px;
+  font-weight:700;
+}
+
+.auth-toggle{
+  text-align:center;
+  color:var(--muted);
+  margin-top:18px;
+  font-size:14px;
+}
+
+.auth-toggle span{
+  color:var(--accent);
+  font-weight:800;
+  cursor:pointer;
+}
+
+/* ================= APP ================= */
+
+#app{
+  min-height:100vh;
+  display:none;
+}
+
+.app-shell{
+  width:100%;
+  max-width:1250px;
+  min-height:100vh;
+  margin:auto;
+  display:flex;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+  width:240px;
+  border-right:1px solid var(--line);
+  padding:20px 14px;
+  position:sticky;
+  top:0;
+  height:100vh;
+  background:var(--card);
+  display:flex;
+  flex-direction:column;
+}
+
+.sidebar-logo{
+  padding:10px 12px 22px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  font-weight:900;
+  font-size:20px;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.nav-btn{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:13px 14px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-align:left;
+  font-weight:750;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.nav-icon{
+  width:23px;
+  text-align:center;
+  font-size:19px;
+}
+
+.sidebar-bottom{
+  margin-top:auto;
+}
+
+.user-mini{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  border-top:1px solid var(--line);
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  min-width:42px;
+  border-radius:50%;
+  overflow:hidden;
+  background:linear-gradient(135deg,#ddd,#aaa);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  color:#555;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.user-mini-info{
+  min-width:0;
+}
+
+.user-mini-name{
+  font-size:14px;
+  font-weight:800;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.user-mini-handle{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+  flex:1;
+  min-width:0;
+}
+
+.topbar{
+  height:66px;
+  border-bottom:1px solid var(--line);
+  background:var(--card);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.topbar-title{
+  font-weight:900;
+  font-size:19px;
+}
+
+.top-actions{
+  display:flex;
+  gap:8px;
+}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--card);
+  color:var(--text);
+  display:grid;
+  place-items:center;
+}
+
+.page{
+  display:none;
+  max-width:760px;
+  margin:auto;
+  padding:22px 18px 100px;
+}
+
+.page.active{
+  display:block;
+}
+
+/* ================= HOME ================= */
+
+.feed{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.poll-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 4px 18px rgba(0,0,0,.03);
+}
+
+.poll-author{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.poll-author-info{
+  flex:1;
+  min-width:0;
+}
+
+.poll-author-name{
+  font-size:14px;
+  font-weight:850;
+}
+
+.poll-author-handle{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.poll-time{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.poll-question{
+  font-size:19px;
+  line-height:1.35;
+  font-weight:850;
+  margin-bottom:16px;
+}
+
+.poll-options{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.poll-option{
+  position:relative;
+  overflow:hidden;
+  width:100%;
+  min-height:48px;
+  padding:13px 14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--bg);
+  color:var(--text);
+  text-align:left;
+}
+
+.poll-option-bar{
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:0;
+  background:var(--accent);
+  opacity:.12;
+}
+
+.poll-option-content{
+  position:relative;
+  z-index:1;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.poll-option.selected{
+  border-color:var(--accent);
+}
+
+.poll-actions{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-top:15px;
+  padding-top:13px;
+  border-top:1px solid var(--line);
+}
+
+.action-btn{
+  border:0;
+  background:none;
+  color:var(--muted);
+  font-size:14px;
+  font-weight:750;
+  display:flex;
+  gap:5px;
+  align-items:center;
+}
+
+.action-btn.liked{
+  color:var(--danger);
+}
+
+.poll-count{
+  margin-left:auto;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* ================= CREATE ================= */
+
+.create-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:20px;
+}
+
+.option-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:9px;
+}
+
+.option-row input{
+  flex:1;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:12px;
+  background:var(--bg);
+  color:var(--text);
+  outline:none;
+}
+
+.remove-option{
+  width:42px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--danger);
+  border-radius:12px;
+}
+
+/* ================= PROFILE ================= */
+
+.profile-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+}
+
+.profile-cover{
+  height:130px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+.profile-main{
+  padding:0 20px 22px;
+}
+
+.profile-avatar-wrap{
+  margin-top:-45px;
+  margin-bottom:12px;
+}
+
+.profile-big-avatar{
+  width:90px;
+  height:90px;
+  border:5px solid var(--card);
+  border-radius:50%;
+  background:var(--bg);
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  font-size:30px;
+  font-weight:900;
+}
+
+.profile-big-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-name{
+  font-size:24px;
+  font-weight:900;
+}
+
+.profile-handle{
+  color:var(--muted);
+}
+
+.profile-bio{
+  margin-top:12px;
+  line-height:1.5;
+}
+
+.profile-actions{
+  display:flex;
+  gap:8px;
+  margin-top:16px;
+}
+
+.profile-actions button{
+  flex:1;
+}
+
+/* ================= SEARCH ================= */
+
+.search-box{
+  margin-bottom:15px;
+}
+
+.search-results{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.search-user{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  cursor:pointer;
+}
+
+.search-user-info{
+  flex:1;
+}
+
+/* ================= NOTIFICATIONS ================= */
+
+.notification{
+  display:flex;
+  gap:12px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--card);
+  margin-bottom:9px;
+}
+
+.notification.unread{
+  border-color:var(--accent);
+  background:rgba(108,92,231,.06);
+}
+
+.notification-text{
+  font-size:14px;
+  line-height:1.4;
+}
+
+/* ================= CHAT ================= */
+
+.chat-layout{
+  display:flex;
+  height:calc(100vh - 66px);
+  max-height:calc(100vh - 66px);
+}
+
+.chat-list{
+  width:330px;
+  border-right:1px solid var(--line);
+  overflow:auto;
+  background:var(--card);
+}
+
+.chat-list-header{
+  padding:17px;
+  border-bottom:1px solid var(--line);
+}
+
+.chat-list-header h2{
+  font-size:20px;
+  margin-bottom:12px;
+}
+
+.chat-search{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:12px;
+  padding:11px 13px;
+  outline:none;
+}
+
+.chat-users{
+  padding:8px;
+}
+
+.chat-user{
+  display:flex;
+  gap:11px;
+  padding:12px;
+  border-radius:14px;
+  cursor:pointer;
+  align-items:center;
+}
+
+.chat-user:hover,
+.chat-user.active{
+  background:var(--bg);
+}
+
+.chat-user-info{
+  min-width:0;
+  flex:1;
+}
+
+.chat-user-name{
+  font-weight:800;
+  font-size:14px;
+}
+
+.chat-preview{
+  color:var(--muted);
+  font-size:12px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.chat-unread{
+  min-width:21px;
+  height:21px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--accent);
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+}
+
+.chat-area{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+}
+
+.chat-empty{
+  flex:1;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:var(--muted);
+  padding:30px;
+}
+
+.chat-empty-icon{
+  font-size:50px;
+  margin-bottom:12px;
+}
+
+.chat-header{
+  min-height:66px;
+  background:var(--card);
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+}
+
+.chat-back{
+  display:none;
+}
+
+.chat-head-info{
+  flex:1;
+}
+
+.chat-head-name{
+  font-weight:900;
+}
+
+.chat-status{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.messages{
+  flex:1;
+  overflow:auto;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.message-row{
+  display:flex;
+  width:100%;
+}
+
+.message-row.mine{
+  justify-content:flex-end;
+}
+
+.bubble{
+  max-width:min(72%,520px);
+  padding:10px 13px;
+  border-radius:18px;
+  background:var(--card);
+  border:1px solid var(--line);
+  font-size:14px;
+  line-height:1.4;
+  word-break:break-word;
+}
+
+.mine .bubble{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+  border-bottom-right-radius:5px;
+}
+
+.theirs .bubble{
+  border-bottom-left-radius:5px;
+}
+
+.message-meta{
+  margin-top:4px;
+  font-size:10px;
+  opacity:.65;
+  text-align:right;
+}
+
+.reply-preview{
+  font-size:11px;
+  opacity:.7;
+  border-left:3px solid currentColor;
+  padding-left:7px;
+  margin-bottom:6px;
+}
+
+.chat-composer{
+  background:var(--card);
+  border-top:1px solid var(--line);
+  padding:10px;
+}
+
+.reply-bar{
+  display:none;
+  padding:7px 10px;
+  background:var(--bg);
+  border-radius:10px;
+  margin-bottom:8px;
+  font-size:12px;
+}
+
+.reply-bar.show{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.chat-compose-row{
+  display:flex;
+  gap:8px;
+  align-items:flex-end;
+}
+
+.chat-input{
+  flex:1;
+  min-height:44px;
+  max-height:110px;
+  resize:none;
+  border:1px solid var(--line);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:15px;
+  padding:12px;
+  outline:none;
+}
+
+.send-btn{
+  width:45px;
+  height:45px;
+  border:0;
+  border-radius:50%;
+  background:var(--accent);
+  color:#fff;
+  font-size:18px;
+}
+
+/* ================= MOBILE NAV ================= */
+
+.mobile-nav{
+  display:none;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%) translateY(20px);
+  background:#171717;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:12px;
+  font-size:13px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:999;
+  max-width:90%;
+  text-align:center;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* ================= LOADER ================= */
+
+.loader{
+  display:flex;
+  justify-content:center;
+  padding:30px;
+  color:var(--muted);
+}
+
+.empty{
+  text-align:center;
+  padding:50px 20px;
+  color:var(--muted);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:800px){
+
+  .sidebar{
+    display:none;
+  }
+
+  .app-shell{
+    display:block;
+  }
+
+  .content{
+    width:100%;
+  }
+
+  .topbar{
+    height:58px;
+    padding:0 14px;
+  }
+
+  .page{
+    padding:16px 12px 90px;
+  }
+
+  .mobile-nav{
+    display:flex;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:64px;
+    background:var(--card);
+    border-top:1px solid var(--line);
+    z-index:100;
+    justify-content:space-around;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+
+  .mobile-nav button{
+    flex:1;
+    border:0;
+    background:none;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:750;
+  }
+
+  .mobile-nav button.active{
+    color:var(--accent);
+  }
+
+  .mobile-nav-icon{
+    display:block;
+    font-size:20px;
+    margin-bottom:2px;
+  }
+
+  .chat-layout{
+    height:calc(100vh - 58px);
+    max-height:calc(100vh - 58px);
+  }
+
+  .chat-list{
+    width:100%;
+    border-right:0;
+  }
+
+  .chat-area{
+    display:none;
+    width:100%;
+  }
+
+  .chat-layout.conversation-open .chat-list{
+    display:none;
+  }
+
+  .chat-layout.conversation-open .chat-area{
+    display:flex;
+  }
+
+  .chat-back{
+    display:grid;
+  }
+
+  .bubble{
+    max-width:82%;
+  }
+
+  .chat-list-header{
+    padding:14px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-<div id="app"></div>
+<!-- ================= AUTH ================= -->
+
+<section id="authScreen">
+
+  <div class="auth-box">
+
+    <div class="logo">
+      <div class="logo-icon">P</div>
+      <div class="logo-text">Poll Pulse</div>
+    </div>
+
+    <h1 id="authTitle">Welcome back</h1>
+    <p class="auth-sub" id="authSub">
+      Login to join the conversation.
+    </p>
+
+    <div id="nameField" class="field hidden">
+      <label>Name</label>
+      <input id="authName" type="text" placeholder="Your name">
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input id="authEmail" type="email" placeholder="you@example.com">
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <input id="authPassword" type="password" placeholder="••••••••">
+    </div>
+
+    <button class="primary-btn" id="authBtn">
+      Login
+    </button>
+
+    <div class="auth-toggle">
+      <span id="authToggle">Create an account</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= APP ================= -->
+
+<div id="app">
+
+  <div class="app-shell">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="width:38px;height:38px;border-radius:12px;font-size:17px;">
+          P
+        </div>
+        Poll Pulse
+      </div>
+
+      <div class="nav">
+
+        <button class="nav-btn active" data-page="home">
+          <span class="nav-icon">⌂</span>
+          Home
+        </button>
+
+        <button class="nav-btn" data-page="discover">
+          <span class="nav-icon">⌕</span>
+          Discover
+        </button>
+
+        <button class="nav-btn" data-page="create">
+          <span class="nav-icon">＋</span>
+          Create
+        </button>
+
+        <button class="nav-btn" data-page="chat">
+          <span class="nav-icon">◌</span>
+          Messages
+          <span id="sidebarChatBadge" class="chat-unread hidden">0</span>
+        </button>
+
+        <button class="nav-btn" data-page="notifications">
+          <span class="nav-icon">♡</span>
+          Notifications
+        </button>
+
+        <button class="nav-btn" data-page="profile">
+          <span class="nav-icon">◯</span>
+          Profile
+        </button>
+
+      </div>
+
+      <div class="sidebar-bottom">
+
+        <button class="nav-btn" id="themeBtn">
+          <span class="nav-icon">☾</span>
+          Dark mode
+        </button>
+
+        <button class="nav-btn" id="logoutBtn">
+          <span class="nav-icon">↪</span>
+          Logout
+        </button>
+
+        <div class="user-mini">
+
+          <div class="avatar" id="sidebarAvatar">
+            U
+          </div>
+
+          <div class="user-mini-info">
+            <div class="user-mini-name" id="sidebarName">
+              User
+            </div>
+            <div class="user-mini-handle" id="sidebarHandle">
+              @user
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- CONTENT -->
+
+    <main class="content">
+
+      <header class="topbar">
+
+        <div class="topbar-title" id="topbarTitle">
+          Home
+        </div>
+
+        <div class="top-actions">
+
+          <button class="icon-btn" id="topSearchBtn">
+            ⌕
+          </button>
+
+          <button class="icon-btn" id="topThemeBtn">
+            ☾
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- HOME -->
+
+      <section id="page-home" class="page active">
+
+        <div class="feed" id="homeFeed">
+          <div class="loader">Loading polls…</div>
+        </div>
+
+      </section>
+
+
+      <!-- DISCOVER -->
+
+      <section id="page-discover" class="page">
+
+        <div class="search-box">
+          <input
+            id="discoverSearch"
+            placeholder="Search people..."
+          >
+        </div>
+
+        <div id="discoverResults" class="search-results">
+          <div class="empty">
+            Search for people on Poll Pulse.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- CREATE -->
+
+      <section id="page-create" class="page">
+
+        <div class="create-card">
+
+          <h2 style="margin-bottom:18px;">
+            Create a poll
+          </h2>
+
+          <div class="field">
+            <label>Question</label>
+            <textarea
+              id="pollQuestion"
+              rows="4"
+              placeholder="What do you want to ask?"
+            ></textarea>
+          </div>
+
+          <div class="field">
+
+            <label>Options</label>
+
+            <div id="optionsContainer">
+
+              <div class="option-row">
+                <input class="poll-option-input" placeholder="Option 1">
+              </div>
+
+              <div class="option-row">
+                <input class="poll-option-input" placeholder="Option 2">
+              </div>
+
+            </div>
+
+          </div>
+
+          <button class="secondary-btn" id="addOptionBtn">
+            + Add option
+          </button>
+
+          <button class="primary-btn" id="createPollBtn">
+            Publish poll
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- PROFILE -->
+
+      <section id="page-profile" class="page">
+
+        <div class="profile-card">
+
+          <div class="profile-cover"></div>
+
+          <div class="profile-main">
+
+            <div class="profile-avatar-wrap">
+              <div class="profile-big-avatar" id="profileAvatar">
+                U
+              </div>
+            </div>
+
+            <div class="profile-name" id="profileName">
+              User
+            </div>
+
+            <div class="profile-handle" id="profileHandle">
+              @user
+            </div>
+
+            <div class="profile-bio" id="profileBio">
+              Welcome to Poll Pulse.
+            </div>
+
+            <div class="profile-actions">
+              <button class="secondary-btn" id="editProfileBtn">
+                Edit profile
+              </button>
+              <button class="secondary-btn" id="profileLogoutBtn">
+                Logout
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div style="margin-top:20px;">
+          <h3 style="margin-bottom:12px;">Your polls</h3>
+          <div id="profilePolls" class="feed"></div>
+        </div>
+
+      </section>
+
+
+      <!-- NOTIFICATIONS -->
+
+      <section id="page-notifications" class="page">
+
+        <div id="notificationsList">
+          <div class="loader">Loading notifications…</div>
+        </div>
+
+      </section>
+
+
+      <!-- CHAT -->
+
+      <section id="page-chat" style="display:none;padding:0;">
+
+        <div class="chat-layout" id="chatLayout">
+
+          <div class="chat-list">
+
+            <div class="chat-list-header">
+
+              <h2>Messages</h2>
+
+              <input
+                id="chatSearch"
+                class="chat-search"
+                placeholder="Search people..."
+              >
+
+            </div>
+
+            <div id="chatUsers" class="chat-users">
+              <div class="loader">Loading chats…</div>
+            </div>
+
+          </div>
+
+
+          <div class="chat-area">
+
+            <div id="chatEmpty" class="chat-empty">
+
+              <div>
+                <div class="chat-empty-icon">💬</div>
+                <h2 style="color:var(--text);margin-bottom:7px;">
+                  Your messages
+                </h2>
+                <p>
+                  Select someone to start chatting.
+                </p>
+              </div>
+
+            </div>
+
+
+            <div id="chatConversation" class="hidden" style="display:flex;flex-direction:column;height:100%;">
+
+              <div class="chat-header">
+
+                <button class="icon-btn chat-back" id="chatBackBtn">
+                  ←
+                </button>
+
+                <div class="avatar" id="chatAvatar">
+                  U
+                </div>
+
+                <div class="chat-head-info">
+                  <div class="chat-head-name" id="chatTitle">
+                    User
+                  </div>
+                  <div class="chat-status" id="chatStatus">
+                    Message
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div id="messages" class="messages"></div>
+
+
+              <div class="chat-composer">
+
+                <div id="replyBar" class="reply-bar">
+                  <span id="replyText"></span>
+                  <button
+                    id="cancelReplyBtn"
+                    style="border:0;background:none;color:var(--danger);"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div class="chat-compose-row">
+
+                  <textarea
+                    id="chatInput"
+                    class="chat-input"
+                    rows="1"
+                    placeholder="Message..."
+                  ></textarea>
+
+                  <button class="send-btn" id="sendMessageBtn">
+                    ➤
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- MOBILE NAV -->
+
+  <nav class="mobile-nav">
+
+    <button data-page="home" class="active">
+      <span class="mobile-nav-icon">⌂</span>
+      Home
+    </button>
+
+    <button data-page="discover">
+      <span class="mobile-nav-icon">⌕</span>
+      Search
+    </button>
+
+    <button data-page="create">
+      <span class="mobile-nav-icon">＋</span>
+      Create
+    </button>
+
+    <button data-page="chat">
+      <span class="mobile-nav-icon">◌</span>
+      Chat
+    </button>
+
+    <button data-page="profile">
+      <span class="mobile-nav-icon">◯</span>
+      Profile
+    </button>
+
+  </nav>
+
+</div>
+
+
 <div id="toast" class="toast"></div>
 
+
 <script>
+
 /* =========================================================
-   POLL PULSE CHAT
-   Standalone version
-   ========================================================= */
+   SUPABASE
+========================================================= */
 
-const SUPABASE_URL = "https://dbpbkvfaxgifjeveijqf.supabase.co";
-const SUPABASE_KEY = "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
+const SUPABASE_URL =
+  "https://dbpbkvfaxgifjeveijqf.supabase.co";
 
-const sb = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const SUPABASE_KEY =
+  "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
+
+const { createClient } =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* =========================================================
+   STATE
+========================================================= */
 
 let currentUser = null;
 let currentProfile = null;
-let selectedUser = null;
-let messagesChannel = null;
-let typingTimer = null;
-let replyMessage = null;
 
-const app = document.getElementById("app");
-const toastBox = document.getElementById("toast");
+let currentPage = "home";
 
-function toast(message) {
-  toastBox.textContent = message;
-  toastBox.classList.add("show");
+let currentChatUser = null;
 
-  clearTimeout(window.toastTimer);
+let messageChannel = null;
 
-  window.toastTimer = setTimeout(() => {
-    toastBox.classList.remove("show");
-  }, 2500);
+let replyToMessage = null;
+
+let allProfiles = [];
+
+let pollsCache = [];
+
+let authMode = "login";
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function $(id){
+  return document.getElementById(id);
 }
 
-function escapeHTML(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+function escapeHTML(value){
+  if(value === null || value === undefined) return "";
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-function initials(name) {
-  return String(name || "?")
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map(x => x[0])
-    .join("")
-    .toUpperCase();
+function firstValue(row, keys, fallback=""){
+  if(!row) return fallback;
+
+  for(const key of keys){
+    if(
+      row[key] !== undefined &&
+      row[key] !== null &&
+      row[key] !== ""
+    ){
+      return row[key];
+    }
+  }
+
+  return fallback;
 }
 
-function avatarHTML(profile, sizeClass = "") {
+function getProfileName(profile){
+  return firstValue(
+    profile,
+    ["full_name","name","display_name","username"],
+    "User"
+  );
+}
+
+function getUsername(profile){
+  let username =
+    firstValue(
+      profile,
+      ["username","user_name","handle"],
+      ""
+    );
+
+  if(!username){
+    username =
+      getProfileName(profile)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g,"")
+        .slice(0,20) || "user";
+  }
+
+  return username;
+}
+
+function getAvatar(profile){
+  return firstValue(
+    profile,
+    ["avatar_url","avatar","profile_image","image_url"],
+    ""
+  );
+}
+
+function getBio(profile){
+  return firstValue(
+    profile,
+    ["bio","about","description"],
+    "Welcome to Poll Pulse."
+  );
+}
+
+function getPollUserId(poll){
+  return firstValue(
+    poll,
+    ["user_id","creator_id","author_id","owner_id"],
+    null
+  );
+}
+
+function getPollQuestion(poll){
+  return firstValue(
+    poll,
+    ["question","title","text","poll_question"],
+    "Untitled poll"
+  );
+}
+
+function getPollOptions(poll){
+
+  let value =
+    firstValue(
+      poll,
+      ["options","choices","answers","poll_options"],
+      []
+    );
+
+  if(Array.isArray(value)){
+    return value;
+  }
+
+  if(typeof value === "string"){
+
+    try{
+      const parsed = JSON.parse(value);
+
+      if(Array.isArray(parsed)){
+        return parsed;
+      }
+    }catch(e){}
+
+    return value
+      .split(",")
+      .map(x => x.trim())
+      .filter(Boolean);
+  }
+
+  /* fallback for option1, option2... */
+
+  const result = [];
+
+  for(let i=1;i<=10;i++){
+
+    const option =
+      firstValue(
+        poll,
+        [
+          `option${i}`,
+          `choice${i}`,
+          `answer${i}`
+        ],
+        ""
+      );
+
+    if(option) result.push(option);
+  }
+
+  return result;
+}
+
+function getMessageText(message){
+  return firstValue(
+    message,
+    ["message","content","text","body"],
+    ""
+  );
+}
+
+function formatTime(dateString){
+
+  if(!dateString) return "";
+
+  const date = new Date(dateString);
+
+  if(Number.isNaN(date.getTime())) return "";
+
+  return date.toLocaleString(
+    [],
+    {
+      hour:"numeric",
+      minute:"2-digit"
+    }
+  );
+}
+
+function formatDate(dateString){
+
+  if(!dateString) return "";
+
+  const date = new Date(dateString);
+
+  return date.toLocaleDateString(
+    [],
+    {
+      day:"numeric",
+      month:"short"
+    }
+  );
+}
+
+function showToast(message){
+
+  $("toast").textContent = message;
+
+  $("toast").classList.add("show");
+
+  clearTimeout(window.__toastTimer);
+
+  window.__toastTimer =
+    setTimeout(
+      () => $("toast").classList.remove("show"),
+      2600
+    );
+}
+
+function avatarHTML(profile, size="42px"){
+
   const name =
-    profile?.full_name ||
-    profile?.username ||
-    profile?.name ||
-    "User";
+    getProfileName(profile);
 
   const avatar =
-    profile?.avatar_url ||
-    profile?.avatar ||
-    profile?.profile_image;
+    getAvatar(profile);
 
-  if (avatar) {
+  const initial =
+    escapeHTML(
+      name.charAt(0).toUpperCase()
+    );
+
+  if(avatar){
+
     return `
-      <div class="avatar ${sizeClass}">
-        <img src="${escapeHTML(avatar)}" alt="">
+      <div class="avatar"
+           style="width:${size};height:${size};min-width:${size};">
+        <img src="${escapeHTML(avatar)}"
+             alt=""
+             onerror="this.parentElement.innerHTML='${initial}'">
       </div>
     `;
   }
 
   return `
-    <div class="avatar ${sizeClass}">
-      ${escapeHTML(initials(name))}
+    <div class="avatar"
+         style="width:${size};height:${size};min-width:${size};">
+      ${initial}
     </div>
   `;
 }
 
-function displayName(profile) {
-  return (
-    profile?.full_name ||
-    profile?.username ||
-    profile?.name ||
-    "Poll Pulse User"
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+function setAuthMode(mode){
+
+  authMode = mode;
+
+  if(mode === "login"){
+
+    $("authTitle").textContent =
+      "Welcome back";
+
+    $("authSub").textContent =
+      "Login to join the conversation.";
+
+    $("authBtn").textContent =
+      "Login";
+
+    $("authToggle").textContent =
+      "Create an account";
+
+    $("nameField").classList.add("hidden");
+
+  }else{
+
+    $("authTitle").textContent =
+      "Create your account";
+
+    $("authSub").textContent =
+      "Join Poll Pulse and start asking.";
+
+    $("authBtn").textContent =
+      "Create account";
+
+    $("authToggle").textContent =
+      "Already have an account? Login";
+
+    $("nameField").classList.remove("hidden");
+  }
+}
+
+$("authToggle").onclick = () => {
+
+  setAuthMode(
+    authMode === "login"
+      ? "signup"
+      : "login"
   );
-}
+};
 
-function timeAgo(date) {
-  if (!date) return "";
+$("authBtn").onclick = async () => {
 
-  const d = new Date(date);
-  const now = new Date();
-  const diff = Math.floor((now - d) / 1000);
+  const email =
+    $("authEmail").value.trim();
 
-  if (diff < 60) return "now";
-  if (diff < 3600) return Math.floor(diff / 60) + "m";
-  if (diff < 86400) return Math.floor(diff / 3600) + "h";
-  if (diff < 604800) return Math.floor(diff / 86400) + "d";
+  const password =
+    $("authPassword").value;
 
-  return d.toLocaleDateString([], {
-    day: "numeric",
-    month: "short"
-  });
-}
+  if(!email || !password){
 
-function messageTime(date) {
-  if (!date) return "";
-
-  return new Date(date).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-}
-
-/* =========================================================
-   AUTH SCREEN
-   ========================================================= */
-
-function showAuth() {
-  app.innerHTML = `
-    <div class="auth-card">
-
-      <div class="brand">
-        <div class="brand-logo">P</div>
-        <div>
-          <div class="brand-name">Poll Pulse</div>
-          <div class="brand-sub">Messages</div>
-        </div>
-      </div>
-
-      <div class="auth-title">Welcome back</div>
-
-      <div class="auth-text">
-        Sign in to your Poll Pulse account to open your messages.
-      </div>
-
-      <div id="authError" class="auth-error"></div>
-
-      <div class="field">
-        <label>Email</label>
-        <input
-          id="emailInput"
-          type="email"
-          placeholder="you@example.com"
-          autocomplete="email"
-        >
-      </div>
-
-      <div class="field">
-        <label>Password</label>
-        <input
-          id="passwordInput"
-          type="password"
-          placeholder="Your password"
-          autocomplete="current-password"
-        >
-      </div>
-
-      <button class="primary-btn" id="loginBtn">
-        Sign in
-      </button>
-
-      <button class="secondary-btn" id="signupBtn">
-        Create account
-      </button>
-
-    </div>
-  `;
-
-  document.getElementById("loginBtn").onclick = login;
-  document.getElementById("signupBtn").onclick = signup;
-}
-
-async function login() {
-  const email = document.getElementById("emailInput").value.trim();
-  const password = document.getElementById("passwordInput").value;
-
-  if (!email || !password) {
-    showAuthError("Please enter email and password.");
-    return;
-  }
-
-  const btn = document.getElementById("loginBtn");
-
-  btn.disabled = true;
-  btn.textContent = "Signing in...";
-
-  const { error } = await sb.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    showAuthError(error.message);
-    btn.disabled = false;
-    btn.textContent = "Sign in";
-    return;
-  }
-
-  await boot();
-}
-
-async function signup() {
-  const email = document.getElementById("emailInput").value.trim();
-  const password = document.getElementById("passwordInput").value;
-
-  if (!email || !password) {
-    showAuthError("Please enter email and password.");
-    return;
-  }
-
-  if (password.length < 6) {
-    showAuthError("Password should be at least 6 characters.");
-    return;
-  }
-
-  const btn = document.getElementById("signupBtn");
-
-  btn.disabled = true;
-  btn.textContent = "Creating...";
-
-  const { error } = await sb.auth.signUp({
-    email,
-    password
-  });
-
-  if (error) {
-    showAuthError(error.message);
-  } else {
-    toast("Account created. Check your email if confirmation is enabled.");
-  }
-
-  btn.disabled = false;
-  btn.textContent = "Create account";
-}
-
-function showAuthError(message) {
-  const box = document.getElementById("authError");
-
-  if (!box) return;
-
-  box.textContent = message;
-  box.style.display = "block";
-}
-
-/* =========================================================
-   MAIN APP
-   ========================================================= */
-
-function renderApp() {
-  app.innerHTML = `
-    <div class="chat-app" id="chatApp">
-
-      <aside class="sidebar">
-
-        <div class="sidebar-top">
-
-          <div class="sidebar-brand">
-
-            <div class="sidebar-brand-left">
-              <div class="mini-logo">P</div>
-
-              <div>
-                <div class="sidebar-title">Messages</div>
-              </div>
-            </div>
-
-            <div class="top-actions">
-              <button
-                class="icon-btn"
-                id="themeBtn"
-                title="Theme"
-              >◐</button>
-
-              <button
-                class="icon-btn"
-                id="refreshBtn"
-                title="Refresh"
-              >↻</button>
-
-              <button
-                class="icon-btn"
-                id="logoutBtn"
-                title="Logout"
-              >⇥</button>
-            </div>
-
-          </div>
-
-          <div class="search">
-            <span class="search-icon">⌕</span>
-            <input
-              id="searchInput"
-              type="search"
-              placeholder="Search people..."
-            >
-          </div>
-
-        </div>
-
-        <div id="conversationList" class="conversation-list">
-          <div class="empty-list">
-            Loading conversations...
-          </div>
-        </div>
-
-      </aside>
-
-
-      <main class="chat-panel">
-
-        <div id="chatEmpty" class="chat-empty">
-
-          <div class="chat-empty-icon">✉</div>
-
-          <h2>Your messages</h2>
-
-          <p>
-            Select someone from your conversations to start chatting.
-          </p>
-
-        </div>
-
-
-        <div id="chatContent" style="display:none; height:100%; flex-direction:column;">
-
-          <header class="chat-header">
-
-            <button
-              class="icon-btn back-btn"
-              id="backBtn"
-            >←</button>
-
-            <div id="chatAvatar"></div>
-
-            <div class="chat-user">
-              <div id="chatUserName" class="chat-user-name">
-                User
-              </div>
-
-              <div id="chatStatus" class="chat-status">
-                Messages
-              </div>
-            </div>
-
-            <button
-              class="icon-btn"
-              id="clearChatBtn"
-              title="Refresh messages"
-            >↻</button>
-
-          </header>
-
-
-          <div id="messages" class="messages">
-          </div>
-
-
-          <div id="typingIndicator" class="typing">
-          </div>
-
-
-          <div id="replyBar" class="reply-bar">
-
-            <div class="reply-content">
-              <div class="reply-label">Replying</div>
-              <div id="replyText" class="reply-text"></div>
-            </div>
-
-            <button class="icon-btn" id="cancelReply">
-              ×
-            </button>
-
-          </div>
-
-
-          <div class="composer">
-
-            <textarea
-              id="chatInput"
-              placeholder="Write a message..."
-              rows="1"
-            ></textarea>
-
-            <button
-              class="send-btn"
-              id="sendBtn"
-              disabled
-              title="Send"
-            >➤</button>
-
-          </div>
-
-        </div>
-
-      </main>
-
-    </div>
-  `;
-
-  bindMainEvents();
-}
-
-function bindMainEvents() {
-
-  document.getElementById("themeBtn").onclick = () => {
-    document.body.classList.toggle("dark");
-
-    localStorage.setItem(
-      "pollPulseDark",
-      document.body.classList.contains("dark")
+    showToast(
+      "Email and password required."
     );
-  };
 
-  if (localStorage.getItem("pollPulseDark") === "true") {
-    document.body.classList.add("dark");
+    return;
   }
 
-  document.getElementById("refreshBtn").onclick = loadConversations;
+  $("authBtn").disabled = true;
 
-  document.getElementById("logoutBtn").onclick = async () => {
-    await sb.auth.signOut();
-    selectedUser = null;
-    showAuth();
-  };
+  try{
 
-  document.getElementById("backBtn").onclick = () => {
-    document.getElementById("chatApp")
-      .classList.remove("mobile-chat");
+    if(authMode === "login"){
 
-    selectedUser = null;
-    disconnectMessages();
-  };
+      const { error } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
 
-  document.getElementById("clearChatBtn").onclick = () => {
-    if (selectedUser) {
-      loadMessages();
-    }
-  };
+      if(error) throw error;
 
-  document.getElementById("cancelReply").onclick = clearReply;
+    }else{
 
-  const input = document.getElementById("chatInput");
+      const name =
+        $("authName").value.trim();
 
-  input.addEventListener("input", () => {
-    input.style.height = "auto";
-    input.style.height =
-      Math.min(input.scrollHeight, 120) + "px";
+      const { data,error } =
+        await supabase.auth.signUp({
+          email,
+          password,
+          options:{
+            data:{
+              full_name:name
+            }
+          }
+        });
 
-    document.getElementById("sendBtn").disabled =
-      !input.value.trim();
+      if(error) throw error;
 
-    handleTyping();
-  });
+      if(data.user){
 
-  input.addEventListener("keydown", e => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-
-      if (input.value.trim()) {
-        sendMessage();
+        await createProfileIfMissing(
+          data.user,
+          name
+        );
       }
-    }
-  });
 
-  document.getElementById("sendBtn").onclick = sendMessage;
-
-  document.getElementById("searchInput").addEventListener(
-    "input",
-    e => searchUsers(e.target.value)
-  );
-}
-
-/* =========================================================
-   LOAD CONVERSATIONS
-   ========================================================= */
-
-async function loadConversations() {
-
-  const list = document.getElementById("conversationList");
-
-  if (!list) return;
-
-  list.innerHTML = `
-    <div class="empty-list">
-      Loading...
-    </div>
-  `;
-
-  try {
-
-    const { data, error } = await sb
-      .from("messages")
-      .select(`
-        sender_id,
-        receiver_id,
-        message,
-        created_at
-      `)
-      .or(
-        `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
-      )
-      .order("created_at", {
-        ascending: false
-      })
-      .limit(300);
-
-    if (error) throw error;
-
-    const userIds = [];
-
-    for (const row of data || []) {
-      const other =
-        row.sender_id === currentUser.id
-          ? row.receiver_id
-          : row.sender_id;
-
-      if (other && !userIds.includes(other)) {
-        userIds.push(other);
-      }
+      showToast(
+        "Account created. Check email if confirmation is enabled."
+      );
     }
 
-    if (!userIds.length) {
-      list.innerHTML = `
-        <div class="empty-list">
-          <strong>No conversations yet.</strong>
-          <br><br>
-          Search for a user above and open a conversation.
-        </div>
-      `;
-
-      return;
-    }
-
-    const { data: profiles, error: profileError } =
-      await sb
-        .from("profiles")
-        .select("*")
-        .in("id", userIds);
-
-    if (profileError) throw profileError;
-
-    const profileMap = {};
-
-    for (const profile of profiles || []) {
-      profileMap[profile.id] = profile;
-    }
-
-    const latest = {};
-
-    for (const row of data || []) {
-
-      const other =
-        row.sender_id === currentUser.id
-          ? row.receiver_id
-          : row.sender_id;
-
-      if (!latest[other]) {
-        latest[other] = row;
-      }
-    }
-
-    list.innerHTML = userIds.map(id => {
-
-      const profile = profileMap[id] || {
-        id,
-        full_name: "Poll Pulse User"
-      };
-
-      const row = latest[id];
-
-      return `
-        <div
-          class="conversation"
-          data-user-id="${escapeHTML(id)}"
-        >
-
-          ${avatarHTML(profile)}
-
-          <div class="conversation-info">
-
-            <div class="conversation-line">
-
-              <div class="conversation-name">
-                ${escapeHTML(displayName(profile))}
-              </div>
-
-              <div class="conversation-time">
-                ${timeAgo(row?.created_at)}
-              </div>
-
-            </div>
-
-            <div class="conversation-preview">
-              ${escapeHTML(row?.message || "No message")}
-            </div>
-
-          </div>
-
-        </div>
-      `;
-
-    }).join("");
-
-    document.querySelectorAll(".conversation")
-      .forEach(el => {
-
-        el.onclick = () => {
-          const id = el.dataset.userId;
-          openConversation(id);
-        };
-
-      });
-
-  } catch (error) {
+  }catch(error){
 
     console.error(error);
 
-    list.innerHTML = `
-      <div class="empty-list">
-        Could not load conversations.
-        <br><br>
-        <small>${escapeHTML(error.message)}</small>
-      </div>
-    `;
+    showToast(
+      error.message || "Authentication failed."
+    );
+
+  }finally{
+
+    $("authBtn").disabled = false;
   }
-}
+};
+
 
 /* =========================================================
-   SEARCH
-   ========================================================= */
+   PROFILE
+========================================================= */
 
-let searchTimeout = null;
+async function createProfileIfMissing(
+  user,
+  name=""
+){
 
-function searchUsers(query) {
+  try{
 
-  clearTimeout(searchTimeout);
-
-  const value = query.trim();
-
-  if (!value) {
-    loadConversations();
-    return;
-  }
-
-  searchTimeout = setTimeout(async () => {
-
-    const list = document.getElementById("conversationList");
-
-    list.innerHTML = `
-      <div class="empty-list">
-        Searching...
-      </div>
-    `;
-
-    try {
-
-      const { data, error } = await sb
+    const { data } =
+      await supabase
         .from("profiles")
         .select("*")
-        .or(
-          `username.ilike.%${value}%,full_name.ilike.%${value}%,name.ilike.%${value}%`
-        )
-        .neq("id", currentUser.id)
-        .limit(30);
+        .eq("id",user.id)
+        .maybeSingle();
 
-      if (error) throw error;
+    if(data) return;
 
-      if (!data?.length) {
+    const username =
+      (
+        name ||
+        user.email?.split("@")[0] ||
+        "user"
+      )
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g,"")
+      .slice(0,20);
 
-        list.innerHTML = `
-          <div class="empty-list">
-            No users found for
-            <strong>${escapeHTML(value)}</strong>
-          </div>
-        `;
-
-        return;
-      }
-
-      list.innerHTML = data.map(profile => `
-        <div
-          class="conversation"
-          data-user-id="${escapeHTML(profile.id)}"
-        >
-
-          ${avatarHTML(profile)}
-
-          <div class="conversation-info">
-
-            <div class="conversation-name">
-              ${escapeHTML(displayName(profile))}
-            </div>
-
-            <div class="conversation-preview">
-              @${escapeHTML(profile.username || "")}
-            </div>
-
-          </div>
-
-        </div>
-      `).join("");
-
-      document.querySelectorAll(".conversation")
-        .forEach(el => {
-          el.onclick = () => {
-            openConversation(el.dataset.userId);
-          };
+    const { error } =
+      await supabase
+        .from("profiles")
+        .insert({
+          id:user.id,
+          username,
+          full_name:name || username
         });
 
-    } catch (error) {
+    if(error){
 
-      console.error(error);
-
-      list.innerHTML = `
-        <div class="empty-list">
-          Search failed.
-          <br><br>
-          <small>${escapeHTML(error.message)}</small>
-        </div>
-      `;
-
+      console.warn(
+        "Profile insert failed:",
+        error
+      );
     }
 
-  }, 350);
+  }catch(error){
+
+    console.warn(error);
+  }
 }
 
+async function loadCurrentProfile(){
+
+  if(!currentUser) return;
+
+  const { data,error } =
+    await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id",currentUser.id)
+      .maybeSingle();
+
+  if(error){
+
+    console.warn(
+      "Profile load:",
+      error
+    );
+
+    await createProfileIfMissing(
+      currentUser,
+      currentUser.user_metadata?.full_name || ""
+    );
+
+    return loadCurrentProfile();
+  }
+
+  currentProfile = data;
+
+  updateCurrentUserUI();
+}
+
+function updateCurrentUserUI(){
+
+  if(!currentProfile) return;
+
+  const name =
+    getProfileName(currentProfile);
+
+  const username =
+    getUsername(currentProfile);
+
+  const avatar =
+    getAvatar(currentProfile);
+
+  $("sidebarName").textContent =
+    name;
+
+  $("sidebarHandle").textContent =
+    "@" + username;
+
+  $("profileName").textContent =
+    name;
+
+  $("profileHandle").textContent =
+    "@" + username;
+
+  $("profileBio").textContent =
+    getBio(currentProfile);
+
+  setAvatarElement(
+    $("sidebarAvatar"),
+    currentProfile
+  );
+
+  setAvatarElement(
+    $("profileAvatar"),
+    currentProfile
+  );
+}
+
+function setAvatarElement(el,profile){
+
+  const name =
+    getProfileName(profile);
+
+  const avatar =
+    getAvatar(profile);
+
+  if(avatar){
+
+    el.innerHTML =
+      `<img src="${escapeHTML(avatar)}"
+            alt=""
+            onerror="this.remove()">`;
+
+  }else{
+
+    el.textContent =
+      name.charAt(0).toUpperCase();
+  }
+}
+
+
 /* =========================================================
-   OPEN CHAT
-   ========================================================= */
+   NAVIGATION
+========================================================= */
 
-async function openConversation(userId) {
+const pageTitles = {
+  home:"Home",
+  discover:"Discover",
+  create:"Create Poll",
+  chat:"Messages",
+  notifications:"Notifications",
+  profile:"Profile"
+};
 
-  if (!userId || userId === currentUser.id) return;
+function openPage(page){
 
-  const { data, error } = await sb
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
-    .maybeSingle();
+  currentPage = page;
 
-  if (error) {
-    toast(error.message);
-    return;
-  }
-
-  if (!data) {
-    toast("User profile not found.");
-    return;
-  }
-
-  selectedUser = data;
-
-  document.querySelectorAll(".conversation")
+  document
+    .querySelectorAll(".page")
     .forEach(el => {
-      el.classList.toggle(
+
+      el.classList.remove("active");
+
+      if(el.id === `page-${page}`){
+        el.classList.add("active");
+      }
+    });
+
+  if(page === "chat"){
+
+    $("page-chat").style.display =
+      "block";
+
+    $("page-chat").classList.add("active");
+
+  }else{
+
+    $("page-chat").style.display =
+      "none";
+  }
+
+  $("topbarTitle").textContent =
+    pageTitles[page] || "Poll Pulse";
+
+  document
+    .querySelectorAll(".nav-btn[data-page],.mobile-nav button[data-page]")
+    .forEach(btn => {
+
+      btn.classList.toggle(
         "active",
-        el.dataset.userId === userId
+        btn.dataset.page === page
       );
     });
 
-  document.getElementById("chatEmpty").style.display = "none";
+  if(page === "home"){
+    loadPolls();
+  }
 
-  document.getElementById("chatContent").style.display = "flex";
+  if(page === "profile"){
+    loadProfilePolls();
+  }
 
-  document.getElementById("chatAvatar").innerHTML =
-    avatarHTML(selectedUser);
+  if(page === "notifications"){
+    loadNotifications();
+  }
 
-  document.getElementById("chatUserName").textContent =
-    displayName(selectedUser);
-
-  document.getElementById("chatStatus").textContent =
-    selectedUser.username
-      ? "@" + selectedUser.username
-      : "Poll Pulse";
-
-  document.getElementById("chatApp")
-    .classList.add("mobile-chat");
-
-  clearReply();
-
-  await loadMessages();
-  subscribeToMessages();
+  if(page === "chat"){
+    loadChatUsers();
+  }
 }
 
+document
+  .querySelectorAll("[data-page]")
+  .forEach(btn => {
+
+    btn.addEventListener(
+      "click",
+      () => openPage(btn.dataset.page)
+    );
+  });
+
+
 /* =========================================================
-   LOAD MESSAGES
-   ========================================================= */
+   THEME
+========================================================= */
 
-async function loadMessages() {
+function toggleTheme(){
 
-  if (!selectedUser) return;
+  document.body.classList.toggle("dark");
 
-  const box = document.getElementById("messages");
+  localStorage.setItem(
+    "pollpulse-theme",
+    document.body.classList.contains("dark")
+      ? "dark"
+      : "light"
+  );
+}
 
-  box.innerHTML = `
-    <div class="empty-list">
-      Loading messages...
-    </div>
-  `;
+if(
+  localStorage.getItem("pollpulse-theme")
+  === "dark"
+){
+  document.body.classList.add("dark");
+}
 
-  const { data, error } = await sb
-    .from("messages")
-    .select("*")
-    .or(
-      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedUser.id}),and(sender_id.eq.${selectedUser.id},receiver_id.eq.${currentUser.id})`
-    )
-    .order("created_at", {
-      ascending: true
-    });
+$("themeBtn").onclick =
+  toggleTheme;
 
-  if (error) {
+$("topThemeBtn").onclick =
+  toggleTheme;
+
+
+/* =========================================================
+   POLLS
+========================================================= */
+
+async function loadPolls(){
+
+  const container =
+    $("homeFeed");
+
+  container.innerHTML =
+    `<div class="loader">Loading polls…</div>`;
+
+  const { data,error } =
+    await supabase
+      .from("polls")
+      .select("*")
+      .order("created_at",{ascending:false})
+      .limit(50);
+
+  if(error){
 
     console.error(error);
 
-    box.innerHTML = `
-      <div class="empty-list">
-        Could not load messages.
-        <br><br>
-        <small>${escapeHTML(error.message)}</small>
-      </div>
-    `;
-
-    return;
-  }
-
-  renderMessages(data || []);
-
-  await markMessagesRead();
-}
-
-function renderMessages(rows) {
-
-  const box = document.getElementById("messages");
-
-  if (!rows.length) {
-
-    box.innerHTML = `
-      <div class="chat-empty">
-        <div class="chat-empty-icon">♡</div>
-
-        <h2>Start a conversation</h2>
-
-        <p>
-          Send the first message to ${escapeHTML(
-            displayName(selectedUser)
-          )}.
+    container.innerHTML = `
+      <div class="empty">
+        <h3>Couldn't load polls</h3>
+        <p style="margin-top:8px;">
+          ${escapeHTML(error.message)}
         </p>
       </div>
     `;
@@ -1532,403 +2140,2023 @@ function renderMessages(rows) {
     return;
   }
 
-  box.innerHTML = rows.map(message => {
+  pollsCache =
+    data || [];
 
-    const mine =
-      message.sender_id === currentUser.id;
+  if(!pollsCache.length){
 
-    const deleted =
-      !!message.deleted_at;
+    container.innerHTML = `
+      <div class="empty">
+        <div style="font-size:40px;">📊</div>
+        <h3 style="margin-top:10px;color:var(--text);">
+          No polls yet
+        </h3>
+        <p style="margin-top:6px;">
+          Be the first person to create one.
+        </p>
+      </div>
+    `;
 
-    let content = "";
+    return;
+  }
 
-    if (deleted) {
+  const userIds =
+    [...new Set(
+      pollsCache
+        .map(getPollUserId)
+        .filter(Boolean)
+    )];
 
-      content = `
-        <div class="deleted">
-          This message was deleted
+  let profiles = [];
+
+  if(userIds.length){
+
+    const result =
+      await supabase
+        .from("profiles")
+        .select("*")
+        .in("id",userIds);
+
+    profiles =
+      result.data || [];
+  }
+
+  const profileMap =
+    new Map(
+      profiles.map(p => [p.id,p])
+    );
+
+  container.innerHTML =
+    pollsCache
+      .map(poll =>
+        renderPoll(
+          poll,
+          profileMap.get(
+            getPollUserId(poll)
+          )
+        )
+      )
+      .join("");
+
+  attachPollEvents();
+}
+
+function renderPoll(poll,profile){
+
+  const options =
+    getPollOptions(poll);
+
+  const question =
+    getPollQuestion(poll);
+
+  const created =
+    firstValue(
+      poll,
+      ["created_at","date"],
+      ""
+    );
+
+  const pollId =
+    poll.id;
+
+  const author =
+    profile ||
+    {
+      full_name:"User",
+      username:"user"
+    };
+
+  return `
+    <article class="poll-card"
+             data-poll-id="${escapeHTML(pollId)}">
+
+      <div class="poll-author">
+
+        ${avatarHTML(author)}
+
+        <div class="poll-author-info">
+          <div class="poll-author-name">
+            ${escapeHTML(getProfileName(author))}
+          </div>
+
+          <div class="poll-author-handle">
+            @${escapeHTML(getUsername(author))}
+          </div>
         </div>
-      `;
 
-    } else {
+        <div class="poll-time">
+          ${escapeHTML(formatDate(created))}
+        </div>
 
-      content = escapeHTML(
-        message.message || ""
-      ).replace(/\n/g, "<br>");
+      </div>
+
+      <div class="poll-question">
+        ${escapeHTML(question)}
+      </div>
+
+      <div class="poll-options">
+
+        ${
+          options.length
+          ? options.map((option,index) => `
+              <button
+                class="poll-option vote-option"
+                data-poll="${escapeHTML(pollId)}"
+                data-option="${index}"
+              >
+                <span class="poll-option-bar"></span>
+
+                <span class="poll-option-content">
+                  <span>
+                    ${escapeHTML(
+                      typeof option === "object"
+                        ? firstValue(option,["text","label","name"],"Option")
+                        : option
+                    )}
+                  </span>
+
+                  <strong class="vote-percent">
+                    —
+                  </strong>
+                </span>
+
+              </button>
+            `).join("")
+          : `
+            <div class="empty" style="padding:15px;">
+              No options found.
+            </div>
+          `
+        }
+
+      </div>
+
+      <div class="poll-actions">
+
+        <button
+          class="action-btn like-poll"
+          data-poll="${escapeHTML(pollId)}"
+        >
+          ♡ <span>Like</span>
+        </button>
+
+        <button
+          class="action-btn comment-poll"
+          data-poll="${escapeHTML(pollId)}"
+        >
+          💬 <span>Discuss</span>
+        </button>
+
+        <span class="poll-count">
+          Poll
+        </span>
+
+      </div>
+
+    </article>
+  `;
+}
+
+function attachPollEvents(){
+
+  document
+    .querySelectorAll(".vote-option")
+    .forEach(btn => {
+
+      btn.onclick =
+        () => votePoll(
+          btn.dataset.poll,
+          Number(btn.dataset.option)
+        );
+    });
+
+  document
+    .querySelectorAll(".like-poll")
+    .forEach(btn => {
+
+      btn.onclick =
+        () => likePoll(
+          btn.dataset.poll,
+          btn
+        );
+    });
+
+  document
+    .querySelectorAll(".comment-poll")
+    .forEach(btn => {
+
+      btn.onclick =
+        () => {
+
+          openPage("chat");
+
+          showToast(
+            "Choose someone to discuss this poll with."
+          );
+        };
+    });
+}
+
+
+/* =========================================================
+   VOTING
+========================================================= */
+
+async function votePoll(
+  pollId,
+  optionIndex
+){
+
+  if(!currentUser) return;
+
+  const existing =
+    await supabase
+      .from("votes")
+      .select("*")
+      .eq("poll_id",pollId)
+      .eq("user_id",currentUser.id)
+      .maybeSingle();
+
+  if(existing.data){
+
+    showToast(
+      "You already voted on this poll."
+    );
+
+    return;
+  }
+
+  const attempts = [
+
+    {
+      user_id:currentUser.id,
+      poll_id:pollId,
+      option_index:optionIndex
+    },
+
+    {
+      user_id:currentUser.id,
+      poll_id:pollId,
+      option_id:String(optionIndex)
+    },
+
+    {
+      user_id:currentUser.id,
+      poll_id:pollId,
+      selected_option:optionIndex
+    },
+
+    {
+      user_id:currentUser.id,
+      poll_id:pollId,
+      choice:optionIndex
     }
 
-    let reply = "";
+  ];
 
-    if (message.reply_to) {
+  let success = false;
 
-      const original = rows.find(
-        x => String(x.id) === String(message.reply_to)
+  for(const payload of attempts){
+
+    const { error } =
+      await supabase
+        .from("votes")
+        .insert(payload);
+
+    if(!error){
+
+      success = true;
+      break;
+    }
+  }
+
+  if(!success){
+
+    showToast(
+      "Vote failed. Check your votes table columns."
+    );
+
+    return;
+  }
+
+  showToast("Vote recorded ✓");
+
+  loadPolls();
+}
+
+
+/* =========================================================
+   LIKES
+========================================================= */
+
+async function likePoll(
+  pollId,
+  button
+){
+
+  if(!currentUser) return;
+
+  const existing =
+    await supabase
+      .from("likes")
+      .select("*")
+      .eq("user_id",currentUser.id)
+      .eq("poll_id",pollId)
+      .maybeSingle();
+
+  if(existing.data){
+
+    const { error } =
+      await supabase
+        .from("likes")
+        .delete()
+        .eq("user_id",currentUser.id)
+        .eq("poll_id",pollId);
+
+    if(error){
+
+      showToast(
+        "Couldn't unlike."
       );
 
-      if (original) {
-
-        reply = `
-          <div class="reply-preview">
-            ${escapeHTML(
-              original.message || "Message"
-            )}
-          </div>
-        `;
-
-      }
+      return;
     }
 
-    return `
+    button.classList.remove("liked");
+    button.innerHTML =
+      "♡ <span>Like</span>";
+
+  }else{
+
+    const { error } =
+      await supabase
+        .from("likes")
+        .insert({
+          user_id:currentUser.id,
+          poll_id:pollId
+        });
+
+    if(error){
+
+      showToast(
+        "Like failed."
+      );
+
+      return;
+    }
+
+    button.classList.add("liked");
+    button.innerHTML =
+      "♥ <span>Liked</span>";
+  }
+}
+
+
+/* =========================================================
+   CREATE POLL
+========================================================= */
+
+$("addOptionBtn").onclick = () => {
+
+  const container =
+    $("optionsContainer");
+
+  const count =
+    container.querySelectorAll(
+      ".poll-option-input"
+    ).length;
+
+  if(count >= 8){
+
+    showToast(
+      "Maximum 8 options."
+    );
+
+    return;
+  }
+
+  const row =
+    document.createElement("div");
+
+  row.className =
+    "option-row";
+
+  row.innerHTML = `
+    <input
+      class="poll-option-input"
+      placeholder="Option ${count + 1}"
+    >
+
+    <button
+      class="remove-option"
+      type="button"
+    >
+      ✕
+    </button>
+  `;
+
+  row
+    .querySelector(".remove-option")
+    .onclick = () => row.remove();
+
+  container.appendChild(row);
+};
+
+$("createPollBtn").onclick =
+  createPoll;
+
+async function createPoll(){
+
+  const question =
+    $("pollQuestion").value.trim();
+
+  const options =
+    [...document.querySelectorAll(
+      ".poll-option-input"
+    )]
+    .map(input => input.value.trim())
+    .filter(Boolean);
+
+  if(!question){
+
+    showToast(
+      "Write a question first."
+    );
+
+    return;
+  }
+
+  if(options.length < 2){
+
+    showToast(
+      "Add at least 2 options."
+    );
+
+    return;
+  }
+
+  $("createPollBtn").disabled = true;
+
+  const payloads = [
+
+    {
+      user_id:currentUser.id,
+      question,
+      options
+    },
+
+    {
+      creator_id:currentUser.id,
+      question,
+      options
+    },
+
+    {
+      user_id:currentUser.id,
+      title:question,
+      options
+    },
+
+    {
+      creator_id:currentUser.id,
+      title:question,
+      options
+    }
+
+  ];
+
+  let success = false;
+
+  for(const payload of payloads){
+
+    const { error } =
+      await supabase
+        .from("polls")
+        .insert(payload);
+
+    if(!error){
+
+      success = true;
+      break;
+    }
+  }
+
+  $("createPollBtn").disabled = false;
+
+  if(!success){
+
+    showToast(
+      "Poll create failed. Your polls table may use different column names."
+    );
+
+    return;
+  }
+
+  $("pollQuestion").value = "";
+
+  document.querySelectorAll(
+    ".poll-option-input"
+  ).forEach((input,index) => {
+
+    if(index < 2){
+      input.value = "";
+    }else{
+      input.closest(".option-row")?.remove();
+    }
+  });
+
+  showToast(
+    "Poll published 🎉"
+  );
+
+  openPage("home");
+}
+
+
+/* =========================================================
+   DISCOVER
+========================================================= */
+
+let searchTimer = null;
+
+$("discoverSearch").oninput =
+  () => {
+
+    clearTimeout(searchTimer);
+
+    searchTimer =
+      setTimeout(
+        searchProfiles(
+          $("discoverSearch").value
+        ),
+        300
+      );
+  };
+
+async function searchProfiles(query){
+
+  query =
+    query.trim();
+
+  const container =
+    $("discoverResults");
+
+  if(!query){
+
+    container.innerHTML = `
+      <div class="empty">
+        Search for people on Poll Pulse.
+      </div>
+    `;
+
+    return;
+  }
+
+  const { data,error } =
+    await supabase
+      .from("profiles")
+      .select("*")
+      .or(
+        `username.ilike.%${query}%,full_name.ilike.%${query}%,name.ilike.%${query}%`
+      )
+      .limit(30);
+
+  if(error){
+
+    console.error(error);
+
+    container.innerHTML = `
+      <div class="empty">
+        Search failed.
+      </div>
+    `;
+
+    return;
+  }
+
+  const users =
+    (data || [])
+      .filter(
+        user => user.id !== currentUser.id
+      );
+
+  if(!users.length){
+
+    container.innerHTML = `
+      <div class="empty">
+        No people found.
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML =
+    users.map(user => `
       <div
-        class="message-row ${mine ? "mine" : ""}"
-        data-message-id="${escapeHTML(message.id)}"
-        data-message-text="${escapeHTML(message.message || "")}"
+        class="search-user"
+        data-user-id="${escapeHTML(user.id)}"
       >
 
-        <div class="message-wrap">
+        ${avatarHTML(user)}
 
-          <div class="message-bubble">
+        <div class="search-user-info">
 
-            ${reply}
+          <div style="font-weight:850;">
+            ${escapeHTML(getProfileName(user))}
+          </div>
 
-            ${content}
+          <div style="font-size:12px;color:var(--muted);">
+            @${escapeHTML(getUsername(user))}
+          </div>
+
+        </div>
+
+        <button
+          class="secondary-btn discover-message"
+          data-user-id="${escapeHTML(user.id)}"
+        >
+          Message
+        </button>
+
+      </div>
+    `).join("");
+
+  container
+    .querySelectorAll(".search-user")
+    .forEach(card => {
+
+      card.onclick = e => {
+
+        if(
+          e.target.closest(
+            ".discover-message"
+          )
+        ) return;
+
+        openUserProfile(
+          card.dataset.userId
+        );
+      };
+    });
+
+  container
+    .querySelectorAll(".discover-message")
+    .forEach(btn => {
+
+      btn.onclick = e => {
+
+        e.stopPropagation();
+
+        startChatById(
+          btn.dataset.userId
+        );
+      };
+    });
+}
+
+
+/* =========================================================
+   USER PROFILE / FOLLOW
+========================================================= */
+
+async function openUserProfile(userId){
+
+  const { data:user,error } =
+    await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id",userId)
+      .maybeSingle();
+
+  if(error || !user){
+
+    showToast(
+      "User not found."
+    );
+
+    return;
+  }
+
+  const followResult =
+    await supabase
+      .from("follows")
+      .select("*")
+      .eq("follower_id",currentUser.id)
+      .eq("following_id",userId)
+      .maybeSingle();
+
+  const following =
+    !!followResult.data;
+
+  const avatar =
+    getAvatar(user);
+
+  const name =
+    getProfileName(user);
+
+  const username =
+    getUsername(user);
+
+  const modal =
+    document.createElement("div");
+
+  modal.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    z-index:500;
+    display:grid;
+    place-items:center;
+    padding:20px;
+  `;
+
+  modal.innerHTML = `
+    <div style="
+      width:100%;
+      max-width:400px;
+      background:var(--card);
+      color:var(--text);
+      border-radius:24px;
+      padding:24px;
+      text-align:center;
+    ">
+
+      ${avatarHTML(user,"78px")}
+
+      <h2 style="margin-top:12px;">
+        ${escapeHTML(name)}
+      </h2>
+
+      <p style="color:var(--muted);">
+        @${escapeHTML(username)}
+      </p>
+
+      <p style="margin-top:12px;line-height:1.5;">
+        ${escapeHTML(getBio(user))}
+      </p>
+
+      <div style="
+        display:flex;
+        gap:8px;
+        margin-top:20px;
+      ">
+
+        <button
+          id="modalFollowBtn"
+          class="primary-btn"
+          style="margin:0;"
+        >
+          ${following ? "Following" : "Follow"}
+        </button>
+
+        <button
+          id="modalMessageBtn"
+          class="secondary-btn"
+          style="flex:1;"
+        >
+          Message
+        </button>
+
+      </div>
+
+      <button
+        id="modalCloseBtn"
+        class="secondary-btn"
+        style="width:100%;margin-top:9px;"
+      >
+        Close
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  $("modalCloseBtn").onclick =
+    () => modal.remove();
+
+  $("modalMessageBtn").onclick =
+    () => {
+
+      modal.remove();
+
+      startChatById(userId);
+    };
+
+  $("modalFollowBtn").onclick =
+    async () => {
+
+      const btn =
+        $("modalFollowBtn");
+
+      if(following){
+
+        const { error } =
+          await supabase
+            .from("follows")
+            .delete()
+            .eq("follower_id",currentUser.id)
+            .eq("following_id",userId);
+
+        if(error){
+
+          showToast(
+            "Couldn't unfollow."
+          );
+
+          return;
+        }
+
+        btn.textContent =
+          "Follow";
+
+      }else{
+
+        const { error } =
+          await supabase
+            .from("follows")
+            .insert({
+              follower_id:currentUser.id,
+              following_id:userId
+            });
+
+        if(error){
+
+          showToast(
+            "Couldn't follow."
+          );
+
+          return;
+        }
+
+        btn.textContent =
+          "Following";
+      }
+    };
+}
+
+
+/* =========================================================
+   CHAT USERS
+========================================================= */
+
+async function loadChatUsers(
+  search=""
+){
+
+  const container =
+    $("chatUsers");
+
+  const { data:profiles,error } =
+    await supabase
+      .from("profiles")
+      .select("*")
+      .neq("id",currentUser.id)
+      .limit(100);
+
+  if(error){
+
+    console.error(error);
+
+    container.innerHTML = `
+      <div class="empty">
+        Couldn't load users.
+      </div>
+    `;
+
+    return;
+  }
+
+  let users =
+    profiles || [];
+
+  if(search){
+
+    const q =
+      search.toLowerCase();
+
+    users =
+      users.filter(user => {
+
+        const name =
+          getProfileName(user)
+            .toLowerCase();
+
+        const username =
+          getUsername(user)
+            .toLowerCase();
+
+        return (
+          name.includes(q) ||
+          username.includes(q)
+        );
+      });
+  }
+
+  if(!users.length){
+
+    container.innerHTML = `
+      <div class="empty">
+        No people found.
+      </div>
+    `;
+
+    return;
+  }
+
+  const unreadMap =
+    await getUnreadCounts(
+      users.map(u => u.id)
+    );
+
+  container.innerHTML =
+    users.map(user => {
+
+      const unread =
+        unreadMap[user.id] || 0;
+
+      return `
+        <div
+          class="chat-user ${
+            currentChatUser?.id === user.id
+              ? "active"
+              : ""
+          }"
+          data-id="${escapeHTML(user.id)}"
+        >
+
+          ${avatarHTML(user)}
+
+          <div class="chat-user-info">
+
+            <div class="chat-user-name">
+              ${escapeHTML(getProfileName(user))}
+            </div>
+
+            <div class="chat-preview">
+              @${escapeHTML(getUsername(user))}
+            </div>
 
           </div>
 
-          <div class="message-meta">
+          ${
+            unread
+              ? `<span class="chat-unread">${unread}</span>`
+              : ""
+          }
 
-            <span>
-              ${messageTime(message.created_at)}
-            </span>
+        </div>
+      `;
+    }).join("");
 
-            ${
-              mine
-                ? `<span>${message.read ? "✓✓" : "✓"}</span>`
-                : ""
-            }
+  container
+    .querySelectorAll(".chat-user")
+    .forEach(el => {
 
-          </div>
+      el.onclick =
+        () => {
+
+          const user =
+            users.find(
+              u => u.id === el.dataset.id
+            );
+
+          if(user){
+            openChat(user);
+          }
+        };
+    });
+}
+
+$("chatSearch").oninput =
+  e => {
+
+    loadChatUsers(
+      e.target.value
+    );
+  };
+
+
+async function getUnreadCounts(userIds){
+
+  const result = {};
+
+  if(!userIds.length) return result;
+
+  const { data,error } =
+    await supabase
+      .from("messages")
+      .select("sender_id")
+      .eq("receiver_id",currentUser.id)
+      .eq("read",false)
+      .in("sender_id",userIds);
+
+  if(error){
+
+    console.warn(
+      "Unread count:",
+      error
+    );
+
+    return result;
+  }
+
+  (data || []).forEach(row => {
+
+    result[row.sender_id] =
+      (result[row.sender_id] || 0) + 1;
+  });
+
+  return result;
+}
+
+
+/* =========================================================
+   OPEN CHAT
+========================================================= */
+
+async function startChatById(userId){
+
+  const { data:user } =
+    await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id",userId)
+      .maybeSingle();
+
+  if(!user){
+
+    showToast(
+      "User not found."
+    );
+
+    return;
+  }
+
+  openPage("chat");
+
+  openChat(user);
+}
+
+async function openChat(user){
+
+  currentChatUser =
+    user;
+
+  $("chatLayout")
+    .classList.add(
+      "conversation-open"
+    );
+
+  $("chatEmpty")
+    .classList.add("hidden");
+
+  $("chatConversation")
+    .classList.remove("hidden");
+
+  $("chatTitle").textContent =
+    getProfileName(user);
+
+  $("chatStatus").textContent =
+    "@" + getUsername(user);
+
+  setAvatarElement(
+    $("chatAvatar"),
+    user
+  );
+
+  await markChatRead();
+
+  await loadMessages();
+
+  await loadChatUsers(
+    $("chatSearch").value
+  );
+
+  subscribeMessages();
+}
+
+
+/* =========================================================
+   CLOSE CHAT MOBILE
+========================================================= */
+
+$("chatBackBtn").onclick =
+  () => {
+
+    $("chatLayout")
+      .classList.remove(
+        "conversation-open"
+      );
+
+    currentChatUser =
+      null;
+
+    if(messageChannel){
+
+      supabase.removeChannel(
+        messageChannel
+      );
+
+      messageChannel = null;
+    }
+  };
+
+
+/* =========================================================
+   LOAD MESSAGES
+========================================================= */
+
+async function loadMessages(){
+
+  if(!currentChatUser) return;
+
+  const { data,error } =
+    await supabase
+      .from("messages")
+      .select("*")
+      .or(
+        `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
+      )
+      .order(
+        "created_at",
+        {ascending:true}
+      )
+      .limit(500);
+
+  if(error){
+
+    console.error(error);
+
+    $("messages").innerHTML = `
+      <div class="empty">
+        Couldn't load messages.<br>
+        <small>${escapeHTML(error.message)}</small>
+      </div>
+    `;
+
+    return;
+  }
+
+  const messages =
+    data || [];
+
+  if(!messages.length){
+
+    $("messages").innerHTML = `
+      <div class="empty">
+        <div style="font-size:35px;">👋</div>
+        <p style="margin-top:8px;">
+          Start the conversation.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+  $("messages").innerHTML =
+    messages
+      .filter(
+        m => !m.deleted_at
+      )
+      .map(renderMessage)
+      .join("");
+
+  attachMessageActions();
+
+  scrollMessages();
+}
+
+function renderMessage(message){
+
+  const mine =
+    message.sender_id === currentUser.id;
+
+  const text =
+    getMessageText(message);
+
+  const replied =
+    message.reply_to;
+
+  return `
+    <div
+      class="message-row ${
+        mine ? "mine" : "theirs"
+      }"
+      data-message-id="${escapeHTML(message.id)}"
+    >
+
+      <div
+        class="bubble"
+        data-message-id="${escapeHTML(message.id)}"
+      >
+
+        ${
+          replied
+            ? `
+              <div class="reply-preview">
+                Replying to a message
+              </div>
+            `
+            : ""
+        }
+
+        ${escapeHTML(text)}
+
+        <div class="message-meta">
+
+          ${escapeHTML(
+            formatTime(message.created_at)
+          )}
+
+          ${
+            mine
+              ? (
+                  message.read
+                    ? " · Seen"
+                    : " · Sent"
+                )
+              : ""
+          }
 
         </div>
 
       </div>
-    `;
 
-  }).join("");
-
-  box.scrollTop = box.scrollHeight;
-
-  addMessageInteractions();
+    </div>
+  `;
 }
 
-function addMessageInteractions() {
+function attachMessageActions(){
 
-  document.querySelectorAll(".message-row")
-    .forEach(row => {
+  document
+    .querySelectorAll(".bubble")
+    .forEach(bubble => {
 
-      row.addEventListener("contextmenu", e => {
+      bubble.addEventListener(
+        "contextmenu",
+        e => {
 
-        e.preventDefault();
+          e.preventDefault();
 
-        const id = row.dataset.messageId;
-        const text = row.dataset.messageText;
+          const id =
+            bubble.dataset.messageId;
 
-        if (!id) return;
+          const message =
+            document.querySelector(
+              `.message-row[data-message-id="${CSS.escape(id)}"]`
+            );
 
-        if (
-          confirm(
-            "Reply to this message?\n\n" +
-            text
-          )
-        ) {
-          setReply({
+          const text =
+            message?.querySelector(
+              ".bubble"
+            )?.childNodes[0]?.textContent
+            || "Message";
+
+          replyToMessage = {
             id,
-            message: text
-          });
+            text:text.trim()
+          };
+
+          $("replyText").textContent =
+            "Replying: " +
+            replyToMessage.text.slice(
+              0,
+              80
+            );
+
+          $("replyBar")
+            .classList.add("show");
+
+          $("chatInput").focus();
         }
-
-      });
-
+      );
     });
 }
 
+function scrollMessages(){
+
+  const el =
+    $("messages");
+
+  el.scrollTop =
+    el.scrollHeight;
+}
+
+
 /* =========================================================
-   SEND
-   ========================================================= */
+   SEND MESSAGE
+========================================================= */
 
-async function sendMessage() {
+$("sendMessageBtn").onclick =
+  sendMessage;
 
-  if (!selectedUser) return;
+$("chatInput").addEventListener(
+  "keydown",
+  e => {
 
-  const input = document.getElementById("chatInput");
+    if(
+      e.key === "Enter" &&
+      !e.shiftKey
+    ){
 
-  const text = input.value.trim();
+      e.preventDefault();
 
-  if (!text) return;
+      sendMessage();
+    }
+  }
+);
 
-  const sendBtn = document.getElementById("sendBtn");
+async function sendMessage(){
 
-  sendBtn.disabled = true;
+  if(
+    !currentUser ||
+    !currentChatUser
+  ) return;
+
+  const input =
+    $("chatInput");
+
+  const text =
+    input.value.trim();
+
+  if(!text) return;
+
+  $("sendMessageBtn").disabled =
+    true;
 
   const payload = {
-    sender_id: currentUser.id,
-    receiver_id: selectedUser.id,
-    message: text
+    sender_id:currentUser.id,
+    receiver_id:currentChatUser.id,
+    message:text
   };
 
-  if (replyMessage) {
-    payload.reply_to = replyMessage.id;
+  if(replyToMessage){
+
+    payload.reply_to =
+      replyToMessage.id;
   }
 
-  const { error } = await sb
-    .from("messages")
-    .insert(payload);
+  const { error } =
+    await supabase
+      .from("messages")
+      .insert(payload);
 
-  if (error) {
+  $("sendMessageBtn").disabled =
+    false;
+
+  if(error){
 
     console.error(error);
 
-    toast(error.message);
-
-    sendBtn.disabled = false;
+    showToast(
+      "Message failed: " +
+      error.message
+    );
 
     return;
   }
 
   input.value = "";
-  input.style.height = "auto";
 
-  clearReply();
-
-  sendBtn.disabled = true;
+  cancelReply();
 
   await loadMessages();
-  await loadConversations();
+
+  scrollMessages();
 }
+
 
 /* =========================================================
    READ RECEIPTS
-   ========================================================= */
+========================================================= */
 
-async function markMessagesRead() {
+async function markChatRead(){
 
-  if (!selectedUser || !currentUser) return;
+  if(!currentChatUser) return;
 
-  const { error } = await sb
-    .from("messages")
-    .update({
-      read: true,
-      read_at: new Date().toISOString()
-    })
-    .eq("sender_id", selectedUser.id)
-    .eq("receiver_id", currentUser.id)
-    .eq("read", false);
+  const { error } =
+    await supabase
+      .from("messages")
+      .update({
+        read:true,
+        read_at:new Date().toISOString()
+      })
+      .eq(
+        "sender_id",
+        currentChatUser.id
+      )
+      .eq(
+        "receiver_id",
+        currentUser.id
+      )
+      .eq(
+        "read",
+        false
+      );
 
-  if (error) {
-    console.warn("Read receipt unavailable:", error.message);
+  if(error){
+
+    console.warn(
+      "markChatRead:",
+      error
+    );
   }
 }
 
-/* =========================================================
-   REPLY
-   ========================================================= */
+$("cancelReplyBtn").onclick =
+  cancelReply;
 
-function setReply(message) {
+function cancelReply(){
 
-  replyMessage = message;
+  replyToMessage =
+    null;
 
-  document.getElementById("replyText").textContent =
-    message.message || "Message";
+  $("replyBar")
+    .classList.remove(
+      "show"
+    );
 
-  document.getElementById("replyBar")
-    .classList.add("show");
-
-  document.getElementById("chatInput")
-    .focus();
+  $("replyText").textContent =
+    "";
 }
 
-function clearReply() {
 
-  replyMessage = null;
+/* =========================================================
+   REALTIME CHAT
+========================================================= */
 
-  const bar = document.getElementById("replyBar");
+function subscribeMessages(){
 
-  if (bar) {
-    bar.classList.remove("show");
+  if(messageChannel){
+
+    supabase.removeChannel(
+      messageChannel
+    );
   }
+
+  messageChannel =
+    supabase
+      .channel(
+        "chat-" +
+        currentUser.id +
+        "-" +
+        Date.now()
+      )
+      .on(
+        "postgres_changes",
+        {
+          event:"*",
+          schema:"public",
+          table:"messages"
+        },
+        async payload => {
+
+          const row =
+            payload.new ||
+            payload.old;
+
+          if(!row) return;
+
+          const belongs =
+            (
+              row.sender_id === currentUser.id &&
+              row.receiver_id === currentChatUser?.id
+            )
+            ||
+            (
+              row.sender_id === currentChatUser?.id &&
+              row.receiver_id === currentUser.id
+            );
+
+          if(belongs){
+
+            await markChatRead();
+
+            await loadMessages();
+          }
+
+          updateChatBadge();
+        }
+      )
+      .subscribe();
 }
+
 
 /* =========================================================
-   TYPING
-   ========================================================= */
+   CHAT BADGE
+========================================================= */
 
-function handleTyping() {
+async function updateChatBadge(){
 
-  clearTimeout(typingTimer);
+  if(!currentUser) return;
 
-  /*
-    Basic local typing UX.
-    Realtime presence can be added later without
-    breaking the chat.
-  */
+  const { count,error } =
+    await supabase
+      .from("messages")
+      .select(
+        "id",
+        {
+          count:"exact",
+          head:true
+        }
+      )
+      .eq(
+        "receiver_id",
+        currentUser.id
+      )
+      .eq(
+        "read",
+        false
+      );
 
-  const indicator =
-    document.getElementById("typingIndicator");
+  if(error) return;
 
-  if (!indicator) return;
+  const badges = [
+    $("sidebarChatBadge")
+  ];
 
-  indicator.textContent = "Typing...";
+  badges.forEach(badge => {
 
-  typingTimer = setTimeout(() => {
-    indicator.textContent = "";
-  }, 700);
+    if(!badge) return;
+
+    if(count > 0){
+
+      badge.textContent =
+        count > 99 ? "99+" : count;
+
+      badge.classList.remove(
+        "hidden"
+      );
+
+    }else{
+
+      badge.classList.add(
+        "hidden"
+      );
+    }
+  });
 }
+
 
 /* =========================================================
-   REALTIME
-   ========================================================= */
+   NOTIFICATIONS
+========================================================= */
 
-function disconnectMessages() {
+async function loadNotifications(){
 
-  if (messagesChannel) {
+  const container =
+    $("notificationsList");
 
-    sb.removeChannel(messagesChannel);
+  const { data,error } =
+    await supabase
+      .from("notifications")
+      .select("*")
+      .eq("user_id",currentUser.id)
+      .order(
+        "created_at",
+        {ascending:false}
+      )
+      .limit(50);
 
-    messagesChannel = null;
-  }
-}
+  if(error){
 
-function subscribeToMessages() {
+    container.innerHTML = `
+      <div class="empty">
+        Notifications couldn't be loaded.
+      </div>
+    `;
 
-  disconnectMessages();
-
-  if (!selectedUser) return;
-
-  messagesChannel = sb
-    .channel(
-      "chat-" +
-      currentUser.id +
-      "-" +
-      selectedUser.id
-    )
-    .on(
-      "postgres_changes",
-      {
-        event: "*",
-        schema: "public",
-        table: "messages"
-      },
-      payload => {
-
-        const row =
-          payload.new || payload.old;
-
-        if (!row) return;
-
-        const related =
-          (
-            row.sender_id === currentUser.id &&
-            row.receiver_id === selectedUser.id
-          ) ||
-          (
-            row.sender_id === selectedUser.id &&
-            row.receiver_id === currentUser.id
-          );
-
-        if (!related) return;
-
-        loadMessages();
-        loadConversations();
-
-      }
-    )
-    .subscribe(status => {
-      console.log("Realtime:", status);
-    });
-}
-
-/* =========================================================
-   PROFILE
-   ========================================================= */
-
-async function loadCurrentProfile() {
-
-  const { data, error } = await sb
-    .from("profiles")
-    .select("*")
-    .eq("id", currentUser.id)
-    .maybeSingle();
-
-  if (error) {
-    console.warn("Profile error:", error.message);
     return;
   }
 
-  currentProfile = data;
+  const notifications =
+    data || [];
+
+  if(!notifications.length){
+
+    container.innerHTML = `
+      <div class="empty">
+        <div style="font-size:40px;">♡</div>
+        <h3 style="margin-top:10px;color:var(--text);">
+          No notifications
+        </h3>
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML =
+    notifications.map(n => {
+
+      const text =
+        firstValue(
+          n,
+          ["message","text","content"],
+          "You have a new notification."
+        );
+
+      const unread =
+        firstValue(
+          n,
+          ["read","is_read"],
+          false
+        );
+
+      return `
+        <div class="notification ${
+          unread ? "" : "unread"
+        }">
+
+          <div style="font-size:22px;">
+            ${
+              firstValue(
+                n,
+                ["type"],
+                "notification"
+              ) === "like"
+                ? "♥"
+                : "♡"
+            }
+          </div>
+
+          <div class="notification-text">
+
+            ${escapeHTML(text)}
+
+            <div style="
+              color:var(--muted);
+              font-size:11px;
+              margin-top:4px;
+            ">
+              ${escapeHTML(
+                formatDate(n.created_at)
+              )}
+            </div>
+
+          </div>
+
+        </div>
+      `;
+    }).join("");
+
+  /* Mark common notification read shape */
+
+  await supabase
+    .from("notifications")
+    .update({read:true})
+    .eq("user_id",currentUser.id)
+    .eq("read",false);
 }
 
-/* =========================================================
-   BOOT
-   ========================================================= */
 
-async function boot() {
+/* =========================================================
+   PROFILE POLLS
+========================================================= */
+
+async function loadProfilePolls(){
+
+  const container =
+    $("profilePolls");
+
+  if(!currentUser) return;
+
+  const { data,error } =
+    await supabase
+      .from("polls")
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {ascending:false}
+      )
+      .limit(30);
+
+  if(error){
+
+    /* fallback creator_id */
+
+    const fallback =
+      await supabase
+        .from("polls")
+        .select("*")
+        .eq(
+          "creator_id",
+          currentUser.id
+        )
+        .order(
+          "created_at",
+          {ascending:false}
+        )
+        .limit(30);
+
+    if(fallback.error){
+
+      container.innerHTML = `
+        <div class="empty">
+          Couldn't load your polls.
+        </div>
+      `;
+
+      return;
+    }
+
+    renderProfilePolls(
+      fallback.data || []
+    );
+
+    return;
+  }
+
+  renderProfilePolls(
+    data || []
+  );
+}
+
+function renderProfilePolls(polls){
+
+  const container =
+    $("profilePolls");
+
+  if(!polls.length){
+
+    container.innerHTML = `
+      <div class="empty">
+        You haven't created a poll yet.
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML =
+    polls.map(poll =>
+      renderPoll(
+        poll,
+        currentProfile
+      )
+    ).join("");
+
+  attachPollEvents();
+}
+
+
+/* =========================================================
+   SEARCH BUTTON
+========================================================= */
+
+$("topSearchBtn").onclick =
+  () => {
+
+    openPage("discover");
+
+    setTimeout(
+      () =>
+        $("discoverSearch").focus(),
+      100
+    );
+  };
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout(){
+
+  await supabase.auth.signOut();
+
+  currentUser =
+    null;
+
+  currentProfile =
+    null;
+
+  if(messageChannel){
+
+    await supabase.removeChannel(
+      messageChannel
+    );
+
+    messageChannel =
+      null;
+  }
+
+  $("app").style.display =
+    "none";
+
+  $("authScreen").style.display =
+    "flex";
+
+  $("authEmail").value =
+    "";
+
+  $("authPassword").value =
+    "";
+
+  showToast(
+    "Logged out."
+  );
+}
+
+$("logoutBtn").onclick =
+  logout;
+
+$("profileLogoutBtn").onclick =
+  logout;
+
+
+/* =========================================================
+   AUTH SESSION
+========================================================= */
+
+async function init(){
 
   const {
-    data: {
+    data:{
       session
     }
-  } = await sb.auth.getSession();
+  } =
+    await supabase.auth.getSession();
 
-  if (!session?.user) {
+  if(session?.user){
 
-    currentUser = null;
-    currentProfile = null;
+    await enterApp(
+      session.user
+    );
 
-    showAuth();
+  }else{
 
-    return;
+    $("authScreen").style.display =
+      "flex";
+
+    $("app").style.display =
+      "none";
   }
+}
 
-  currentUser = session.user;
+async function enterApp(user){
+
+  currentUser =
+    user;
+
+  $("authScreen").style.display =
+    "none";
+
+  $("app").style.display =
+    "block";
+
+  await createProfileIfMissing(
+    user,
+    user.user_metadata?.full_name || ""
+  );
 
   await loadCurrentProfile();
 
-  renderApp();
+  await loadPolls();
 
-  await loadConversations();
+  await updateChatBadge();
+
+  openPage("home");
 }
 
-/* =========================================================
-   AUTH STATE
-   ========================================================= */
+supabase.auth.onAuthStateChange(
+  async (event,session) => {
 
-sb.auth.onAuthStateChange((event, session) => {
+    if(
+      event === "SIGNED_IN" &&
+      session?.user
+    ){
 
-  if (session?.user) {
-
-    currentUser = session.user;
-
-    if (!document.querySelector(".chat-app")) {
-      boot();
+      await enterApp(
+        session.user
+      );
     }
 
-  } else {
+    if(event === "SIGNED_OUT"){
 
-    currentUser = null;
-    selectedUser = null;
+      $("app").style.display =
+        "none";
 
-    disconnectMessages();
-
-    showAuth();
+      $("authScreen").style.display =
+        "flex";
+    }
   }
+);
 
-});
+
+/* =========================================================
+   EDIT PROFILE
+========================================================= */
+
+$("editProfileBtn").onclick =
+  async () => {
+
+    if(!currentProfile) return;
+
+    const name =
+      prompt(
+        "Your name:",
+        getProfileName(
+          currentProfile
+        )
+      );
+
+    if(name === null) return;
+
+    const bio =
+      prompt(
+        "Bio:",
+        getBio(currentProfile)
+      );
+
+    if(bio === null) return;
+
+    const attempts = [
+
+      {
+        full_name:name,
+        bio
+      },
+
+      {
+        name,
+        bio
+      }
+
+    ];
+
+    let updated =
+      false;
+
+    for(const payload of attempts){
+
+      const { error } =
+        await supabase
+          .from("profiles")
+          .update(payload)
+          .eq("id",currentUser.id);
+
+      if(!error){
+
+        updated =
+          true;
+
+        break;
+      }
+    }
+
+    if(!updated){
+
+      showToast(
+        "Profile update failed."
+      );
+
+      return;
+    }
+
+    await loadCurrentProfile();
+
+    showToast(
+      "Profile updated ✓"
+    );
+  };
+
+
+/* =========================================================
+   PERIODIC UPDATES
+========================================================= */
+
+setInterval(
+  () => {
+
+    if(currentUser){
+
+      updateChatBadge();
+
+      if(currentPage === "chat"){
+        loadChatUsers(
+          $("chatSearch").value
+        );
+      }
+    }
+
+  },
+  15000
+);
+
 
 /* =========================================================
    START
-   ========================================================= */
+========================================================= */
 
-boot();
+init();
 
 </script>
 
