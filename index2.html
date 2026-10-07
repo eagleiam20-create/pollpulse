@@ -6,6 +6,8 @@
 
   <title>Poll Pulse Chats</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -15,7 +17,7 @@
 
     body {
       font-family: Arial, Helvetica, sans-serif;
-      background: #fafafa;
+      background: #f5f5f5;
       color: #111;
       min-height: 100vh;
     }
@@ -37,11 +39,12 @@
       margin: auto;
       background: #fff;
       position: relative;
+      overflow: hidden;
     }
 
     /* =========================
        INBOX
-    ========================= */
+    ========================== */
 
     .inbox {
       min-height: 100vh;
@@ -57,7 +60,7 @@
       border-bottom: 1px solid #eee;
       position: sticky;
       top: 0;
-      background: rgba(255,255,255,.96);
+      background: rgba(255,255,255,.97);
       z-index: 10;
     }
 
@@ -83,6 +86,10 @@
       font-size: 23px;
     }
 
+    .topbar-icon:active {
+      background: #f2f2f2;
+    }
+
     .search-wrap {
       padding: 14px 16px 8px;
     }
@@ -106,7 +113,7 @@
 
     /* =========================
        CHAT LIST
-    ========================= */
+    ========================== */
 
     .chat-list {
       padding-bottom: 20px;
@@ -180,7 +187,7 @@
     .chat-preview-row {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       margin-top: 4px;
     }
 
@@ -207,9 +214,26 @@
       font-size: 14px;
     }
 
+    .loading {
+      text-align: center;
+      padding: 45px 20px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .error-box {
+      margin: 20px 16px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #fff0f0;
+      color: #d00;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
     /* =========================
        CHAT SCREEN
-    ========================= */
+    ========================== */
 
     .chat-screen {
       display: none;
@@ -240,7 +264,8 @@
       height: 40px;
       border-radius: 50%;
       background: transparent;
-      font-size: 27px;
+      font-size: 30px;
+      line-height: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -277,6 +302,9 @@
     .chat-user-name {
       font-size: 15px;
       font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .chat-user-status {
@@ -295,7 +323,7 @@
 
     /* =========================
        MESSAGES
-    ========================= */
+    ========================== */
 
     .messages {
       flex: 1;
@@ -305,6 +333,7 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+      overscroll-behavior: contain;
     }
 
     .date-label {
@@ -328,12 +357,13 @@
     }
 
     .message {
-      max-width: 75%;
+      max-width: 78%;
       padding: 10px 14px;
       border-radius: 20px;
       font-size: 15px;
       line-height: 1.35;
-      word-wrap: break-word;
+      word-break: break-word;
+      white-space: pre-wrap;
     }
 
     .received .message {
@@ -352,7 +382,7 @@
       font-size: 10px;
       margin-top: 4px;
       text-align: right;
-      opacity: .65;
+      opacity: .68;
     }
 
     .typing {
@@ -360,6 +390,7 @@
       padding: 4px 16px 8px;
       color: #888;
       font-size: 12px;
+      background: #fff;
     }
 
     .typing.show {
@@ -367,8 +398,8 @@
     }
 
     /* =========================
-       MESSAGE INPUT
-    ========================= */
+       INPUT
+    ========================== */
 
     .message-input-area {
       padding: 9px 10px;
@@ -417,13 +448,57 @@
       font-weight: 700;
     }
 
+    .send-btn:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
     .send-btn:active {
       transform: scale(.97);
     }
 
     /* =========================
-       DESKTOP
-    ========================= */
+       SEARCH USERS
+    ========================== */
+
+    .search-results {
+      background: #fff;
+      border-top: 1px solid #eee;
+    }
+
+    .search-result {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      background: #fff;
+      text-align: left;
+    }
+
+    .search-result:hover {
+      background: #f7f7f7;
+    }
+
+    .search-result-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .search-result-name {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .search-result-username {
+      color: #777;
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
 
     @media (min-width: 700px) {
       body {
@@ -433,10 +508,6 @@
       .app {
         min-height: 100vh;
         box-shadow: 0 0 20px rgba(0,0,0,.06);
-      }
-
-      .chat-screen {
-        position: fixed;
       }
     }
 
@@ -448,7 +519,7 @@
       }
 
       .message {
-        max-width: 82%;
+        max-width: 84%;
       }
     }
   </style>
@@ -465,127 +536,53 @@
     <main class="inbox" id="inbox">
 
       <header class="topbar">
+
         <div class="topbar-left">
-          <div class="topbar-title">Chats</div>
+          <div class="topbar-title">
+            Chats
+          </div>
         </div>
 
-        <button class="topbar-icon" id="newChatBtn" type="button">
+        <button
+          class="topbar-icon"
+          id="newChatBtn"
+          type="button"
+          aria-label="New chat"
+        >
           ✎
         </button>
+
       </header>
 
+
       <div class="search-wrap">
+
         <input
           id="searchInput"
           class="search-box"
           type="text"
-          placeholder="Search"
+          placeholder="Search people..."
           autocomplete="off"
         >
+
       </div>
+
+
+      <div id="searchResults" class="search-results"></div>
+
 
       <div class="section-title">
         Messages
       </div>
 
-      <div class="chat-list" id="chatList">
 
-        <!-- Demo chat -->
-
-        <button class="chat-item" type="button" onclick="openChat('Aarav', 'A')">
-
-          <div class="avatar">
-            A
-          </div>
-
-          <div class="chat-info">
-
-            <div class="chat-name-row">
-              <div class="chat-name">
-                Aarav
-              </div>
-
-              <div class="chat-time">
-                2m
-              </div>
-            </div>
-
-            <div class="chat-preview-row">
-
-              <div class="chat-preview">
-                Hey! How are you?
-              </div>
-
-              <div class="unread-dot"></div>
-
-            </div>
-
-          </div>
-
-        </button>
-
-
-        <button class="chat-item" type="button" onclick="openChat('Rahul', 'R')">
-
-          <div class="avatar">
-            R
-          </div>
-
-          <div class="chat-info">
-
-            <div class="chat-name-row">
-              <div class="chat-name">
-                Rahul
-              </div>
-
-              <div class="chat-time">
-                1h
-              </div>
-            </div>
-
-            <div class="chat-preview-row">
-
-              <div class="chat-preview">
-                Nice poll 👍
-              </div>
-
-            </div>
-
-          </div>
-
-        </button>
-
-
-        <button class="chat-item" type="button" onclick="openChat('Priya', 'P')">
-
-          <div class="avatar">
-            P
-          </div>
-
-          <div class="chat-info">
-
-            <div class="chat-name-row">
-              <div class="chat-name">
-                Priya
-              </div>
-
-              <div class="chat-time">
-                3h
-              </div>
-            </div>
-
-            <div class="chat-preview-row">
-
-              <div class="chat-preview">
-                See you tomorrow
-              </div>
-
-            </div>
-
-          </div>
-
-        </button>
-
+      <div
+        class="chat-list"
+        id="chatList"
+      >
+        <div class="loading">
+          Loading chats...
+        </div>
       </div>
 
     </main>
@@ -595,34 +592,49 @@
          CHAT SCREEN
     ========================== -->
 
-    <section class="chat-screen" id="chatScreen">
+    <section
+      class="chat-screen"
+      id="chatScreen"
+    >
 
       <header class="chat-topbar">
 
         <button
           class="back-btn"
+          id="backBtn"
           type="button"
-          onclick="closeChat()"
           aria-label="Back"
         >
           ‹
         </button>
 
-        <div class="chat-user-avatar" id="chatAvatar">
+
+        <div
+          class="chat-user-avatar"
+          id="chatAvatar"
+        >
           U
         </div>
 
+
         <div class="chat-user-info">
 
-          <div class="chat-user-name" id="chatUserName">
+          <div
+            class="chat-user-name"
+            id="chatUserName"
+          >
             User
           </div>
 
-          <div class="chat-user-status" id="chatUserStatus">
-            Active now
+          <div
+            class="chat-user-status"
+            id="chatUserStatus"
+          >
+            Chat
           </div>
 
         </div>
+
 
         <button
           class="header-action"
@@ -635,49 +647,16 @@
       </header>
 
 
-      <div class="messages" id="messages">
-
-        <div class="date-label">
-          Today
-        </div>
-
-        <div class="message-row received">
-
-          <div class="message">
-            Hey! How are you?
-            <div class="message-meta">
-              10:20 AM
-            </div>
-          </div>
-
-        </div>
-
-        <div class="message-row sent">
-
-          <div class="message">
-            I'm good! What about you?
-            <div class="message-meta">
-              10:21 AM · Seen
-            </div>
-          </div>
-
-        </div>
-
-        <div class="message-row received">
-
-          <div class="message">
-            I'm good too 😊
-            <div class="message-meta">
-              10:22 AM
-            </div>
-          </div>
-
-        </div>
-
-      </div>
+      <div
+        class="messages"
+        id="messages"
+      ></div>
 
 
-      <div class="typing" id="typingIndicator">
+      <div
+        class="typing"
+        id="typingIndicator"
+      >
         Typing...
       </div>
 
@@ -688,9 +667,11 @@
           class="input-icon"
           type="button"
           aria-label="Emoji"
+          id="emojiBtn"
         >
           😊
         </button>
+
 
         <input
           id="messageInput"
@@ -700,11 +681,11 @@
           autocomplete="off"
         >
 
+
         <button
           id="sendBtn"
           class="send-btn"
           type="button"
-          onclick="sendMessage()"
         >
           Send
         </button>
@@ -718,186 +699,1629 @@
 
   <script>
 
+    /* =====================================================
+       SUPABASE
+    ===================================================== */
+
+    const SUPABASE_URL =
+      "https://dbpbkvfaxgifjeveijqf.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    /* =====================================================
+       STATE
+    ===================================================== */
+
+    let currentUser = null;
     let currentChatUser = null;
+    let realtimeChannel = null;
+    let searchTimer = null;
 
-    /* =========================
-       OPEN CHAT
-    ========================== */
 
-    function openChat(name, initial) {
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
 
-      currentChatUser = {
-        name: name,
-        initial: initial
-      };
+    const $ = id =>
+      document.getElementById(id);
 
-      document.getElementById("chatUserName").textContent = name;
 
-      document.getElementById("chatAvatar").textContent = initial;
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
 
-      document.getElementById("chatUserStatus").textContent = "Active now";
+    async function init() {
 
-      document.getElementById("chatScreen").classList.add("active");
+      try {
 
-      setTimeout(function () {
+        const {
+          data: {
+            session
+          }
+        } = await supabaseClient.auth.getSession();
 
-        document.getElementById("messageInput").focus();
 
-        scrollMessages();
+        if (!session) {
 
-      }, 100);
+          $("chatList").innerHTML = `
+            <div class="empty">
+              Please login first.
+            </div>
+          `;
+
+          return;
+        }
+
+
+        currentUser =
+          session.user;
+
+
+        await loadChats();
+
+        setupRealtime();
+
+      } catch (error) {
+
+        console.error(
+          "INIT ERROR:",
+          error
+        );
+
+        showError(
+          error.message
+        );
+
+      }
 
     }
 
 
-    /* =========================
+    /* =====================================================
+       LOAD CHAT LIST
+    ===================================================== */
+
+    async function loadChats() {
+
+      if (!currentUser) return;
+
+
+      const list =
+        $("chatList");
+
+
+      list.innerHTML = `
+        <div class="loading">
+          Loading chats...
+        </div>
+      `;
+
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .from("messages")
+            .select(`
+              id,
+              sender_id,
+              receiver_id,
+              message,
+              read,
+              created_at,
+              message_type
+            `)
+            .or(
+              `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+            )
+            .order(
+              "created_at",
+              {
+                ascending: false
+              }
+            );
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        if (!data || data.length === 0) {
+
+          list.innerHTML = `
+            <div class="empty">
+              No chats yet.<br>
+              Search someone above to start chatting.
+            </div>
+          `;
+
+          return;
+        }
+
+
+        /*
+          Keep only the newest message
+          for each conversation.
+        */
+
+        const conversations =
+          new Map();
+
+
+        data.forEach(message => {
+
+          const otherId =
+            message.sender_id === currentUser.id
+              ? message.receiver_id
+              : message.sender_id;
+
+
+          if (!conversations.has(otherId)) {
+
+            conversations.set(
+              otherId,
+              message
+            );
+
+          }
+
+        });
+
+
+        const userIds =
+          [...conversations.keys()];
+
+
+        if (!userIds.length) {
+
+          list.innerHTML = `
+            <div class="empty">
+              No chats yet.
+            </div>
+          `;
+
+          return;
+        }
+
+
+        const {
+          data: profiles,
+          error: profileError
+        } =
+          await supabaseClient
+            .from("profiles")
+            .select(`
+              id,
+              username,
+              display_name,
+              avatar_url
+            `)
+            .in(
+              "id",
+              userIds
+            );
+
+
+        if (profileError) {
+          throw profileError;
+        }
+
+
+        list.innerHTML = "";
+
+
+        const profileMap =
+          new Map(
+            (profiles || []).map(
+              profile => [
+                profile.id,
+                profile
+              ]
+            )
+          );
+
+
+        userIds.forEach(userId => {
+
+          const message =
+            conversations.get(userId);
+
+          const profile =
+            profileMap.get(userId);
+
+
+          if (!profile) return;
+
+
+          const item =
+            createChatItem(
+              profile,
+              message
+            );
+
+
+          list.appendChild(item);
+
+        });
+
+
+        if (!list.children.length) {
+
+          list.innerHTML = `
+            <div class="empty">
+              No chats found.
+            </div>
+          `;
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "LOAD CHATS:",
+          error
+        );
+
+        showError(
+          error.message
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       CREATE CHAT ITEM
+    ===================================================== */
+
+    function createChatItem(
+      profile,
+      message
+    ) {
+
+      const item =
+        document.createElement(
+          "button"
+        );
+
+      item.className =
+        "chat-item";
+
+      item.type =
+        "button";
+
+
+      const avatar =
+        document.createElement(
+          "div"
+        );
+
+      avatar.className =
+        "avatar";
+
+
+      setAvatar(
+        avatar,
+        profile
+      );
+
+
+      const info =
+        document.createElement(
+          "div"
+        );
+
+      info.className =
+        "chat-info";
+
+
+      const nameRow =
+        document.createElement(
+          "div"
+        );
+
+      nameRow.className =
+        "chat-name-row";
+
+
+      const name =
+        document.createElement(
+          "div"
+        );
+
+      name.className =
+        "chat-name";
+
+      name.textContent =
+        profile.display_name ||
+        profile.username ||
+        "User";
+
+
+      const time =
+        document.createElement(
+          "div"
+        );
+
+      time.className =
+        "chat-time";
+
+      time.textContent =
+        formatChatTime(
+          message.created_at
+        );
+
+
+      nameRow.appendChild(
+        name
+      );
+
+      nameRow.appendChild(
+        time
+      );
+
+
+      const previewRow =
+        document.createElement(
+          "div"
+        );
+
+      previewRow.className =
+        "chat-preview-row";
+
+
+      const preview =
+        document.createElement(
+          "div"
+        );
+
+      preview.className =
+        "chat-preview";
+
+
+      let previewText =
+        message.message || "";
+
+
+      if (
+        message.message_type &&
+        message.message_type !== "text"
+      ) {
+
+        if (
+          message.message_type === "image"
+        ) {
+
+          previewText =
+            "📷 Photo";
+
+        } else {
+
+          previewText =
+            "Message";
+
+        }
+
+      }
+
+
+      if (
+        message.sender_id ===
+        currentUser.id
+      ) {
+
+        previewText =
+          "You: " + previewText;
+
+      }
+
+
+      preview.textContent =
+        previewText;
+
+
+      previewRow.appendChild(
+        preview
+      );
+
+
+      if (
+        message.receiver_id ===
+          currentUser.id &&
+        message.read === false
+      ) {
+
+        const dot =
+          document.createElement(
+            "div"
+          );
+
+        dot.className =
+          "unread-dot";
+
+        previewRow.appendChild(
+          dot
+        );
+
+      }
+
+
+      info.appendChild(
+        nameRow
+      );
+
+      info.appendChild(
+        previewRow
+      );
+
+
+      item.appendChild(
+        avatar
+      );
+
+      item.appendChild(
+        info
+      );
+
+
+      item.addEventListener(
+        "click",
+        () => {
+          openChat(
+            profile
+          );
+        }
+      );
+
+
+      return item;
+
+    }
+
+
+    /* =====================================================
+       OPEN CHAT
+    ===================================================== */
+
+    async function openChat(
+      profile
+    ) {
+
+      if (!currentUser) return;
+
+
+      currentChatUser =
+        profile;
+
+
+      $("chatUserName").textContent =
+        profile.display_name ||
+        profile.username ||
+        "User";
+
+
+      $("chatUserStatus").textContent =
+        "Chat";
+
+
+      setAvatar(
+        $("chatAvatar"),
+        profile
+      );
+
+
+      $("chatScreen")
+        .classList
+        .add("active");
+
+
+      $("messages").innerHTML = `
+        <div class="loading">
+          Loading messages...
+        </div>
+      `;
+
+
+      await loadMessages();
+
+    }
+
+
+    /* =====================================================
        CLOSE CHAT
-    ========================== */
+    ===================================================== */
 
     function closeChat() {
 
-      document
-        .getElementById("chatScreen")
-        .classList.remove("active");
+      currentChatUser =
+        null;
 
-      currentChatUser = null;
+
+      $("chatScreen")
+        .classList
+        .remove("active");
 
     }
 
 
-    /* =========================
-       SEND MESSAGE
-    ========================== */
+    /* =====================================================
+       LOAD MESSAGES
+    ===================================================== */
 
-    function sendMessage() {
+    async function loadMessages() {
+
+      if (
+        !currentUser ||
+        !currentChatUser
+      ) return;
+
+
+      const box =
+        $("messages");
+
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .from("messages")
+            .select(`
+              id,
+              sender_id,
+              receiver_id,
+              message,
+              read,
+              read_at,
+              delivered_at,
+              created_at,
+              message_type,
+              media_url
+            `)
+            .or(
+              `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
+            )
+            .order(
+              "created_at",
+              {
+                ascending: true
+              }
+            );
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        box.innerHTML = "";
+
+
+        if (!data || data.length === 0) {
+
+          box.innerHTML = `
+            <div class="empty">
+              No messages yet.<br>
+              Say hi 👋
+            </div>
+          `;
+
+          return;
+        }
+
+
+        const dateLabel =
+          document.createElement(
+            "div"
+          );
+
+        dateLabel.className =
+          "date-label";
+
+        dateLabel.textContent =
+          "Today";
+
+        box.appendChild(
+          dateLabel
+        );
+
+
+        data.forEach(
+          message => {
+
+            const row =
+              document.createElement(
+                "div"
+              );
+
+
+            const mine =
+              message.sender_id ===
+              currentUser.id;
+
+
+            row.className =
+              "message-row " +
+              (
+                mine
+                  ? "sent"
+                  : "received"
+              );
+
+
+            const bubble =
+              document.createElement(
+                "div"
+              );
+
+            bubble.className =
+              "message";
+
+
+            /*
+              Text / image message
+            */
+
+            if (
+              message.message_type ===
+                "image" &&
+              message.media_url
+            ) {
+
+              const image =
+                document.createElement(
+                  "img"
+                );
+
+              image.src =
+                message.media_url;
+
+              image.alt =
+                "Image";
+
+              image.style.maxWidth =
+                "220px";
+
+              image.style.borderRadius =
+                "14px";
+
+              bubble.appendChild(
+                image
+              );
+
+
+              if (
+                message.message
+              ) {
+
+                const text =
+                  document.createElement(
+                    "div"
+                  );
+
+                text.textContent =
+                  message.message;
+
+                text.style.marginTop =
+                  "6px";
+
+                bubble.appendChild(
+                  text
+                );
+
+              }
+
+            } else {
+
+              bubble.textContent =
+                message.message ||
+                "";
+
+            }
+
+
+            const meta =
+              document.createElement(
+                "div"
+              );
+
+            meta.className =
+              "message-meta";
+
+
+            let status =
+              "";
+
+
+            if (mine) {
+
+              if (message.read) {
+
+                status =
+                  " · Seen";
+
+              } else if (
+                message.delivered_at
+              ) {
+
+                status =
+                  " · Delivered";
+
+              } else {
+
+                status =
+                  " · Sent";
+
+              }
+
+            }
+
+
+            meta.textContent =
+              formatMessageTime(
+                message.created_at
+              ) +
+              status;
+
+
+            bubble.appendChild(
+              meta
+            );
+
+
+            row.appendChild(
+              bubble
+            );
+
+
+            box.appendChild(
+              row
+            );
+
+          }
+        );
+
+
+        await markMessagesRead(
+          data
+        );
+
+
+        scrollMessages();
+
+      } catch (error) {
+
+        console.error(
+          "LOAD MESSAGES:",
+          error
+        );
+
+        box.innerHTML = `
+          <div class="error-box">
+            ${escapeHtml(error.message)}
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       MARK AS READ
+    ===================================================== */
+
+    async function markMessagesRead(
+      messages
+    ) {
+
+      if (!currentUser) return;
+
+
+      const unreadIds =
+        messages
+          .filter(
+            message =>
+              message.receiver_id ===
+                currentUser.id &&
+              message.read === false
+          )
+          .map(
+            message =>
+              message.id
+          );
+
+
+      if (
+        unreadIds.length === 0
+      ) return;
+
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("messages")
+          .update({
+            read: true,
+            read_at:
+              new Date()
+                .toISOString()
+          })
+          .in(
+            "id",
+            unreadIds
+          );
+
+
+      if (error) {
+
+        console.error(
+          "MARK READ:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       SEND MESSAGE
+    ===================================================== */
+
+    async function sendMessage() {
+
+      if (
+        !currentUser ||
+        !currentChatUser
+      ) {
+
+        return;
+
+      }
+
 
       const input =
-        document.getElementById("messageInput");
+        $("messageInput");
+
 
       const text =
         input.value.trim();
 
+
       if (!text) return;
 
-      const messages =
-        document.getElementById("messages");
 
-      const row =
-        document.createElement("div");
+      const button =
+        $("sendBtn");
 
-      row.className =
-        "message-row sent";
 
-      const message =
-        document.createElement("div");
+      button.disabled =
+        true;
 
-      message.className =
-        "message";
 
-      message.textContent =
-        text;
+      try {
 
-      const meta =
-        document.createElement("div");
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("messages")
+            .insert({
 
-      meta.className =
-        "message-meta";
+              sender_id:
+                currentUser.id,
 
-      meta.textContent =
-        "Just now · Sent";
+              receiver_id:
+                currentChatUser.id,
 
-      message.appendChild(meta);
+              message:
+                text,
 
-      row.appendChild(message);
+              read:
+                false,
 
-      messages.appendChild(row);
+              message_type:
+                "text",
 
-      input.value = "";
+              delivered_at:
+                new Date()
+                  .toISOString()
 
-      scrollMessages();
+            });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        input.value = "";
+
+
+        await loadMessages();
+
+        await loadChats();
+
+
+      } catch (error) {
+
+        console.error(
+          "SEND MESSAGE:",
+          error
+        );
+
+
+        alert(
+          "Message error: " +
+          error.message
+        );
+
+
+      } finally {
+
+        button.disabled =
+          false;
+
+      }
 
     }
 
 
-    /* =========================
-       ENTER TO SEND
-    ========================== */
+    /* =====================================================
+       SEARCH USERS
+    ===================================================== */
 
-    document
-      .getElementById("messageInput")
-      .addEventListener("keydown", function(event) {
+    async function searchUsers() {
 
-        if (event.key === "Enter") {
+      clearTimeout(
+        searchTimer
+      );
 
-          event.preventDefault();
 
-          sendMessage();
+      searchTimer =
+        setTimeout(
+          runUserSearch,
+          300
+        );
+
+    }
+
+
+    async function runUserSearch() {
+
+      const query =
+        $("searchInput")
+          .value
+          .trim();
+
+
+      const results =
+        $("searchResults");
+
+
+      if (!query) {
+
+        results.innerHTML =
+          "";
+
+        return;
+
+      }
+
+
+      if (!currentUser) return;
+
+
+      results.innerHTML = `
+        <div class="loading">
+          Searching...
+        </div>
+      `;
+
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .from("profiles")
+            .select(`
+              id,
+              username,
+              display_name,
+              avatar_url
+            `)
+            .ilike(
+              "username",
+              "%" +
+              query +
+              "%"
+            )
+            .neq(
+              "id",
+              currentUser.id
+            )
+            .limit(15);
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        results.innerHTML =
+          "";
+
+
+        if (
+          !data ||
+          data.length === 0
+        ) {
+
+          results.innerHTML = `
+            <div class="empty">
+              No users found.
+            </div>
+          `;
+
+          return;
 
         }
 
-      });
+
+        data.forEach(
+          profile => {
+
+            const item =
+              document.createElement(
+                "button"
+              );
+
+            item.className =
+              "search-result";
+
+            item.type =
+              "button";
 
 
-    /* =========================
-       SEARCH
-    ========================== */
+            const avatar =
+              document.createElement(
+                "div"
+              );
 
-    document
-      .getElementById("searchInput")
-      .addEventListener("input", function() {
-
-        const query =
-          this.value.toLowerCase().trim();
-
-        const chats =
-          document.querySelectorAll(".chat-item");
-
-        chats.forEach(function(chat) {
-
-          const name =
-            chat
-              .querySelector(".chat-name")
-              .textContent
-              .toLowerCase();
-
-          chat.style.display =
-            name.includes(query)
-              ? "flex"
-              : "none";
-
-        });
-
-      });
+            avatar.className =
+              "avatar";
 
 
-    /* =========================
+            setAvatar(
+              avatar,
+              profile
+            );
+
+
+            const info =
+              document.createElement(
+                "div"
+              );
+
+            info.className =
+              "search-result-info";
+
+
+            const name =
+              document.createElement(
+                "div"
+              );
+
+            name.className =
+              "search-result-name";
+
+            name.textContent =
+              profile.display_name ||
+              profile.username ||
+              "User";
+
+
+            const username =
+              document.createElement(
+                "div"
+              );
+
+            username.className =
+              "search-result-username";
+
+            username.textContent =
+              "@" +
+              (
+                profile.username ||
+                "user"
+              );
+
+
+            info.appendChild(
+              name
+            );
+
+            info.appendChild(
+              username
+            );
+
+
+            item.appendChild(
+              avatar
+            );
+
+            item.appendChild(
+              info
+            );
+
+
+            item.addEventListener(
+              "click",
+              async () => {
+
+                $("searchInput")
+                  .value = "";
+
+                results.innerHTML =
+                  "";
+
+                await openChat(
+                  profile
+                );
+
+              }
+            );
+
+
+            results.appendChild(
+              item
+            );
+
+          }
+        );
+
+      } catch (error) {
+
+        console.error(
+          "SEARCH:",
+          error
+        );
+
+
+        results.innerHTML = `
+          <div class="error-box">
+            ${escapeHtml(error.message)}
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       REALTIME
+    ===================================================== */
+
+    function setupRealtime() {
+
+      if (!currentUser) return;
+
+
+      if (realtimeChannel) {
+
+        supabaseClient.removeChannel(
+          realtimeChannel
+        );
+
+      }
+
+
+      realtimeChannel =
+        supabaseClient
+          .channel(
+            "pollpulse-chat-" +
+            currentUser.id
+          )
+          .on(
+            "postgres_changes",
+            {
+              event: "*",
+              schema: "public",
+              table: "messages"
+            },
+            async () => {
+
+              await loadChats();
+
+
+              if (
+                currentChatUser
+              ) {
+
+                await loadMessages();
+
+              }
+
+            }
+          )
+          .subscribe();
+
+    }
+
+
+    /* =====================================================
+       AVATAR
+    ===================================================== */
+
+    function setAvatar(
+      element,
+      profile
+    ) {
+
+      element.innerHTML =
+        "";
+
+
+      if (
+        profile &&
+        profile.avatar_url
+      ) {
+
+        const img =
+          document.createElement(
+            "img"
+          );
+
+        img.src =
+          profile.avatar_url;
+
+        img.alt =
+          "";
+
+        img.onerror =
+          () => {
+
+            element.innerHTML =
+              "";
+
+            element.textContent =
+              getInitial(
+                profile
+              );
+
+          };
+
+
+        element.appendChild(
+          img
+        );
+
+      } else {
+
+        element.textContent =
+          getInitial(
+            profile
+          );
+
+      }
+
+    }
+
+
+    function getInitial(
+      profile
+    ) {
+
+      return (
+        (
+          profile?.display_name ||
+          profile?.username ||
+          "U"
+        )
+        .charAt(0)
+        .toUpperCase()
+      );
+
+    }
+
+
+    /* =====================================================
+       SEARCH INPUT
+    ===================================================== */
+
+    $("searchInput")
+      .addEventListener(
+        "input",
+        searchUsers
+      );
+
+
+    /* =====================================================
+       SEND BUTTON
+    ===================================================== */
+
+    $("sendBtn")
+      .addEventListener(
+        "click",
+        sendMessage
+      );
+
+
+    /* =====================================================
+       ENTER TO SEND
+    ===================================================== */
+
+    $("messageInput")
+      .addEventListener(
+        "keydown",
+        event => {
+
+          if (
+            event.key === "Enter"
+          ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       BACK BUTTON
+    ===================================================== */
+
+    $("backBtn")
+      .addEventListener(
+        "click",
+        closeChat
+      );
+
+
+    /* =====================================================
+       NEW CHAT BUTTON
+    ===================================================== */
+
+    $("newChatBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          $("searchInput")
+            .focus();
+
+        }
+      );
+
+
+    /* =====================================================
+       EMOJI BUTTON
+    ===================================================== */
+
+    $("emojiBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          const input =
+            $("messageInput");
+
+          input.value += " 😊";
+
+          input.focus();
+
+        }
+      );
+
+
+    /* =====================================================
+       FORMAT TIME
+    ===================================================== */
+
+    function formatChatTime(
+      date
+    ) {
+
+      const d =
+        new Date(date);
+
+      const now =
+        new Date();
+
+      const diff =
+        now - d;
+
+      const minutes =
+        Math.floor(
+          diff / 60000
+        );
+
+
+      if (
+        minutes < 1
+      ) {
+
+        return "now";
+
+      }
+
+
+      if (
+        minutes < 60
+      ) {
+
+        return (
+          minutes +
+          "m"
+        );
+
+      }
+
+
+      const hours =
+        Math.floor(
+          minutes / 60
+        );
+
+
+      if (
+        hours < 24
+      ) {
+
+        return (
+          hours +
+          "h"
+        );
+
+      }
+
+
+      const days =
+        Math.floor(
+          hours / 24
+        );
+
+
+      if (
+        days < 7
+      ) {
+
+        return (
+          days +
+          "d"
+        );
+
+      }
+
+
+      return d.toLocaleDateString();
+
+    }
+
+
+    function formatMessageTime(
+      date
+    ) {
+
+      return new Date(
+        date
+      ).toLocaleTimeString(
+        [],
+        {
+          hour:
+            "numeric",
+
+          minute:
+            "2-digit"
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value || ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =====================================================
        SCROLL
-    ========================== */
+    ===================================================== */
 
     function scrollMessages() {
 
       const box =
-        document.getElementById("messages");
+        $("messages");
 
-      box.scrollTop =
-        box.scrollHeight;
+
+      requestAnimationFrame(
+        () => {
+
+          box.scrollTop =
+            box.scrollHeight;
+
+        }
+      );
 
     }
 
 
-    /* =========================
-       NEW CHAT
-    ========================== */
+    /* =====================================================
+       ERROR
+    ===================================================== */
 
-    document
-      .getElementById("newChatBtn")
-      .addEventListener("click", function() {
+    function showError(
+      message
+    ) {
 
-        document
-          .getElementById("searchInput")
-          .focus();
+      $("chatList").innerHTML = `
+        <div class="error-box">
+          ${escapeHtml(message)}
+        </div>
+      `;
 
-      });
+    }
+
+
+    /* =====================================================
+       START APP
+    ===================================================== */
+
+    init();
 
   </script>
 
