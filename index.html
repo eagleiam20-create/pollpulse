@@ -7,6 +7,8 @@
 
 <title>Poll Pulse</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{
   box-sizing:border-box;
@@ -20,12 +22,7 @@ html,body{
   min-height:100%;
   font-family:Inter,Arial,sans-serif;
   background:#f5f7fb;
-  color:#18202a;
-  overscroll-behavior:none;
-}
-
-body{
-  overflow-x:hidden;
+  color:#111827;
 }
 
 button,input,textarea{
@@ -33,7 +30,6 @@ button,input,textarea{
 }
 
 button{
-  border:0;
   cursor:pointer;
 }
 
@@ -41,247 +37,189 @@ button{
   display:none!important;
 }
 
-/* ================= AUTH ================= */
+/* AUTH */
 
 #authScreen{
   min-height:100vh;
   min-height:100dvh;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   padding:24px;
-  background:
-    radial-gradient(circle at 10% 10%,#dfe8ff 0,transparent 32%),
-    radial-gradient(circle at 90% 90%,#e7ddff 0,transparent 35%),
-    #f7f9ff;
+  background:linear-gradient(135deg,#eef2ff,#f8fafc);
 }
 
-.auth-card{
+.authBox{
   width:100%;
-  max-width:430px;
-  background:#fff;
+  max-width:420px;
+  background:white;
   border-radius:28px;
-  padding:30px 24px;
-  box-shadow:0 20px 60px rgba(30,40,80,.12);
+  padding:28px;
+  box-shadow:0 20px 60px rgba(15,23,42,.12);
 }
 
 .logo{
+  text-align:center;
+  font-size:32px;
+  font-weight:900;
+  margin-bottom:8px;
+  background:linear-gradient(90deg,#6366f1,#8b5cf6);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.subtitle{
+  text-align:center;
+  color:#64748b;
+  margin-bottom:24px;
+}
+
+.authTabs{
   display:flex;
-  align-items:center;
-  gap:11px;
-  margin-bottom:26px;
+  background:#f1f5f9;
+  border-radius:14px;
+  padding:4px;
+  margin-bottom:18px;
 }
 
-.logo-icon{
-  width:48px;
-  height:48px;
-  border-radius:15px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:24px;
-  background:linear-gradient(135deg,#635bff,#8b5cf6);
-  color:#fff;
-  box-shadow:0 10px 25px rgba(99,91,255,.25);
+.authTabs button{
+  flex:1;
+  border:0;
+  padding:11px;
+  border-radius:11px;
+  background:transparent;
+  font-weight:700;
 }
 
-.logo-title{
-  font-size:23px;
-  font-weight:800;
-}
-
-.logo-sub{
-  color:#7c8494;
-  font-size:12px;
-  margin-top:2px;
-}
-
-.auth-card h1{
-  margin:0 0 8px;
-  font-size:29px;
-}
-
-.auth-desc{
-  color:#747c8b;
-  margin:0 0 23px;
-  line-height:1.5;
+.authTabs button.active{
+  background:white;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
 .field{
-  margin-bottom:14px;
+  margin-bottom:13px;
 }
 
 .field label{
   display:block;
   font-size:13px;
   font-weight:700;
-  margin-bottom:7px;
+  margin-bottom:6px;
 }
 
 .field input,
 .field textarea,
-.search-input{
+.searchInput{
   width:100%;
-  border:1px solid #e3e7ef;
-  background:#f8f9fc;
+  border:1px solid #e2e8f0;
   border-radius:14px;
   padding:13px 14px;
   outline:none;
-  transition:.2s;
+  background:#f8fafc;
 }
 
 .field input:focus,
 .field textarea:focus,
-.search-input:focus{
-  border-color:#756cff;
-  background:#fff;
-  box-shadow:0 0 0 4px rgba(99,91,255,.08);
+.searchInput:focus{
+  border-color:#6366f1;
+  background:white;
 }
 
-.primary-btn{
+.primary{
   width:100%;
+  border:0;
+  border-radius:14px;
   padding:14px;
-  border-radius:14px;
-  color:#fff;
-  background:linear-gradient(135deg,#635bff,#8b5cf6);
+  color:white;
   font-weight:800;
-  box-shadow:0 10px 24px rgba(99,91,255,.22);
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
 }
 
-.primary-btn:disabled{
-  opacity:.65;
-}
-
-.secondary-btn{
-  width:100%;
-  padding:13px;
-  margin-top:10px;
-  border-radius:14px;
-  background:#f0f1f7;
-  color:#313846;
+.secondary{
+  border:0;
+  border-radius:12px;
+  padding:10px 14px;
+  background:#eef2ff;
+  color:#4f46e5;
   font-weight:700;
 }
 
-.auth-links{
-  display:flex;
-  justify-content:space-between;
-  margin-top:16px;
-  gap:10px;
-}
-
-.text-btn{
-  background:none;
-  color:#635bff;
-  font-size:13px;
-  font-weight:700;
-}
-
-#authMessage{
-  min-height:20px;
-  margin:12px 0 0;
-  font-size:13px;
+.smallLink{
+  margin-top:14px;
   text-align:center;
+  color:#6366f1;
+  font-size:14px;
+  cursor:pointer;
 }
 
-.success{
-  color:#16834b!important;
-}
+/* APP */
 
-.error{
-  color:#d83b4d!important;
-}
-
-/* ================= APP ================= */
-
-#appScreen{
+#app{
   min-height:100vh;
   min-height:100dvh;
-  background:#f6f7fb;
-}
-
-.app-shell{
-  width:100%;
-  max-width:520px;
-  margin:auto;
-  min-height:100vh;
-  min-height:100dvh;
-  background:#f6f7fb;
-  position:relative;
 }
 
 .topbar{
   position:sticky;
   top:0;
-  z-index:30;
-  height:68px;
-  padding:10px 16px;
-  padding-top:max(10px,env(safe-area-inset-top));
-  background:rgba(246,247,251,.94);
-  backdrop-filter:blur(18px);
+  z-index:20;
+  height:64px;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid #e5e7eb;
   display:flex;
   align-items:center;
   justify-content:space-between;
+  padding:0 16px;
 }
 
-.top-brand{
+.brand{
+  font-size:21px;
+  font-weight:900;
+  color:#4f46e5;
+}
+
+.topActions{
   display:flex;
-  align-items:center;
-  gap:9px;
+  gap:8px;
 }
 
-.top-brand .logo-icon{
-  width:39px;
-  height:39px;
-  border-radius:12px;
-  font-size:19px;
-}
-
-.top-brand span{
-  font-weight:850;
-}
-
-.icon-btn{
+.iconBtn{
   width:42px;
   height:42px;
-  border-radius:13px;
-  background:#fff;
-  box-shadow:0 5px 18px rgba(30,40,70,.07);
-  font-size:19px;
-  position:relative;
+  border:0;
+  border-radius:50%;
+  background:#f1f5f9;
+  font-size:18px;
 }
 
-.badge{
-  position:absolute;
-  top:-3px;
-  right:-3px;
-  min-width:17px;
-  height:17px;
-  padding:0 4px;
-  border-radius:20px;
-  background:#ff4d67;
-  color:#fff;
-  font-size:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:800;
+#main{
+  width:100%;
+  max-width:600px;
+  margin:auto;
+  padding:16px 14px 100px;
 }
 
-/* ================= CONTENT ================= */
+.pageTitle{
+  font-size:26px;
+  font-weight:900;
+  margin:8px 0 16px;
+}
 
-.content{
-  padding:10px 15px 110px;
+.card{
+  background:white;
+  border:1px solid #e8edf4;
+  border-radius:22px;
+  padding:17px;
+  margin-bottom:14px;
+  box-shadow:0 5px 20px rgba(15,23,42,.045);
 }
 
 .hero{
-  border-radius:25px;
-  padding:23px;
-  color:#fff;
-  background:
-    radial-gradient(circle at 100% 0,#a78bfa,transparent 40%),
-    linear-gradient(135deg,#4f46e5,#7c3aed);
-  box-shadow:0 16px 35px rgba(79,70,229,.22);
-  margin-bottom:17px;
+  padding:22px;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
+  color:white;
+  border:0;
 }
 
 .hero h2{
@@ -292,142 +230,110 @@ button{
 .hero p{
   margin:0;
   opacity:.9;
-  line-height:1.45;
-  font-size:14px;
 }
 
-.section-head{
+.sectionTitle{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin:22px 2px 11px;
+  margin:20px 2px 10px;
 }
 
-.section-head h3{
+.sectionTitle h3{
   margin:0;
   font-size:17px;
 }
 
-.muted{
-  color:#818998;
-  font-size:12px;
-}
+/* USER */
 
-/* ================= SUGGESTIONS ================= */
-
-.suggestions{
+.userRow{
   display:flex;
-  gap:11px;
-  overflow-x:auto;
-  padding:2px 2px 5px;
-  scrollbar-width:none;
-}
-
-.suggestions::-webkit-scrollbar{
-  display:none;
-}
-
-.suggestion-card{
-  min-width:150px;
-  background:#fff;
-  border-radius:19px;
-  padding:14px;
-  box-shadow:0 7px 22px rgba(25,35,60,.06);
+  align-items:center;
+  gap:12px;
 }
 
 .avatar{
-  width:48px;
-  height:48px;
+  width:46px;
+  height:46px;
   border-radius:50%;
   object-fit:cover;
-  background:#e9eaf1;
-  display:block;
-}
-
-.suggestion-card .avatar{
-  margin-bottom:9px;
-}
-
-.user-name{
-  font-weight:800;
-  font-size:14px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.username{
-  color:#89909e;
-  font-size:11px;
-  margin-top:2px;
-}
-
-.follow-btn{
-  width:100%;
-  margin-top:11px;
-  padding:8px;
-  border-radius:10px;
-  background:#635bff;
-  color:#fff;
-  font-size:12px;
-  font-weight:800;
-}
-
-.follow-btn.following{
-  background:#ececf5;
-  color:#4e5361;
-}
-
-/* ================= POLLS ================= */
-
-.poll-card{
-  background:#fff;
-  border-radius:22px;
-  padding:17px;
-  margin-bottom:13px;
-  box-shadow:0 7px 25px rgba(25,35,60,.06);
-}
-
-.poll-author{
+  background:#e0e7ff;
   display:flex;
   align-items:center;
-  gap:10px;
+  justify-content:center;
+  color:#4f46e5;
+  font-weight:900;
+  flex:none;
 }
 
-.poll-author .avatar{
-  width:39px;
-  height:39px;
+.avatar.big{
+  width:82px;
+  height:82px;
+  font-size:27px;
 }
 
-.poll-question{
-  font-size:17px;
-  line-height:1.35;
+.userInfo{
+  min-width:0;
+  flex:1;
+}
+
+.userName{
   font-weight:800;
-  margin:15px 0 12px;
 }
 
-.poll-option{
+.muted{
+  color:#64748b;
+  font-size:13px;
+}
+
+.followBtn{
+  border:0;
+  border-radius:12px;
+  padding:9px 13px;
+  background:#4f46e5;
+  color:white;
+  font-weight:800;
+}
+
+.followBtn.following{
+  background:#eef2ff;
+  color:#4f46e5;
+}
+
+/* POLL */
+
+.pollQuestion{
+  font-size:18px;
+  font-weight:800;
+  margin:15px 0;
+}
+
+.pollOption{
   width:100%;
+  text-align:left;
+  border:1px solid #e2e8f0;
+  background:#f8fafc;
+  border-radius:13px;
+  padding:12px;
+  margin-top:8px;
   position:relative;
   overflow:hidden;
-  margin:8px 0;
-  padding:12px 13px;
-  border-radius:13px;
-  border:1px solid #e7e9ef;
-  background:#fafbfc;
-  text-align:left;
-  color:#222936;
 }
 
-.poll-option .bar{
+.pollOption:hover{
+  border-color:#818cf8;
+}
+
+.pollBar{
   position:absolute;
-  inset:0 auto 0 0;
-  width:0;
-  background:rgba(99,91,255,.12);
-  transition:.4s;
+  left:0;
+  top:0;
+  bottom:0;
+  background:#e0e7ff;
+  opacity:.7;
 }
 
-.poll-option .option-content{
+.pollText{
   position:relative;
   z-index:1;
   display:flex;
@@ -435,399 +341,256 @@ button{
   gap:10px;
 }
 
-.poll-option.selected{
-  border-color:#7168ff;
-}
-
-.poll-meta{
+.pollMeta{
   display:flex;
   justify-content:space-between;
   margin-top:13px;
-  color:#8b919d;
-  font-size:11px;
-}
-
-.poll-actions{
-  display:flex;
-  gap:8px;
-  margin-top:13px;
-  border-top:1px solid #f0f1f5;
-  padding-top:11px;
-}
-
-.action-btn{
-  flex:1;
-  padding:9px;
-  border-radius:11px;
-  background:#f6f7fa;
-  color:#646b79;
   font-size:12px;
-  font-weight:700;
+  color:#64748b;
 }
 
-/* ================= SEARCH ================= */
+/* SEARCH */
 
-.search-box{
-  margin:5px 0 15px;
+.searchBox{
+  position:sticky;
+  top:70px;
+  z-index:5;
+  margin-bottom:14px;
 }
 
-.search-results{
+/* CHAT */
+
+.chatList{
   display:flex;
   flex-direction:column;
-  gap:9px;
+  gap:4px;
 }
 
-.search-item{
-  background:#fff;
-  padding:13px;
-  border-radius:16px;
+.chatItem{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  box-shadow:0 5px 18px rgba(30,40,70,.05);
+  gap:12px;
+  padding:13px 8px;
+  border-radius:15px;
+  cursor:pointer;
 }
 
-.search-user{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:0;
+.chatItem:hover{
+  background:#f8fafc;
 }
 
-.search-user .avatar{
-  width:43px;
-  height:43px;
-}
-
-.empty{
-  text-align:center;
-  color:#8b919d;
-  padding:35px 15px;
-}
-
-/* ================= CREATE ================= */
-
-.create-card{
-  background:#fff;
-  border-radius:22px;
-  padding:18px;
-  box-shadow:0 7px 25px rgba(25,35,60,.06);
-}
-
-.create-card textarea{
-  min-height:105px;
-  resize:none;
-}
-
-.option-input{
-  margin-top:9px;
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #e3e6ed;
-  background:#fafbfc;
-  outline:none;
-}
-
-.remove-option{
-  margin-top:5px;
-  font-size:11px;
-  color:#d54b59;
-  background:none;
-}
-
-/* ================= PROFILE ================= */
-
-.profile-card{
-  background:#fff;
-  border-radius:23px;
-  padding:22px;
-  text-align:center;
-  box-shadow:0 7px 25px rgba(25,35,60,.06);
-}
-
-.profile-avatar-wrap{
-  position:relative;
-  width:90px;
-  height:90px;
-  margin:0 auto 12px;
-}
-
-.profile-avatar{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#e8e9ef;
-}
-
-.photo-edit{
-  position:absolute;
-  right:0;
-  bottom:0;
-  width:29px;
-  height:29px;
-  border-radius:50%;
-  background:#635bff;
-  color:#fff;
-  border:3px solid #fff;
-}
-
-.profile-stats{
-  display:flex;
-  justify-content:center;
-  gap:30px;
-  margin:19px 0;
-}
-
-.stat strong{
-  display:block;
-  font-size:18px;
-}
-
-.stat span{
-  color:#858b98;
-  font-size:11px;
-}
-
-.profile-actions{
-  display:flex;
-  gap:9px;
-}
-
-.profile-actions button{
-  flex:1;
-}
-
-/* ================= CHAT ================= */
-
-.chat-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.chat-item{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  background:#fff;
-  padding:13px;
-  border-radius:17px;
-  box-shadow:0 5px 17px rgba(30,40,70,.05);
-}
-
-.chat-item-info{
+.chatPreview{
   flex:1;
   min-width:0;
 }
 
-.chat-last{
-  color:#8a909c;
-  font-size:12px;
+.chatPreview .last{
+  color:#64748b;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 
-.chat-window{
-  position:fixed;
-  inset:0;
-  z-index:100;
-  background:#f7f8fc;
-  display:flex;
-  flex-direction:column;
+.chatTime{
+  color:#94a3b8;
+  font-size:11px;
 }
 
-.chat-header{
-  height:64px;
-  padding:8px 13px;
-  padding-top:max(8px,env(safe-area-inset-top));
-  background:#fff;
+.chatHeader{
   display:flex;
   align-items:center;
   gap:10px;
-  border-bottom:1px solid #eceef3;
+  margin-bottom:12px;
 }
 
-.chat-header button{
-  background:none;
-  font-size:22px;
+.backBtn{
+  border:0;
+  background:#f1f5f9;
+  border-radius:10px;
+  padding:8px 12px;
 }
 
-.chat-header .avatar{
-  width:39px;
-  height:39px;
-}
-
-.chat-messages{
-  flex:1;
+.messages{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  max-height:58vh;
   overflow-y:auto;
-  padding:16px;
+  padding:5px 2px;
 }
 
 .message{
   max-width:78%;
   padding:10px 13px;
-  border-radius:16px;
-  margin:6px 0;
-  font-size:14px;
-  line-height:1.4;
-  word-break:break-word;
+  border-radius:17px;
+  line-height:1.35;
 }
 
 .message.mine{
-  margin-left:auto;
-  background:#635bff;
-  color:#fff;
+  align-self:flex-end;
+  color:white;
+  background:#4f46e5;
   border-bottom-right-radius:5px;
 }
 
 .message.theirs{
-  margin-right:auto;
-  background:#fff;
+  align-self:flex-start;
+  background:#eef2f7;
   border-bottom-left-radius:5px;
 }
 
-.chat-input{
-  padding:9px;
-  padding-bottom:max(9px,env(safe-area-inset-bottom));
-  background:#fff;
-  display:flex;
-  gap:8px;
-  border-top:1px solid #e9ebf0;
+.messageTime{
+  font-size:9px;
+  opacity:.65;
+  margin-top:4px;
 }
 
-.chat-input input{
+.chatComposer{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.chatComposer input{
   flex:1;
-  min-width:0;
-  border:1px solid #e0e3ea;
-  background:#f7f8fa;
-  border-radius:13px;
+  border:1px solid #e2e8f0;
+  border-radius:14px;
   padding:12px;
   outline:none;
 }
 
-.chat-input button{
-  width:47px;
-  border-radius:13px;
-  background:#635bff;
-  color:#fff;
+.sendBtn{
+  border:0;
+  border-radius:14px;
+  width:50px;
+  background:#4f46e5;
+  color:white;
 }
 
-/* ================= BOTTOM NAV ================= */
+/* PROFILE */
 
-.bottom-nav{
+.profileTop{
+  text-align:center;
+  padding:25px 10px;
+}
+
+.profileName{
+  font-size:22px;
+  font-weight:900;
+  margin-top:10px;
+}
+
+.stats{
+  display:flex;
+  justify-content:center;
+  gap:35px;
+  margin-top:18px;
+}
+
+.stat strong{
+  display:block;
+  font-size:19px;
+}
+
+.stat span{
+  font-size:12px;
+  color:#64748b;
+}
+
+.profileActions{
+  display:flex;
+  gap:8px;
+  margin-top:18px;
+}
+
+.profileActions button{
+  flex:1;
+}
+
+/* BOTTOM NAV */
+
+.bottomNav{
   position:fixed;
-  z-index:40;
+  left:0;
+  right:0;
   bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(520px,100%);
-  padding:7px 9px;
-  padding-bottom:max(7px,env(safe-area-inset-bottom));
+  z-index:50;
+  height:70px;
+  padding:7px 10px max(7px,env(safe-area-inset-bottom));
   background:rgba(255,255,255,.96);
-  backdrop-filter:blur(20px);
-  border-top:1px solid #eceef3;
+  backdrop-filter:blur(16px);
+  border-top:1px solid #e5e7eb;
+  display:flex;
+  justify-content:center;
+}
+
+.navInner{
+  width:100%;
+  max-width:600px;
   display:flex;
   justify-content:space-around;
 }
 
-.nav-btn{
+.navBtn{
   flex:1;
-  background:none;
-  color:#9298a5;
-  padding:7px 2px;
-  font-size:10px;
+  border:0;
+  background:transparent;
+  color:#64748b;
+  font-size:11px;
   font-weight:700;
-}
-
-.nav-btn span{
-  display:block;
-  font-size:19px;
-  margin-bottom:2px;
-}
-
-.nav-btn.active{
-  color:#635bff;
-}
-
-/* ================= MODALS ================= */
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:90;
-  background:rgba(12,15,25,.55);
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  padding:18px;
+  gap:3px;
 }
 
-.modal-card{
-  width:100%;
-  max-width:420px;
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:24px;
-  padding:20px;
+.navBtn span:first-child{
+  font-size:21px;
 }
 
-.modal-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:15px;
+.navBtn.active{
+  color:#4f46e5;
 }
 
-.modal-head h3{
-  margin:0;
-}
-
-.close-btn{
-  width:35px;
-  height:35px;
-  border-radius:10px;
-  background:#f0f1f5;
-}
-
-/* ================= TOAST ================= */
+/* TOAST */
 
 #toast{
   position:fixed;
-  z-index:200;
   left:50%;
-  bottom:88px;
-  transform:translateX(-50%) translateY(20px);
-  background:#202532;
-  color:#fff;
-  padding:11px 15px;
-  border-radius:13px;
-  font-size:12px;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
+  bottom:85px;
+  transform:translateX(-50%);
+  z-index:100;
   max-width:90%;
+  padding:12px 17px;
+  border-radius:14px;
+  color:white;
+  background:#111827;
+  display:none;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.loading{
+  padding:30px;
   text-align:center;
+  color:#64748b;
 }
 
-#toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
+/* MOBILE */
 
-/* ================= DESKTOP ================= */
-
-@media(min-width:700px){
-  .app-shell{
-    box-shadow:0 0 60px rgba(20,30,60,.08);
+@media(max-width:480px){
+  .authBox{
+    padding:22px;
+    border-radius:22px;
   }
 
-  .bottom-nav{
-    box-shadow:0 -5px 25px rgba(20,30,60,.08);
+  #main{
+    padding-left:11px;
+    padding-right:11px;
+  }
+
+  .card{
+    border-radius:19px;
   }
 }
 </style>
@@ -835,399 +598,159 @@ button{
 
 <body>
 
-<!-- ================= AUTH ================= -->
-
+<!-- AUTH -->
 <section id="authScreen">
 
-  <div class="auth-card">
+  <div class="authBox">
 
-    <div class="logo">
-      <div class="logo-icon">📊</div>
-      <div>
-        <div class="logo-title">Poll Pulse</div>
-        <div class="logo-sub">Your voice. Your pulse.</div>
+    <div class="logo">Poll Pulse</div>
+    <div class="subtitle">Ask. Vote. Connect.</div>
+
+    <div class="authTabs">
+      <button id="loginTab" class="active" type="button">Login</button>
+      <button id="signupTab" type="button">Sign up</button>
+    </div>
+
+    <div id="loginForm">
+
+      <div class="field">
+        <label>Email</label>
+        <input id="loginEmail" type="email" autocomplete="email">
       </div>
-    </div>
 
-    <h1 id="authTitle">Welcome back</h1>
+      <div class="field">
+        <label>Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password">
+      </div>
 
-    <p class="auth-desc" id="authDesc">
-      Login to see polls, people and conversations.
-    </p>
+      <button id="loginBtn" class="primary" type="button">
+        Login
+      </button>
 
-    <div class="field">
-      <label>Email</label>
-      <input
-        id="emailInput"
-        type="email"
-        autocomplete="email"
-        placeholder="you@example.com">
-    </div>
-
-    <div class="field">
-      <label>Password</label>
-      <input
-        id="passwordInput"
-        type="password"
-        autocomplete="current-password"
-        placeholder="Your password">
-    </div>
-
-    <div class="field hidden" id="usernameField">
-      <label>Username</label>
-      <input
-        id="usernameInput"
-        type="text"
-        autocomplete="username"
-        placeholder="yourusername">
-    </div>
-
-    <button
-      id="loginButton"
-      class="primary-btn"
-      type="button">
-      Login
-    </button>
-
-    <button
-      id="signupButton"
-      class="secondary-btn"
-      type="button">
-      Create account
-    </button>
-
-    <div class="auth-links">
-      <button id="forgotButton" class="text-btn" type="button">
+      <div class="smallLink" id="forgotBtn">
         Forgot password?
-      </button>
+      </div>
 
-      <button id="modeButton" class="text-btn" type="button">
-        Sign up
-      </button>
     </div>
 
-    <div id="authMessage"></div>
+    <div id="signupForm" class="hidden">
+
+      <div class="field">
+        <label>Username</label>
+        <input id="signupUsername" type="text" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input id="signupEmail" type="email" autocomplete="email">
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input id="signupPassword" type="password" autocomplete="new-password">
+      </div>
+
+      <button id="signupBtn" class="primary" type="button">
+        Create account
+      </button>
+
+    </div>
 
   </div>
 </section>
 
 
-<!-- ================= APP ================= -->
-
-<section id="appScreen" class="hidden">
-
-<div class="app-shell">
+<!-- APP -->
+<section id="app" class="hidden">
 
   <header class="topbar">
 
-    <div class="top-brand">
-      <div class="logo-icon">📊</div>
-      <span>Poll Pulse</span>
-    </div>
+    <div class="brand">Poll Pulse</div>
 
-    <button
-      id="notificationButton"
-      class="icon-btn"
-      type="button">
-      🔔
-      <span id="notificationBadge" class="badge hidden">0</span>
-    </button>
+    <div class="topActions">
+
+      <button class="iconBtn" id="refreshBtn" type="button">
+        ↻
+      </button>
+
+      <button class="iconBtn" id="notifBtn" type="button">
+        🔔
+      </button>
+
+    </div>
 
   </header>
 
+  <main id="main"></main>
 
-  <main id="mainContent" class="content"></main>
+  <nav class="bottomNav">
 
+    <div class="navInner">
 
-  <nav class="bottom-nav">
+      <button class="navBtn active" data-page="home" type="button">
+        <span>⌂</span>
+        <span>Home</span>
+      </button>
 
-    <button class="nav-btn active" data-page="home" type="button">
-      <span>⌂</span>
-      Home
-    </button>
+      <button class="navBtn" data-page="search" type="button">
+        <span>⌕</span>
+        <span>Search</span>
+      </button>
 
-    <button class="nav-btn" data-page="search" type="button">
-      <span>⌕</span>
-      Search
-    </button>
+      <button class="navBtn" data-page="create" type="button">
+        <span>＋</span>
+        <span>Create</span>
+      </button>
 
-    <button class="nav-btn" data-page="create" type="button">
-      <span>＋</span>
-      Create
-    </button>
+      <button class="navBtn" data-page="chat" type="button">
+        <span>💬</span>
+        <span>Chat</span>
+      </button>
 
-    <button class="nav-btn" data-page="chat" type="button">
-      <span>💬</span>
-      Chat
-    </button>
+      <button class="navBtn" data-page="profile" type="button">
+        <span>👤</span>
+        <span>Profile</span>
+      </button>
 
-    <button class="nav-btn" data-page="profile" type="button">
-      <span>◉</span>
-      Profile
-    </button>
+    </div>
 
   </nav>
 
-</div>
 </section>
 
-
-<!-- ================= CHAT MODAL ================= -->
-
-<div id="chatWindow" class="chat-window hidden">
-
-  <div class="chat-header">
-
-    <button id="closeChatButton" type="button">‹</button>
-
-    <img id="chatAvatar" class="avatar" src="" alt="">
-
-    <div>
-      <div id="chatName" class="user-name">Chat</div>
-      <div id="chatUsername" class="username"></div>
-    </div>
-
-  </div>
-
-  <div id="chatMessages" class="chat-messages"></div>
-
-  <form id="chatForm" class="chat-input">
-
-    <input
-      id="chatInput"
-      type="text"
-      maxlength="1000"
-      autocomplete="off"
-      placeholder="Message...">
-
-    <button type="submit">➤</button>
-
-  </form>
-
-</div>
-
-
-<!-- ================= PHOTO MODAL ================= -->
-
-<div id="photoModal" class="modal hidden">
-
-  <div class="modal-card">
-
-    <div class="modal-head">
-      <h3>Profile photo</h3>
-      <button id="closePhotoModal" class="close-btn" type="button">✕</button>
-    </div>
-
-    <input id="photoInput" type="file" accept="image/*">
-
-    <button
-      id="uploadPhotoButton"
-      class="primary-btn"
-      type="button"
-      style="margin-top:14px">
-      Upload photo
-    </button>
-
-    <div id="photoMessage" class="muted" style="margin-top:10px"></div>
-
-  </div>
-</div>
-
-
 <div id="toast"></div>
-
 
 <script>
 "use strict";
 
-/* =========================================================
-   CONFIG
-========================================================= */
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
-  "https://dbpbkvfaxgifjeveijqf.supabase.co";
+"https://dbpbkvfaxgifjeveijqf.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
-
-
-/* =========================================================
-   GLOBALS
-========================================================= */
+"sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
 
 let supabaseClient = null;
-let supabaseLoading = null;
-
 let currentUser = null;
 let currentProfile = null;
-
-let currentPage = "home";
-
 let currentChatUser = null;
-let chatChannel = null;
+let realtimeChannel = null;
 
-let authMode = "login";
+function initSupabase(){
 
-let pollCache = [];
-let profileCache = [];
+  if(supabaseClient) return Promise.resolve(supabaseClient);
 
-const $ = id => document.getElementById(id);
-
-
-/* =========================================================
-   BASIC HELPERS
-========================================================= */
-
-function escapeHTML(value){
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-function avatarURL(url,name){
-  if(url) return url;
-
-  const letter =
-    String(name || "?")
-      .trim()
-      .charAt(0)
-      .toUpperCase() || "?";
-
-  return "https://ui-avatars.com/api/?name=" +
-    encodeURIComponent(letter) +
-    "&background=635bff&color=fff&size=160";
-}
-
-function showToast(message){
-  const el = $("toast");
-  el.textContent = message;
-  el.classList.add("show");
-
-  clearTimeout(window.__toastTimer);
-
-  window.__toastTimer = setTimeout(()=>{
-    el.classList.remove("show");
-  },2600);
-}
-
-function setAuthMessage(message,type=""){
-  const el = $("authMessage");
-
-  el.textContent = message;
-  el.className = type;
-}
-
-function setPhotoMessage(message){
-  $("photoMessage").textContent = message;
-}
-
-function timeAgo(date){
-  const d = new Date(date);
-  const diff = Math.floor((Date.now()-d.getTime())/1000);
-
-  if(diff < 60) return "just now";
-
-  const min = Math.floor(diff/60);
-  if(min < 60) return min+"m";
-
-  const hour = Math.floor(min/60);
-  if(hour < 24) return hour+"h";
-
-  const day = Math.floor(hour/24);
-  if(day < 30) return day+"d";
-
-  return d.toLocaleDateString();
-}
-
-
-/* =========================================================
-   SUPABASE LOADER
-========================================================= */
-
-function loadSupabase(){
-
-  if(
-    window.supabase &&
-    typeof window.supabase.createClient === "function"
-  ){
-    return Promise.resolve(window.supabase);
+  if(!window.supabase){
+    return Promise.reject(
+      new Error("Supabase library load nahi hui.")
+    );
   }
 
-  if(supabaseLoading){
-    return supabaseLoading;
-  }
-
-  supabaseLoading = new Promise((resolve,reject)=>{
-
-    const sources = [
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
-      "https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"
-    ];
-
-    let index = 0;
-
-    function tryLoad(){
-
-      if(
-        window.supabase &&
-        typeof window.supabase.createClient === "function"
-      ){
-        resolve(window.supabase);
-        return;
-      }
-
-      if(index >= sources.length){
-        reject(
-          new Error(
-            "Supabase library load nahi hui. Internet/CDN check karo."
-          )
-        );
-        return;
-      }
-
-      const script = document.createElement("script");
-
-      script.src = sources[index++];
-      script.async = true;
-
-      script.onload = ()=>{
-
-        if(
-          window.supabase &&
-          typeof window.supabase.createClient === "function"
-        ){
-          resolve(window.supabase);
-        }else{
-          tryLoad();
-        }
-
-      };
-
-      script.onerror = ()=>{
-        tryLoad();
-      };
-
-      document.head.appendChild(script);
-    }
-
-    tryLoad();
-
-  });
-
-  return supabaseLoading;
-}
-
-
-async function initSupabase(){
-
-  const sdk = await loadSupabase();
-
-  if(!supabaseClient){
-
-    supabaseClient = sdk.createClient(
+  supabaseClient =
+    window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_KEY,
       {
@@ -1239,674 +762,549 @@ async function initSupabase(){
       }
     );
 
+  return Promise.resolve(supabaseClient);
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+function toast(message){
+
+  const box = $("toast");
+
+  box.textContent = message;
+  box.style.display = "block";
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(()=>{
+      box.style.display = "none";
+    },3000);
+}
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function initials(name){
+
+  return String(name || "U")
+    .trim()
+    .slice(0,1)
+    .toUpperCase();
+}
+
+function avatarHTML(profile, big=false){
+
+  const cls = big ? "avatar big" : "avatar";
+
+  if(profile?.avatar_url){
+
+    return `
+      <img class="${cls}"
+           src="${escapeHTML(profile.avatar_url)}"
+           onerror="this.outerHTML='<div class=&quot;${cls}&quot;>${initials(profile.username)}</div>'">
+    `;
+
   }
 
-  return supabaseClient;
+  return `
+    <div class="${cls}">
+      ${initials(profile?.username || profile?.full_name)}
+    </div>
+  `;
+}
+
+function formatDate(date){
+
+  if(!date) return "";
+
+  const d = new Date(date);
+
+  return d.toLocaleString([],{
+    day:"numeric",
+    month:"short",
+    hour:"numeric",
+    minute:"2-digit"
+  });
 }
 
 
-/* =========================================================
-   AUTH MODE
-========================================================= */
+/* =========================
+   AUTH UI
+========================= */
 
-function setAuthMode(mode){
+function showLogin(){
 
-  authMode = mode;
+  $("loginForm").classList.remove("hidden");
+  $("signupForm").classList.add("hidden");
 
-  const signup =
-    mode === "signup";
+  $("loginTab").classList.add("active");
+  $("signupTab").classList.remove("active");
+}
 
-  $("authTitle").textContent =
-    signup ? "Create account" : "Welcome back";
+function showSignup(){
 
-  $("authDesc").textContent =
-    signup
-      ? "Create your Poll Pulse account."
-      : "Login to see polls, people and conversations.";
+  $("loginForm").classList.add("hidden");
+  $("signupForm").classList.remove("hidden");
 
-  $("usernameField")
-    .classList.toggle("hidden",!signup);
-
-  $("loginButton")
-    .classList.toggle("hidden",signup);
-
-  $("signupButton")
-    .classList.toggle("hidden",!signup);
-
-  $("modeButton").textContent =
-    signup ? "Login" : "Sign up";
-
-  setAuthMessage("");
-
+  $("loginTab").classList.remove("active");
+  $("signupTab").classList.add("active");
 }
 
 
-/* =========================================================
+/* =========================
    LOGIN
-========================================================= */
+========================= */
 
 async function loginUser(){
 
-  const email =
-    $("emailInput").value.trim();
-
-  const password =
-    $("passwordInput").value;
-
-  if(!email || !password){
-    setAuthMessage(
-      "Email aur password dono bharo.",
-      "error"
-    );
-    return;
-  }
-
-  const button = $("loginButton");
-
-  button.disabled = true;
-  button.textContent = "Logging in...";
-
-  setAuthMessage("Connecting...");
-
   try{
 
-    const sb = await initSupabase();
+    await initSupabase();
+
+    const email =
+      $("loginEmail").value.trim();
+
+    const password =
+      $("loginPassword").value;
+
+    if(!email || !password){
+
+      toast("Email aur password bhar bhai.");
+      return;
+    }
+
+    $("loginBtn").disabled = true;
+    $("loginBtn").textContent = "Logging in...";
 
     const {data,error} =
-      await sb.auth.signInWithPassword({
+      await supabaseClient.auth.signInWithPassword({
         email,
         password
       });
 
-    if(error){
-      throw error;
-    }
+    if(error) throw error;
 
-    if(!data || !data.user){
-      throw new Error("Login successful nahi hua.");
+    if(!data.user){
+
+      toast("Login nahi hua.");
+      return;
     }
 
     currentUser = data.user;
 
-    setAuthMessage(
-      "Login successful!",
-      "success"
-    );
-
-    await openApp(currentUser);
-
-  }catch(error){
-
-    console.error("LOGIN ERROR:",error);
-
-    setAuthMessage(
-      error?.message ||
-      "Login failed. Internet aur account check karo.",
-      "error"
-    );
-
-  }finally{
-
-    button.disabled = false;
-    button.textContent = "Login";
-
-  }
-}
-
-
-/* =========================================================
-   SIGNUP
-========================================================= */
-
-async function signupUser(){
-
-  const email =
-    $("emailInput").value.trim();
-
-  const password =
-    $("passwordInput").value;
-
-  const username =
-    $("usernameInput").value.trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9_]/g,"");
-
-  if(!email || !password || !username){
-
-    setAuthMessage(
-      "Email, password aur username bharo.",
-      "error"
-    );
-
-    return;
-  }
-
-  if(password.length < 6){
-
-    setAuthMessage(
-      "Password kam se kam 6 characters ka hona chahiye.",
-      "error"
-    );
-
-    return;
-  }
-
-  const button = $("signupButton");
-
-  button.disabled = true;
-  button.textContent = "Creating...";
-
-  try{
-
-    const sb = await initSupabase();
-
-    const {data,error} =
-      await sb.auth.signUp({
-        email,
-        password,
-        options:{
-          data:{
-            username
-          }
-        }
-      });
-
-    if(error){
-      throw error;
-    }
-
-    if(data?.session){
-
-      currentUser = data.user;
-
-      await ensureProfile();
-
-      await openApp(currentUser);
-
-    }else{
-
-      setAuthMessage(
-        "Account ban gaya. Agar email confirmation enabled hai to email verify karo.",
-        "success"
-      );
-
-    }
-
-  }catch(error){
-
-    console.error("SIGNUP ERROR:",error);
-
-    setAuthMessage(
-      error?.message ||
-      "Signup failed.",
-      "error"
-    );
-
-  }finally{
-
-    button.disabled = false;
-    button.textContent = "Create account";
-
-  }
-}
-
-
-/* =========================================================
-   PASSWORD RESET
-========================================================= */
-
-async function resetPassword(){
-
-  const email =
-    $("emailInput").value.trim();
-
-  if(!email){
-
-    setAuthMessage(
-      "Pehle email enter karo.",
-      "error"
-    );
-
-    return;
-  }
-
-  try{
-
-    const sb = await initSupabase();
-
-    const {error} =
-      await sb.auth.resetPasswordForEmail(
-        email,
-        {
-          redirectTo:
-            window.location.origin +
-            window.location.pathname
-        }
-      );
-
-    if(error) throw error;
-
-    setAuthMessage(
-      "Password reset email bhej diya gaya.",
-      "success"
-    );
+    await openApp();
 
   }catch(error){
 
     console.error(error);
 
-    setAuthMessage(
-      error?.message || "Reset failed.",
-      "error"
+    toast(
+      error?.message ||
+      "Login mein problem aa gayi."
     );
 
+  }finally{
+
+    $("loginBtn").disabled = false;
+    $("loginBtn").textContent = "Login";
   }
 }
 
 
-/* =========================================================
-   PROFILE
-========================================================= */
+/* =========================
+   SIGNUP
+========================= */
 
-async function ensureProfile(){
-
-  if(!currentUser) return null;
-
-  const sb = await initSupabase();
+async function signupUser(){
 
   try{
 
-    const {data,error} =
-      await sb
-        .from("profiles")
-        .select("*")
-        .eq("id",currentUser.id)
-        .maybeSingle();
-
-    if(error){
-      throw error;
-    }
-
-    if(data){
-
-      currentProfile = data;
-      return data;
-
-    }
+    await initSupabase();
 
     const username =
-      currentUser.user_metadata?.username ||
-      (
-        currentUser.email
-          ? currentUser.email.split("@")[0]
-          : "user"
-      );
+      $("signupUsername").value.trim();
 
-    const fallback = {
-      id:currentUser.id,
-      username:username,
-      full_name:"",
-      avatar_url:""
-    };
+    const email =
+      $("signupEmail").value.trim();
 
-    const result =
-      await sb
-        .from("profiles")
-        .insert(fallback)
-        .select()
-        .maybeSingle();
+    const password =
+      $("signupPassword").value;
 
-    if(result.error){
+    if(!username || !email || !password){
 
-      console.warn(
-        "Profile create warning:",
-        result.error
-      );
+      toast("Saari details bhar bhai.");
+      return;
+    }
 
-      currentProfile = fallback;
+    if(password.length < 6){
+
+      toast("Password kam se kam 6 characters ka rakho.");
+      return;
+    }
+
+    $("signupBtn").disabled = true;
+    $("signupBtn").textContent = "Creating...";
+
+    const {data,error} =
+      await supabaseClient.auth.signUp({
+
+        email,
+        password,
+
+        options:{
+          data:{
+            username
+          }
+        }
+
+      });
+
+    if(error) throw error;
+
+    if(data.session){
+
+      currentUser = data.user;
+
+      await ensureProfile();
+
+      await openApp();
 
     }else{
 
-      currentProfile =
-        result.data || fallback;
+      toast(
+        "Account ban gaya. Agar email confirmation ON hai to email verify karo."
+      );
+
+      showLogin();
 
     }
 
   }catch(error){
 
-    console.warn(
-      "ensureProfile:",
-      error
+    console.error(error);
+
+    toast(
+      error?.message ||
+      "Signup failed."
     );
 
-    currentProfile = {
-      id:currentUser.id,
-      username:
-        currentUser.email?.split("@")[0] || "user",
-      full_name:"",
-      avatar_url:""
-    };
+  }finally{
 
+    $("signupBtn").disabled = false;
+    $("signupBtn").textContent = "Create account";
   }
-
-  return currentProfile;
 }
 
 
-/* =========================================================
+/* =========================
+   PROFILE
+========================= */
+
+async function ensureProfile(){
+
+  if(!currentUser) return null;
+
+  const {data,error} =
+    await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id",currentUser.id)
+      .maybeSingle();
+
+  if(error){
+
+    console.error("Profile:",error);
+
+    return null;
+  }
+
+  if(data){
+
+    currentProfile = data;
+
+    return data;
+  }
+
+  const username =
+    currentUser.user_metadata?.username ||
+    currentUser.email?.split("@")[0] ||
+    "user";
+
+  const newProfile = {
+
+    id:currentUser.id,
+    username,
+    full_name:username
+
+  };
+
+  const result =
+    await supabaseClient
+      .from("profiles")
+      .insert(newProfile)
+      .select()
+      .single();
+
+  if(result.error){
+
+    console.error(result.error);
+    return null;
+  }
+
+  currentProfile = result.data;
+
+  return result.data;
+}
+
+
+/* =========================
    OPEN APP
-========================================================= */
+========================= */
 
-async function openApp(user){
-
-  currentUser = user;
+async function openApp(){
 
   $("authScreen").classList.add("hidden");
-  $("appScreen").classList.remove("hidden");
+  $("app").classList.remove("hidden");
 
   await ensureProfile();
 
-  await loadPage("home");
+  await loadHome();
 
   updateNotificationCount();
-
 }
 
 
-/* =========================================================
-   AUTH LISTENER
-========================================================= */
-
-async function setupAuthListener(){
-
-  const sb = await initSupabase();
-
-  sb.auth.onAuthStateChange(
-    async(event,session)=>{
-
-      if(
-        session?.user &&
-        !currentUser
-      ){
-
-        currentUser = session.user;
-
-        setTimeout(()=>{
-          openApp(session.user);
-        },0);
-
-      }
-
-      if(
-        event === "SIGNED_OUT"
-      ){
-
-        currentUser = null;
-        currentProfile = null;
-
-        $("appScreen")
-          .classList.add("hidden");
-
-        $("authScreen")
-          .classList.remove("hidden");
-
-        setAuthMode("login");
-
-      }
-
-    }
-  );
-}
-
-
-/* =========================================================
+/* =========================
    NAVIGATION
-========================================================= */
+========================= */
 
-async function loadPage(page){
-
-  currentPage = page;
+async function navigate(page){
 
   document
-    .querySelectorAll(".nav-btn")
-    .forEach(button=>{
-      button.classList.toggle(
+    .querySelectorAll(".navBtn")
+    .forEach(btn=>{
+      btn.classList.toggle(
         "active",
-        button.dataset.page === page
+        btn.dataset.page === page
       );
     });
-
-  const main = $("mainContent");
-
-  main.innerHTML =
-    '<div class="empty">Loading...</div>';
 
   try{
 
     if(page === "home")
       await loadHome();
 
-    else if(page === "search")
+    if(page === "search")
       loadSearch();
 
-    else if(page === "create")
+    if(page === "create")
       loadCreate();
 
-    else if(page === "chat")
-      await loadChatList();
+    if(page === "chat")
+      await loadChat();
 
-    else if(page === "profile")
+    if(page === "profile")
       await loadProfile();
 
   }catch(error){
 
-    console.error("PAGE ERROR:",error);
-
-    main.innerHTML = `
-      <div class="empty">
-        Something went wrong.<br>
-        <small>${escapeHTML(error.message)}</small>
-      </div>
-    `;
+    console.error(error);
+    toast("Page load nahi ho paya.");
 
   }
 }
 
 
-/* =========================================================
+/* =========================
    HOME
-========================================================= */
+========================= */
 
 async function loadHome(){
 
-  const main = $("mainContent");
-
-  main.innerHTML = `
-
-    <section class="hero">
-      <h2>What's your pulse? 👋</h2>
-      <p>
-        Vote, create polls and discover what people think.
-      </p>
-    </section>
-
-    <div class="section-head">
-      <h3>People you may know</h3>
-      <span class="muted">Suggestions</span>
-    </div>
-
-    <div id="suggestions" class="suggestions">
-      <div class="empty">Loading...</div>
-    </div>
-
-    <div class="section-head">
-      <h3>Latest polls</h3>
-      <span class="muted">For you</span>
-    </div>
-
-    <div id="polls">
-      <div class="empty">Loading polls...</div>
-    </div>
+  $("main").innerHTML = `
+    <div class="loading">Loading...</div>
   `;
 
-  await loadSuggestions();
-  await loadPolls();
+  let suggestions = [];
+  let polls = [];
+
+  const profilesResult =
+    await supabaseClient
+      .from("profiles")
+      .select("*")
+      .neq("id",currentUser.id)
+      .limit(12);
+
+  if(!profilesResult.error){
+
+    suggestions =
+      profilesResult.data || [];
+  }
+
+  const pollsResult =
+    await supabaseClient
+      .from("polls")
+      .select("*")
+      .order("created_at",{ascending:false})
+      .limit(30);
+
+  if(!pollsResult.error){
+
+    polls =
+      pollsResult.data || [];
+  }
+
+  $("main").innerHTML = `
+
+    <div class="card hero">
+      <h2>What's on your mind?</h2>
+      <p>Create a poll, vote and see what people think.</p>
+    </div>
+
+    <div class="sectionTitle">
+      <h3>People you may know</h3>
+    </div>
+
+    <div id="suggestions"></div>
+
+    <div class="sectionTitle">
+      <h3>Latest polls</h3>
+    </div>
+
+    <div id="polls"></div>
+  `;
+
+  renderSuggestions(suggestions);
+
+  renderPolls(polls);
 }
 
 
-/* =========================================================
+/* =========================
    SUGGESTIONS
-========================================================= */
+========================= */
 
-async function loadSuggestions(){
+function renderSuggestions(users){
 
   const box = $("suggestions");
 
-  if(!box) return;
+  if(!users.length){
 
-  try{
+    box.innerHTML = `
+      <div class="card">
+        <div class="muted">
+          Abhi koi suggestions nahi hain.
+        </div>
+      </div>
+    `;
 
-    const sb = await initSupabase();
+    return;
+  }
 
-    const {data,error} =
-      await sb
-        .from("profiles")
-        .select("*")
-        .neq("id",currentUser.id)
-        .limit(12);
+  box.innerHTML = `
+    <div class="card">
 
-    if(error) throw error;
+      ${users.map(user=>`
 
-    profileCache = data || [];
+        <div class="userRow" style="margin-bottom:13px">
 
-    if(!profileCache.length){
+          ${avatarHTML(user)}
 
-      box.innerHTML =
-        '<div class="empty">No suggestions yet.</div>';
+          <div class="userInfo">
 
-      return;
-    }
+            <div class="userName">
+              ${escapeHTML(
+                user.username ||
+                user.full_name ||
+                "User"
+              )}
+            </div>
 
-    box.innerHTML =
-      profileCache.map(user=>`
+            <div class="muted">
+              ${escapeHTML(user.full_name || "")}
+            </div>
 
-        <div class="suggestion-card">
-
-          <img
-            class="avatar"
-            src="${avatarURL(
-              user.avatar_url,
-              user.username
-            )}"
-            alt="">
-
-          <div class="user-name">
-            ${escapeHTML(
-              user.full_name ||
-              user.username ||
-              "User"
-            )}
-          </div>
-
-          <div class="username">
-            @${escapeHTML(user.username || "")}
           </div>
 
           <button
-            class="follow-btn"
             type="button"
+            class="followBtn"
             data-follow-id="${user.id}">
             Follow
           </button>
 
         </div>
 
-      `).join("");
+      `).join("")}
 
-    await updateFollowButtons();
+    </div>
+  `;
 
-  }catch(error){
-
-    console.error("SUGGESTION ERROR:",error);
-
-    box.innerHTML =
-      '<div class="empty">Suggestions unavailable.</div>';
-
-  }
+  updateFollowButtons();
 }
 
 
-/* =========================================================
-   FOLLOW BUTTONS
-========================================================= */
+/* =========================
+   FOLLOW
+========================= */
 
 async function updateFollowButtons(){
 
-  if(!currentUser) return;
-
-  try{
-
-    const sb = await initSupabase();
-
-    const {data,error} =
-      await sb
-        .from("follows")
-        .select("following_id")
-        .eq("follower_id",currentUser.id);
-
-    if(error) throw error;
-
-    const followed =
-      new Set(
-        (data || []).map(
-          x=>x.following_id
-        )
-      );
-
-    document
-      .querySelectorAll("[data-follow-id]")
-      .forEach(button=>{
-
-        const id =
-          button.dataset.followId;
-
-        if(followed.has(id)){
-
-          button.textContent = "Following";
-          button.classList.add("following");
-
-        }else{
-
-          button.textContent = "Follow";
-          button.classList.remove("following");
-
-        }
-
-      });
-
-  }catch(error){
-
-    console.warn(
-      "FOLLOW STATUS:",
-      error
+  const buttons =
+    document.querySelectorAll(
+      "[data-follow-id]"
     );
 
+  for(const button of buttons){
+
+    const id =
+      button.dataset.followId;
+
+    const {data} =
+      await supabaseClient
+        .from("follows")
+        .select("id")
+        .eq("follower_id",currentUser.id)
+        .eq("following_id",id)
+        .maybeSingle();
+
+    if(data){
+
+      button.textContent = "Following";
+      button.classList.add("following");
+
+    }else{
+
+      button.textContent = "Follow";
+      button.classList.remove("following");
+    }
+
+    button.onclick =
+      ()=>toggleFollow(id,button);
   }
 }
 
-
 async function toggleFollow(userId,button){
-
-  if(!currentUser || !userId) return;
-
-  button.disabled = true;
 
   try{
 
-    const sb = await initSupabase();
-
     const {data,error} =
-      await sb
+      await supabaseClient
         .from("follows")
         .select("id")
         .eq("follower_id",currentUser.id)
@@ -1918,7 +1316,7 @@ async function toggleFollow(userId,button){
     if(data){
 
       const result =
-        await sb
+        await supabaseClient
           .from("follows")
           .delete()
           .eq("id",data.id);
@@ -1928,12 +1326,12 @@ async function toggleFollow(userId,button){
       button.textContent = "Follow";
       button.classList.remove("following");
 
-      showToast("Unfollowed");
+      toast("Unfollowed");
 
     }else{
 
       const result =
-        await sb
+        await supabaseClient
           .from("follows")
           .insert({
             follower_id:currentUser.id,
@@ -1945,303 +1343,164 @@ async function toggleFollow(userId,button){
       button.textContent = "Following";
       button.classList.add("following");
 
-      showToast("Following");
+      toast("Followed");
 
+      /* notification */
+      await supabaseClient
+        .from("notifications")
+        .insert({
+          user_id:userId,
+          message:
+            `${currentProfile?.username || "Someone"} started following you`,
+          read:false
+        })
+        .then(()=>{})
+        .catch(()=>{});
     }
 
   }catch(error){
 
-    console.error("FOLLOW ERROR:",error);
+    console.error(error);
 
-    showToast(
+    toast(
       error?.message ||
-      "Follow failed"
+      "Follow update failed."
     );
-
-  }finally{
-
-    button.disabled = false;
-
   }
 }
 
 
-/* =========================================================
+/* =========================
    POLLS
-========================================================= */
+========================= */
 
-async function loadPolls(){
+function renderPolls(polls){
 
   const box = $("polls");
 
-  if(!box) return;
-
-  try{
-
-    const sb = await initSupabase();
-
-    const {data,error} =
-      await sb
-        .from("polls")
-        .select("*")
-        .order("created_at",{ascending:false})
-        .limit(30);
-
-    if(error) throw error;
-
-    pollCache = data || [];
-
-    if(!pollCache.length){
-
-      box.innerHTML =
-        '<div class="empty">No polls yet. Create the first one!</div>';
-
-      return;
-    }
-
-    box.innerHTML =
-      pollCache.map(renderPoll).join("");
-
-    await loadPollVotes();
-
-  }catch(error){
-
-    console.error("POLL ERROR:",error);
+  if(!polls.length){
 
     box.innerHTML = `
-      <div class="empty">
-        Polls could not be loaded.
-        <br>
-        <small>${escapeHTML(error.message)}</small>
+      <div class="card">
+        <div class="muted">
+          No polls yet. Pehla poll tum banao!
+        </div>
       </div>
     `;
 
-  }
-}
-
-
-function renderPoll(poll){
-
-  let options = [];
-
-  if(Array.isArray(poll.options)){
-    options = poll.options;
-  }else if(typeof poll.options === "string"){
-    try{
-      options = JSON.parse(poll.options);
-    }catch{
-      options = poll.options
-        .split(",")
-        .map(x=>x.trim())
-        .filter(Boolean);
-    }
+    return;
   }
 
-  if(!options.length){
-    options = ["Yes","No"];
-  }
+  box.innerHTML =
+    polls.map(poll=>{
 
-  const author =
-    poll.username ||
-    poll.author_name ||
-    "Poll creator";
+      let options = poll.options;
 
-  return `
+      if(typeof options === "string"){
 
-    <article
-      class="poll-card"
-      data-poll="${poll.id}">
-
-      <div class="poll-author">
-
-        <img
-          class="avatar"
-          src="${avatarURL(
-            poll.avatar_url,
-            author
-          )}"
-          alt="">
-
-        <div>
-          <div class="user-name">
-            ${escapeHTML(author)}
-          </div>
-          <div class="username">
-            ${timeAgo(poll.created_at)}
-          </div>
-        </div>
-
-      </div>
-
-      <div class="poll-question">
-        ${escapeHTML(
-          poll.question ||
-          poll.title ||
-          "Untitled poll"
-        )}
-      </div>
-
-      <div class="poll-options">
-
-        ${options.map((option,index)=>`
-
-          <button
-            class="poll-option"
-            type="button"
-            data-vote-poll="${poll.id}"
-            data-vote-index="${index}">
-
-            <span class="bar"></span>
-
-            <span class="option-content">
-              <span>
-                ${escapeHTML(option)}
-              </span>
-              <strong class="vote-percent">
-                0%
-              </strong>
-            </span>
-
-          </button>
-
-        `).join("")}
-
-      </div>
-
-      <div class="poll-meta">
-        <span class="vote-total">0 votes</span>
-        <span>Poll</span>
-      </div>
-
-    </article>
-
-  `;
-}
-
-
-/* =========================================================
-   VOTES
-========================================================= */
-
-async function loadPollVotes(){
-
-  if(!pollCache.length) return;
-
-  try{
-
-    const sb = await initSupabase();
-
-    const ids =
-      pollCache.map(p=>p.id);
-
-    const {data,error} =
-      await sb
-        .from("poll_votes")
-        .select("*")
-        .in("poll_id",ids);
-
-    if(error) throw error;
-
-    const grouped = {};
-
-    (data || []).forEach(v=>{
-
-      if(!grouped[v.poll_id]){
-        grouped[v.poll_id] = [];
+        try{
+          options = JSON.parse(options);
+        }catch{
+          options =
+            options
+              .split(",")
+              .map(x=>x.trim());
+        }
       }
 
-      grouped[v.poll_id].push(v);
+      if(!Array.isArray(options))
+        options = [];
+
+      return `
+
+        <div class="card">
+
+          <div class="muted">
+            Poll
+          </div>
+
+          <div class="pollQuestion">
+            ${escapeHTML(poll.question)}
+          </div>
+
+          <div>
+
+            ${options.map((option,index)=>`
+
+              <button
+                type="button"
+                class="pollOption"
+                data-poll-id="${poll.id}"
+                data-option-index="${index}">
+
+                <div class="pollBar"
+                     style="width:0%">
+                </div>
+
+                <div class="pollText">
+
+                  <span>
+                    ${escapeHTML(option)}
+                  </span>
+
+                  <span>
+                    —
+                  </span>
+
+                </div>
+
+              </button>
+
+            `).join("")}
+
+          </div>
+
+          <div class="pollMeta">
+
+            <span>
+              ${formatDate(poll.created_at)}
+            </span>
+
+            <span>
+              Vote to see results
+            </span>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  document
+    .querySelectorAll(".pollOption")
+    .forEach(button=>{
+
+      button.onclick =
+        ()=>votePoll(
+          button.dataset.pollId,
+          Number(button.dataset.optionIndex),
+          button
+        );
 
     });
-
-    document
-      .querySelectorAll("[data-poll]")
-      .forEach(card=>{
-
-        const pollId =
-          card.dataset.poll;
-
-        const votes =
-          grouped[pollId] || [];
-
-        const total =
-          votes.length;
-
-        card.querySelector(".vote-total")
-          .textContent =
-          total + (total === 1 ? " vote" : " votes");
-
-        const counts = {};
-
-        votes.forEach(v=>{
-          counts[v.option_index] =
-            (counts[v.option_index] || 0) + 1;
-        });
-
-        card
-          .querySelectorAll("[data-vote-index]")
-          .forEach(button=>{
-
-            const index =
-              button.dataset.voteIndex;
-
-            const count =
-              counts[index] || 0;
-
-            const percent =
-              total
-                ? Math.round(
-                    count / total * 100
-                  )
-                : 0;
-
-            button
-              .querySelector(".bar")
-              .style.width =
-              percent + "%";
-
-            button
-              .querySelector(".vote-percent")
-              .textContent =
-              percent + "%";
-
-            const hasVoted =
-              votes.some(v=>
-                String(v.user_id) ===
-                String(currentUser.id) &&
-                String(v.option_index) ===
-                String(index)
-              );
-
-            if(hasVoted){
-              button.classList.add("selected");
-            }
-
-          });
-
-      });
-
-  }catch(error){
-
-    console.warn(
-      "Vote stats unavailable:",
-      error
-    );
-
-  }
 }
 
 
-async function votePoll(pollId,index){
+/* =========================
+   VOTE
+========================= */
 
-  if(!currentUser) return;
+async function votePoll(
+  pollId,
+  optionIndex,
+  button
+){
 
   try{
 
-    const sb = await initSupabase();
-
     const existing =
-      await sb
+      await supabaseClient
         .from("poll_votes")
         .select("id")
         .eq("poll_id",pollId)
@@ -2253,762 +1512,872 @@ async function votePoll(pollId,index){
     if(existing.data){
 
       const result =
-        await sb
+        await supabaseClient
           .from("poll_votes")
           .update({
-            option_index:index
+            option_index:optionIndex
           })
           .eq("id",existing.data.id);
 
       if(result.error) throw result.error;
 
+      toast("Vote updated");
+
     }else{
 
       const result =
-        await sb
+        await supabaseClient
           .from("poll_votes")
           .insert({
             poll_id:pollId,
             user_id:currentUser.id,
-            option_index:index
+            option_index:optionIndex
           });
 
       if(result.error) throw result.error;
 
+      toast("Vote recorded");
     }
 
-    showToast("Vote saved!");
-
-    await loadPollVotes();
+    /* show basic results */
+    await showPollResults(pollId);
 
   }catch(error){
 
-    console.error("VOTE ERROR:",error);
+    console.error(error);
 
-    showToast(
+    toast(
       error?.message ||
-      "Vote save nahi hua."
+      "Vote nahi ho paya."
     );
-
   }
 }
 
+async function showPollResults(pollId){
 
-/* =========================================================
-   SEARCH
-========================================================= */
+  const pollResult =
+    await supabaseClient
+      .from("polls")
+      .select("*")
+      .eq("id",pollId)
+      .single();
 
-function loadSearch(){
+  if(pollResult.error) return;
 
-  $("mainContent").innerHTML = `
+  let options = pollResult.data.options;
 
-    <div class="section-head">
-      <h3>Search</h3>
-    </div>
+  if(typeof options === "string"){
 
-    <div class="search-box">
-      <input
-        id="searchInput"
-        class="search-input"
-        type="search"
-        autocomplete="off"
-        placeholder="Search people...">
-    </div>
+    try{
+      options = JSON.parse(options);
+    }catch{
+      options =
+        options.split(",").map(x=>x.trim());
+    }
+  }
 
-    <div id="searchResults" class="search-results">
-      <div class="empty">
-        Search for people on Poll Pulse.
-      </div>
-    </div>
+  if(!Array.isArray(options)) return;
 
-  `;
+  const votesResult =
+    await supabaseClient
+      .from("poll_votes")
+      .select("option_index")
+      .eq("poll_id",pollId);
 
-  $("searchInput")
-    .addEventListener(
-      "input",
-      searchAll
+  if(votesResult.error) return;
+
+  const votes =
+    votesResult.data || [];
+
+  const total = votes.length;
+
+  const counts =
+    options.map((_,index)=>
+      votes.filter(
+        v=>Number(v.option_index) === index
+      ).length
     );
+
+  document
+    .querySelectorAll(
+      `[data-poll-id="${pollId}"]`
+    )
+    .forEach((button,index)=>{
+
+      const count = counts[index] || 0;
+
+      const percent =
+        total
+        ? Math.round(count * 100 / total)
+        : 0;
+
+      const bar =
+        button.querySelector(".pollBar");
+
+      const text =
+        button.querySelector(".pollText span:last-child");
+
+      if(bar)
+        bar.style.width =
+          percent + "%";
+
+      if(text)
+        text.textContent =
+          percent + "%";
+    });
 }
 
 
+/* =========================
+   SEARCH
+========================= */
+
+function loadSearch(){
+
+  $("main").innerHTML = `
+
+    <div class="pageTitle">
+      Search
+    </div>
+
+    <div class="searchBox">
+      <input
+        id="searchInput"
+        class="searchInput"
+        type="search"
+        placeholder="Search people..."
+        autocomplete="off">
+    </div>
+
+    <div id="searchResults"></div>
+  `;
+
+  $("searchInput").addEventListener(
+    "input",
+    searchAll
+  );
+}
+
 async function searchAll(){
 
-  const input =
-    $("searchInput");
+  const term =
+    $("searchInput").value.trim();
 
   const box =
     $("searchResults");
 
-  if(!input || !box) return;
-
-  const term =
-    input.value.trim();
-
   if(!term){
 
-    box.innerHTML =
-      '<div class="empty">Search for people on Poll Pulse.</div>';
+    box.innerHTML = `
+      <div class="card muted">
+        Username search karo.
+      </div>
+    `;
 
     return;
   }
 
-  box.innerHTML =
-    '<div class="empty">Searching...</div>';
+  const result =
+    await supabaseClient
+      .from("profiles")
+      .select("*")
+      .or(
+        `username.ilike.%${term}%,full_name.ilike.%${term}%`
+      )
+      .neq("id",currentUser.id)
+      .limit(20);
 
-  try{
+  if(result.error){
 
-    const sb = await initSupabase();
+    console.error(result.error);
 
-    const {data,error} =
-      await sb
-        .from("profiles")
-        .select("*")
-        .or(
-          "username.ilike.%" +
-          term +
-          "%,full_name.ilike.%" +
-          term +
-          "%"
-        )
-        .neq("id",currentUser.id)
-        .limit(30);
+    box.innerHTML = `
+      <div class="card">
+        Search failed.
+      </div>
+    `;
 
-    if(error) throw error;
+    return;
+  }
 
-    if(!data?.length){
+  const users =
+    result.data || [];
 
-      box.innerHTML =
-        '<div class="empty">No users found.</div>';
+  if(!users.length){
 
-      return;
-    }
+    box.innerHTML = `
+      <div class="card muted">
+        Koi user nahi mila.
+      </div>
+    `;
 
-    box.innerHTML =
-      data.map(user=>`
+    return;
+  }
 
-        <div class="search-item">
+  box.innerHTML = `
+    <div class="card">
 
-          <div class="search-user">
+      ${users.map(user=>`
 
-            <img
-              class="avatar"
-              src="${avatarURL(
-                user.avatar_url,
-                user.username
-              )}"
-              alt="">
+        <div class="userRow" style="margin-bottom:14px">
 
-            <div>
-              <div class="user-name">
-                ${escapeHTML(
-                  user.full_name ||
-                  user.username ||
-                  "User"
-                )}
-              </div>
+          ${avatarHTML(user)}
 
-              <div class="username">
-                @${escapeHTML(
-                  user.username || ""
-                )}
-              </div>
+          <div class="userInfo">
+
+            <div class="userName">
+              ${escapeHTML(
+                user.username ||
+                user.full_name ||
+                "User"
+              )}
+            </div>
+
+            <div class="muted">
+              ${escapeHTML(user.full_name || "")}
             </div>
 
           </div>
 
           <button
-            class="follow-btn"
             type="button"
-            data-follow-id="${user.id}">
+            class="followBtn"
+            data-search-follow="${user.id}">
             Follow
+          </button>
+
+          <button
+            type="button"
+            class="secondary"
+            data-start-chat="${user.id}">
+            Chat
           </button>
 
         </div>
 
-      `).join("");
+      `).join("")}
 
-    await updateFollowButtons();
+    </div>
+  `;
 
-  }catch(error){
+  await updateSearchFollowButtons();
 
-    console.error(
-      "SEARCH ERROR:",
-      error
+  document
+    .querySelectorAll("[data-start-chat]")
+    .forEach(btn=>{
+
+      btn.onclick = async()=>{
+
+        const id =
+          btn.dataset.startChat;
+
+        const profile =
+          users.find(
+            x=>x.id === id
+          );
+
+        if(profile){
+
+          currentChatUser = profile;
+
+          await loadChatWindow();
+        }
+      };
+    });
+}
+
+async function updateSearchFollowButtons(){
+
+  const buttons =
+    document.querySelectorAll(
+      "[data-search-follow]"
     );
 
-    box.innerHTML =
-      `<div class="empty">
-        Search failed.<br>
-        <small>${escapeHTML(error.message)}</small>
-      </div>`;
+  for(const button of buttons){
 
+    const userId =
+      button.dataset.searchFollow;
+
+    const {data} =
+      await supabaseClient
+        .from("follows")
+        .select("id")
+        .eq("follower_id",currentUser.id)
+        .eq("following_id",userId)
+        .maybeSingle();
+
+    if(data){
+
+      button.textContent = "Following";
+      button.classList.add("following");
+
+    }else{
+
+      button.textContent = "Follow";
+      button.classList.remove("following");
+    }
+
+    button.onclick =
+      ()=>toggleFollow(
+        userId,
+        button
+      );
   }
 }
 
 
-/* =========================================================
+/* =========================
    CREATE POLL
-========================================================= */
+========================= */
 
 function loadCreate(){
 
-  $("mainContent").innerHTML = `
+  $("main").innerHTML = `
 
-    <div class="section-head">
-      <h3>Create a poll</h3>
+    <div class="pageTitle">
+      Create Poll
     </div>
 
-    <div class="create-card">
+    <div class="card">
 
       <div class="field">
+
         <label>Question</label>
 
         <textarea
           id="pollQuestion"
+          rows="4"
           placeholder="What do you want to ask?"></textarea>
+
       </div>
 
       <div class="field">
 
-        <label>Options</label>
+        <label>Option 1</label>
 
         <input
-          class="option-input"
           id="option1"
-          placeholder="Option 1">
+          placeholder="First option">
+
+      </div>
+
+      <div class="field">
+
+        <label>Option 2</label>
 
         <input
-          class="option-input"
           id="option2"
-          placeholder="Option 2">
+          placeholder="Second option">
+
+      </div>
+
+      <div class="field">
+
+        <label>Option 3</label>
 
         <input
-          class="option-input"
           id="option3"
-          placeholder="Option 3">
+          placeholder="Optional">
+
+      </div>
+
+      <div class="field">
+
+        <label>Option 4</label>
 
         <input
-          class="option-input"
           id="option4"
-          placeholder="Option 4">
+          placeholder="Optional">
 
       </div>
 
       <button
-        id="createPollButton"
-        class="primary-btn"
-        type="button">
-        Publish poll
+        id="createPollBtn"
+        type="button"
+        class="primary">
+        Publish Poll
       </button>
 
     </div>
   `;
 
-  $("createPollButton")
-    .addEventListener(
-      "click",
-      createPoll
-    );
+  $("createPollBtn").onclick =
+    createPoll;
 }
-
 
 async function createPoll(){
 
   const question =
-    $("pollQuestion")
-      .value
-      .trim();
+    $("pollQuestion").value.trim();
 
-  const options =
-    [
-      $("option1").value.trim(),
-      $("option2").value.trim(),
-      $("option3").value.trim(),
-      $("option4").value.trim()
-    ].filter(Boolean);
+  const options = [
+    $("option1").value.trim(),
+    $("option2").value.trim(),
+    $("option3").value.trim(),
+    $("option4").value.trim()
+  ].filter(Boolean);
 
   if(!question){
 
-    showToast("Question likho.");
+    toast("Question likho.");
     return;
   }
 
   if(options.length < 2){
 
-    showToast("Kam se kam 2 options chahiye.");
+    toast("Kam se kam 2 options chahiye.");
     return;
   }
 
-  const button =
-    $("createPollButton");
-
-  button.disabled = true;
-  button.textContent = "Publishing...";
-
   try{
 
-    const sb = await initSupabase();
+    $("createPollBtn").disabled = true;
+    $("createPollBtn").textContent = "Publishing...";
 
     const result =
-      await sb
+      await supabaseClient
         .from("polls")
         .insert({
-          question:question,
-          options:options,
+          question,
+          options,
           user_id:currentUser.id
         });
 
     if(result.error) throw result.error;
 
-    showToast("Poll published!");
+    toast("Poll published!");
 
-    await loadPage("home");
+    await loadHome();
 
   }catch(error){
 
-    console.error(
-      "CREATE POLL ERROR:",
-      error
-    );
+    console.error(error);
 
-    showToast(
+    toast(
       error?.message ||
-      "Poll create nahi hua."
+      "Poll publish nahi hua."
     );
 
   }finally{
 
-    button.disabled = false;
-    button.textContent = "Publish poll";
-
+    $("createPollBtn").disabled = false;
+    $("createPollBtn").textContent = "Publish Poll";
   }
 }
 
 
-/* =========================================================
+/* =========================
    CHAT LIST
-========================================================= */
+========================= */
 
-async function loadChatList(){
+async function loadChat(){
 
-  const main =
-    $("mainContent");
-
-  main.innerHTML = `
-
-    <div class="section-head">
-      <h3>Messages</h3>
+  $("main").innerHTML = `
+    <div class="pageTitle">Messages</div>
+    <div class="card">
+      <div class="loading">
+        Loading chats...
+      </div>
     </div>
-
-    <div id="chatList" class="chat-list">
-      <div class="empty">Loading chats...</div>
-    </div>
-
   `;
 
-  const box =
-    $("chatList");
+  const result =
+    await supabaseClient
+      .from("messages")
+      .select("*")
+      .or(
+        `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+      )
+      .order("created_at",{ascending:false});
 
-  try{
+  if(result.error){
 
-    const sb = await initSupabase();
+    console.error(result.error);
 
-    /*
-      conversations/messages schema agar different hai
-      to query ko apne Supabase schema ke according adjust
-      karna padega.
-    */
+    $("main").innerHTML = `
+      <div class="card">
+        Chat load nahi hua.
+      </div>
+    `;
 
-    const {data,error} =
-      await sb
-        .from("messages")
-        .select("*")
-        .or(
-          "sender_id.eq." +
-          currentUser.id +
-          ",receiver_id.eq." +
-          currentUser.id
-        )
-        .order("created_at",{ascending:false})
-        .limit(100);
+    return;
+  }
 
-    if(error) throw error;
+  const messages =
+    result.data || [];
 
-    const userIds = new Set();
+  const map = new Map();
 
-    (data || []).forEach(message=>{
+  for(const message of messages){
 
-      if(
-        message.sender_id &&
-        message.sender_id !== currentUser.id
-      ){
-        userIds.add(message.sender_id);
-      }
+    const other =
+      message.sender_id === currentUser.id
+      ? message.receiver_id
+      : message.sender_id;
 
-      if(
-        message.receiver_id &&
-        message.receiver_id !== currentUser.id
-      ){
-        userIds.add(message.receiver_id);
-      }
-
-    });
-
-    if(!userIds.size){
-
-      box.innerHTML =
-        '<div class="empty">No conversations yet.</div>';
-
-      return;
+    if(!map.has(other)){
+      map.set(other,message);
     }
+  }
 
-    const {data:users,error:userError} =
-      await sb
+  const ids =
+    [...map.keys()];
+
+  let profiles = [];
+
+  if(ids.length){
+
+    const profileResult =
+      await supabaseClient
         .from("profiles")
         .select("*")
-        .in("id",[...userIds]);
+        .in("id",ids);
 
-    if(userError) throw userError;
+    profiles =
+      profileResult.data || [];
+  }
 
-    const map = {};
+  const profileMap =
+    new Map(
+      profiles.map(p=>[p.id,p])
+    );
 
-    (users || []).forEach(u=>{
-      map[u.id] = u;
-    });
+  $("main").innerHTML = `
 
-    const seen = new Set();
+    <div class="pageTitle">
+      Messages
+    </div>
 
-    box.innerHTML =
-      (data || [])
-        .filter(message=>{
+    <div class="card">
 
-          const other =
-            message.sender_id === currentUser.id
-              ? message.receiver_id
-              : message.sender_id;
+      ${
+        ids.length
+        ? ids.map(id=>{
 
-          if(!other || seen.has(other))
-            return false;
+            const message =
+              map.get(id);
 
-          seen.add(other);
-          return true;
+            const profile =
+              profileMap.get(id) || {
+                id,
+                username:"User"
+              };
 
-        })
-        .map(message=>{
+            return `
 
-          const other =
-            message.sender_id === currentUser.id
-              ? message.receiver_id
-              : message.sender_id;
+              <div
+                class="chatItem"
+                data-chat-id="${id}">
 
-          const user =
-            map[other] || {};
+                ${avatarHTML(profile)}
 
-          return `
+                <div class="chatPreview">
 
-            <button
-              class="chat-item"
-              type="button"
-              data-chat-user="${other}">
+                  <div class="userName">
+                    ${escapeHTML(
+                      profile.username ||
+                      profile.full_name ||
+                      "User"
+                    )}
+                  </div>
 
-              <img
-                class="avatar"
-                src="${avatarURL(
-                  user.avatar_url,
-                  user.username
-                )}"
-                alt="">
+                  <div class="last">
+                    ${escapeHTML(message.content)}
+                  </div>
 
-              <div class="chat-item-info">
-
-                <div class="user-name">
-                  ${escapeHTML(
-                    user.full_name ||
-                    user.username ||
-                    "User"
-                  )}
                 </div>
 
-                <div class="chat-last">
-                  ${escapeHTML(
-                    message.content || ""
-                  )}
+                <div class="chatTime">
+                  ${formatDate(message.created_at)}
                 </div>
 
               </div>
+            `;
 
-            </button>
-          `;
+          }).join("")
+        : `
+          <div class="muted">
+            Abhi koi chat nahi hai.<br>
+            Search se kisi user ko choose karke chat start karo.
+          </div>
+        `
+      }
 
-        })
-        .join("");
+    </div>
+  `;
 
-  }catch(error){
+  document
+    .querySelectorAll("[data-chat-id]")
+    .forEach(item=>{
 
-    console.error(
-      "CHAT LIST ERROR:",
-      error
-    );
+      item.onclick = async()=>{
 
-    box.innerHTML =
-      `<div class="empty">
-        Messages unavailable.<br>
-        <small>${escapeHTML(error.message)}</small>
-      </div>`;
+        const profile =
+          profileMap.get(
+            item.dataset.chatId
+          );
 
-  }
-}
+        if(profile){
 
+          currentChatUser = profile;
 
-/* =========================================================
-   OPEN CHAT
-========================================================= */
-
-async function openChat(userId){
-
-  try{
-
-    const sb = await initSupabase();
-
-    const {data:user,error:userError} =
-      await sb
-        .from("profiles")
-        .select("*")
-        .eq("id",userId)
-        .maybeSingle();
-
-    if(userError) throw userError;
-
-    currentChatUser =
-      user || {
-        id:userId,
-        username:"User"
+          await loadChatWindow();
+        }
       };
-
-    $("chatName").textContent =
-      currentChatUser.full_name ||
-      currentChatUser.username ||
-      "User";
-
-    $("chatUsername").textContent =
-      currentChatUser.username
-        ? "@"+currentChatUser.username
-        : "";
-
-    $("chatAvatar").src =
-      avatarURL(
-        currentChatUser.avatar_url,
-        currentChatUser.username
-      );
-
-    $("chatWindow")
-      .classList.remove("hidden");
-
-    await loadMessages();
-
-    subscribeChat();
-
-  }catch(error){
-
-    console.error(
-      "OPEN CHAT ERROR:",
-      error
-    );
-
-    showToast(
-      error?.message ||
-      "Chat open nahi hua."
-    );
-
-  }
+    });
 }
 
 
-/* =========================================================
-   LOAD MESSAGES
-========================================================= */
+/* =========================
+   CHAT WINDOW
+========================= */
+
+async function loadChatWindow(){
+
+  if(!currentChatUser)
+    return;
+
+  $("main").innerHTML = `
+
+    <div class="chatHeader">
+
+      <button
+        type="button"
+        class="backBtn"
+        id="backChat">
+        ←
+      </button>
+
+      ${avatarHTML(currentChatUser)}
+
+      <div>
+        <div class="userName">
+          ${escapeHTML(
+            currentChatUser.username ||
+            currentChatUser.full_name ||
+            "User"
+          )}
+        </div>
+
+        <div class="muted">
+          Chat
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div id="messages"
+           class="messages">
+      </div>
+
+      <div class="chatComposer">
+
+        <input
+          id="messageInput"
+          type="text"
+          placeholder="Message..."
+          autocomplete="off">
+
+        <button
+          id="sendMessageBtn"
+          class="sendBtn"
+          type="button">
+          ➤
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  $("backChat").onclick =
+    ()=>loadChat();
+
+  $("sendMessageBtn").onclick =
+    sendMessage;
+
+  $("messageInput").addEventListener(
+    "keydown",
+    e=>{
+      if(e.key === "Enter")
+        sendMessage();
+    }
+  );
+
+  await loadMessages();
+
+  subscribeChat();
+}
 
 async function loadMessages(){
 
-  if(!currentChatUser) return;
+  const result =
+    await supabaseClient
+      .from("messages")
+      .select("*")
+      .or(
+        `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
+      )
+      .order("created_at",{ascending:true});
+
+  if(result.error){
+
+    console.error(result.error);
+    return;
+  }
 
   const box =
-    $("chatMessages");
+    $("messages");
+
+  if(!box) return;
 
   box.innerHTML =
-    '<div class="empty">Loading...</div>';
-
-  try{
-
-    const sb = await initSupabase();
-
-    const me =
-      currentUser.id;
-
-    const other =
-      currentChatUser.id;
-
-    const {data,error} =
-      await sb
-        .from("messages")
-        .select("*")
-        .or(
-          "and(sender_id.eq."+me+",receiver_id.eq."+other+"),"+
-          "and(sender_id.eq."+other+",receiver_id.eq."+me+")"
-        )
-        .order("created_at",{ascending:true});
-
-    if(error) throw error;
-
-    if(!data?.length){
-
-      box.innerHTML =
-        '<div class="empty">Start the conversation 👋</div>';
-
-      return;
-    }
-
-    box.innerHTML =
-      data.map(message=>`
+    (result.data || [])
+      .map(message=>`
 
         <div class="message ${
-          message.sender_id === me
-            ? "mine"
-            : "theirs"
+          message.sender_id === currentUser.id
+          ? "mine"
+          : "theirs"
         }">
 
-          ${escapeHTML(
-            message.content || ""
-          )}
+          <div>
+            ${escapeHTML(message.content)}
+          </div>
+
+          <div class="messageTime">
+            ${formatDate(message.created_at)}
+          </div>
 
         </div>
 
-      `).join("");
+      `)
+      .join("");
 
-    box.scrollTop =
-      box.scrollHeight;
-
-  }catch(error){
-
-    console.error(
-      "MESSAGE LOAD ERROR:",
-      error
-    );
-
-    box.innerHTML =
-      `<div class="empty">
-        Messages load nahi hue.<br>
-        <small>${escapeHTML(error.message)}</small>
-      </div>`;
-
-  }
+  box.scrollTop =
+    box.scrollHeight;
 }
 
 
-/* =========================================================
+/* =========================
    SEND MESSAGE
-========================================================= */
+========================= */
 
 async function sendMessage(){
 
   const input =
-    $("chatInput");
+    $("messageInput");
+
+  if(!input || !currentChatUser)
+    return;
 
   const content =
     input.value.trim();
 
-  if(!content || !currentChatUser)
+  if(!content)
     return;
 
-  input.value = "";
+  input.disabled = true;
 
   try{
 
-    const sb = await initSupabase();
-
     const result =
-      await sb
+      await supabaseClient
         .from("messages")
         .insert({
           sender_id:currentUser.id,
           receiver_id:currentChatUser.id,
-          content:content
+          content
         });
 
-    if(result.error) throw result.error;
+    if(result.error)
+      throw result.error;
+
+    input.value = "";
 
     await loadMessages();
 
+    await supabaseClient
+      .from("notifications")
+      .insert({
+        user_id:currentChatUser.id,
+        message:
+          `${currentProfile?.username || "Someone"} sent you a message`,
+        read:false
+      })
+      .then(()=>{})
+      .catch(()=>{});
+
   }catch(error){
 
-    console.error(
-      "SEND MESSAGE ERROR:",
-      error
-    );
+    console.error(error);
 
-    input.value = content;
-
-    showToast(
+    toast(
       error?.message ||
       "Message send nahi hua."
     );
 
+  }finally{
+
+    input.disabled = false;
+    input.focus();
   }
 }
 
 
-/* =========================================================
+/* =========================
    REALTIME CHAT
-========================================================= */
+========================= */
 
 function subscribeChat(){
 
-  if(chatChannel){
+  if(!currentChatUser)
+    return;
+
+  if(realtimeChannel){
+
     try{
-      chatChannel.unsubscribe();
+      supabaseClient
+        .removeChannel(realtimeChannel);
     }catch{}
   }
 
-  if(!supabaseClient || !currentChatUser)
-    return;
-
-  const ids = [
-    currentUser.id,
-    currentChatUser.id
-  ].sort();
-
-  chatChannel =
+  realtimeChannel =
     supabaseClient
       .channel(
-        "chat-"+ids.join("-")
+        "chat-" +
+        currentUser.id +
+        "-" +
+        currentChatUser.id +
+        "-" +
+        Date.now()
       )
       .on(
         "postgres_changes",
         {
-          event:"*",
+          event:"INSERT",
           schema:"public",
           table:"messages"
         },
         payload=>{
 
-          const row =
+          const m =
             payload.new;
-
-          if(!row) return;
 
           const relevant =
             (
-              row.sender_id === currentUser.id &&
-              row.receiver_id === currentChatUser.id
+              m.sender_id === currentUser.id &&
+              m.receiver_id === currentChatUser.id
             ) ||
             (
-              row.sender_id === currentChatUser.id &&
-              row.receiver_id === currentUser.id
+              m.sender_id === currentChatUser.id &&
+              m.receiver_id === currentUser.id
             );
 
-          if(relevant){
+          if(relevant)
             loadMessages();
-          }
 
         }
       )
@@ -3016,204 +2385,132 @@ function subscribeChat(){
 }
 
 
-/* =========================================================
+/* =========================
    PROFILE PAGE
-========================================================= */
+========================= */
 
 async function loadProfile(){
 
   await ensureProfile();
 
-  const p =
-    currentProfile || {};
+  const followerResult =
+    await supabaseClient
+      .from("follows")
+      .select("id",{count:"exact",head:true})
+      .eq("following_id",currentUser.id);
 
-  $("mainContent").innerHTML = `
+  const followingResult =
+    await supabaseClient
+      .from("follows")
+      .select("id",{count:"exact",head:true})
+      .eq("follower_id",currentUser.id);
 
-    <div class="section-head">
-      <h3>Profile</h3>
-    </div>
+  const followers =
+    followerResult.count || 0;
 
-    <div class="profile-card">
+  const following =
+    followingResult.count || 0;
 
-      <div class="profile-avatar-wrap">
+  $("main").innerHTML = `
 
-        <img
-          id="profileAvatar"
-          class="profile-avatar"
-          src="${avatarURL(
-            p.avatar_url,
-            p.username
-          )}"
-          alt="Profile">
+    <div class="card profileTop">
 
-        <button
-          id="editPhotoButton"
-          class="photo-edit"
-          type="button">
-          ✎
-        </button>
+      ${avatarHTML(currentProfile,true)}
 
-      </div>
-
-      <div class="user-name" style="font-size:19px">
+      <div class="profileName">
         ${escapeHTML(
-          p.full_name ||
-          p.username ||
+          currentProfile?.username ||
+          currentProfile?.full_name ||
           "User"
         )}
       </div>
 
-      <div class="username">
-        @${escapeHTML(
-          p.username || ""
+      <div class="muted">
+        ${escapeHTML(
+          currentProfile?.full_name || ""
         )}
       </div>
 
-      <div class="profile-stats">
+      <div class="stats">
 
         <div class="stat">
-          <strong id="followersCount">0</strong>
+          <strong>${followers}</strong>
           <span>Followers</span>
         </div>
 
         <div class="stat">
-          <strong id="followingCount">0</strong>
+          <strong>${following}</strong>
           <span>Following</span>
         </div>
 
       </div>
 
-      <div class="profile-actions">
+      <div class="profileActions">
 
         <button
-          id="logoutButton"
-          class="secondary-btn"
-          type="button">
+          type="button"
+          class="secondary"
+          id="photoBtn">
+          📷 Change photo
+        </button>
+
+        <button
+          type="button"
+          class="secondary"
+          id="logoutBtn">
           Logout
         </button>
 
       </div>
 
-    </div>
+      <input
+        id="photoInput"
+        type="file"
+        accept="image/*"
+        class="hidden">
 
+    </div>
   `;
 
-  $("editPhotoButton")
-    .addEventListener(
-      "click",
-      ()=>{
-        $("photoModal")
-          .classList.remove("hidden");
-      }
-    );
+  $("photoBtn").onclick =
+    ()=>$("photoInput").click();
 
-  $("logoutButton")
-    .addEventListener(
-      "click",
-      logoutUser
-    );
+  $("photoInput").onchange =
+    uploadProfilePhoto;
 
-  await loadFollowCounts();
+  $("logoutBtn").onclick =
+    logoutUser;
 }
 
 
-/* =========================================================
-   FOLLOW COUNTS
-========================================================= */
-
-async function loadFollowCounts(){
-
-  try{
-
-    const sb = await initSupabase();
-
-    const followers =
-      await sb
-        .from("follows")
-        .select("id",{count:"exact",head:true})
-        .eq(
-          "following_id",
-          currentUser.id
-        );
-
-    const following =
-      await sb
-        .from("follows")
-        .select("id",{count:"exact",head:true})
-        .eq(
-          "follower_id",
-          currentUser.id
-        );
-
-    $("followersCount")
-      .textContent =
-      followers.count || 0;
-
-    $("followingCount")
-      .textContent =
-      following.count || 0;
-
-  }catch(error){
-
-    console.warn(
-      "FOLLOW COUNT ERROR:",
-      error
-    );
-
-  }
-}
-
-
-/* =========================================================
-   PROFILE PHOTO
-========================================================= */
+/* =========================
+   PHOTO UPLOAD
+========================= */
 
 async function uploadProfilePhoto(){
 
   const file =
-    $("photoInput").files[0];
+    $("photoInput").files?.[0];
 
-  if(!file){
-
-    setPhotoMessage(
-      "Pehle photo select karo."
-    );
-
+  if(!file)
     return;
-  }
-
-  if(!file.type.startsWith("image/")){
-
-    setPhotoMessage(
-      "Sirf image select karo."
-    );
-
-    return;
-  }
-
-  const button =
-    $("uploadPhotoButton");
-
-  button.disabled = true;
-  button.textContent = "Uploading...";
 
   try{
 
-    const sb = await initSupabase();
+    toast("Photo upload ho rahi hai...");
 
     const extension =
-      file.name.split(".").pop()
+      file.name
+        .split(".")
+        .pop()
         .toLowerCase();
 
     const path =
-      currentUser.id +
-      "/" +
-      Date.now() +
-      "." +
-      extension;
+      `${currentUser.id}/${Date.now()}.${extension}`;
 
     const upload =
-      await sb.storage
+      await supabaseClient
+        .storage
         .from("avatars")
         .upload(
           path,
@@ -3228,22 +2525,20 @@ async function uploadProfilePhoto(){
       throw upload.error;
 
     const publicUrl =
-      sb.storage
+      supabaseClient
+        .storage
         .from("avatars")
         .getPublicUrl(path)
         .data
         .publicUrl;
 
     const update =
-      await sb
+      await supabaseClient
         .from("profiles")
         .update({
           avatar_url:publicUrl
         })
-        .eq(
-          "id",
-          currentUser.id
-        );
+        .eq("id",currentUser.id);
 
     if(update.error)
       throw update.error;
@@ -3251,497 +2546,328 @@ async function uploadProfilePhoto(){
     currentProfile.avatar_url =
       publicUrl;
 
-    setPhotoMessage(
-      "Profile photo updated!"
-    );
+    toast("Profile photo updated!");
 
-    showToast(
-      "Profile photo updated!"
-    );
-
-    setTimeout(()=>{
-      $("photoModal")
-        .classList.add("hidden");
-
-      loadProfile();
-    },600);
+    await loadProfile();
 
   }catch(error){
 
-    console.error(
-      "PHOTO ERROR:",
-      error
-    );
+    console.error(error);
 
-    setPhotoMessage(
+    toast(
       error?.message ||
-      "Photo upload failed."
+      "Photo upload failed. Supabase Storage check karo."
     );
-
-  }finally{
-
-    button.disabled = false;
-    button.textContent =
-      "Upload photo";
-
   }
 }
 
 
-/* =========================================================
+/* =========================
    NOTIFICATIONS
-========================================================= */
+========================= */
 
 async function updateNotificationCount(){
 
-  if(!currentUser) return;
-
   try{
 
-    const sb = await initSupabase();
-
-    const {count,error} =
-      await sb
+    const result =
+      await supabaseClient
         .from("notifications")
-        .select("id",{
-          count:"exact",
-          head:true
-        })
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .eq(
-          "read",
-          false
-        );
+        .select("id",{count:"exact",head:true})
+        .eq("user_id",currentUser.id)
+        .eq("read",false);
 
-    if(error) throw error;
+    const count =
+      result.count || 0;
 
-    const badge =
-      $("notificationBadge");
+    const btn =
+      $("notifBtn");
 
-    if(count > 0){
+    if(btn){
 
-      badge.textContent =
-        count > 99 ? "99+" : count;
-
-      badge.classList.remove("hidden");
-
-    }else{
-
-      badge.classList.add("hidden");
-
+      btn.textContent =
+        count > 0
+        ? `🔔 ${count > 9 ? "9+" : count}`
+        : "🔔";
     }
 
   }catch(error){
 
-    console.warn(
-      "NOTIFICATION ERROR:",
-      error
-    );
-
+    console.error(error);
   }
 }
-
 
 async function showNotifications(){
 
-  try{
-
-    const sb = await initSupabase();
-
-    const {data,error} =
-      await sb
-        .from("notifications")
-        .select("*")
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .order(
-          "created_at",
-          {ascending:false}
-        )
-        .limit(30);
-
-    if(error) throw error;
-
-    if(!data?.length){
-
-      showToast("No notifications.");
-      return;
-    }
-
-    const text =
-      data
-        .slice(0,5)
-        .map(n=>
-          n.message ||
-          n.content ||
-          "New notification"
-        )
-        .join(" • ");
-
-    showToast(text);
-
-    await sb
+  const result =
+    await supabaseClient
       .from("notifications")
-      .update({read:true})
-      .eq(
-        "user_id",
-        currentUser.id
-      );
+      .select("*")
+      .eq("user_id",currentUser.id)
+      .order("created_at",{ascending:false})
+      .limit(10);
 
-    updateNotificationCount();
+  if(result.error){
 
-  }catch(error){
-
-    console.warn(
-      "NOTIFICATION LOAD:",
-      error
-    );
-
-    showToast(
-      "Notifications unavailable."
-    );
-
+    toast("Notifications load nahi hui.");
+    return;
   }
+
+  const notifications =
+    result.data || [];
+
+  if(!notifications.length){
+
+    toast("No new notifications.");
+    return;
+  }
+
+  const text =
+    notifications
+      .slice(0,5)
+      .map(n=>
+        n.message ||
+        n.content ||
+        "New notification"
+      )
+      .join(" • ");
+
+  toast(text);
+
+  await supabaseClient
+    .from("notifications")
+    .update({read:true})
+    .eq("user_id",currentUser.id)
+    .eq("read",false);
+
+  updateNotificationCount();
 }
 
 
-/* =========================================================
+/* =========================
    LOGOUT
-========================================================= */
+========================= */
 
 async function logoutUser(){
 
   try{
 
-    const sb = await initSupabase();
+    await supabaseClient.auth.signOut();
 
-    await sb.auth.signOut();
+    currentUser = null;
+    currentProfile = null;
+
+    if(realtimeChannel){
+
+      try{
+        await supabaseClient
+          .removeChannel(realtimeChannel);
+      }catch{}
+    }
+
+    $("app").classList.add("hidden");
+    $("authScreen").classList.remove("hidden");
+
+    $("loginPassword").value = "";
 
   }catch(error){
 
-    console.error(
-      "LOGOUT ERROR:",
-      error
-    );
+    console.error(error);
 
+    toast("Logout failed.");
   }
-
-  currentUser = null;
-  currentProfile = null;
-
-  $("appScreen")
-    .classList.add("hidden");
-
-  $("authScreen")
-    .classList.remove("hidden");
-
-  $("emailInput").value = "";
-  $("passwordInput").value = "";
-  $("usernameInput").value = "";
-
-  setAuthMode("login");
-
-  showToast("Logged out.");
-
 }
 
 
-/* =========================================================
-   EVENT DELEGATION
-========================================================= */
+/* =========================
+   AUTH STATE
+========================= */
 
-document.addEventListener(
-  "click",
-  async event=>{
+function setupAuthListener(){
 
-    const followButton =
-      event.target.closest(
-        "[data-follow-id]"
-      );
+  supabaseClient.auth.onAuthStateChange(
+    async(event,session)=>{
 
-    if(followButton){
+      if(session?.user){
 
-      await toggleFollow(
-        followButton.dataset.followId,
-        followButton
-      );
+        currentUser =
+          session.user;
 
-      return;
+        if(event === "SIGNED_IN"){
+
+          await openApp();
+        }
+
+      }else{
+
+        currentUser = null;
+
+        $("app")
+          .classList
+          .add("hidden");
+
+        $("authScreen")
+          .classList
+          .remove("hidden");
+      }
     }
-
-    const voteButton =
-      event.target.closest(
-        "[data-vote-poll]"
-      );
-
-    if(voteButton){
-
-      await votePoll(
-        voteButton.dataset.votePoll,
-        Number(
-          voteButton.dataset.voteIndex
-        )
-      );
-
-      return;
-    }
-
-    const chatButton =
-      event.target.closest(
-        "[data-chat-user]"
-      );
-
-    if(chatButton){
-
-      await openChat(
-        chatButton.dataset.chatUser
-      );
-
-      return;
-    }
-
-  }
-);
+  );
+}
 
 
-/* =========================================================
-   DOM READY
-========================================================= */
+/* =========================
+   INIT
+========================= */
 
 document.addEventListener(
   "DOMContentLoaded",
-  ()=>{
+  async()=>{
 
-    /* AUTH */
+    try{
 
-    $("loginButton")
-      .addEventListener(
-        "click",
-        loginUser
-      );
+      await initSupabase();
 
-    $("signupButton")
-      .addEventListener(
-        "click",
-        signupUser
-      );
+      setupAuthListener();
 
-    $("forgotButton")
-      .addEventListener(
-        "click",
-        resetPassword
-      );
+      $("loginTab").onclick =
+        showLogin;
 
-    $("modeButton")
-      .addEventListener(
-        "click",
-        ()=>{
-          setAuthMode(
-            authMode === "login"
-              ? "signup"
-              : "login"
-          );
-        }
-      );
+      $("signupTab").onclick =
+        showSignup;
 
+      $("loginBtn").onclick =
+        loginUser;
 
-    /* NAV */
+      $("signupBtn").onclick =
+        signupUser;
 
-    document
-      .querySelectorAll(".nav-btn")
-      .forEach(button=>{
+      $("forgotBtn").onclick =
+        async()=>{
 
-        button.addEventListener(
-          "click",
-          ()=>loadPage(
-            button.dataset.page
-          )
-        );
+          const email =
+            $("loginEmail").value.trim();
 
-      });
+          if(!email){
 
-
-    /* NOTIFICATIONS */
-
-    $("notificationButton")
-      .addEventListener(
-        "click",
-        showNotifications
-      );
-
-
-    /* CHAT */
-
-    $("closeChatButton")
-      .addEventListener(
-        "click",
-        ()=>{
-
-          $("chatWindow")
-            .classList.add("hidden");
-
-          if(chatChannel){
-
-            try{
-              chatChannel.unsubscribe();
-            }catch{}
-
-            chatChannel = null;
-
+            toast("Pehle email enter karo.");
+            return;
           }
 
-          currentChatUser = null;
+          try{
 
-        }
-      );
+            const result =
+              await supabaseClient.auth
+                .resetPasswordForEmail(
+                  email,
+                  {
+                    redirectTo:
+                      window.location.origin +
+                      window.location.pathname
+                  }
+                );
 
+            if(result.error)
+              throw result.error;
 
-    $("chatForm")
-      .addEventListener(
-        "submit",
-        event=>{
+            toast(
+              "Password reset email bhej di."
+            );
 
-          event.preventDefault();
+          }catch(error){
 
-          sendMessage();
+            console.error(error);
 
-        }
-      );
+            toast(
+              error?.message ||
+              "Reset failed."
+            );
+          }
+        };
 
+      document
+        .querySelectorAll(".navBtn")
+        .forEach(button=>{
 
-    /* PHOTO */
+          button.onclick =
+            ()=>navigate(
+              button.dataset.page
+            );
 
-    $("closePhotoModal")
-      .addEventListener(
-        "click",
+        });
+
+      $("refreshBtn").onclick =
         ()=>{
 
-          $("photoModal")
-            .classList.add("hidden");
+          const active =
+            document
+              .querySelector(".navBtn.active")
+              ?.dataset.page ||
+            "home";
 
-        }
+          navigate(active);
+        };
+
+      $("notifBtn").onclick =
+        showNotifications;
+
+      const session =
+        await supabaseClient.auth.getSession();
+
+      if(session.data.session){
+
+        currentUser =
+          session.data.session.user;
+
+        await openApp();
+      }
+
+    }catch(error){
+
+      console.error(
+        "START ERROR:",
+        error
       );
 
-
-    $("uploadPhotoButton")
-      .addEventListener(
-        "click",
-        uploadProfilePhoto
+      toast(
+        "App start nahi ho paya. Internet check karo."
       );
-
-
-    /* START */
-
-    startApp();
-
+    }
   }
 );
 
 
-/* =========================================================
-   START APP
-========================================================= */
-
-async function startApp(){
-
-  $("authScreen")
-    .classList.remove("hidden");
-
-  $("appScreen")
-    .classList.add("hidden");
-
-  try{
-
-    await initSupabase();
-
-    await setupAuthListener();
-
-    const result =
-      await supabaseClient.auth.getSession();
-
-    if(result.error){
-      throw result.error;
-    }
-
-    const session =
-      result.data?.session;
-
-    if(session?.user){
-
-      currentUser =
-        session.user;
-
-      await openApp(
-        session.user
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "START ERROR:",
-      error
-    );
-
-    setAuthMessage(
-      "Login system start nahi hua. Internet connection check karo.",
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   GLOBAL ERROR HANDLING
-========================================================= */
+/* =========================
+   GLOBAL ERROR LOG
+========================= */
 
 window.addEventListener(
   "error",
   event=>{
-
     console.error(
-      "GLOBAL JS ERROR:",
+      "Global JS Error:",
       event.error || event.message
     );
-
   }
 );
 
 window.addEventListener(
   "unhandledrejection",
   event=>{
-
     console.error(
-      "PROMISE ERROR:",
+      "Promise Error:",
       event.reason
     );
-
   }
 );
 
 
-/* =========================================================
-   EXPOSE FUNCTIONS
-========================================================= */
-
+/* expose */
 window.loginUser = loginUser;
 window.signupUser = signupUser;
 window.logoutUser = logoutUser;
-window.searchAll = searchAll;
-window.votePoll = votePoll;
-window.toggleFollow = toggleFollow;
-window.openChat = openChat;
-window.sendMessage = sendMessage;
 window.createPoll = createPoll;
-window.uploadProfilePhoto = uploadProfilePhoto;
+window.searchAll = searchAll;
+window.sendMessage = sendMessage;
 
 </script>
 
