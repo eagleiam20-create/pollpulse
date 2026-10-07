@@ -2930,7 +2930,8 @@
 const avatarInput = $("avatarInput");
 
 if (avatarUploadBtn && avatarInput) {
-  avatarUploadBtn.addEventListener("click", function (event) {
+
+  avatarUploadBtn.addEventListener("click", function(event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -2942,13 +2943,12 @@ if (avatarUploadBtn && avatarInput) {
     avatarInput.value = "";
     avatarInput.click();
   });
+
+  avatarInput.addEventListener(
+    "change",
+    uploadAvatar
+  );
 }
-
-
-    $("avatarInput").addEventListener(
-      "change",
-      uploadAvatar
-      );
  if (avatarInput) {
   avatarInput.addEventListener("change", uploadAvatar);
 }     
