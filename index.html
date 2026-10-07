@@ -3,332 +3,826 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#6c5ce7">
 <title>Poll Pulse</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{margin:0;background:#f5f3ff;color:#181824}
-.app{max-width:520px;margin:auto;min-height:100vh;padding-bottom:90px}
-.hidden{display:none!important}
+*{
+  box-sizing:border-box;
+  font-family:Inter,Arial,sans-serif;
+  -webkit-tap-highlight-color:transparent;
+}
 
-.auth{min-height:100vh;display:flex;align-items:center;padding:20px}
-.box{width:100%;background:#fff;padding:28px;border-radius:28px;box-shadow:0 15px 40px #0001}
-.logo{text-align:center;font-size:34px;font-weight:800;color:#6c5ce7}
-.sub{text-align:center;color:#777;margin:8px 0 25px}
+:root{
+  --primary:#6c5ce7;
+  --primary2:#8b7cf6;
+  --pink:#ff4f8b;
+  --bg:#f7f7fb;
+  --card:#ffffff;
+  --text:#181824;
+  --muted:#77758a;
+  --border:#ecebf3;
+  --soft:#f0edff;
+  --danger:#e74c3c;
+  --success:#19a974;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+}
+
+body{
+  min-height:100vh;
+}
+
+button,input,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.app{
+  width:100%;
+  max-width:560px;
+  min-height:100vh;
+  margin:auto;
+  padding-bottom:92px;
+}
+
+/* =========================
+   AUTH
+========================= */
+
+.auth{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:
+    radial-gradient(circle at top left,#e7e2ff 0,transparent 35%),
+    radial-gradient(circle at bottom right,#ffe2ed 0,transparent 35%),
+    var(--bg);
+}
+
+.box{
+  width:100%;
+  max-width:430px;
+  padding:30px 24px;
+  background:rgba(255,255,255,.94);
+  border:1px solid #fff;
+  border-radius:30px;
+  box-shadow:0 20px 60px rgba(48,39,100,.14);
+}
+
+.logo{
+  text-align:center;
+  font-size:35px;
+  font-weight:900;
+  letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--primary),var(--pink));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.sub{
+  text-align:center;
+  color:var(--muted);
+  margin:8px 0 26px;
+  font-size:14px;
+}
 
 input,textarea{
-width:100%;padding:14px;margin:6px 0;border:1px solid #ddd;
-border-radius:14px;outline:none;font-size:15px
+  width:100%;
+  padding:14px 15px;
+  margin:6px 0;
+  border:1px solid var(--border);
+  border-radius:15px;
+  outline:none;
+  background:#fafafe;
+  color:var(--text);
+  transition:.2s;
 }
 
-button{cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
+input:focus,textarea:focus{
+  border-color:var(--primary2);
+  background:white;
+  box-shadow:0 0 0 4px rgba(108,92,231,.08);
+}
+
+textarea{
+  resize:vertical;
+  min-height:100px;
+}
 
 .btn{
-border:0;border-radius:14px;padding:12px 15px;
-background:#6c5ce7;color:white;font-weight:bold
+  border:0;
+  border-radius:15px;
+  padding:12px 16px;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  color:white;
+  font-weight:800;
+  box-shadow:0 7px 18px rgba(108,92,231,.2);
+  transition:.2s;
 }
 
-.wide{width:100%;margin-top:8px}
+.btn:active{
+  transform:scale(.98);
+}
+
+.wide{
+  width:100%;
+  margin-top:9px;
+}
 
 .link{
-width:100%;border:0;background:none;color:#6c5ce7;
-font-weight:bold;margin-top:13px
+  width:100%;
+  border:0;
+  background:none;
+  color:var(--primary);
+  font-weight:800;
+  margin-top:13px;
 }
 
-.msg{text-align:center;min-height:20px;margin-top:12px;color:#e74c3c;font-size:14px}
+.msg{
+  text-align:center;
+  min-height:20px;
+  margin-top:12px;
+  color:var(--danger);
+  font-size:13px;
+}
+
+/* =========================
+   TOP HEADER
+========================= */
 
 header{
-padding:24px 18px;color:white;
-background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
-border-radius:0 0 28px 28px
+  position:relative;
+  padding:22px 18px 24px;
+  color:white;
+  background:
+    radial-gradient(circle at 90% 0,#ff8eb5 0,transparent 30%),
+    linear-gradient(135deg,#6252df,#795eea 48%,#ff4f8b);
+  border-radius:0 0 30px 30px;
+  overflow:hidden;
 }
 
-header h1{margin:0;font-size:29px}
-header p{margin:7px 0 0}
-.content{padding:16px}
+header:after{
+  content:"";
+  position:absolute;
+  width:150px;
+  height:150px;
+  border:25px solid rgba(255,255,255,.08);
+  border-radius:50%;
+  right:-50px;
+  bottom:-80px;
+}
+
+.header-top{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+header h1{
+  margin:0;
+  font-size:28px;
+  letter-spacing:-.8px;
+}
+
+header p{
+  margin:6px 0 0;
+  font-size:13px;
+  opacity:.9;
+}
+
+.header-pill{
+  position:relative;
+  z-index:2;
+  padding:8px 11px;
+  border-radius:14px;
+  background:rgba(255,255,255,.16);
+  backdrop-filter:blur(10px);
+  font-size:12px;
+  font-weight:800;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding:16px;
+}
 
 .card{
-background:white;padding:17px;margin-bottom:14px;
-border-radius:21px;box-shadow:0 6px 20px #0001
+  background:var(--card);
+  padding:17px;
+  margin-bottom:14px;
+  border-radius:23px;
+  border:1px solid rgba(20,20,50,.035);
+  box-shadow:0 7px 24px rgba(25,20,70,.06);
 }
 
-.row{display:flex;align-items:center;gap:10px}
-.grow{flex:1;min-width:0}
+.hero-card{
+  padding:20px;
+  background:
+    linear-gradient(135deg,#f0edff,#fff5fa);
+}
+
+.hero-title{
+  margin:0;
+  font-size:20px;
+  font-weight:900;
+}
+
+.hero-text{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:4px 2px 12px;
+}
+
+.section-title h2{
+  margin:0;
+  font-size:18px;
+}
+
+.section-title span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.grow{
+  flex:1;
+  min-width:0;
+}
 
 .avatar{
-width:46px;height:46px;border-radius:50%;
-display:grid;place-items:center;
-background:linear-gradient(135deg,#6c5ce7,#ff4f8b);
-color:white;font-weight:bold;flex:none
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--primary),var(--pink));
+  color:white;
+  font-weight:900;
+  flex:none;
+  box-shadow:0 5px 15px rgba(108,92,231,.2);
 }
 
-.small{color:#777;font-size:12px}
-.tiny{color:#888;font-size:11px;word-break:break-all}
+.small{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.tiny{
+  color:#888;
+  font-size:10px;
+  word-break:break-all;
+}
+
+/* =========================
+   POLLS
+========================= */
+
+.poll-card{
+  position:relative;
+  overflow:hidden;
+}
 
 .creator{
-display:flex;
-align-items:center;
-gap:8px;
-margin-bottom:12px
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
 }
 
 .creator-avatar{
-width:34px;height:34px;border-radius:50%;
-background:#6c5ce7;color:white;
-display:grid;place-items:center;
-font-size:13px;font-weight:bold;
-flex:none
+  width:38px;
+  height:38px;
+  border-radius:13px;
+  background:linear-gradient(135deg,var(--primary),var(--pink));
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:13px;
+  font-weight:900;
+  flex:none;
+}
+
+.creator-name{
+  font-size:14px;
+  font-weight:900;
 }
 
 .poll-title{
-font-size:18px;
-font-weight:800;
-margin-bottom:12px
+  font-size:19px;
+  font-weight:900;
+  line-height:1.3;
+  margin-bottom:13px;
+  letter-spacing:-.25px;
 }
 
 .option{
-width:100%;
-padding:13px;
-margin:5px 0;
-border:0;
-border-radius:13px;
-background:#eeeafe;
-color:#5145b5;
-font-weight:bold;
-text-align:left
+  width:100%;
+  padding:13px 14px;
+  margin:5px 0;
+  border:1px solid #e5e1ff;
+  border-radius:15px;
+  background:#f3f0ff;
+  color:#5145b5;
+  font-weight:800;
+  text-align:left;
+  transition:.18s;
+}
+
+.option:active{
+  transform:scale(.99);
 }
 
 .option.selected{
-background:#6c5ce7;
-color:white
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  border-color:transparent;
+  color:white;
 }
 
 .result{
-margin:7px 0 10px
+  margin:7px 0 10px;
 }
 
 .result-top{
-display:flex;
-justify-content:space-between;
-font-size:12px;
-margin-bottom:4px
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  margin-bottom:5px;
 }
 
 .resultbar{
-height:8px;
-background:#eee;
-border-radius:8px;
-overflow:hidden
+  height:8px;
+  background:#eeeef5;
+  border-radius:20px;
+  overflow:hidden;
 }
 
 .resultbar i{
-display:block;
-height:100%;
-background:linear-gradient(90deg,#6c5ce7,#ff4f8b)
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,var(--primary),var(--pink));
+  border-radius:20px;
+}
+
+.poll-total{
+  margin-top:10px;
 }
 
 .poll-actions{
-display:flex;
-gap:8px;
-margin-top:12px;
-flex-wrap:wrap
+  display:flex;
+  gap:8px;
+  margin-top:13px;
+  flex-wrap:wrap;
 }
 
 .poll-action{
-border:0;
-background:#f0edff;
-color:#5145b5;
-padding:8px 12px;
-border-radius:12px;
-font-weight:bold
+  border:0;
+  background:#f2efff;
+  color:#5145b5;
+  padding:9px 12px;
+  border-radius:13px;
+  font-weight:800;
+  font-size:12px;
 }
 
 .delete-poll{
-background:#ffe9e9;
-color:#e74c3c
+  background:#fff0f0;
+  color:var(--danger);
 }
+
+/* =========================
+   SUGGESTIONS
+========================= */
 
 .suggestion{
-background:linear-gradient(135deg,#f0edff,#fff);
-border:1px solid #e2ddff;
-padding:15px;
-border-radius:19px;
-margin-bottom:14px
+  background:linear-gradient(135deg,#f0edff,#fff);
+  border:1px solid #e3ddff;
+  padding:17px;
+  border-radius:22px;
+  margin-bottom:14px;
 }
 
-.suggestion h3{margin:0 0 5px}
+.suggestion h3{
+  margin:0 0 4px;
+  font-size:17px;
+}
 
 .user{
-padding:11px 0;
-border-bottom:1px solid #eee
+  padding:12px 2px;
+  border-bottom:1px solid var(--border);
 }
 
-.user:last-child{border-bottom:0}
+.user:last-child{
+  border-bottom:0;
+}
 
 .follow{
-background:#6c5ce7;
-padding:8px 12px;
-white-space:nowrap
+  padding:8px 13px;
+  white-space:nowrap;
+  font-size:12px;
 }
 
-.following{background:#19a974}
-
-.profile-stat{text-align:center;flex:1}
-.profile-stat strong{display:block;font-size:20px}
-.profile-stat span{font-size:11px;color:#777}
-
-.tabs{
-display:flex;
-gap:7px;
-overflow:auto;
-margin:14px 0
+.following{
+  background:var(--success);
 }
 
-.tabs button{
-border:0;
-border-radius:18px;
-padding:9px 13px;
-background:#eee;
-white-space:nowrap
+/* =========================
+   SEARCH
+========================= */
+
+.search-box{
+  position:relative;
 }
 
-.tabs button.active{
-background:#6c5ce7;
-color:white
+.search-box input{
+  padding-left:43px;
 }
 
-.chat-header{
-display:flex;
-align-items:center;
-gap:10px;
-padding:8px 0 14px;
-border-bottom:1px solid #eee;
-margin-bottom:10px
+.search-icon{
+  position:absolute;
+  left:15px;
+  top:20px;
+  z-index:2;
+  color:var(--muted);
 }
 
-.chat-header-info{flex:1;min-width:0}
-.chat-header-name{font-size:16px;font-weight:800}
-.chat-header-status{font-size:11px;color:#777;margin-top:3px}
-
-.chat-user{
-padding:12px 4px;
-border-bottom:1px solid #eee;
-cursor:pointer
+.search-result-title{
+  margin:20px 0 7px;
+  font-size:14px;
+  font-weight:900;
 }
 
-.chat-user:hover{
-background:#f7f5ff;
-border-radius:12px
+/* =========================
+   CREATE
+========================= */
+
+.create-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
 }
 
-.chat-preview{
-font-size:12px;
-color:#777;
-margin-top:3px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
+.create-icon{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  background:var(--soft);
+  font-size:23px;
 }
 
-.chatbox{
-height:320px;
-overflow:auto;
-background:#f5f3ff;
-border-radius:15px;
-padding:10px
+.create-head h2{
+  margin:0;
 }
 
-.bubble{
-max-width:78%;
-padding:10px 13px;
-background:white;
-border-radius:15px;
-margin:7px 0;
-word-break:break-word
+.create-head p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:12px;
 }
 
-.mine{
-margin-left:auto;
-background:#6c5ce7;
-color:white
+/* =========================
+   PROFILE
+========================= */
+
+.profile-top{
+  text-align:center;
+}
+
+.profile-big-avatar{
+  width:72px;
+  height:72px;
+  margin:auto;
+  border-radius:24px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--primary),var(--pink));
+  color:white;
+  font-size:25px;
+  font-weight:900;
+  box-shadow:0 10px 25px rgba(108,92,231,.22);
+}
+
+.profile-top h2{
+  margin:10px 0 2px;
+}
+
+.profile-stats{
+  display:flex;
+  margin-top:20px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+}
+
+.profile-stat{
+  text-align:center;
+  flex:1;
+}
+
+.profile-stat strong{
+  display:block;
+  font-size:20px;
+}
+
+.profile-stat span{
+  font-size:11px;
+  color:var(--muted);
 }
 
 .notice{
-padding:12px;
-background:#f6f5ff;
-border-radius:14px;
-margin:7px 0
+  padding:13px;
+  background:#f7f6ff;
+  border:1px solid #ebe8ff;
+  border-radius:15px;
+  margin:7px 0;
+  font-size:13px;
 }
 
-.toast{
-display:none;
-position:fixed;
-top:15px;
-left:50%;
-transform:translateX(-50%);
-width:min(450px,92%);
-background:#181824;
-color:white;
-padding:14px;
-border-radius:15px;
-z-index:1000;
-text-align:center
+.tabs{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  margin:17px 0 13px;
+  scrollbar-width:none;
 }
+
+.tabs::-webkit-scrollbar{
+  display:none;
+}
+
+.tabs button{
+  border:0;
+  border-radius:18px;
+  padding:9px 14px;
+  background:#f0eff4;
+  color:#666;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:800;
+}
+
+.tabs button.active{
+  background:var(--primary);
+  color:white;
+}
+
+/* =========================
+   CHAT
+========================= */
+
+.chat-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:4px 0 14px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:10px;
+}
+
+.chat-header-info{
+  flex:1;
+  min-width:0;
+}
+
+.chat-header-name{
+  font-size:16px;
+  font-weight:900;
+}
+
+.chat-header-status{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.chat-user{
+  padding:12px 4px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+}
+
+.chat-user:hover{
+  background:#f8f7ff;
+  border-radius:13px;
+}
+
+.chat-preview{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.chatbox{
+  height:340px;
+  overflow:auto;
+  background:#f5f3ff;
+  border-radius:17px;
+  padding:10px;
+}
+
+.bubble{
+  max-width:78%;
+  padding:10px 13px;
+  background:white;
+  border-radius:16px;
+  margin:7px 0;
+  word-break:break-word;
+  box-shadow:0 3px 10px rgba(0,0,0,.04);
+}
+
+.mine{
+  margin-left:auto;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  color:white;
+}
+
+/* =========================
+   NOTIFICATIONS
+========================= */
+
+.notification-card{
+  padding:11px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.notification-card:last-child{
+  border-bottom:0;
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
 
 .bottom{
-position:fixed;
-bottom:0;
-left:50%;
-transform:translateX(-50%);
-width:min(520px,100%);
-height:72px;
-background:white;
-display:flex;
-justify-content:space-around;
-align-items:center;
-box-shadow:0 -5px 20px #0002;
-z-index:100;
-border-radius:20px 20px 0 0
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(560px,100%);
+  height:78px;
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(18px);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -5px 25px rgba(20,15,60,.09);
+  z-index:100;
+  border-top:1px solid rgba(0,0,0,.04);
 }
 
 .nav{
-border:0;
-background:none;
-color:#777;
-font-size:21px;
-position:relative
+  min-width:52px;
+  border:0;
+  background:none;
+  color:#85838f;
+  font-size:21px;
+  position:relative;
+  padding:5px;
 }
 
 .nav b{
-display:block;
-font-size:10px;
-margin-top:3px
+  display:block;
+  font-size:10px;
+  margin-top:3px;
+  font-weight:800;
 }
 
-.nav.active{color:#6c5ce7}
-.create{font-size:29px;color:#6c5ce7}
+.nav.active{
+  color:var(--primary);
+}
+
+.create{
+  width:52px;
+  height:52px;
+  border-radius:18px;
+  font-size:29px;
+  color:white;
+  background:linear-gradient(135deg,var(--primary),var(--pink));
+  box-shadow:0 8px 20px rgba(108,92,231,.25);
+}
 
 .badge{
-position:absolute;
-top:-6px;
-right:-8px;
-background:#e74c3c;
-color:white;
-border-radius:20px;
-padding:2px 6px;
-font-size:9px
+  position:absolute;
+  top:-3px;
+  right:0;
+  min-width:17px;
+  background:var(--danger);
+  color:white;
+  border-radius:20px;
+  padding:2px 5px;
+  font-size:9px;
+  font-weight:900;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  display:none;
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(450px,92%);
+  background:#181824;
+  color:white;
+  padding:13px 15px;
+  border-radius:15px;
+  z-index:1000;
+  text-align:center;
+  font-size:13px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+/* =========================
+   LOADING
+========================= */
+
+.loading{
+  padding:20px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* =========================
+   SMALL SCREENS
+========================= */
+
+@media(max-width:380px){
+  .content{
+    padding:12px;
+  }
+
+  .card{
+    padding:15px;
+  }
+
+  header{
+    padding-left:15px;
+    padding-right:15px;
+  }
+
+  .poll-title{
+    font-size:17px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUTH -->
+<!-- =========================
+     AUTH
+========================= -->
 
 <div id="authScreen" class="app">
 
@@ -342,52 +836,25 @@ font-size:9px
 Everyone has an opinion.
 </div>
 
-<input
-id="email"
-type="email"
-placeholder="Email"
->
+<input id="email" type="email" placeholder="Email">
 
-<input
-id="password"
-type="password"
-placeholder="Password"
->
+<input id="password" type="password" placeholder="Password">
 
-<input
-id="username"
-class="hidden"
-placeholder="Username"
->
+<input id="username" class="hidden" placeholder="Username">
 
-<button
-id="loginBtn"
-class="btn wide"
-onclick="login()"
->
+<button id="loginBtn" class="btn wide" onclick="login()">
 Login
 </button>
 
-<button
-id="signupBtn"
-class="btn wide hidden"
-onclick="signup()"
->
+<button id="signupBtn" class="btn wide hidden" onclick="signup()">
 Create Account
 </button>
 
-<button
-id="authToggleBtn"
-class="link"
-onclick="toggleAuth()"
->
+<button id="authToggleBtn" class="link" onclick="toggleAuth()">
 Create new account
 </button>
 
-<button
-class="link"
-onclick="resetPassword()"
->
+<button class="link" onclick="resetPassword()">
 Forgot password?
 </button>
 
@@ -400,54 +867,75 @@ Forgot password?
 </div>
 
 
-<!-- APP -->
+<!-- =========================
+     APP
+========================= -->
 
 <div id="homeScreen" class="app hidden">
 
 <header>
 
-<h1>Poll Pulse</h1>
+<div class="header-top">
 
-<p id="hello">
-Welcome 👋
-</p>
+<div>
+<h1>Poll Pulse</h1>
+<p id="hello">Welcome 👋</p>
+</div>
+
+<div class="header-pill">
+LIVE
+</div>
+
+</div>
 
 </header>
 
 
 <main class="content">
 
-
-<!-- HOME -->
+<!-- =========================
+     HOME
+========================= -->
 
 <section id="homePage">
 
-<div class="card">
+<div class="card hero-card">
 
-<h2 style="margin-top:0">
-🔥 Poll Feed
-</h2>
+<div class="hero-title">
+🔥 What's your opinion?
+</div>
 
-<p>
-Vote, discover people and follow interesting users.
-</p>
+<div class="hero-text">
+Vote on interesting questions, discover people and share your own thoughts.
+</div>
 
 </div>
 
+<div class="section-title">
+<h2>Poll Feed</h2>
+<span>Latest</span>
+</div>
+
 <div id="polls">
-Loading polls...
+<div class="loading">Loading polls...</div>
 </div>
 
 </section>
 
 
-<!-- SEARCH -->
+<!-- =========================
+     SEARCH
+========================= -->
 
 <section id="searchPage" class="hidden">
 
 <div class="card">
 
-<h2>🔎 Search</h2>
+<h2 style="margin-top:0">🔎 Search</h2>
+
+<div class="search-box">
+
+<span class="search-icon">🔎</span>
 
 <input
 id="searchInput"
@@ -455,8 +943,10 @@ placeholder="Search username or poll..."
 oninput="searchAll()"
 >
 
+</div>
+
 <div id="searchResults">
-Search something...
+<div class="notice">Search something...</div>
 </div>
 
 </div>
@@ -464,13 +954,26 @@ Search something...
 </section>
 
 
-<!-- CREATE -->
+<!-- =========================
+     CREATE
+========================= -->
 
 <section id="createPage" class="hidden">
 
 <div class="card">
 
-<h2>➕ Create Poll</h2>
+<div class="create-head">
+
+<div class="create-icon">
+🗳️
+</div>
+
+<div>
+<h2>Create Poll</h2>
+<p>Ask the community what they think.</p>
+</div>
+
+</div>
 
 <input
 id="question"
@@ -497,10 +1000,7 @@ id="option4"
 placeholder="Option 4 (optional)"
 >
 
-<button
-class="btn wide"
-onclick="createPoll()"
->
+<button class="btn wide" onclick="createPoll()">
 Publish Poll
 </button>
 
@@ -509,13 +1009,15 @@ Publish Poll
 </section>
 
 
-<!-- CHAT -->
+<!-- =========================
+     CHAT
+========================= -->
 
 <section id="chatPage" class="hidden">
 
 <div class="card">
 
-<h2>💬 Chats</h2>
+<h2 style="margin-top:0">💬 Chats</h2>
 
 <input
 id="chatSearch"
@@ -524,7 +1026,9 @@ oninput="searchChatUsers()"
 >
 
 <div id="chatUsers">
+<div class="notice">
 Search a user to start chatting.
+</div>
 </div>
 
 
@@ -532,10 +1036,7 @@ Search a user to start chatting.
 
 <div class="chat-header">
 
-<button
-class="btn"
-onclick="closeChat()"
->
+<button class="btn" onclick="closeChat()">
 ←
 </button>
 
@@ -545,17 +1046,11 @@ U
 
 <div class="chat-header-info">
 
-<div
-id="chatTitle"
-class="chat-header-name"
->
+<div id="chatTitle" class="chat-header-name">
 User
 </div>
 
-<div
-id="chatStatus"
-class="chat-header-status"
->
+<div id="chatStatus" class="chat-header-status">
 Chat
 </div>
 
@@ -564,11 +1059,7 @@ Chat
 </div>
 
 
-<div
-id="messages"
-class="chatbox"
->
-</div>
+<div id="messages" class="chatbox"></div>
 
 
 <div class="row">
@@ -580,10 +1071,7 @@ placeholder="Message..."
 onkeydown="handleChatEnter(event)"
 >
 
-<button
-class="btn"
-onclick="sendMessage()"
->
+<button class="btn" onclick="sendMessage()">
 Send
 </button>
 
@@ -596,42 +1084,30 @@ Send
 </section>
 
 
-<!-- PROFILE -->
+<!-- =========================
+     PROFILE
+========================= -->
 
 <section id="profilePage" class="hidden">
 
 <div class="card">
 
-<div class="row">
+<div class="profile-top">
 
-<div id="avatar" class="avatar">
+<div id="avatar" class="profile-big-avatar">
 U
 </div>
 
-<div>
-
-<h2
-id="profileName"
-style="margin:0"
->
+<h2 id="profileName">
 User
 </h2>
 
-<div
-id="profileUsername"
-class="small"
->
-</div>
-
-</div>
+<div id="profileUsername" class="small"></div>
 
 </div>
 
 
-<br>
-
-
-<div class="row">
+<div class="profile-stats">
 
 <div class="profile-stat">
 
@@ -639,12 +1115,9 @@ class="small"
 0
 </strong>
 
-<span>
-Followers
-</span>
+<span>Followers</span>
 
 </div>
-
 
 <div class="profile-stat">
 
@@ -652,12 +1125,9 @@ Followers
 0
 </strong>
 
-<span>
-Following
-</span>
+<span>Following</span>
 
 </div>
-
 
 <div class="profile-stat">
 
@@ -665,57 +1135,37 @@ Following
 0
 </strong>
 
-<span>
-Polls
-</span>
+<span>Polls</span>
 
 </div>
 
 </div>
 
 
-<br>
+<div class="notice" style="margin-top:18px">
 
+<b>🆔 My User ID</b>
 
-<div class="notice">
-
-<b>
-🆔 My User ID
-</b>
-
-<div
-id="profileId"
-class="tiny"
->
-</div>
+<div id="profileId" class="tiny"></div>
 
 </div>
 
 
 <div class="tabs">
 
-<button
-class="active"
-onclick="profileTab('polls',this)"
->
+<button class="active" onclick="profileTab('polls',this)">
 My Polls
 </button>
 
-<button
-onclick="profileTab('votes',this)"
->
+<button onclick="profileTab('votes',this)">
 My Votes
 </button>
 
-<button
-onclick="profileTab('followers',this)"
->
+<button onclick="profileTab('followers',this)">
 Followers
 </button>
 
-<button
-onclick="profileTab('following',this)"
->
+<button onclick="profileTab('following',this)">
 Following
 </button>
 
@@ -730,12 +1180,12 @@ Following
 
 <div class="card">
 
-<h3>
+<h3 style="margin-top:0">
 🔔 Notifications
 </h3>
 
 <div id="notifications">
-Loading...
+<div class="loading">Loading...</div>
 </div>
 
 </div>
@@ -743,7 +1193,7 @@ Loading...
 
 <button
 class="btn wide"
-style="background:#e74c3c"
+style="background:linear-gradient(135deg,#e74c3c,#ff6b6b)"
 onclick="logout()"
 >
 Logout
@@ -754,7 +1204,9 @@ Logout
 </main>
 
 
-<!-- NAVIGATION -->
+<!-- =========================
+     NAVIGATION
+========================= -->
 
 <nav class="bottom">
 
@@ -794,10 +1246,7 @@ onclick="showPage('chat')"
 💬
 <b>Chat</b>
 
-<span
-id="chatBadge"
-class="badge hidden"
->
+<span id="chatBadge" class="badge hidden">
 0
 </span>
 
@@ -812,10 +1261,7 @@ onclick="showPage('profile')"
 👤
 <b>Profile</b>
 
-<span
-id="notificationBadge"
-class="badge hidden"
->
+<span id="notificationBadge" class="badge hidden">
 0
 </span>
 
@@ -840,7 +1286,6 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
 "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
-
 
 let sb = null;
 let currentUser = null;
@@ -929,9 +1374,7 @@ function initSupabase(){
                 SUPABASE_KEY
             );
 
-        console.log(
-            "SUPABASE CONNECTED"
-        );
+        console.log("SUPABASE CONNECTED");
 
         return true;
 
@@ -969,23 +1412,12 @@ function toggleAuth(){
     const toggleBtn =
         document.getElementById("authToggleBtn");
 
-
     const signupMode =
         !username.classList.contains("hidden");
 
-
-    username.classList.toggle(
-        "hidden"
-    );
-
-    loginBtn.classList.toggle(
-        "hidden"
-    );
-
-    signupBtn.classList.toggle(
-        "hidden"
-    );
-
+    username.classList.toggle("hidden");
+    loginBtn.classList.toggle("hidden");
+    signupBtn.classList.toggle("hidden");
 
     toggleBtn.textContent =
         signupMode
@@ -993,7 +1425,6 @@ function toggleAuth(){
         "Create new account"
         :
         "Already have an account? Login";
-
 
     authMessage("");
 }
@@ -1014,7 +1445,6 @@ async function signup(){
         return;
     }
 
-
     const email =
         document
         .getElementById("email")
@@ -1022,12 +1452,10 @@ async function signup(){
         .trim()
         .toLowerCase();
 
-
     const password =
         document
         .getElementById("password")
         .value;
-
 
     const username =
         document
@@ -1035,7 +1463,6 @@ async function signup(){
         .value
         .trim()
         .toLowerCase();
-
 
     if(!email || !password || !username){
 
@@ -1046,7 +1473,6 @@ async function signup(){
         return;
     }
 
-
     if(password.length < 6){
 
         authMessage(
@@ -1055,7 +1481,6 @@ async function signup(){
 
         return;
     }
-
 
     if(!/^[a-z0-9_]{3,25}$/.test(username)){
 
@@ -1066,16 +1491,12 @@ async function signup(){
         return;
     }
 
-
     const button =
         document.getElementById("signupBtn");
 
     button.disabled = true;
 
-    authMessage(
-        "Creating account..."
-    );
-
+    authMessage("Creating account...");
 
     try{
 
@@ -1094,7 +1515,6 @@ async function signup(){
 
             });
 
-
         if(error){
 
             authMessage(
@@ -1104,7 +1524,6 @@ async function signup(){
             return;
         }
 
-
         if(!data?.user){
 
             authMessage(
@@ -1113,7 +1532,6 @@ async function signup(){
 
             return;
         }
-
 
         if(data.session){
 
@@ -1134,7 +1552,6 @@ async function signup(){
             );
         }
 
-
     }catch(error){
 
         console.error(error);
@@ -1143,7 +1560,6 @@ async function signup(){
             error?.message ||
             "Signup failed."
         );
-
 
     }finally{
 
@@ -1165,22 +1581,17 @@ async function createProfile(
 
     if(!sb || !user)return;
 
-
     const {error} =
         await sb
         .from("profiles")
         .upsert({
 
             id:user.id,
-
             email:email,
-
             username:username,
-
             display_name:username
 
         });
-
 
     if(error){
 
@@ -1207,7 +1618,6 @@ async function login(){
         return;
     }
 
-
     const email =
         document
         .getElementById("email")
@@ -1215,42 +1625,31 @@ async function login(){
         .trim()
         .toLowerCase();
 
-
     const password =
         document
         .getElementById("password")
         .value;
 
-
     if(!email){
 
-        authMessage(
-            "Email enter karo."
-        );
+        authMessage("Email enter karo.");
 
         return;
     }
-
 
     if(!password){
 
-        authMessage(
-            "Password enter karo."
-        );
+        authMessage("Password enter karo.");
 
         return;
     }
-
 
     const button =
         document.getElementById("loginBtn");
 
     button.disabled = true;
 
-    authMessage(
-        "Logging in..."
-    );
-
+    authMessage("Logging in...");
 
     try{
 
@@ -1262,7 +1661,6 @@ async function login(){
 
             });
 
-
         if(error){
 
             authMessage(
@@ -1271,7 +1669,6 @@ async function login(){
 
             return;
         }
-
 
         if(!data?.user){
 
@@ -1282,13 +1679,11 @@ async function login(){
             return;
         }
 
-
         authMessage("");
 
         await openApp(
             data.user
         );
-
 
     }catch(error){
 
@@ -1298,7 +1693,6 @@ async function login(){
             error?.message ||
             "Login failed."
         );
-
 
     }finally{
 
@@ -1323,14 +1717,12 @@ async function resetPassword(){
         return;
     }
 
-
     const email =
         document
         .getElementById("email")
         .value
         .trim()
         .toLowerCase();
-
 
     if(!email){
 
@@ -1341,16 +1733,13 @@ async function resetPassword(){
         return;
     }
 
-
     authMessage(
         "Sending reset email..."
     );
 
-
     const redirectUrl =
         window.location.origin +
         window.location.pathname;
-
 
     const {error} =
         await sb.auth.resetPasswordForEmail(
@@ -1364,7 +1753,6 @@ async function resetPassword(){
 
         );
 
-
     if(error){
 
         authMessage(
@@ -1373,7 +1761,6 @@ async function resetPassword(){
 
         return;
     }
-
 
     authMessage(
         "Reset email bhej diya. Inbox aur Spam check karo."
@@ -1389,7 +1776,6 @@ async function getProfile(id){
 
     if(!sb || !id)return null;
 
-
     const {data,error} =
         await sb
         .from("profiles")
@@ -1398,7 +1784,6 @@ async function getProfile(id){
         )
         .eq("id",id)
         .maybeSingle();
-
 
     if(error){
 
@@ -1410,7 +1795,6 @@ async function getProfile(id){
         return null;
     }
 
-
     return data || null;
 }
 
@@ -1419,13 +1803,10 @@ async function ensureProfile(user){
 
     if(!user)return null;
 
-
     let profile =
         await getProfile(user.id);
 
-
     if(profile)return profile;
-
 
     let username =
         user.user_metadata?.username ||
@@ -1437,7 +1818,6 @@ async function ensureProfile(user){
             "user"
         );
 
-
     username =
         username
         .replace(
@@ -1445,7 +1825,6 @@ async function ensureProfile(user){
             ""
         )
         .slice(0,25);
-
 
     if(username.length < 3){
 
@@ -1456,13 +1835,11 @@ async function ensureProfile(user){
             .slice(0,8);
     }
 
-
     await createProfile(
         user,
         user.email || "",
         username
     );
-
 
     return await getProfile(
         user.id
@@ -1478,61 +1855,46 @@ async function openApp(user){
 
     if(!user)return;
 
-
     currentUser = user;
-
 
     document
         .getElementById("authScreen")
         .classList.add("hidden");
 
-
     document
         .getElementById("homeScreen")
         .classList.remove("hidden");
 
-
     const profile =
         await ensureProfile(user);
-
 
     const username =
         profile?.username ||
         user.user_metadata?.username ||
         "user";
 
-
     const displayName =
         profile?.display_name ||
         username;
 
-
     document.getElementById("hello").textContent =
         "@" + username;
-
 
     document.getElementById("profileName").textContent =
         displayName;
 
-
     document.getElementById("profileUsername").textContent =
         "@" + username;
-
 
     document.getElementById("profileId").textContent =
         user.id;
 
-
     document.getElementById("avatar").textContent =
         getInitial(username);
 
-
     await updateProfileStats();
-
     await loadPolls();
-
     await loadNotifications();
-
     await updateChatBadge();
 }
 
@@ -1544,7 +1906,6 @@ async function openApp(user){
 async function updateProfileStats(){
 
     if(!currentUser || !sb)return;
-
 
     const followers =
         await sb
@@ -1561,7 +1922,6 @@ async function updateProfileStats(){
             currentUser.id
         );
 
-
     const following =
         await sb
         .from("follows")
@@ -1576,7 +1936,6 @@ async function updateProfileStats(){
             "follower_id",
             currentUser.id
         );
-
 
     const polls =
         await sb
@@ -1593,18 +1952,15 @@ async function updateProfileStats(){
             currentUser.id
         );
 
-
     document.getElementById(
         "followersCount"
     ).textContent =
         followers.count || 0;
 
-
     document.getElementById(
         "followingCount"
     ).textContent =
         following.count || 0;
-
 
     document.getElementById(
         "myPollCount"
@@ -1633,7 +1989,6 @@ function showPage(page){
         .classList.add("hidden")
     );
 
-
     [
         "navHome",
         "navSearch",
@@ -1647,23 +2002,18 @@ function showPage(page){
         .classList.remove("active")
     );
 
-
     if(page==="home"){
 
         document
         .getElementById("homePage")
         .classList.remove("hidden");
 
-
         document
         .getElementById("navHome")
         .classList.add("active");
 
-
         loadPolls();
-
     }
-
 
     if(page==="search"){
 
@@ -1671,22 +2021,17 @@ function showPage(page){
         .getElementById("searchPage")
         .classList.remove("hidden");
 
-
         document
         .getElementById("navSearch")
         .classList.add("active");
-
     }
-
 
     if(page==="create"){
 
         document
         .getElementById("createPage")
         .classList.remove("hidden");
-
     }
-
 
     if(page==="chat"){
 
@@ -1694,16 +2039,12 @@ function showPage(page){
         .getElementById("chatPage")
         .classList.remove("hidden");
 
-
         document
         .getElementById("navChat")
         .classList.add("active");
 
-
         updateChatBadge();
-
     }
-
 
     if(page==="profile"){
 
@@ -1711,22 +2052,17 @@ function showPage(page){
         .getElementById("profilePage")
         .classList.remove("hidden");
 
-
         document
         .getElementById("navProfile")
         .classList.add("active");
 
-
         updateProfileStats();
-
         loadNotifications();
-
 
         const firstTab =
             document.querySelector(
                 ".tabs button"
             );
-
 
         profileTab(
             "polls",
@@ -1746,7 +2082,6 @@ async function getFollowingIds(){
         return [];
     }
 
-
     const {data,error} =
         await sb
         .from("follows")
@@ -1755,7 +2090,6 @@ async function getFollowingIds(){
             "follower_id",
             currentUser.id
         );
-
 
     if(error){
 
@@ -1766,7 +2100,6 @@ async function getFollowingIds(){
 
         return [];
     }
-
 
     return (data || [])
         .map(
@@ -1784,26 +2117,18 @@ async function loadPolls(){
     const box =
         document.getElementById("polls");
 
-
     if(!box)return;
-
 
     if(!currentUser || !sb){
 
         box.innerHTML =
-            "<div class='notice'>" +
-            "Login required." +
-            "</div>";
+            "<div class='notice'>Login required.</div>";
 
         return;
     }
 
-
     box.innerHTML =
-        "<div class='notice'>" +
-        "Loading polls..." +
-        "</div>";
-
+        "<div class='loading'>Loading polls...</div>";
 
     try{
 
@@ -1822,7 +2147,6 @@ async function loadPolls(){
             )
             .limit(100);
 
-
         if(error){
 
             console.error(
@@ -1830,31 +2154,25 @@ async function loadPolls(){
                 error
             );
 
-
             box.innerHTML =
                 "<div class='notice'>" +
                 "Polls load error: " +
                 esc(error.message) +
                 "</div>";
 
-
             return;
         }
 
-
         box.innerHTML = "";
-
 
         let votes = [];
         let likes = [];
-
 
         const pollIds =
             (polls || [])
             .map(
                 p => p.id
             );
-
 
         if(pollIds.length){
 
@@ -1869,7 +2187,6 @@ async function loadPolls(){
                     pollIds
                 );
 
-
             if(voteResult.error){
 
                 console.error(
@@ -1883,7 +2200,6 @@ async function loadPolls(){
                     voteResult.data || [];
             }
 
-
             const likeResult =
                 await sb
                 .from("likes")
@@ -1894,7 +2210,6 @@ async function loadPolls(){
                     "poll_id",
                     pollIds
                 );
-
 
             if(likeResult.error){
 
@@ -1910,7 +2225,6 @@ async function loadPolls(){
             }
         }
 
-
         if(!polls || !polls.length){
 
             box.innerHTML =
@@ -1920,7 +2234,6 @@ async function loadPolls(){
 
         }else{
 
-
             for(const poll of polls){
 
                 const profile =
@@ -1928,20 +2241,16 @@ async function loadPolls(){
                         poll.user_id
                     );
 
-
                 const username =
                     profile?.username ||
                     "user";
-
 
                 const displayName =
                     profile?.display_name ||
                     username;
 
-
                 let options =
                     poll.options;
-
 
                 if(typeof options === "string"){
 
@@ -1962,12 +2271,10 @@ async function loadPolls(){
                     }
                 }
 
-
                 if(!Array.isArray(options)){
 
                     options = [];
                 }
-
 
                 const pollVotes =
                     votes.filter(
@@ -1975,10 +2282,8 @@ async function loadPolls(){
                         v.poll_id === poll.id
                     );
 
-
                 const totalVotes =
                     pollVotes.length;
-
 
                 const myVote =
                     pollVotes.find(
@@ -1987,13 +2292,11 @@ async function loadPolls(){
                         currentUser.id
                     );
 
-
                 const pollLikes =
                     likes.filter(
                         l =>
                         l.poll_id === poll.id
                     );
-
 
                 const liked =
                     pollLikes.some(
@@ -2002,14 +2305,11 @@ async function loadPolls(){
                         currentUser.id
                     );
 
-
                 const card =
                     document.createElement("div");
 
-
                 card.className =
-                    "card";
-
+                    "card poll-card";
 
                 card.innerHTML = `
 
@@ -2017,24 +2317,19 @@ async function loadPolls(){
 
                         <div class="creator-avatar">
                             ${esc(
-                                getInitial(
-                                    username
-                                )
+                                getInitial(username)
                             )}
                         </div>
 
                         <div class="grow">
 
-                            <b>
+                            <div class="creator-name">
                                 @${esc(username)}
-                            </b>
+                            </div>
 
                             <div class="small">
-
                                 ${esc(displayName)}
-
                                 •
-
                                 ${
                                     poll.created_at
                                     ?
@@ -2044,13 +2339,11 @@ async function loadPolls(){
                                     :
                                     ""
                                 }
-
                             </div>
 
                         </div>
 
                     </div>
-
 
                     <div class="poll-title">
                         ${esc(
@@ -2059,14 +2352,10 @@ async function loadPolls(){
                         )}
                     </div>
 
-
                     <div class="poll-options"></div>
 
-
                     <div class="small poll-total">
-
                         ${totalVotes}
-
                         ${
                             totalVotes === 1
                             ?
@@ -2074,15 +2363,11 @@ async function loadPolls(){
                             :
                             "votes"
                         }
-
                     </div>
-
 
                     <div class="poll-actions">
 
-                        <button
-                            class="poll-action like-btn"
-                        >
+                        <button class="poll-action like-btn">
                             ${
                                 liked
                                 ?
@@ -2090,20 +2375,15 @@ async function loadPolls(){
                                 :
                                 "🤍 Like"
                             }
-
                             ${pollLikes.length}
-
                         </button>
-
 
                         ${
                             poll.user_id ===
                             currentUser.id
                             ?
                             `
-                            <button
-                                class="poll-action delete-poll"
-                            >
+                            <button class="poll-action delete-poll">
                                 🗑️ Delete
                             </button>
                             `
@@ -2114,12 +2394,10 @@ async function loadPolls(){
                     </div>
                 `;
 
-
                 const optionsBox =
                     card.querySelector(
                         ".poll-options"
                     );
-
 
                 options.forEach(
                     option => {
@@ -2129,7 +2407,6 @@ async function loadPolls(){
                                 v =>
                                 v.option === option
                             ).length;
-
 
                         const percent =
                             totalVotes
@@ -2142,16 +2419,13 @@ async function loadPolls(){
                             :
                             0;
 
-
                         const button =
                             document.createElement(
                                 "button"
                             );
 
-
                         button.className =
                             "option";
-
 
                         if(
                             myVote &&
@@ -2163,7 +2437,6 @@ async function loadPolls(){
                             );
                         }
 
-
                         button.textContent =
                             myVote &&
                             myVote.option === option
@@ -2171,7 +2444,6 @@ async function loadPolls(){
                             "✓ " + option
                             :
                             option;
-
 
                         button.onclick =
                             async function(){
@@ -2183,11 +2455,9 @@ async function loadPolls(){
 
                             };
 
-
                         optionsBox.appendChild(
                             button
                         );
-
 
                         if(myVote){
 
@@ -2196,10 +2466,8 @@ async function loadPolls(){
                                     "div"
                                 );
 
-
                             result.className =
                                 "result";
-
 
                             result.innerHTML = `
 
@@ -2215,7 +2483,6 @@ async function loadPolls(){
 
                                 </div>
 
-
                                 <div class="resultbar">
 
                                     <i
@@ -2225,7 +2492,6 @@ async function loadPolls(){
                                 </div>
                             `;
 
-
                             optionsBox.appendChild(
                                 result
                             );
@@ -2234,12 +2500,10 @@ async function loadPolls(){
                     }
                 );
 
-
                 const likeBtn =
                     card.querySelector(
                         ".like-btn"
                     );
-
 
                 likeBtn.onclick =
                     async function(){
@@ -2252,12 +2516,10 @@ async function loadPolls(){
 
                     };
 
-
                 const deleteBtn =
                     card.querySelector(
                         ".delete-poll"
                     );
-
 
                 if(deleteBtn){
 
@@ -2271,19 +2533,14 @@ async function loadPolls(){
                         };
                 }
 
-
                 box.appendChild(
                     card
                 );
             }
         }
 
-
-        /* RANDOM SUGGESTIONS */
-
         const suggestions =
             await loadSuggestions();
-
 
         if(suggestions){
 
@@ -2292,14 +2549,12 @@ async function loadPolls(){
             );
         }
 
-
     }catch(error){
 
         console.error(
             "LOAD POLLS CRASH:",
             error
         );
-
 
         box.innerHTML =
             "<div class='notice'>" +
@@ -2324,12 +2579,10 @@ async function loadSuggestions(){
         return null;
     }
 
-
     try{
 
         const followingIds =
             await getFollowingIds();
-
 
         const {
             data:users,
@@ -2346,7 +2599,6 @@ async function loadSuggestions(){
             )
             .limit(200);
 
-
         if(error){
 
             console.error(
@@ -2357,7 +2609,6 @@ async function loadSuggestions(){
             return null;
         }
 
-
         let candidates =
             (users || [])
             .filter(
@@ -2367,14 +2618,10 @@ async function loadSuggestions(){
                 )
             );
 
-
         if(!candidates.length){
 
             return null;
         }
-
-
-        /* Fisher-Yates shuffle */
 
         for(
             let i =
@@ -2391,7 +2638,6 @@ async function loadSuggestions(){
                     (i + 1)
                 );
 
-
             [
                 candidates[i],
                 candidates[j]
@@ -2402,33 +2648,24 @@ async function loadSuggestions(){
             ];
         }
 
-
         const selected =
             candidates.slice(0,5);
 
-
         const box =
-            document.createElement(
-                "div"
-            );
-
+            document.createElement("div");
 
         box.className =
             "suggestion";
 
-
         box.innerHTML = `
 
-            <h3>
-                👥 Follow Suggestions
-            </h3>
+            <h3>👥 Follow Suggestions</h3>
 
             <div class="small">
                 New people you may know
             </div>
 
         `;
-
 
         selected.forEach(
             user => {
@@ -2438,23 +2675,18 @@ async function loadSuggestions(){
                         "div"
                     );
 
-
                 row.className =
                     "row user";
-
 
                 row.innerHTML = `
 
                     <div class="avatar">
-
                         ${esc(
                             getInitial(
                                 user.username
                             )
                         )}
-
                     </div>
-
 
                     <div class="grow">
 
@@ -2465,31 +2697,24 @@ async function loadSuggestions(){
                         </b>
 
                         <div class="small">
-
                             ${esc(
                                 user.display_name ||
                                 ""
                             )}
-
                         </div>
 
                     </div>
 
-
-                    <button
-                        class="btn follow"
-                    >
+                    <button class="btn follow">
                         Follow
                     </button>
 
                 `;
 
-
                 const button =
                     row.querySelector(
                         ".follow"
                     );
-
 
                 button.onclick =
                     async function(){
@@ -2503,7 +2728,6 @@ async function loadSuggestions(){
 
                     };
 
-
                 box.appendChild(
                     row
                 );
@@ -2511,9 +2735,7 @@ async function loadSuggestions(){
             }
         );
 
-
         return box;
-
 
     }catch(error){
 
@@ -2545,7 +2767,6 @@ async function followUser(
         return;
     }
 
-
     if(!sb){
 
         toast(
@@ -2554,7 +2775,6 @@ async function followUser(
 
         return;
     }
-
 
     if(
         userId ===
@@ -2568,13 +2788,11 @@ async function followUser(
         return;
     }
 
-
     if(button){
 
         button.disabled = true;
         button.textContent = "Loading...";
     }
-
 
     try{
 
@@ -2595,12 +2813,10 @@ async function followUser(
             )
             .limit(1);
 
-
         if(checkError){
 
             throw checkError;
         }
-
 
         if(existing?.length){
 
@@ -2613,14 +2829,9 @@ async function followUser(
                     existing[0].id
                 );
 
-
             if(error)throw error;
 
-
-            toast(
-                "Unfollowed"
-            );
-
+            toast("Unfollowed");
 
         }else{
 
@@ -2637,24 +2848,19 @@ async function followUser(
 
                 });
 
-
             if(error)throw error;
-
 
             await createNotification(
                 userId,
                 "started following you"
             );
 
-
             toast(
                 "✅ Following!"
             );
         }
 
-
         await updateProfileStats();
-
 
     }catch(error){
 
@@ -2663,7 +2869,6 @@ async function followUser(
             error
         );
 
-
         toast(
             "Follow error: " +
             (
@@ -2671,7 +2876,6 @@ async function followUser(
                 "Unknown error"
             )
         );
-
 
     }finally{
 
@@ -2704,7 +2908,6 @@ async function vote(
         return;
     }
 
-
     const {
         data:old,
         error:oldError
@@ -2722,7 +2925,6 @@ async function vote(
         )
         .limit(1);
 
-
     if(oldError){
 
         toast(
@@ -2731,7 +2933,6 @@ async function vote(
 
         return;
     }
-
 
     if(old?.length){
 
@@ -2746,7 +2947,6 @@ async function vote(
                 old[0].id
             );
 
-
         if(error){
 
             toast(
@@ -2755,7 +2955,6 @@ async function vote(
 
             return;
         }
-
 
     }else{
 
@@ -2773,7 +2972,6 @@ async function vote(
 
             });
 
-
         if(error){
 
             toast(
@@ -2784,11 +2982,9 @@ async function vote(
         }
     }
 
-
     toast(
         "✅ Vote saved!"
     );
-
 
     await loadPolls();
 }
@@ -2811,7 +3007,6 @@ async function deletePoll(
         return;
     }
 
-
     if(
         !confirm(
             "Delete this poll?"
@@ -2820,7 +3015,6 @@ async function deletePoll(
 
         return;
     }
-
 
     const {error} =
         await sb
@@ -2835,14 +3029,12 @@ async function deletePoll(
             currentUser.id
         );
 
-
     if(error){
 
         console.error(
             "DELETE POLL ERROR:",
             error
         );
-
 
         toast(
             "Could not delete poll: " +
@@ -2852,14 +3044,11 @@ async function deletePoll(
         return;
     }
 
-
     toast(
         "🗑️ Poll deleted!"
     );
 
-
     await updateProfileStats();
-
     await loadPolls();
 }
 
@@ -2879,13 +3068,11 @@ async function createPoll(){
         return;
     }
 
-
     const question =
         document
         .getElementById("question")
         .value
         .trim();
-
 
     const options =
         [
@@ -2903,7 +3090,6 @@ async function createPoll(){
         )
         .filter(Boolean);
 
-
     if(!question){
 
         toast(
@@ -2913,7 +3099,6 @@ async function createPoll(){
         return;
     }
 
-
     if(options.length < 2){
 
         toast(
@@ -2922,7 +3107,6 @@ async function createPoll(){
 
         return;
     }
-
 
     if(
         options.length !==
@@ -2935,7 +3119,6 @@ async function createPoll(){
 
         return;
     }
-
 
     const {error} =
         await sb
@@ -2951,7 +3134,6 @@ async function createPoll(){
 
         });
 
-
     if(error){
 
         toast(
@@ -2960,7 +3142,6 @@ async function createPoll(){
 
         return;
     }
-
 
     [
         "question",
@@ -2976,14 +3157,11 @@ async function createPoll(){
         .value = ""
     );
 
-
     toast(
         "🎉 Poll published!"
     );
 
-
     await updateProfileStats();
-
 
     showPage(
         "home"
@@ -3008,7 +3186,6 @@ async function likePoll(
         return;
     }
 
-
     const {
         data,
         error
@@ -3026,7 +3203,6 @@ async function likePoll(
         )
         .limit(1);
 
-
     if(error){
 
         toast(
@@ -3035,7 +3211,6 @@ async function likePoll(
 
         return;
     }
-
 
     if(data?.length){
 
@@ -3048,7 +3223,6 @@ async function likePoll(
                 data[0].id
             );
 
-
         if(error){
 
             toast(
@@ -3058,11 +3232,9 @@ async function likePoll(
             return;
         }
 
-
         toast(
             "Like removed"
         );
-
 
     }else{
 
@@ -3079,7 +3251,6 @@ async function likePoll(
 
             });
 
-
         if(error){
 
             toast(
@@ -3088,7 +3259,6 @@ async function likePoll(
 
             return;
         }
-
 
         toast(
             "❤️ Liked"
@@ -3107,7 +3277,6 @@ function searchAll(){
         searchTimer
     );
 
-
     searchTimer =
         setTimeout(
             runSearch,
@@ -3120,27 +3289,23 @@ async function runSearch(){
 
     if(!currentUser || !sb)return;
 
-
     const q =
         document
         .getElementById("searchInput")
         .value
         .trim();
 
-
     const box =
         document
         .getElementById("searchResults");
 
-
     if(!q){
 
-        box.textContent =
-            "Search users or polls.";
+        box.innerHTML =
+            "<div class='notice'>Search users or polls.</div>";
 
         return;
     }
-
 
     const {
         data:users
@@ -3156,7 +3321,6 @@ async function runSearch(){
         )
         .limit(20);
 
-
     const {
         data:polls
     } =
@@ -3171,10 +3335,8 @@ async function runSearch(){
         )
         .limit(20);
 
-
     box.innerHTML =
-        "<h3>👤 Users</h3>";
-
+        "<div class='search-result-title'>👤 Users</div>";
 
     for(const user of users || []){
 
@@ -3183,36 +3345,29 @@ async function runSearch(){
                 "div"
             );
 
-
         row.className =
             "row user";
-
 
         const av =
             document.createElement(
                 "div"
             );
 
-
         av.className =
             "avatar";
-
 
         av.textContent =
             getInitial(
                 user.username
             );
 
-
         const info =
             document.createElement(
                 "div"
             );
 
-
         info.className =
             "grow";
-
 
         info.innerHTML = `
 
@@ -3230,16 +3385,13 @@ async function runSearch(){
 
         `;
 
-
         const button =
             document.createElement(
                 "button"
             );
 
-
         button.className =
             "btn follow";
-
 
         if(
             user.id ===
@@ -3251,14 +3403,12 @@ async function runSearch(){
 
             button.disabled = true;
 
-
         }else{
 
             const following =
                 await isFollowing(
                     user.id
                 );
-
 
             button.textContent =
                 following
@@ -3267,14 +3417,12 @@ async function runSearch(){
                 :
                 "Follow";
 
-
             if(following){
 
                 button.classList.add(
                     "following"
                 );
             }
-
 
             button.onclick =
                 async function(){
@@ -3287,19 +3435,15 @@ async function runSearch(){
                 };
         }
 
-
         row.appendChild(av);
         row.appendChild(info);
         row.appendChild(button);
 
-
         box.appendChild(row);
     }
 
-
     box.innerHTML +=
-        "<h3>🗳️ Polls</h3>";
-
+        "<div class='search-result-title'>🗳️ Polls</div>";
 
     for(const poll of polls || []){
 
@@ -3308,18 +3452,14 @@ async function runSearch(){
                 "div"
             );
 
-
         div.className =
             "notice";
-
 
         div.textContent =
             poll.question;
 
-
         box.appendChild(div);
     }
-
 
     if(
         !users?.length &&
@@ -3327,9 +3467,7 @@ async function runSearch(){
     ){
 
         box.innerHTML +=
-            "<div class='small'>" +
-            "No results found." +
-            "</div>";
+            "<div class='small'>No results found.</div>";
     }
 }
 
@@ -3341,7 +3479,6 @@ async function isFollowing(
     if(!currentUser || !sb){
         return false;
     }
-
 
     const {
         data,
@@ -3360,11 +3497,9 @@ async function isFollowing(
         )
         .limit(1);
 
-
     if(error){
         return false;
     }
-
 
     return !!data?.length;
 }
@@ -3387,7 +3522,6 @@ async function createNotification(
         return;
     }
 
-
     const {error} =
         await sb
         .from("notifications")
@@ -3404,7 +3538,6 @@ async function createNotification(
 
         });
 
-
     if(error){
 
         console.error(
@@ -3418,7 +3551,6 @@ async function createNotification(
 async function loadNotifications(){
 
     if(!currentUser || !sb)return;
-
 
     const {
         data,
@@ -3439,12 +3571,10 @@ async function loadNotifications(){
         )
         .limit(50);
 
-
     const box =
         document.getElementById(
             "notifications"
         );
-
 
     if(error){
 
@@ -3456,9 +3586,7 @@ async function loadNotifications(){
         return;
     }
 
-
     box.innerHTML = "";
-
 
     if(!data?.length){
 
@@ -3475,10 +3603,8 @@ async function loadNotifications(){
                         "div"
                     );
 
-
                 div.className =
-                    "notice";
-
+                    "notification-card";
 
                 div.textContent =
                     (n.message ||
@@ -3494,14 +3620,12 @@ async function loadNotifications(){
                         ""
                     );
 
-
                 box.appendChild(
                     div
                 );
             }
         );
     }
-
 
     const unread =
         (data || [])
@@ -3510,16 +3634,13 @@ async function loadNotifications(){
         )
         .length;
 
-
     const badge =
         document.getElementById(
             "notificationBadge"
         );
 
-
     badge.textContent =
         unread;
-
 
     badge.classList.toggle(
         "hidden",
@@ -3548,7 +3669,6 @@ async function profileTab(
         )
     );
 
-
     if(button){
 
         button.classList.add(
@@ -3556,16 +3676,13 @@ async function profileTab(
         );
     }
 
-
     const box =
         document.getElementById(
             "profileContent"
         );
 
-
     box.innerHTML =
-        "Loading...";
-
+        "<div class='loading'>Loading...</div>";
 
     if(tab==="polls"){
 
@@ -3589,7 +3706,6 @@ async function profileTab(
                 }
             );
 
-
         if(error){
 
             box.innerHTML =
@@ -3600,9 +3716,7 @@ async function profileTab(
             return;
         }
 
-
         box.innerHTML = "";
-
 
         (data || []).forEach(
             poll => {
@@ -3612,14 +3726,11 @@ async function profileTab(
                         "div"
                     );
 
-
                 div.className =
                     "notice";
 
-
                 div.textContent =
                     poll.question;
-
 
                 box.appendChild(
                     div
@@ -3627,14 +3738,12 @@ async function profileTab(
             }
         );
 
-
         if(!data?.length){
 
             box.textContent =
                 "No polls yet.";
         }
     }
-
 
     if(tab==="votes"){
 
@@ -3652,7 +3761,6 @@ async function profileTab(
                 currentUser.id
             );
 
-
         if(error){
 
             box.innerHTML =
@@ -3663,9 +3771,7 @@ async function profileTab(
             return;
         }
 
-
         box.innerHTML = "";
-
 
         (data || []).forEach(
             v => {
@@ -3675,10 +3781,8 @@ async function profileTab(
                         "div"
                     );
 
-
                 div.className =
                     "notice";
-
 
                 div.innerHTML =
                     "<b>" +
@@ -3689,13 +3793,11 @@ async function profileTab(
                     "</b><br>✓ " +
                     esc(v.option);
 
-
                 box.appendChild(
                     div
                 );
             }
         );
-
 
         if(!data?.length){
 
@@ -3703,7 +3805,6 @@ async function profileTab(
                 "No votes yet.";
         }
     }
-
 
     if(
         tab==="followers" ||
@@ -3717,14 +3818,12 @@ async function profileTab(
             :
             "following_id";
 
-
         const filterColumn =
             tab==="followers"
             ?
             "following_id"
             :
             "follower_id";
-
 
         const {
             data,
@@ -3738,7 +3837,6 @@ async function profileTab(
                 currentUser.id
             );
 
-
         if(error){
 
             box.innerHTML =
@@ -3749,9 +3847,7 @@ async function profileTab(
             return;
         }
 
-
         box.innerHTML = "";
-
 
         for(
             const item of data || []
@@ -3762,61 +3858,49 @@ async function profileTab(
                     item[column]
                 );
 
-
             if(!user)continue;
-
 
             const row =
                 document.createElement(
                     "div"
                 );
 
-
             row.className =
                 "row user";
-
 
             const av =
                 document.createElement(
                     "div"
                 );
 
-
             av.className =
                 "avatar";
-
 
             av.textContent =
                 getInitial(
                     user.username
                 );
 
-
             const info =
                 document.createElement(
                     "div"
                 );
 
-
             info.className =
                 "grow";
-
 
             info.innerHTML =
                 "<b>@" +
                 esc(user.username) +
                 "</b>";
 
-
             row.appendChild(av);
             row.appendChild(info);
-
 
             box.appendChild(
                 row
             );
         }
-
 
         if(!data?.length){
 
@@ -3841,7 +3925,6 @@ function searchChatUsers(){
         chatTimer
     );
 
-
     chatTimer =
         setTimeout(
             runChatSearch,
@@ -3854,27 +3937,23 @@ async function runChatSearch(){
 
     if(!currentUser || !sb)return;
 
-
     const q =
         document
         .getElementById("chatSearch")
         .value
         .trim();
 
-
     const box =
         document
         .getElementById("chatUsers");
 
-
     if(!q){
 
-        box.textContent =
-            "Search a username to start chatting.";
+        box.innerHTML =
+            "<div class='notice'>Search a username to start chatting.</div>";
 
         return;
     }
-
 
     const {
         data,
@@ -3895,7 +3974,6 @@ async function runChatSearch(){
         )
         .limit(20);
 
-
     if(error){
 
         box.innerHTML =
@@ -3906,9 +3984,7 @@ async function runChatSearch(){
         return;
     }
 
-
     box.innerHTML = "";
-
 
     if(!data?.length){
 
@@ -3918,7 +3994,6 @@ async function runChatSearch(){
         return;
     }
 
-
     data.forEach(
         user => {
 
@@ -3927,36 +4002,29 @@ async function runChatSearch(){
                     "div"
                 );
 
-
             row.className =
                 "row chat-user";
-
 
             const av =
                 document.createElement(
                     "div"
                 );
 
-
             av.className =
                 "avatar";
-
 
             av.textContent =
                 getInitial(
                     user.username
                 );
 
-
             const info =
                 document.createElement(
                     "div"
                 );
 
-
             info.className =
                 "grow";
-
 
             info.innerHTML = `
 
@@ -3975,10 +4043,8 @@ async function runChatSearch(){
 
             `;
 
-
             row.appendChild(av);
             row.appendChild(info);
-
 
             row.onclick =
                 function(){
@@ -3988,7 +4054,6 @@ async function runChatSearch(){
                     );
 
                 };
-
 
             box.appendChild(
                 row
@@ -4014,17 +4079,12 @@ async function openChat(
         return;
     }
 
-
     currentChatUser =
         user;
 
-
     document
     .getElementById("chatArea")
-    .classList.remove(
-        "hidden"
-    );
-
+    .classList.remove("hidden");
 
     document.getElementById(
         "chatTitle"
@@ -4035,13 +4095,11 @@ async function openChat(
             "user"
         );
 
-
     document.getElementById(
         "chatStatus"
     ).textContent =
         user.display_name ||
         "Poll Pulse user";
-
 
     document.getElementById(
         "chatAvatar"
@@ -4049,7 +4107,6 @@ async function openChat(
         getInitial(
             user.username
         );
-
 
     await loadMessages();
 }
@@ -4063,12 +4120,9 @@ function closeChat(){
 
     currentChatUser = null;
 
-
     document
     .getElementById("chatArea")
-    .classList.add(
-        "hidden"
-    );
+    .classList.add("hidden");
 }
 
 
@@ -4087,18 +4141,13 @@ async function loadMessages(){
         return;
     }
 
-
     const box =
         document.getElementById(
             "messages"
         );
 
-
     box.innerHTML =
-        "<div class='small'>" +
-        "Loading messages..." +
-        "</div>";
-
+        "<div class='loading'>Loading messages...</div>";
 
     try{
 
@@ -4115,7 +4164,6 @@ async function loadMessages(){
                 currentChatUser.id
             );
 
-
         const received =
             await sb
             .from("messages")
@@ -4129,14 +4177,12 @@ async function loadMessages(){
                 currentUser.id
             );
 
-
         if(sent.error){
 
             console.error(
                 "SENT MESSAGES ERROR:",
                 sent.error
             );
-
 
             box.innerHTML =
                 "<div class='notice'>" +
@@ -4145,10 +4191,8 @@ async function loadMessages(){
                 ) +
                 "</div>";
 
-
             return;
         }
-
 
         if(received.error){
 
@@ -4157,7 +4201,6 @@ async function loadMessages(){
                 received.error
             );
 
-
             box.innerHTML =
                 "<div class='notice'>" +
                 esc(
@@ -4165,17 +4208,14 @@ async function loadMessages(){
                 ) +
                 "</div>";
 
-
             return;
         }
-
 
         const messages =
             [
                 ...(sent.data || []),
                 ...(received.data || [])
             ];
-
 
         messages.sort(
             (a,b) =>
@@ -4187,9 +4227,7 @@ async function loadMessages(){
                 )
         );
 
-
         box.innerHTML = "";
-
 
         if(!messages.length){
 
@@ -4198,10 +4236,8 @@ async function loadMessages(){
                 "No messages yet. Say hi! 👋" +
                 "</div>";
 
-
             return;
         }
-
 
         messages.forEach(
             message => {
@@ -4210,7 +4246,6 @@ async function loadMessages(){
                     document.createElement(
                         "div"
                     );
-
 
                 bubble.className =
                     "bubble " +
@@ -4223,11 +4258,9 @@ async function loadMessages(){
                         ""
                     );
 
-
                 bubble.textContent =
                     message.message ||
                     "";
-
 
                 box.appendChild(
                     bubble
@@ -4235,10 +4268,8 @@ async function loadMessages(){
             }
         );
 
-
         box.scrollTop =
             box.scrollHeight;
-
 
     }catch(error){
 
@@ -4246,7 +4277,6 @@ async function loadMessages(){
             "CHAT CRASH:",
             error
         );
-
 
         box.innerHTML =
             "<div class='notice'>" +
@@ -4293,19 +4323,15 @@ async function sendMessage(){
         return;
     }
 
-
     const input =
         document.getElementById(
             "chatInput"
         );
 
-
     const text =
         input.value.trim();
 
-
     if(!text)return;
-
 
     const {error} =
         await sb
@@ -4322,7 +4348,6 @@ async function sendMessage(){
 
         });
 
-
     if(error){
 
         toast(
@@ -4333,15 +4358,12 @@ async function sendMessage(){
         return;
     }
 
-
     input.value = "";
-
 
     await createNotification(
         currentChatUser.id,
         "sent you a message"
     );
-
 
     await loadMessages();
 
@@ -4357,7 +4379,6 @@ async function updateChatBadge(){
 
     if(!currentUser || !sb)return;
 
-
     const {
         data,
         error
@@ -4371,7 +4392,6 @@ async function updateChatBadge(){
         )
         .limit(100);
 
-
     if(error){
 
         console.error(
@@ -4382,20 +4402,16 @@ async function updateChatBadge(){
         return;
     }
 
-
     const badge =
         document.getElementById(
             "chatBadge"
         );
 
-
     const count =
         (data || []).length;
 
-
     badge.textContent =
         count;
-
 
     badge.classList.toggle(
         "hidden",
@@ -4424,29 +4440,20 @@ async function logout(){
         }
     }
 
-
     currentUser = null;
     currentChatUser = null;
 
-
     document
     .getElementById("homeScreen")
-    .classList.add(
-        "hidden"
-    );
-
+    .classList.add("hidden");
 
     document
     .getElementById("authScreen")
-    .classList.remove(
-        "hidden"
-    );
-
+    .classList.remove("hidden");
 
     document.getElementById(
         "password"
     ).value = "";
-
 
     authMessage(
         "Logged out."
@@ -4462,7 +4469,6 @@ async function initAuth(){
 
     if(!sb)return;
 
-
     try{
 
         const {
@@ -4471,7 +4477,6 @@ async function initAuth(){
         } =
             await sb.auth.getSession();
 
-
         if(error){
 
             console.error(
@@ -4479,15 +4484,12 @@ async function initAuth(){
                 error
             );
 
-
             authMessage(
                 error.message
             );
 
-
             return;
         }
-
 
         if(
             data?.session?.user
@@ -4498,13 +4500,11 @@ async function initAuth(){
             );
         }
 
-
     }catch(error){
 
         console.error(
             error
         );
-
 
         authMessage(
             error?.message ||
@@ -4525,7 +4525,6 @@ function startApp(){
         return;
     }
 
-
     sb.auth.onAuthStateChange(
         async (
             event,
@@ -4536,7 +4535,6 @@ function startApp(){
                 "AUTH EVENT:",
                 event
             );
-
 
             if(
                 event ===
@@ -4550,7 +4548,6 @@ function startApp(){
                 );
             }
 
-
             if(
                 event ===
                 "SIGNED_OUT"
@@ -4561,7 +4558,6 @@ function startApp(){
 
         }
     );
-
 
     initAuth();
 }
