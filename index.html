@@ -1922,324 +1922,35 @@ async function loadSuggestions(){
 
     return box;
 }
+```javascript
+async function deletePoll(pollId){
 
-
-async function loadPolls(){
-
-    if(!currentUser || !sb){
+    if(!currentUser){
+        toast("Please login first");
         return;
     }
 
-    const box =
-        document.getElementById("polls");
-
-    box.innerHTML =
-        "Loading...";
-
-    const suggestion =
-        await loadSuggestions();
-
-    box.innerHTML = "";
-
-    if(suggestion){
-
-        box.appendChild(
-            suggestion
-        );
+    if(!confirm("Delete this poll?")){
+        return;
     }
 
-    const {
-        data:polls,
-        error
-    } =
-        await sb
+    const { error } = await sb
         .from("polls")
-        .select("*")
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        );
+        .delete()
+        .eq("id", pollId)
+        .eq("user_id", currentUser.id);
 
     if(error){
-
-        box.innerHTML =
-            "<div class='card'>" +
-            esc(error.message) +
-            "</div>";
-
+        console.error(error);
+        toast("Could not delete poll");
         return;
     }
 
-    if(!polls?.length){
-
-        box.innerHTML +=
-            "<div class='card'>" +
-            "No polls yet. Create the first poll! 🎉" +
-            "</div>";
-
-        return;
-    }
-
-    const ids =
-        polls.map(
-            p=>p.id
-        );
-
-    const {
-        data:votes
-    } =
-        await sb
-        .from("votes")
-        .select(
-            "poll_id,user_id,option"
-        )
-        .in(
-            "poll_id",
-            ids
-        );
-
-    const profileMap = {};
-
-    for(
-        const poll of polls
-    ){
-
-        if(poll.user_id){
-
-            profileMap[poll.user_id] =
-                await getProfile(
-                    poll.user_id
-                );
-        }
-    }
-
-    for(
-        const poll of polls
-    ){
-
-        const profile =
-            profileMap[
-                poll.user_id
-            ];
-
-        let options =
-            poll.options;
-
-        if(typeof options === "string"){
-
-            try{
-
-                options =
-                    JSON.parse(
-                        options
-                    );
-
-            }catch{
-
-                options = [];
-            }
-        }
-
-        if(!Array.isArray(options)){
-
-            options = [];
-        }
-
-        const pollVotes =
-            (votes || [])
-            .filter(
-                v =>
-                v.poll_id === poll.id
-            );
-
-        const myVote =
-            pollVotes.find(
-                v =>
-                v.user_id ===
-                currentUser.id
-            );
-
-        const counts = {};
-
-        options.forEach(
-            o =>
-            counts[o] = 0
-        );
-
-        pollVotes.forEach(v=>{
-
-            counts[v.option] =
-                (
-                    counts[v.option] ||
-                    0
-                ) + 1;
-
-        });
-
-        const total =
-            pollVotes.length;
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "card";
-
-        const creator =
-            document.createElement("div");
-
-        creator.className =
-            "creator";
-
-        const ca =
-            document.createElement("div");
-
-        ca.className =
-            "creator-avatar";
-
-        ca.textContent =
-            getInitial(
-                profile?.username
-            );
-
-        const ci =
-            document.createElement("div");
-
-        ci.innerHTML =
-            "<b>@" +
-            esc(
-                profile?.username ||
-                "user"
-            ) +
-            "</b>";
-
-        creator.appendChild(ca);
-        creator.appendChild(ci);
-
-        card.appendChild(creator);
-
-        const title =
-            document.createElement("div");
-
-        title.className =
-            "poll-title";
-
-        title.textContent =
-            poll.question ||
-            "Untitled poll";
-
-        card.appendChild(title);
-
-        options.forEach(option=>{
-
-            const button =
-                document.createElement("button");
-
-            button.className =
-                "option";
-
-            button.textContent =
-                (
-                    myVote?.option === option
-                    ?
-                    "✓ "
-                    :
-                    ""
-                ) +
-                option +
-                " — " +
-                (
-                    counts[option] ||
-                    0
-                );
-
-            button.onclick =
-                async function(){
-
-                    button.disabled = true;
-
-                    await vote(
-                        poll.id,
-                        option
-                    );
-
-                    button.disabled = false;
-                };
-
-            card.appendChild(button);
-
-            const bar =
-                document.createElement("div");
-
-            bar.className =
-                "resultbar";
-
-            const fill =
-                document.createElement("i");
-
-            fill.style.width =
-                (
-                    total
-                    ?
-                    counts[option] /
-                    total *
-                    100
-                    :
-                    0
-                ) + "%";
-
-            bar.appendChild(fill);
-
-            card.appendChild(bar);
-        });
-
-        const info =
-            document.createElement("div");
-
-        info.className =
-            "small";
-
-        info.textContent =
-            total +
-            " votes" +
-            (
-                myVote
-                ?
-                " • You voted"
-                :
-                ""
-            );
-
-        card.appendChild(info);
-
-        const like =
-            document.createElement("button");
-
-        like.className =
-            "link";
-
-        like.style.textAlign =
-            "left";
-
-        like.textContent =
-            "❤️ Like";
-
-        like.onclick =
-            function(){
-
-                likePoll(
-                    poll.id
-                );
-
-            };
-
-        card.appendChild(like);
-
-        box.appendChild(card);
-    }
+    toast("Poll deleted!");
+    loadPolls();
 }
+```
+
 
 
 async function vote(
