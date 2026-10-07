@@ -1,1297 +1,987 @@
 <!-- =========================================================
-     POLL PULSE — PROFESSIONAL INSTAGRAM-STYLE CHAT V2
-     Replace your old CHAT code with this entire block.
+     POLL PULSE — PROFESSIONAL CHAT MODULE
+     Replace your old Chat module with this entire block.
 ========================================================= -->
 
 <style>
-:root{
-  --chat-bg:#f7f7f8;
-  --chat-surface:#ffffff;
-  --chat-soft:#f1f1f3;
-  --chat-border:#e7e7ea;
-  --chat-text:#111111;
-  --chat-muted:#8b8b91;
-  --chat-primary:#111111;
-  --chat-green:#22c55e;
-  --chat-danger:#ef4444;
-  --chat-shadow:0 10px 35px rgba(0,0,0,.08);
-}
-
 /* =========================================================
    ROOT
 ========================================================= */
 
-#chatPage{
-  position:fixed;
-  inset:0;
+#chatPage,
+#chatPage * {
+  box-sizing: border-box;
+}
 
-  z-index:9999;
-
-  width:100%;
-  max-width:560px;
-
-  margin:0 auto;
-
-  display:none;
-  flex-direction:column;
-
-  overflow:hidden;
-
-  background:var(--chat-bg);
-
-  color:var(--chat-text);
-
+#chatPage {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  max-width: 560px;
+  margin: auto;
+  overflow: hidden;
+  background: #fff;
+  color: #111;
   font-family:
     Inter,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
-    Roboto,
-    Arial,
     sans-serif;
-
-  -webkit-font-smoothing:antialiased;
 }
 
-#chatPage.active{
-  display:flex;
+#chatPage.active {
+  display: flex;
 }
 
 /* =========================================================
    INBOX
 ========================================================= */
 
-#chatInbox{
-  width:100%;
-  height:100%;
-
-  display:flex;
-  flex-direction:column;
-
-  background:var(--chat-bg);
+#chatInbox {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #fff;
 }
 
-.chat-inbox-header{
-  flex-shrink:0;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  padding:
-    calc(18px + env(safe-area-inset-top))
-    17px
-    12px;
-
-  background:rgba(255,255,255,.94);
-
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-
-  border-bottom:1px solid var(--chat-border);
-
-  font-size:25px;
-  font-weight:850;
-
-  letter-spacing:-.7px;
+.chat-inbox-head {
+  padding: 18px 18px 12px;
+  background: #fff;
 }
 
-.chat-header-subtitle{
-  margin-top:3px;
-
-  color:var(--chat-muted);
-
-  font-size:11px;
-  font-weight:500;
-  letter-spacing:0;
+.chat-inbox-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-/* =========================================================
-   SEARCH
-========================================================= */
-
-.chat-search-wrap{
-  padding:12px 14px 9px;
-
-  background:var(--chat-bg);
+.chat-inbox-title {
+  font-size: 26px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.7px;
 }
 
-.chat-search-box{
-  position:relative;
+.chat-inbox-subtitle {
+  margin-top: 6px;
+  color: #8b8b8b;
+  font-size: 12px;
 }
 
-#chatSearch{
-  width:100%;
-  height:44px;
-
-  box-sizing:border-box;
-
-  border:1px solid transparent;
-
-  outline:none;
-
-  border-radius:14px;
-
-  padding:0 14px 0 42px;
-
-  background:#eaeaec;
-
-  color:var(--chat-text);
-
-  font-size:14px;
-
-  transition:
-    .18s background,
-    .18s border-color;
+.chat-new-btn {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  font-size: 19px;
+  transition: transform .18s ease, opacity .18s ease;
 }
 
-#chatSearch:focus{
-  background:#fff;
-  border-color:#d8d8dc;
+.chat-new-btn:active {
+  transform: scale(.92);
 }
 
-.chat-search-icon{
-  position:absolute;
-
-  left:15px;
-  top:50%;
-
-  transform:translateY(-50%);
-
-  color:#888;
-
-  font-size:18px;
-
-  pointer-events:none;
+.chat-search-wrap {
+  padding: 4px 14px 12px;
 }
 
-/* =========================================================
-   USER LIST
-========================================================= */
-
-#chatUsers{
-  flex:1;
-
-  overflow-y:auto;
-
-  overscroll-behavior:contain;
-
-  padding:4px 7px 20px;
+.chat-search-box {
+  position: relative;
 }
 
-#chatUsers::-webkit-scrollbar,
-#chatMessages::-webkit-scrollbar{
-  width:4px;
+.chat-search-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 14px;
+  pointer-events: none;
 }
 
-#chatUsers::-webkit-scrollbar-thumb,
-#chatMessages::-webkit-scrollbar-thumb{
-  background:#d4d4d7;
-  border-radius:10px;
+#chatSearch {
+  width: 100%;
+  height: 42px;
+  border: 1px solid transparent;
+  outline: 0;
+  border-radius: 13px;
+  padding: 0 13px 0 37px;
+  background: #f3f3f4;
+  color: #111;
+  font: inherit;
+  font-size: 14px;
+  transition: .18s ease;
 }
 
-.chat-user-row{
-  position:relative;
-
-  display:flex;
-  align-items:center;
-
-  gap:12px;
-
-  padding:11px 9px;
-
-  border-radius:16px;
-
-  cursor:pointer;
-
-  transition:
-    background .16s,
-    transform .12s;
+#chatSearch:focus {
+  border-color: #d7d7d7;
+  background: #fff;
 }
 
-.chat-user-row:hover{
-  background:#eeeeef;
+#chatUsers {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
-.chat-user-row:active{
-  transform:scale(.985);
+.chat-user-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  min-height: 72px;
+  cursor: pointer;
+  transition: background .15s ease;
 }
 
-.chat-row-avatar{
-  position:relative;
-
-  width:51px;
-  height:51px;
-
-  flex-shrink:0;
+.chat-user-row:hover {
+  background: #f7f7f7;
 }
 
-.chat-avatar{
-  width:100%;
-  height:100%;
-
-  display:block;
-
-  border-radius:50%;
-
-  object-fit:cover;
-
-  background:#e4e4e6;
-
-  border:1px solid rgba(0,0,0,.05);
+.chat-user-row:active {
+  background: #eeeeee;
 }
 
-.chat-online-dot{
-  position:absolute;
-
-  right:0;
-  bottom:1px;
-
-  width:12px;
-  height:12px;
-
-  border-radius:50%;
-
-  background:var(--chat-green);
-
-  border:2px solid #fff;
-
-  box-shadow:0 1px 3px rgba(0,0,0,.15);
+.chat-avatar-wrap {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
 }
 
-.chat-row-info{
-  flex:1;
-  min-width:0;
+.chat-avatar {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #ededed;
 }
 
-.chat-row-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  gap:8px;
+.chat-online-dot {
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #22c55e;
+  display: none;
 }
 
-.chat-row-name{
-  min-width:0;
-
-  font-size:14px;
-  font-weight:750;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.chat-row-info {
+  min-width: 0;
+  flex: 1;
 }
 
-.chat-row-time{
-  flex-shrink:0;
-
-  color:#999;
-
-  font-size:10px;
+.chat-row-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.chat-row-bottom{
-  display:flex;
-  align-items:center;
-
-  gap:6px;
-
-  margin-top:5px;
+.chat-row-name {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 700;
 }
 
-.chat-last-message{
-  flex:1;
-  min-width:0;
-
-  color:#8a8a90;
-
-  font-size:12px;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.chat-row-time {
+  flex: 0 0 auto;
+  color: #999;
+  font-size: 10px;
 }
 
-.chat-unread{
-  min-width:19px;
-  height:19px;
+.chat-row-bottom {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 4px;
+}
 
-  padding:0 5px;
+.chat-last-message {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #8b8b8b;
+  font-size: 13px;
+}
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border-radius:10px;
-
-  background:#111;
-
-  color:#fff;
-
-  font-size:9px;
-  font-weight:800;
+.chat-unread {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  background: #111;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
 }
 
 /* =========================================================
-   EMPTY STATE
+   EMPTY / LOADING
 ========================================================= */
 
-.chat-empty{
-  min-height:250px;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-
-  padding:35px 25px;
-
-  text-align:center;
-
-  color:#999;
+.chat-empty {
+  padding: 70px 25px;
+  text-align: center;
+  color: #999;
+  font-size: 13px;
 }
 
-.chat-empty-icon{
-  width:58px;
-  height:58px;
-
-  margin-bottom:13px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border-radius:20px;
-
-  background:#e9e9eb;
-
-  font-size:24px;
+.chat-empty-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f2f2f2;
+  font-size: 24px;
 }
 
-.chat-empty-title{
-  color:#333;
-
-  font-size:15px;
-  font-weight:750;
-
-  margin-bottom:5px;
+.chat-empty-title {
+  color: #222;
+  font-size: 15px;
+  font-weight: 700;
 }
 
-.chat-empty-text{
-  max-width:280px;
+.chat-empty-text {
+  margin-top: 5px;
+  color: #999;
+  font-size: 12px;
+}
 
-  font-size:12px;
-  line-height:1.45;
+.chat-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.chat-skeleton-avatar,
+.chat-skeleton-line {
+  background:
+    linear-gradient(
+      90deg,
+      #eeeeee 25%,
+      #f7f7f7 50%,
+      #eeeeee 75%
+    );
+  background-size: 200% 100%;
+  animation: chatShimmer 1.2s infinite;
+}
+
+.chat-skeleton-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.chat-skeleton-content {
+  flex: 1;
+}
+
+.chat-skeleton-line {
+  height: 10px;
+  width: 65%;
+  margin-bottom: 9px;
+  border-radius: 10px;
+}
+
+.chat-skeleton-line.small {
+  width: 42%;
+}
+
+@keyframes chatShimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
 }
 
 /* =========================================================
    CONVERSATION
 ========================================================= */
 
-#chatConversation{
-  display:none;
-
-  flex-direction:column;
-
-  width:100%;
-  height:100%;
-
-  min-height:0;
-
-  background:var(--chat-surface);
+#chatConversation {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #fff;
 }
 
-#chatConversation.active{
-  display:flex;
+#chatConversation.active {
+  display: flex;
 }
 
-/* =========================================================
-   CHAT HEADER
-========================================================= */
-
-.chat-top{
-  position:relative;
-
-  height:62px;
-
-  flex-shrink:0;
-
-  display:flex;
-  align-items:center;
-
-  gap:10px;
-
-  padding:
-    calc(7px + env(safe-area-inset-top))
-    11px
-    7px;
-
-  background:rgba(255,255,255,.95);
-
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-
-  border-bottom:1px solid var(--chat-border);
-
-  z-index:10;
+.chat-top {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ededed;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(15px);
 }
 
-.chat-back{
-  width:40px;
-  height:40px;
-
-  flex-shrink:0;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border:0;
-
-  background:transparent;
-
-  border-radius:50%;
-
-  color:#111;
-
-  font-size:30px;
-  line-height:1;
-
-  cursor:pointer;
-
-  transition:background .15s;
+.chat-back {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #111;
+  cursor: pointer;
+  font-size: 30px;
+  line-height: 1;
 }
 
-.chat-back:hover{
-  background:#f0f0f1;
+.chat-back:hover {
+  background: #f3f3f3;
 }
 
-.chat-user-info{
-  flex:1;
-  min-width:0;
+.chat-header-avatar-wrap {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
 }
 
-.chat-user-name{
-  font-size:15px;
-  font-weight:800;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.chat-header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #eee;
 }
 
-.chat-user-status{
-  margin-top:2px;
-
-  color:#8b8b90;
-
-  font-size:10px;
+.chat-header-info {
+  min-width: 0;
+  flex: 1;
 }
 
-.chat-avatar-wrap{
-  position:relative;
-
-  width:40px;
-  height:40px;
-
-  flex-shrink:0;
+.chat-header-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  font-weight: 750;
 }
 
-.chat-avatar-wrap .chat-avatar{
-  width:40px;
-  height:40px;
+.chat-header-status {
+  margin-top: 2px;
+  color: #888;
+  font-size: 11px;
+}
+
+.chat-header-action {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  font-size: 19px;
 }
 
 /* =========================================================
-   MESSAGE AREA
+   MESSAGES
 ========================================================= */
 
-#chatMessages{
-  flex:1;
-
-  min-height:0;
-
-  overflow-y:auto;
-
-  overscroll-behavior:contain;
-
-  padding:13px 11px 8px;
-
+#chatMessages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 12px 8px;
   background:
     radial-gradient(
-      circle at 50% 0%,
+      circle at top,
       rgba(0,0,0,.025),
-      transparent 45%
+      transparent 35%
     ),
     #fff;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
 }
 
-.chat-day{
-  width:max-content;
-
-  margin:15px auto 11px;
-
-  padding:5px 10px;
-
-  border-radius:20px;
-
-  background:#f0f0f2;
-
-  color:#999;
-
-  font-size:9px;
-  font-weight:650;
+.chat-day {
+  width: fit-content;
+  margin: 15px auto;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #f2f2f2;
+  color: #999;
+  font-size: 10px;
+  font-weight: 600;
 }
 
-/* =========================================================
-   MESSAGE ROW
-========================================================= */
-
-.chat-message-line{
-  display:flex;
-
-  margin:3px 0 1px;
-
-  position:relative;
+.chat-message-line {
+  display: flex;
+  margin: 3px 0;
 }
 
-.chat-message-line.mine{
-  justify-content:flex-end;
+.chat-message-line.mine {
+  justify-content: flex-end;
 }
 
-.chat-message-line.theirs{
-  justify-content:flex-start;
+.chat-message-line.theirs {
+  justify-content: flex-start;
 }
 
-/* =========================================================
-   BUBBLE
-========================================================= */
-
-.chat-bubble{
-  position:relative;
-
-  max-width:78%;
-
-  padding:9px 12px;
-
-  border-radius:19px;
-
-  font-size:14px;
-  line-height:1.42;
-
-  word-break:break-word;
-
-  box-shadow:
-    0 1px 1px rgba(0,0,0,.035);
-
-  user-select:text;
+.chat-bubble {
+  position: relative;
+  max-width: 78%;
+  padding: 9px 12px;
+  border-radius: 19px;
+  font-size: 14px;
+  line-height: 1.45;
+  word-break: break-word;
+  animation: chatMessageIn .16s ease-out;
 }
 
-.mine .chat-bubble{
-  background:#111;
-
-  color:#fff;
-
-  border-bottom-right-radius:6px;
+@keyframes chatMessageIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.theirs .chat-bubble{
-  background:#eeeeef;
-
-  color:#111;
-
-  border-bottom-left-radius:6px;
+.mine .chat-bubble {
+  border-bottom-right-radius: 5px;
+  background: #111;
+  color: #fff;
 }
 
-/* =========================================================
-   META
-========================================================= */
-
-.chat-meta{
-  display:flex;
-
-  align-items:center;
-  justify-content:flex-end;
-
-  gap:5px;
-
-  margin-top:4px;
-
-  font-size:9px;
-
-  opacity:.52;
+.theirs .chat-bubble {
+  border-bottom-left-radius: 5px;
+  background: #eeeeef;
+  color: #111;
 }
 
-.theirs .chat-meta{
-  color:#666;
+.chat-text {
+  white-space: normal;
 }
 
-/* =========================================================
-   PHOTO
-========================================================= */
-
-.chat-photo{
-  display:block;
-
-  width:auto;
-  max-width:245px;
-  max-height:330px;
-
-  object-fit:cover;
-
-  border-radius:14px;
-
-  margin:-2px;
+.chat-deleted {
+  font-style: italic;
+  opacity: .55;
 }
 
-/* =========================================================
-   REPLY PREVIEW
-========================================================= */
-
-.chat-reply-preview{
-  padding:6px 9px;
-
-  margin-bottom:7px;
-
-  border-left:3px solid currentColor;
-
-  background:rgba(127,127,127,.12);
-
-  border-radius:7px;
-
-  font-size:10px;
-
-  opacity:.78;
-
-  max-width:100%;
+.chat-photo {
+  display: block;
+  width: auto;
+  max-width: 245px;
+  max-height: 320px;
+  border-radius: 14px;
+  object-fit: cover;
+  cursor: pointer;
 }
 
-/* =========================================================
-   REACTIONS
-========================================================= */
-
-.chat-reactions{
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:3px;
-
-  margin-top:-4px;
-
-  position:relative;
-
-  z-index:2;
+.chat-reply-preview {
+  margin: -2px -2px 7px;
+  padding: 7px 9px;
+  border-left: 3px solid currentColor;
+  border-radius: 7px;
+  background: rgba(127,127,127,.13);
+  font-size: 11px;
+  opacity: .78;
 }
 
-.mine .chat-reactions{
-  justify-content:flex-end;
+.chat-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 9px;
+  opacity: .58;
 }
 
-.chat-reaction{
-  background:#fff;
+.chat-status-read {
+  letter-spacing: -2px;
+}
 
-  border:1px solid #dedee1;
+.chat-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: -1px;
+}
 
-  border-radius:20px;
+.mine .chat-reactions {
+  justify-content: flex-end;
+}
 
-  padding:3px 7px;
-
-  font-size:11px;
-
-  box-shadow:
-    0 2px 5px rgba(0,0,0,.08);
+.chat-reaction {
+  padding: 3px 7px;
+  border: 1px solid #dedede;
+  border-radius: 20px;
+  background: #fff;
+  color: #222;
+  box-shadow: 0 2px 5px rgba(0,0,0,.06);
+  font-size: 11px;
 }
 
 /* =========================================================
    TYPING
 ========================================================= */
 
-#chatTyping{
-  min-height:19px;
+#chatTyping {
+  min-height: 19px;
+  padding: 0 16px;
+  color: #888;
+  font-size: 10px;
+}
 
-  padding:0 16px;
+.chat-typing-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
 
-  color:#929297;
+.chat-typing-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #999;
+  animation: typingDot 1s infinite;
+}
 
-  font-size:10px;
+.chat-typing-dots span:nth-child(2) {
+  animation-delay: .15s;
+}
 
-  line-height:19px;
+.chat-typing-dots span:nth-child(3) {
+  animation-delay: .3s;
+}
+
+@keyframes typingDot {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-3px);
+  }
 }
 
 /* =========================================================
    REPLY BAR
 ========================================================= */
 
-#chatReplyBar{
-  display:none;
-
-  align-items:center;
-
-  gap:10px;
-
-  padding:8px 12px;
-
-  background:#f6f6f7;
-
-  border-top:1px solid var(--chat-border);
+#chatReplyBar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-top: 1px solid #ededed;
+  background: #f7f7f7;
 }
 
-#chatReplyBar.show{
-  display:flex;
+#chatReplyBar.show {
+  display: flex;
 }
 
-.chat-reply-text{
-  flex:1;
-  min-width:0;
+.chat-reply-accent {
+  width: 3px;
+  height: 34px;
+  flex: 0 0 3px;
+  border-radius: 5px;
+  background: #111;
 }
 
-.chat-reply-title{
-  color:#777;
-
-  font-size:10px;
-  font-weight:800;
-
-  margin-bottom:2px;
+.chat-reply-text {
+  min-width: 0;
+  flex: 1;
 }
 
-#chatReplyContent{
-  overflow:hidden;
-
-  white-space:nowrap;
-  text-overflow:ellipsis;
-
-  font-size:11px;
+.chat-reply-title {
+  font-size: 10px;
+  font-weight: 800;
 }
 
-#cancelReply{
-  width:30px;
-  height:30px;
+#chatReplyContent {
+  margin-top: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #777;
+  font-size: 11px;
+}
 
-  border:0;
-  border-radius:50%;
-
-  background:#e8e8ea;
-
-  cursor:pointer;
-
-  font-size:18px;
+#cancelReply {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
 }
 
 /* =========================================================
    COMPOSER
 ========================================================= */
 
-.chat-composer{
-  display:flex;
-  align-items:flex-end;
-
-  gap:7px;
-
-  padding:
-    8px 10px
-    calc(8px + env(safe-area-inset-bottom));
-
-  background:rgba(255,255,255,.97);
-
-  border-top:1px solid var(--chat-border);
-
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
+.chat-composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 7px;
+  padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid #ededed;
+  background: #fff;
 }
 
-.chat-icon-btn{
-  width:39px;
-  height:39px;
-
-  flex-shrink:0;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border:0;
-
-  border-radius:50%;
-
-  background:#ededef;
-
-  color:#222;
-
-  cursor:pointer;
-
-  font-size:18px;
-
-  transition:
-    transform .15s,
-    background .15s;
+.chat-icon-btn {
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: #f1f1f2;
+  color: #222;
+  cursor: pointer;
+  font-size: 18px;
 }
 
-.chat-icon-btn:hover{
-  background:#e4e4e6;
+.chat-icon-btn:active {
+  transform: scale(.94);
 }
 
-.chat-icon-btn:active{
-  transform:scale(.91);
+#chatInput {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  max-height: 115px;
+  resize: none;
+  outline: 0;
+  border: 1px solid #dedede;
+  border-radius: 21px;
+  padding: 10px 13px;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  font-size: 14px;
+  line-height: 18px;
+  overflow-y: auto;
 }
 
-#chatInput{
-  flex:1;
-  min-width:0;
-
-  max-height:110px;
-
-  resize:none;
-
-  border:1px solid #dcdcdf;
-
-  border-radius:20px;
-
-  outline:none;
-
-  padding:9px 13px;
-
-  background:#fff;
-
-  color:#111;
-
-  font-family:inherit;
-
-  font-size:14px;
-
-  line-height:18px;
-
-  transition:border-color .18s;
+#chatInput:focus {
+  border-color: #bdbdbd;
 }
 
-#chatInput:focus{
-  border-color:#111;
+#sendMessageBtn {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border: 0;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  font-size: 17px;
+  transition: transform .15s ease, opacity .15s ease;
 }
 
-#sendMessageBtn{
-  width:40px;
-  height:40px;
-
-  flex-shrink:0;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border:0;
-
-  border-radius:50%;
-
-  background:#111;
-
-  color:#fff;
-
-  cursor:pointer;
-
-  font-size:16px;
-
-  transition:
-    transform .15s,
-    opacity .15s;
+#sendMessageBtn:active {
+  transform: scale(.92);
 }
 
-#sendMessageBtn:active{
-  transform:scale(.9);
-}
-
-#sendMessageBtn:disabled{
-  opacity:.4;
+#sendMessageBtn:disabled {
+  opacity: .4;
+  cursor: default;
 }
 
 /* =========================================================
    REACTION MENU
 ========================================================= */
 
-#reactionMenu{
-  position:fixed;
-
-  display:none;
-
-  align-items:center;
-
-  gap:3px;
-
-  z-index:10020;
-
-  padding:6px 8px;
-
-  background:#fff;
-
-  border:1px solid #ddd;
-
-  border-radius:30px;
-
-  box-shadow:
-    0 8px 30px rgba(0,0,0,.2);
+#reactionMenu {
+  position: fixed;
+  z-index: 10020;
+  display: none;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 7px;
+  border: 1px solid #e3e3e3;
+  border-radius: 30px;
+  background: rgba(255,255,255,.98);
+  box-shadow: 0 10px 35px rgba(0,0,0,.17);
+  backdrop-filter: blur(12px);
 }
 
-#reactionMenu.show{
-  display:flex;
+#reactionMenu.show {
+  display: flex;
 }
 
-.reaction-choice{
-  width:34px;
-  height:34px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border:0;
-
-  background:transparent;
-
-  border-radius:50%;
-
-  font-size:20px;
-
-  cursor:pointer;
-
-  transition:
-    background .15s,
-    transform .15s;
+.reaction-choice {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  font-size: 19px;
+  transition: transform .15s ease, background .15s ease;
 }
 
-.reaction-choice:hover{
-  background:#f0f0f1;
-
-  transform:scale(1.12);
+.reaction-choice:hover {
+  background: #f1f1f1;
+  transform: scale(1.12);
 }
 
 /* =========================================================
-   MESSAGE ACTION MENU
+   ACTION SHEET
 ========================================================= */
 
-.chat-message-menu{
-  position:fixed;
-
-  z-index:10030;
-
-  min-width:150px;
-
-  overflow:hidden;
-
-  background:#fff;
-
-  border:1px solid #ddd;
-
-  border-radius:15px;
-
-  box-shadow:
-    0 10px 35px rgba(0,0,0,.18);
+#chatActionOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10030;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0,0,0,.35);
 }
 
-.chat-message-menu button{
-  width:100%;
-
-  display:block;
-
-  border:0;
-
-  background:#fff;
-
-  padding:12px 14px;
-
-  color:#222;
-
-  text-align:left;
-
-  cursor:pointer;
-
-  font-size:13px;
+#chatActionOverlay.show {
+  display: flex;
 }
 
-.chat-message-menu button:hover{
-  background:#f5f5f6;
+.chat-action-sheet {
+  width: min(100%, 560px);
+  padding: 8px 10px calc(10px + env(safe-area-inset-bottom));
+  border-radius: 22px 22px 0 0;
+  background: #fff;
+  box-shadow: 0 -10px 40px rgba(0,0,0,.16);
+  animation: actionUp .18s ease-out;
 }
 
-.chat-message-menu button.danger{
-  color:#e33;
-}
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.chat-loading{
-  padding:15px;
-}
-
-.chat-skeleton{
-  display:flex;
-
-  align-items:center;
-
-  gap:12px;
-
-  padding:11px 5px;
-}
-
-.chat-skeleton-avatar{
-  width:51px;
-  height:51px;
-
-  border-radius:50%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #ededed,
-      #f7f7f7,
-      #ededed
-    );
-
-  background-size:200% 100%;
-
-  animation:chatShimmer 1.2s infinite;
-}
-
-.chat-skeleton-lines{
-  flex:1;
-}
-
-.chat-skeleton-line{
-  width:70%;
-  height:10px;
-
-  margin:6px 0;
-
-  border-radius:10px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #ededed,
-      #f7f7f7,
-      #ededed
-    );
-
-  background-size:200% 100%;
-
-  animation:chatShimmer 1.2s infinite;
-}
-
-.chat-skeleton-line.small{
-  width:45%;
-}
-
-@keyframes chatShimmer{
-  to{
-    background-position:-200% 0;
+@keyframes actionUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
   }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.chat-action-handle {
+  width: 38px;
+  height: 4px;
+  margin: 3px auto 10px;
+  border-radius: 10px;
+  background: #ddd;
+}
+
+.chat-action-btn {
+  width: 100%;
+  height: 46px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  text-align: left;
+  padding: 0 14px;
+  color: #222;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+}
+
+.chat-action-btn:hover {
+  background: #f4f4f4;
+}
+
+.chat-action-btn.danger {
+  color: #d22;
 }
 
 /* =========================================================
    TOAST
 ========================================================= */
 
-#chatToast{
-  position:fixed;
-
-  left:50%;
-
-  bottom:
-    calc(75px + env(safe-area-inset-bottom));
-
-  transform:translateX(-50%) translateY(10px);
-
-  z-index:11000;
-
-  max-width:calc(100% - 30px);
-
-  padding:11px 15px;
-
-  border-radius:13px;
-
-  background:#111;
-
-  color:#fff;
-
-  font-size:12px;
-  font-weight:650;
-
-  opacity:0;
-  pointer-events:none;
-
-  transition:
-    opacity .2s,
-    transform .2s;
+#chatToast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(75px + env(safe-area-inset-bottom));
+  z-index: 10050;
+  transform: translate(-50%, 15px);
+  max-width: calc(100vw - 30px);
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #111;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  font-size: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.2);
+  transition: .2s ease;
 }
 
-#chatToast.show{
-  opacity:1;
-
-  transform:
-    translateX(-50%)
-    translateY(0);
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:560px){
-
-  #chatPage{
-    max-width:none;
-  }
-
-  .chat-bubble{
-    max-width:83%;
-  }
-
+#chatToast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 /* =========================================================
    DESKTOP
 ========================================================= */
 
-@media(min-width:561px){
-
-  #chatPage{
-    border-radius:24px;
-
-    top:20px;
-    bottom:20px;
-
-    height:calc(100vh - 40px);
-
-    box-shadow:
-      0 20px 70px rgba(0,0,0,.12);
+@media (min-width: 700px) {
+  #chatPage {
+    max-width: 900px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    border-left: 1px solid #e8e8e8;
+    border-right: 1px solid #e8e8e8;
+    box-shadow: 0 0 40px rgba(0,0,0,.08);
   }
 
+  .chat-bubble {
+    max-width: 65%;
+  }
+
+  .chat-action-sheet {
+    border-radius: 18px;
+    margin-bottom: 20px;
+  }
 }
 
 /* =========================================================
-   DARK MODE
+   DARK MODE SUPPORT
 ========================================================= */
 
-body.dark #chatPage,
-body.dark-mode #chatPage,
-#chatPage.chat-dark{
+@media (prefers-color-scheme: dark) {
+  #chatPage {
+    background: #0f0f10;
+    color: #f5f5f5;
+  }
 
-  --chat-bg:#0d0d0f;
-  --chat-surface:#151517;
-  --chat-soft:#222225;
-  --chat-border:#2b2b2f;
-  --chat-text:#f5f5f5;
-  --chat-muted:#99999f;
-}
+  #chatInbox,
+  .chat-inbox-head,
+  .chat-top,
+  .chat-composer {
+    background: #0f0f10;
+  }
 
-body.dark #chatPage .chat-inbox-header,
-body.dark-mode #chatPage .chat-inbox-header,
-#chatPage.chat-dark .chat-inbox-header,
+  #chatSearch {
+    background: #1c1c1e;
+    color: #fff;
+  }
 
-body.dark #chatPage .chat-top,
-body.dark-mode #chatPage .chat-top,
-#chatPage.chat-dark .chat-top,
+  .chat-user-row:hover {
+    background: #19191b;
+  }
 
-body.dark #chatPage .chat-composer,
-body.dark-mode #chatPage .chat-composer,
-#chatPage.chat-dark .chat-composer{
+  .chat-user-row:active {
+    background: #202023;
+  }
 
-  background:rgba(20,20,22,.96);
-}
+  .chat-last-message,
+  .chat-row-time,
+  .chat-header-status,
+  #chatTyping {
+    color: #888;
+  }
 
-body.dark #chatPage #chatMessages,
-body.dark-mode #chatPage #chatMessages,
-#chatPage.chat-dark #chatMessages{
-  background:#151517;
-}
+  #chatMessages {
+    background: #0f0f10;
+  }
 
-body.dark #chatPage #chatSearch,
-body.dark-mode #chatPage #chatSearch,
-#chatPage.chat-dark #chatSearch{
+  .theirs .chat-bubble {
+    background: #252527;
+    color: #f5f5f5;
+  }
 
-  background:#242428;
+  .chat-day {
+    background: #202023;
+  }
 
-  color:#fff;
-}
+  #chatInput {
+    background: #171719;
+    border-color: #333;
+    color: #fff;
+  }
 
-body.dark #chatPage #chatSearch:focus,
-body.dark-mode #chatPage #chatSearch:focus,
-#chatPage.chat-dark #chatSearch:focus{
+  .chat-icon-btn {
+    background: #222225;
+    color: #fff;
+  }
 
-  background:#1b1b1e;
-}
+  .chat-reaction {
+    background: #1c1c1e;
+    border-color: #333;
+    color: #fff;
+  }
 
-body.dark #chatPage .theirs .chat-bubble,
-body.dark-mode #chatPage .theirs .chat-bubble,
-#chatPage.chat-dark .theirs .chat-bubble{
+  #chatReplyBar {
+    background: #19191b;
+    border-color: #29292c;
+  }
 
-  background:#29292d;
+  #reactionMenu,
+  .chat-action-sheet {
+    background: #1b1b1d;
+    border-color: #333;
+    color: #fff;
+  }
 
-  color:#fff;
-}
+  .chat-action-btn {
+    color: #fff;
+  }
 
-body.dark #chatPage #chatInput,
-body.dark-mode #chatPage #chatInput,
-#chatPage.chat-dark #chatInput{
+  .chat-action-btn:hover {
+    background: #252527;
+  }
 
-  background:#1e1e21;
-
-  color:#fff;
-
-  border-color:#36363a;
-}
-
-body.dark #chatPage .chat-user-row:hover,
-body.dark-mode #chatPage .chat-user-row:hover,
-#chatPage.chat-dark .chat-user-row:hover{
-
-  background:#202023;
-}
-
-body.dark #chatPage .chat-icon-btn,
-body.dark-mode #chatPage .chat-icon-btn,
-#chatPage.chat-dark .chat-icon-btn{
-
-  background:#29292d;
-
-  color:#fff;
-}
-
-body.dark #chatPage .chat-reaction,
-body.dark-mode #chatPage .chat-reaction,
-#chatPage.chat-dark .chat-reaction{
-
-  background:#222225;
-
-  border-color:#3b3b40;
-}
-
-body.dark #chatPage #reactionMenu,
-body.dark-mode #chatPage #reactionMenu,
-#chatPage.chat-dark #reactionMenu,
-
-body.dark #chatPage .chat-message-menu,
-body.dark-mode #chatPage .chat-message-menu,
-#chatPage.chat-dark .chat-message-menu{
-
-  background:#202023;
-
-  border-color:#3b3b40;
-}
-
-body.dark #chatPage .chat-message-menu button,
-body.dark-mode #chatPage .chat-message-menu button,
-#chatPage.chat-dark .chat-message-menu button{
-
-  background:#202023;
-
-  color:#fff;
+  .chat-header-action,
+  .chat-back {
+    color: #fff;
+  }
 }
 </style>
 
 
 <!-- =========================================================
-     CHAT PAGE
+     CHAT HTML
 ========================================================= -->
 
 <div id="chatPage">
@@ -1300,14 +990,27 @@ body.dark-mode #chatPage .chat-message-menu button,
 
   <section id="chatInbox">
 
-    <div class="chat-inbox-header">
+    <div class="chat-inbox-head">
 
-      <div>
-        <div>Messages</div>
+      <div class="chat-inbox-title-row">
 
-        <div class="chat-header-subtitle">
-          Your conversations
+        <div>
+          <div class="chat-inbox-title">
+            Messages
+          </div>
+
+          <div class="chat-inbox-subtitle">
+            Stay connected with the Poll Pulse community
+          </div>
         </div>
+
+        <button
+          id="chatRefreshBtn"
+          class="chat-new-btn"
+          type="button"
+          title="Refresh"
+        >↻</button>
+
       </div>
 
     </div>
@@ -1317,16 +1020,13 @@ body.dark-mode #chatPage .chat-message-menu button,
 
       <div class="chat-search-box">
 
-        <span class="chat-search-icon">
-          ⌕
-        </span>
+        <span class="chat-search-icon">⌕</span>
 
         <input
           id="chatSearch"
           type="search"
-          placeholder="Search people or messages"
+          placeholder="Search conversations..."
           autocomplete="off"
-          enterkeyhint="search"
         >
 
       </div>
@@ -1336,26 +1036,20 @@ body.dark-mode #chatPage .chat-message-menu button,
 
     <div id="chatUsers">
 
-      <div class="chat-loading">
-
-        <div class="chat-skeleton">
-          <div class="chat-skeleton-avatar"></div>
-
-          <div class="chat-skeleton-lines">
-            <div class="chat-skeleton-line"></div>
-            <div class="chat-skeleton-line small"></div>
-          </div>
+      <div class="chat-skeleton">
+        <div class="chat-skeleton-avatar"></div>
+        <div class="chat-skeleton-content">
+          <div class="chat-skeleton-line"></div>
+          <div class="chat-skeleton-line small"></div>
         </div>
+      </div>
 
-        <div class="chat-skeleton">
-          <div class="chat-skeleton-avatar"></div>
-
-          <div class="chat-skeleton-lines">
-            <div class="chat-skeleton-line"></div>
-            <div class="chat-skeleton-line small"></div>
-          </div>
+      <div class="chat-skeleton">
+        <div class="chat-skeleton-avatar"></div>
+        <div class="chat-skeleton-content">
+          <div class="chat-skeleton-line"></div>
+          <div class="chat-skeleton-line small"></div>
         </div>
-
       </div>
 
     </div>
@@ -1374,16 +1068,14 @@ body.dark-mode #chatPage .chat-message-menu button,
         class="chat-back"
         type="button"
         aria-label="Back"
-      >
-        ‹
-      </button>
+      >‹</button>
 
 
-      <div class="chat-avatar-wrap">
+      <div class="chat-header-avatar-wrap">
 
         <img
           id="chatHeaderAvatar"
-          class="chat-avatar"
+          class="chat-header-avatar"
           src=""
           alt=""
         >
@@ -1391,29 +1083,36 @@ body.dark-mode #chatPage .chat-message-menu button,
         <span
           id="chatHeaderOnline"
           class="chat-online-dot"
-          style="display:none"
         ></span>
 
       </div>
 
 
-      <div class="chat-user-info">
+      <div class="chat-header-info">
 
         <div
           id="chatHeaderName"
-          class="chat-user-name"
+          class="chat-header-name"
         >
           Chat
         </div>
 
         <div
           id="chatHeaderStatus"
-          class="chat-user-status"
+          class="chat-header-status"
         >
           Message
         </div>
 
       </div>
+
+
+      <button
+        id="chatHeaderMore"
+        class="chat-header-action"
+        type="button"
+        aria-label="More"
+      >•••</button>
 
     </header>
 
@@ -1424,12 +1123,16 @@ body.dark-mode #chatPage .chat-message-menu button,
     <div id="chatTyping"></div>
 
 
+    <!-- REPLY -->
+
     <div id="chatReplyBar">
+
+      <div class="chat-reply-accent"></div>
 
       <div class="chat-reply-text">
 
         <div class="chat-reply-title">
-          Replying to message
+          Replying
         </div>
 
         <div id="chatReplyContent"></div>
@@ -1439,22 +1142,19 @@ body.dark-mode #chatPage .chat-message-menu button,
       <button
         id="cancelReply"
         type="button"
-        aria-label="Cancel reply"
-      >
-        ×
-      </button>
+      >×</button>
 
     </div>
 
+
+    <!-- COMPOSER -->
 
     <div class="chat-composer">
 
       <label
         class="chat-icon-btn"
         title="Send photo"
-        aria-label="Send photo"
       >
-
         ＋
 
         <input
@@ -1472,17 +1172,15 @@ body.dark-mode #chatPage .chat-message-menu button,
         rows="1"
         maxlength="2000"
         placeholder="Message..."
-        autocomplete="off"
       ></textarea>
 
 
       <button
         id="sendMessageBtn"
         type="button"
-        aria-label="Send message"
-      >
-        ➤
-      </button>
+        disabled
+        aria-label="Send"
+      >➤</button>
 
     </div>
 
@@ -1496,32 +1194,62 @@ body.dark-mode #chatPage .chat-message-menu button,
     <button
       class="reaction-choice"
       data-reaction="❤️"
-      type="button"
     >❤️</button>
 
     <button
       class="reaction-choice"
       data-reaction="😂"
-      type="button"
     >😂</button>
 
     <button
       class="reaction-choice"
       data-reaction="😍"
-      type="button"
     >😍</button>
 
     <button
       class="reaction-choice"
       data-reaction="😮"
-      type="button"
     >😮</button>
 
     <button
       class="reaction-choice"
       data-reaction="👍"
-      type="button"
     >👍</button>
+
+  </div>
+
+
+  <!-- ================= ACTION SHEET ================= -->
+
+  <div id="chatActionOverlay">
+
+    <div class="chat-action-sheet">
+
+      <div class="chat-action-handle"></div>
+
+      <button
+        class="chat-action-btn"
+        data-chat-action="reply"
+      >
+        ↩️ &nbsp; Reply
+      </button>
+
+      <button
+        class="chat-action-btn"
+        data-chat-action="react"
+      >
+        ❤️ &nbsp; React
+      </button>
+
+      <button
+        class="chat-action-btn danger"
+        data-chat-action="delete"
+        style="display:none"
+      >
+        🗑️ &nbsp; Delete message
+      </button>
+
+    </div>
 
   </div>
 
@@ -1531,35 +1259,27 @@ body.dark-mode #chatPage .chat-message-menu button,
 </div>
 
 
-<script>
-/* =========================================================
-   POLL PULSE CHAT ENGINE V2
-========================================================= */
+<!-- =========================================================
+     CHAT ENGINE
+========================================================= -->
 
-(function(){
+<script>
+(function () {
 
   "use strict";
 
-
   /* =======================================================
-     SUPABASE
+     SUPABASE CLIENT
   ======================================================= */
 
-  if(typeof supabase === "undefined"){
-
-    console.error(
-      "Supabase JS library not found."
-    );
-
+  if (typeof supabase === "undefined") {
+    console.error("Poll Pulse Chat: Supabase library not found.");
     return;
-
   }
-
 
   const chatSB =
     window.sb ||
     window.supabaseClient ||
-    window.supabaseClientInstance ||
     supabase.createClient(
       "https://dbpbkvfaxgifjeveijqf.supabase.co",
       "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7"
@@ -1571,26 +1291,24 @@ body.dark-mode #chatPage .chat-message-menu button,
   ======================================================= */
 
   let chatCurrentUser = null;
-
   let chatTargetUser = null;
 
   let chatMessages = [];
-
   let chatProfileCache = {};
 
   let chatReplyTo = null;
-
   let chatReactionMessage = null;
+  let chatActionMessage = null;
 
   let chatChannel = null;
+  let inboxChannel = null;
 
+  let typingTimeout = null;
   let presenceTimer = null;
-
   let inboxTimer = null;
 
-  let typingClearTimer = null;
-
   let searchText = "";
+  let inboxRows = [];
 
 
   const $ = id =>
@@ -1598,96 +1316,48 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
   /* =======================================================
-     TOAST
+     UTILITIES
   ======================================================= */
 
-  function toast(message){
+  function escapeHTML(value) {
 
-    const el = $("chatToast");
-
-    if(!el) return;
-
-    el.textContent = message;
-
-    el.classList.add("show");
-
-    clearTimeout(
-      toast.timer
-    );
-
-    toast.timer =
-      setTimeout(
-        () => {
-
-          el.classList.remove(
-            "show"
-          );
-
-        },
-        2200
-      );
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
 
   }
 
 
-  /* =======================================================
-     HTML ESCAPE
-  ======================================================= */
+  function timeText(date) {
 
-  function escapeHTML(value){
+    if (!date) return "";
 
-    return String(
-      value ?? ""
-    )
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+    return new Date(date).toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit"
+    });
 
   }
 
 
-  /* =======================================================
-     TIME
-  ======================================================= */
+  function dateText(date) {
 
-  function timeText(date){
+    if (!date) return "";
 
-    if(!date) return "";
+    const d = new Date(date);
+    const now = new Date();
 
-    const d =
-      new Date(date);
-
-    return d.toLocaleTimeString(
-      [],
-      {
-        hour:"numeric",
-        minute:"2-digit"
-      }
-    );
-
-  }
-
-
-  function dateText(date){
-
-    if(!date) return "";
-
-    const d =
-      new Date(date);
-
-    const now =
-      new Date();
-
-    const today =
+    const startToday =
       new Date(
         now.getFullYear(),
         now.getMonth(),
         now.getDate()
       );
 
-    const target =
+    const startDate =
       new Date(
         d.getFullYear(),
         d.getMonth(),
@@ -1696,84 +1366,50 @@ body.dark-mode #chatPage .chat-message-menu button,
 
     const diff =
       Math.round(
-        (today - target) /
-        86400000
+        (startToday - startDate) / 86400000
       );
 
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Yesterday";
 
-    if(diff === 0)
-      return "Today";
-
-    if(diff === 1)
-      return "Yesterday";
-
-
-    return d.toLocaleDateString(
-      [],
-      {
-        day:"numeric",
-        month:"short",
-        year:
-          d.getFullYear() !==
-          now.getFullYear()
-            ? "numeric"
-            : undefined
-      }
-    );
+    return d.toLocaleDateString([], {
+      day: "numeric",
+      month: "short",
+      year:
+        d.getFullYear() !== now.getFullYear()
+          ? "numeric"
+          : undefined
+    });
 
   }
 
 
-  /* =======================================================
-     DEFAULT AVATAR
-  ======================================================= */
+  function avatarURL(profile) {
 
-  function defaultAvatar(){
+    if (profile?.avatar_url) {
+      return profile.avatar_url;
+    }
 
     return "data:image/svg+xml;charset=UTF-8," +
       encodeURIComponent(`
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="100"
-          height="100"
-          viewBox="0 0 100 100"
-        >
-
-          <rect
-            width="100"
-            height="100"
-            fill="#e9e9eb"
-          />
-
-          <circle
-            cx="50"
-            cy="37"
-            r="18"
-            fill="#aaa"
-          />
-
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="100"
+             height="100"
+             viewBox="0 0 100 100">
+          <rect width="100" height="100" rx="50"
+                fill="#eeeeee"/>
+          <circle cx="50" cy="38" r="18"
+                  fill="#aaaaaa"/>
           <path
-            d="M19 91c4-22 17-32 31-32s27 10 31 32"
-            fill="#aaa"
-          />
-
+            d="M20 88c4-22 17-31 30-31s26 9 30 31"
+            fill="#aaaaaa"/>
         </svg>
       `);
 
   }
 
 
-  function avatarURL(profile){
-
-    return (
-      profile?.avatar_url ||
-      defaultAvatar()
-    );
-
-  }
-
-
-  function displayName(profile){
+  function displayName(profile) {
 
     return (
       profile?.display_name ||
@@ -1784,80 +1420,96 @@ body.dark-mode #chatPage .chat-message-menu button,
   }
 
 
-  /* =======================================================
-     CURRENT USER
-  ======================================================= */
+  function showToast(message) {
 
-  async function getCurrentUser(){
+    const toast = $("chatToast");
 
-    const {
-      data,
-      error
-    } =
-      await chatSB.auth.getUser();
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(showToast.timer);
+
+    showToast.timer =
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+
+  }
 
 
-    if(error){
+  function scrollMessages(force = false) {
 
-      console.error(
-        "Auth error:",
-        error
-      );
+    const box = $("chatMessages");
 
-      return null;
+    if (!box) return;
 
+    if (force) {
+      requestAnimationFrame(() => {
+        box.scrollTop = box.scrollHeight;
+      });
+      return;
     }
 
+    const distance =
+      box.scrollHeight -
+      box.scrollTop -
+      box.clientHeight;
 
-    return data?.user || null;
+    if (distance < 220) {
+      requestAnimationFrame(() => {
+        box.scrollTop = box.scrollHeight;
+      });
+    }
 
   }
 
 
   /* =======================================================
-     PROFILE
+     USER / PROFILE
   ======================================================= */
 
-  async function getProfile(id){
-
-    if(!id)
-      return null;
-
-
-    if(chatProfileCache[id])
-      return chatProfileCache[id];
-
+  async function getCurrentUser() {
 
     const {
       data,
       error
-    } =
-      await chatSB
-        .from("profiles")
-        .select(
-          "id,username,display_name,avatar_url"
-        )
-        .eq("id",id)
-        .maybeSingle();
+    } = await chatSB.auth.getUser();
 
-
-    if(error){
-
-      console.error(
-        "Profile error:",
-        error
-      );
-
+    if (error || !data?.user) {
       return null;
-
     }
 
+    return data.user;
 
-    if(data)
+  }
+
+
+  async function getProfile(id) {
+
+    if (!id) return null;
+
+    if (chatProfileCache[id]) {
+      return chatProfileCache[id];
+    }
+
+    const {
+      data,
+      error
+    } = await chatSB
+      .from("profiles")
+      .select(
+        "id,username,display_name,avatar_url"
+      )
+      .eq("id", id)
+      .maybeSingle();
+
+    if (!error && data) {
       chatProfileCache[id] = data;
+    }
 
-
-    return data;
+    return data || null;
 
   }
 
@@ -1866,43 +1518,33 @@ body.dark-mode #chatPage .chat-message-menu button,
      OPEN CHAT
   ======================================================= */
 
-  async function openChat(userId){
+  async function openChat(userId) {
 
     chatCurrentUser =
       chatCurrentUser ||
       await getCurrentUser();
 
+    if (!chatCurrentUser) {
 
-    if(!chatCurrentUser){
-
-      toast(
-        "Please login first."
-      );
+      showToast("Please login first.");
 
       return;
 
     }
 
-
-    if(
+    if (
       !userId ||
       userId === chatCurrentUser.id
-    ){
-
+    ) {
       return;
-
     }
-
 
     chatTargetUser =
       await getProfile(userId);
 
+    if (!chatTargetUser) {
 
-    if(!chatTargetUser){
-
-      toast(
-        "User profile not found."
-      );
+      showToast("User profile not found.");
 
       return;
 
@@ -1912,162 +1554,131 @@ body.dark-mode #chatPage .chat-message-menu button,
     $("chatPage")
       .classList.add("active");
 
-
     $("chatInbox")
       .style.display = "none";
-
 
     $("chatConversation")
       .classList.add("active");
 
 
-    $("chatHeaderAvatar")
-      .src =
-      avatarURL(
-        chatTargetUser
-      );
+    $("chatHeaderAvatar").src =
+      avatarURL(chatTargetUser);
 
+    $("chatHeaderName").textContent =
+      displayName(chatTargetUser);
 
-    $("chatHeaderName")
-      .textContent =
-      displayName(
-        chatTargetUser
-      );
-
-
-    $("chatHeaderStatus")
-      .textContent =
+    $("chatHeaderStatus").textContent =
       "Loading...";
+
+
+    cancelReply();
+    hideReactionMenu();
+    hideActionSheet();
 
 
     await loadConversation();
 
-    await updateOnlineStatus();
-
     subscribeConversation();
+
+    updateOnlineStatus();
 
   }
 
 
-  /* =======================================================
-     CLOSE CONVERSATION
-  ======================================================= */
+  function closeChatConversation() {
 
-  function closeChatConversation(){
-
-    if(chatChannel){
-
-      chatSB.removeChannel(
-        chatChannel
-      );
-
-      chatChannel = null;
-
-    }
-
+    destroyConversationChannel();
 
     chatTargetUser = null;
-
-    chatReplyTo = null;
+    chatMessages = [];
 
     $("chatConversation")
       .classList.remove("active");
 
-
     $("chatInbox")
       .style.display = "flex";
-
 
     loadInbox();
 
   }
 
 
-  /* =======================================================
-     CLOSE CHAT
-  ======================================================= */
+  function closeChatPage() {
 
-  function closeChatPage(){
-
-    if(chatChannel){
-
-      chatSB.removeChannel(
-        chatChannel
-      );
-
-      chatChannel = null;
-
-    }
-
+    destroyConversationChannel();
 
     $("chatPage")
       .classList.remove("active");
 
+    $("chatInbox")
+      .style.display = "flex";
 
     $("chatConversation")
       .classList.remove("active");
 
-
-    $("chatInbox")
-      .style.display = "flex";
-
-
     chatTargetUser = null;
 
-    chatReplyTo = null;
+    hideReactionMenu();
+    hideActionSheet();
 
   }
 
 
   /* =======================================================
-     INBOX LOADING
+     INBOX
   ======================================================= */
 
-  async function loadInbox(){
+  async function loadInbox() {
 
     chatCurrentUser =
       chatCurrentUser ||
       await getCurrentUser();
 
-
-    if(!chatCurrentUser)
-      return;
+    if (!chatCurrentUser) return;
 
 
     const {
-      data:messages,
+      data: messages,
       error
-    } =
-      await chatSB
-        .from("messages")
-        .select(`
-          id,
-          sender_id,
-          receiver_id,
-          message,
-          message_type,
-          created_at,
-          read,
-          deleted_at
-        `)
-        .or(
-          `sender_id.eq.${chatCurrentUser.id},receiver_id.eq.${chatCurrentUser.id}`
-        )
-        .order(
-          "created_at",
-          {
-            ascending:false
-          }
-        )
-        .limit(500);
+    } = await chatSB
+      .from("messages")
+      .select(`
+        id,
+        sender_id,
+        receiver_id,
+        message,
+        message_type,
+        created_at,
+        read,
+        deleted_at
+      `)
+      .or(
+        `sender_id.eq.${chatCurrentUser.id},receiver_id.eq.${chatCurrentUser.id}`
+      )
+      .order("created_at", {
+        ascending: false
+      })
+      .limit(500);
 
 
-    if(error){
+    if (error) {
 
       console.error(
         "Inbox error:",
         error
       );
+
+      $("chatUsers").innerHTML = `
+        <div class="chat-empty">
+          <div class="chat-empty-icon">⚠️</div>
+          <div class="chat-empty-title">
+            Couldn't load messages
+          </div>
+          <div class="chat-empty-text">
+            Please try again.
+          </div>
+        </div>
+      `;
 
       return;
 
@@ -2075,92 +1686,77 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
     const conversations = {};
-
-    const partnerIds =
-      new Set();
+    const partnerIds = new Set();
 
 
-    (messages || [])
-      .forEach(message => {
+    (messages || []).forEach(message => {
 
-        const partner =
-          message.sender_id ===
-          chatCurrentUser.id
-            ? message.receiver_id
-            : message.sender_id;
+      const partner =
+        message.sender_id ===
+        chatCurrentUser.id
+          ? message.receiver_id
+          : message.sender_id;
 
+      if (!partner) return;
 
-        if(!partner)
-          return;
-
-
-        partnerIds.add(
-          partner
-        );
+      partnerIds.add(partner);
 
 
-        if(!conversations[partner]){
+      if (!conversations[partner]) {
 
-          conversations[partner] = {
+        conversations[partner] = {
+          latest: message,
+          unread: 0
+        };
 
-            latest:message,
-
-            unread:0
-
-          };
-
-        }
+      }
 
 
-        if(
-          message.receiver_id ===
-          chatCurrentUser.id &&
-          message.read === false
-        ){
+      if (
+        message.receiver_id ===
+        chatCurrentUser.id &&
+        message.read === false
+      ) {
 
-          conversations[
-            partner
-          ].unread++;
+        conversations[partner].unread++;
 
-        }
+      }
 
-      });
+    });
 
 
     /* Include followers/following */
 
-    try{
+    try {
 
       const {
-        data:follows
-      } =
-        await chatSB
-          .from("follows")
-          .select(
-            "follower_id,following_id"
-          )
-          .or(
-            `follower_id.eq.${chatCurrentUser.id},following_id.eq.${chatCurrentUser.id}`
-          )
-          .limit(300);
+        data: follows
+      } = await chatSB
+        .from("follows")
+        .select(
+          "follower_id,following_id"
+        )
+        .or(
+          `follower_id.eq.${chatCurrentUser.id},following_id.eq.${chatCurrentUser.id}`
+        )
+        .limit(200);
 
 
-      (follows || [])
-        .forEach(f => {
+      (follows || []).forEach(follow => {
 
-          const id =
-            f.follower_id ===
-            chatCurrentUser.id
-              ? f.following_id
-              : f.follower_id;
+        const id =
+          follow.follower_id ===
+          chatCurrentUser.id
+            ? follow.following_id
+            : follow.follower_id;
 
+        if (id) {
+          partnerIds.add(id);
+        }
 
-          if(id)
-            partnerIds.add(id);
+      });
 
-        });
-
-    }catch(error){
+    } catch (error) {
 
       console.warn(
         "Follow lookup skipped:",
@@ -2170,9 +1766,9 @@ body.dark-mode #chatPage .chat-message-menu button,
     }
 
 
-    if(!partnerIds.size){
+    if (!partnerIds.size) {
 
-      renderEmptyInbox();
+      renderInbox([]);
 
       return;
 
@@ -2184,182 +1780,122 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
     const {
-      data:profiles
-    } =
-      await chatSB
-        .from("profiles")
-        .select(
-          "id,username,display_name,avatar_url"
-        )
-        .in("id",ids);
+      data: profiles
+    } = await chatSB
+      .from("profiles")
+      .select(
+        "id,username,display_name,avatar_url"
+      )
+      .in("id", ids);
 
 
-    (profiles || [])
-      .forEach(profile => {
+    (profiles || []).forEach(profile => {
 
-        chatProfileCache[
-          profile.id
-        ] = profile;
+      chatProfileCache[profile.id] =
+        profile;
 
-      });
+    });
 
 
-    const rows =
+    inboxRows =
       ids
         .map(id => {
 
           const profile =
             chatProfileCache[id];
 
-
-          if(!profile)
-            return null;
-
+          if (!profile) return null;
 
           return {
-
             id,
-
             profile,
-
             conversation:
-              conversations[id]
-
+              conversations[id] || null
           };
 
         })
         .filter(Boolean)
-        .sort((a,b) => {
+        .sort((a, b) => {
 
-          const aDate =
-            a.conversation
-              ?.latest
-              ?.created_at;
+          const dateA =
+            a.conversation?.latest?.created_at;
 
+          const dateB =
+            b.conversation?.latest?.created_at;
 
-          const bDate =
-            b.conversation
-              ?.latest
-              ?.created_at;
-
-
-          if(!aDate && !bDate)
-            return displayName(a.profile)
-              .localeCompare(
-                displayName(b.profile)
-              );
-
-
-          if(!aDate)
-            return 1;
-
-
-          if(!bDate)
-            return -1;
-
+          if (!dateA && !dateB) return 0;
+          if (!dateA) return 1;
+          if (!dateB) return -1;
 
           return (
-            new Date(bDate) -
-            new Date(aDate)
+            new Date(dateB) -
+            new Date(dateA)
           );
 
         });
 
 
-    renderInbox(rows);
+    renderInbox(inboxRows);
 
   }
 
 
-  /* =======================================================
-     EMPTY INBOX
-  ======================================================= */
-
-  function renderEmptyInbox(){
-
-    $("chatUsers").innerHTML = `
-
-      <div class="chat-empty">
-
-        <div class="chat-empty-icon">
-          💬
-        </div>
-
-        <div class="chat-empty-title">
-          No conversations yet
-        </div>
-
-        <div class="chat-empty-text">
-          Start a conversation with someone
-          you follow.
-        </div>
-
-      </div>
-
-    `;
-
-  }
-
-
-  /* =======================================================
-     INBOX RENDER
-  ======================================================= */
-
-  function renderInbox(rows){
+  function renderInbox(rows) {
 
     const filtered =
       rows.filter(row => {
 
-        if(!searchText)
+        if (!searchText) {
           return true;
+        }
 
-
-        const profile =
-          row.profile;
-
+        const p = row.profile;
 
         const latest =
           row.conversation?.latest;
 
+        const search =
+          (
+            displayName(p) +
+            " " +
+            (p.username || "") +
+            " " +
+            (latest?.message || "")
+          ).toLowerCase();
 
-        const haystack = (
-
-          displayName(profile) +
-          " " +
-          (profile.username || "") +
-          " " +
-          (latest?.message || "")
-
-        ).toLowerCase();
-
-
-        return haystack.includes(
+        return search.includes(
           searchText.toLowerCase()
         );
 
       });
 
 
-    if(!filtered.length){
+    if (!filtered.length) {
 
       $("chatUsers").innerHTML = `
-
         <div class="chat-empty">
 
           <div class="chat-empty-icon">
-            🔎
+            ${searchText ? "⌕" : "💬"}
           </div>
 
           <div class="chat-empty-title">
-            No results
+            ${
+              searchText
+                ? "No users found"
+                : "No conversations yet"
+            }
           </div>
 
           <div class="chat-empty-text">
-            Try another name or message.
+            ${
+              searchText
+                ? "Try another name or username."
+                : "Follow someone and start a conversation."
+            }
           </div>
 
         </div>
-
       `;
 
       return;
@@ -2370,40 +1906,28 @@ body.dark-mode #chatPage .chat-message-menu button,
     $("chatUsers").innerHTML =
       filtered.map(row => {
 
-        const profile =
-          row.profile;
-
+        const p = row.profile;
         const latest =
           row.conversation?.latest;
-
-        const unread =
-          row.conversation?.unread || 0;
-
 
         let preview =
           "Start a conversation";
 
+        if (latest) {
 
-        if(latest){
-
-          if(latest.deleted_at){
+          if (latest.deleted_at) {
 
             preview =
               "Message deleted";
 
-          }
-
-          else if(
-            latest.message_type ===
-            "image"
-          ){
+          } else if (
+            latest.message_type === "image"
+          ) {
 
             preview =
               "📷 Photo";
 
-          }
-
-          else{
+          } else {
 
             preview =
               latest.message ||
@@ -2414,18 +1938,21 @@ body.dark-mode #chatPage .chat-message-menu button,
         }
 
 
-        return `
+        const unread =
+          row.conversation?.unread || 0;
 
+
+        return `
           <div
             class="chat-user-row"
             data-user-id="${escapeHTML(row.id)}"
           >
 
-            <div class="chat-row-avatar">
+            <div class="chat-avatar-wrap">
 
               <img
                 class="chat-avatar"
-                src="${avatarURL(profile)}"
+                src="${avatarURL(p)}"
                 alt=""
               >
 
@@ -2437,19 +1964,14 @@ body.dark-mode #chatPage .chat-message-menu button,
               <div class="chat-row-top">
 
                 <span class="chat-row-name">
-                  ${escapeHTML(
-                    displayName(profile)
-                  )}
+                  ${escapeHTML(displayName(p))}
                 </span>
-
 
                 ${
                   latest
                     ? `
                       <span class="chat-row-time">
-                        ${timeText(
-                          latest.created_at
-                        )}
+                        ${timeText(latest.created_at)}
                       </span>
                     `
                     : ""
@@ -2461,19 +1983,8 @@ body.dark-mode #chatPage .chat-message-menu button,
               <div class="chat-row-bottom">
 
                 <span class="chat-last-message">
-
-                  ${
-                    latest &&
-                    latest.sender_id ===
-                    chatCurrentUser.id
-                      ? "You: "
-                      : ""
-                  }
-
                   ${escapeHTML(preview)}
-
                 </span>
-
 
                 ${
                   unread
@@ -2494,26 +2005,21 @@ body.dark-mode #chatPage .chat-message-menu button,
             </div>
 
           </div>
-
         `;
 
       }).join("");
 
 
     document
-      .querySelectorAll(
-        ".chat-user-row"
-      )
+      .querySelectorAll(".chat-user-row")
       .forEach(row => {
 
         row.addEventListener(
           "click",
           () => {
-
             openChat(
               row.dataset.userId
             );
-
           }
         );
 
@@ -2523,60 +2029,62 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
   /* =======================================================
-     LOAD CONVERSATION
+     CONVERSATION
   ======================================================= */
 
-  async function loadConversation(){
+  async function loadConversation() {
 
-    if(
+    if (
       !chatTargetUser ||
       !chatCurrentUser
-    )
+    ) {
       return;
+    }
+
+
+    $("chatMessages").innerHTML = `
+      <div class="chat-empty">
+        Loading messages...
+      </div>
+    `;
 
 
     const {
       data,
       error
-    } =
-      await chatSB
-        .from("messages")
-        .select(`
-          id,
-          sender_id,
-          receiver_id,
-          message,
-          message_type,
-          media_url,
-          reply_to,
-          deleted_at,
-          delivered_at,
-          read,
-          read_at,
-          created_at
-        `)
-        .or(
-          `and(sender_id.eq.${chatCurrentUser.id},receiver_id.eq.${chatTargetUser.id}),and(sender_id.eq.${chatTargetUser.id},receiver_id.eq.${chatCurrentUser.id})`
-        )
-        .order(
-          "created_at",
-          {
-            ascending:true
-          }
-        )
-        .limit(500);
+    } = await chatSB
+      .from("messages")
+      .select(`
+        id,
+        sender_id,
+        receiver_id,
+        message,
+        message_type,
+        media_url,
+        reply_to,
+        deleted_at,
+        delivered_at,
+        read,
+        read_at,
+        created_at
+      `)
+      .or(
+        `and(sender_id.eq.${chatCurrentUser.id},receiver_id.eq.${chatTargetUser.id}),and(sender_id.eq.${chatTargetUser.id},receiver_id.eq.${chatCurrentUser.id})`
+      )
+      .order("created_at", {
+        ascending: true
+      })
+      .limit(500);
 
 
-    if(error){
+    if (error) {
 
       console.error(
         "Conversation error:",
         error
       );
 
-
       $("chatMessages").innerHTML = `
-
         <div class="chat-empty">
 
           <div class="chat-empty-icon">
@@ -2584,15 +2092,14 @@ body.dark-mode #chatPage .chat-message-menu button,
           </div>
 
           <div class="chat-empty-title">
-            Couldn't load messages
+            Couldn't load chat
           </div>
 
           <div class="chat-empty-text">
-            Please try again.
+            Check your Supabase permissions.
           </div>
 
         </div>
-
       `;
 
       return;
@@ -2604,7 +2111,7 @@ body.dark-mode #chatPage .chat-message-menu button,
       data || [];
 
 
-    renderMessages();
+    await renderMessages();
 
     await markMessagesRead();
 
@@ -2615,16 +2122,15 @@ body.dark-mode #chatPage .chat-message-menu button,
      RENDER MESSAGES
   ======================================================= */
 
-  async function renderMessages(){
+  async function renderMessages() {
 
     const box =
       $("chatMessages");
 
 
-    if(!chatMessages.length){
+    if (!chatMessages.length) {
 
       box.innerHTML = `
-
         <div class="chat-empty">
 
           <div class="chat-empty-icon">
@@ -2632,15 +2138,16 @@ body.dark-mode #chatPage .chat-message-menu button,
           </div>
 
           <div class="chat-empty-title">
-            Say hello
+            Start the conversation
           </div>
 
           <div class="chat-empty-text">
-            Send a message and start the conversation.
+            Send a message to ${escapeHTML(
+              displayName(chatTargetUser)
+            )}.
           </div>
 
         </div>
-
       `;
 
       return;
@@ -2650,41 +2157,33 @@ body.dark-mode #chatPage .chat-message-menu button,
 
     const messageMap = {};
 
-
     chatMessages.forEach(message => {
-
       messageMap[
         String(message.id)
       ] = message;
-
     });
 
 
     box.innerHTML = "";
 
-
     let previousDate = "";
 
 
-    for(
+    for (
       const message of chatMessages
-    ){
+    ) {
 
       const currentDate =
-        dateText(
-          message.created_at
-        );
+        dateText(message.created_at);
 
 
-      if(
+      if (
         currentDate !==
         previousDate
-      ){
+      ) {
 
         const day =
-          document.createElement(
-            "div"
-          );
+          document.createElement("div");
 
         day.className =
           "chat-day";
@@ -2706,9 +2205,7 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
       const line =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
       line.className =
         "chat-message-line " +
@@ -2720,9 +2217,7 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
       const bubble =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
       bubble.className =
         "chat-bubble";
@@ -2731,9 +2226,9 @@ body.dark-mode #chatPage .chat-message-menu button,
         message.id;
 
 
-      /* ================= REPLY ================= */
+      /* ================= REPLY PREVIEW ================= */
 
-      if(message.reply_to){
+      if (message.reply_to) {
 
         const replied =
           messageMap[
@@ -2741,123 +2236,111 @@ body.dark-mode #chatPage .chat-message-menu button,
           ];
 
 
-        if(replied){
+        if (replied) {
 
           let replyText =
             replied.message ||
             "Photo";
 
 
-          if(
+          if (
             replied.message_type ===
             "image"
-          ){
-
-            replyText =
-              "📷 Photo";
-
+          ) {
+            replyText = "📷 Photo";
           }
 
 
           const reply =
-            document.createElement(
-              "div"
-            );
+            document.createElement("div");
 
           reply.className =
             "chat-reply-preview";
 
           reply.textContent =
-            replyText;
+            replyText.length > 100
+              ? replyText.slice(0, 100) + "..."
+              : replyText;
 
-
-          bubble.appendChild(
-            reply
-          );
+          bubble.appendChild(reply);
 
         }
 
       }
 
 
-      /* ================= DELETED ================= */
+      /* ================= CONTENT ================= */
 
-      if(message.deleted_at){
+      if (message.deleted_at) {
 
         const deleted =
-          document.createElement(
-            "div"
-          );
+          document.createElement("div");
+
+        deleted.className =
+          "chat-deleted";
 
         deleted.textContent =
           "Message deleted";
 
-        deleted.style.fontStyle =
-          "italic";
-
-        deleted.style.opacity =
-          ".5";
-
-
-        bubble.appendChild(
-          deleted
-        );
+        bubble.appendChild(deleted);
 
       }
 
-
-      /* ================= IMAGE ================= */
-
-      else if(
+      else if (
         message.message_type ===
-        "image" &&
+          "image" &&
         message.media_url
-      ){
+      ) {
 
-        const img =
-          document.createElement(
-            "img"
-          );
+        const image =
+          document.createElement("img");
 
-        img.className =
+        image.className =
           "chat-photo";
 
-        img.alt =
+        image.alt =
           "Photo";
 
-        img.loading =
-          "lazy";
-
-        img.dataset.mediaPath =
+        image.dataset.mediaPath =
           message.media_url;
 
-
-        if(
+        if (
           message.media_url
             .startsWith("http")
-        ){
+        ) {
 
-          img.src =
+          image.src =
             message.media_url;
 
         }
 
 
-        bubble.appendChild(
-          img
+        image.addEventListener(
+          "click",
+          () => {
+
+            if (image.src) {
+              window.open(
+                image.src,
+                "_blank"
+              );
+            }
+
+          }
         );
+
+
+        bubble.appendChild(image);
 
       }
 
-
-      /* ================= TEXT ================= */
-
-      else{
+      else {
 
         const text =
-          document.createElement(
-            "div"
-          );
+          document.createElement("div");
+
+        text.className =
+          "chat-text";
 
         text.innerHTML =
           escapeHTML(
@@ -2867,10 +2350,7 @@ body.dark-mode #chatPage .chat-message-menu button,
             "<br>"
           );
 
-
-        bubble.appendChild(
-          text
-        );
+        bubble.appendChild(text);
 
       }
 
@@ -2878,9 +2358,7 @@ body.dark-mode #chatPage .chat-message-menu button,
       /* ================= META ================= */
 
       const meta =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
       meta.className =
         "chat-meta";
@@ -2889,23 +2367,24 @@ body.dark-mode #chatPage .chat-message-menu button,
       let status = "";
 
 
-      if(mine){
+      if (mine) {
 
-        if(message.read){
+        if (message.read) {
 
-          status = "✓✓";
+          status =
+            '<span class="chat-status-read">✓✓</span>';
 
         }
 
-        else if(
+        else if (
           message.delivered_at
-        ){
+        ) {
 
           status = "✓✓";
 
         }
 
-        else{
+        else {
 
           status = "✓";
 
@@ -2915,11 +2394,8 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
       meta.innerHTML = `
-
         <span>
-          ${timeText(
-            message.created_at
-          )}
+          ${timeText(message.created_at)}
         </span>
 
         ${
@@ -2927,16 +2403,13 @@ body.dark-mode #chatPage .chat-message-menu button,
             ? `<span>${status}</span>`
             : ""
         }
-
       `;
 
 
-      bubble.appendChild(
-        meta
-      );
+      bubble.appendChild(meta);
 
 
-      /* ================= LONG PRESS ================= */
+      /* ================= ACTIONS ================= */
 
       let pressTimer = null;
 
@@ -2947,11 +2420,8 @@ body.dark-mode #chatPage .chat-message-menu button,
 
           event.preventDefault();
 
-
-          showMessageActions(
-            message,
-            event.clientX,
-            event.clientY
+          showActionSheet(
+            message
           );
 
         }
@@ -2963,26 +2433,17 @@ body.dark-mode #chatPage .chat-message-menu button,
         event => {
 
           pressTimer =
-            setTimeout(
-              () => {
+            setTimeout(() => {
 
-                const touch =
-                  event.touches[0];
+              showActionSheet(
+                message
+              );
 
-
-                showMessageActions(
-                  message,
-                  touch.clientX,
-                  touch.clientY
-                );
-
-              },
-              500
-            );
+            }, 500);
 
         },
         {
-          passive:true
+          passive: true
         }
       );
 
@@ -3011,46 +2472,27 @@ body.dark-mode #chatPage .chat-message-menu button,
       );
 
 
-      line.appendChild(
-        bubble
-      );
+      line.appendChild(bubble);
 
-
-      box.appendChild(
-        line
-      );
-
-
-      /* ================= REACTIONS ================= */
-
-      await renderReactions(
-        message.id,
-        line
-      );
+      box.appendChild(line);
 
     }
 
 
     await hydrateImages();
 
+    await renderAllReactions();
 
-    requestAnimationFrame(
-      () => {
-
-        box.scrollTop =
-          box.scrollHeight;
-
-      }
-    );
+    scrollMessages(true);
 
   }
 
 
   /* =======================================================
-     IMAGE URL
+     IMAGE HYDRATION
   ======================================================= */
 
-  async function hydrateImages(){
+  async function hydrateImages() {
 
     const images =
       document.querySelectorAll(
@@ -3058,26 +2500,28 @@ body.dark-mode #chatPage .chat-message-menu button,
       );
 
 
-    for(
-      const img of images
-    ){
+    for (
+      const image of images
+    ) {
 
       const path =
-        img.dataset.mediaPath;
+        image.dataset.mediaPath;
 
 
-      if(
+      if (
         !path ||
         path.startsWith("http")
-      )
+      ) {
         continue;
+      }
 
 
-      const {
-        data,
-        error
-      } =
-        await chatSB.storage
+      try {
+
+        const {
+          data,
+          error
+        } = await chatSB.storage
           .from("chat-media")
           .createSignedUrl(
             path,
@@ -3085,13 +2529,22 @@ body.dark-mode #chatPage .chat-message-menu button,
           );
 
 
-      if(
-        !error &&
-        data?.signedUrl
-      ){
+        if (
+          !error &&
+          data?.signedUrl
+        ) {
 
-        img.src =
-          data.signedUrl;
+          image.src =
+            data.signedUrl;
+
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "Image hydration failed:",
+          error
+        );
 
       }
 
@@ -3101,112 +2554,141 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
   /* =======================================================
-     REACTIONS RENDER
+     REACTIONS
   ======================================================= */
 
-  async function renderReactions(
-    messageId,
-    line
-  ){
+  async function renderAllReactions() {
 
-    const {
-      data,
-      error
-    } =
-      await chatSB
-        .from("message_reactions")
-        .select(
-          "reaction,user_id"
-        )
-        .eq(
-          "message_id",
-          String(messageId)
-        );
+    if (!chatMessages.length) {
+      return;
+    }
 
 
-    if(error){
+    const ids =
+      chatMessages.map(
+        message =>
+          String(message.id)
+      );
+
+
+    let data = null;
+
+
+    try {
+
+      const result =
+        await chatSB
+          .from("message_reactions")
+          .select(
+            "message_id,reaction,user_id"
+          )
+          .in(
+            "message_id",
+            ids
+          );
+
+      data =
+        result.data || [];
+
+    } catch (error) {
 
       return;
 
     }
 
 
-    if(!data?.length)
+    if (!data.length) {
       return;
+    }
 
 
-    const counts = {};
+    const grouped = {};
 
 
     data.forEach(row => {
 
-      counts[row.reaction] =
+      const id =
+        String(row.message_id);
+
+      if (!grouped[id]) {
+        grouped[id] = {};
+      }
+
+      grouped[id][row.reaction] =
         (
-          counts[row.reaction] ||
+          grouped[id][row.reaction] ||
           0
         ) + 1;
 
     });
 
 
-    const wrap =
-      document.createElement(
-        "div"
-      );
+    Object.entries(grouped)
+      .forEach(([messageId, reactions]) => {
 
-    wrap.className =
-      "chat-reactions";
-
-
-    Object.entries(counts)
-      .forEach(
-        ([emoji,count]) => {
-
-          const item =
-            document.createElement(
-              "span"
-            );
-
-          item.className =
-            "chat-reaction";
-
-          item.textContent =
-            emoji +
-            " " +
-            count;
-
-          wrap.appendChild(
-            item
+        const bubble =
+          document.querySelector(
+            `.chat-bubble[data-message-id="${CSS.escape(messageId)}"]`
           );
 
-        }
-      );
+
+        if (!bubble) return;
 
 
-    line.appendChild(
-      wrap
-    );
+        const line =
+          bubble.parentElement;
+
+
+        const wrap =
+          document.createElement("div");
+
+        wrap.className =
+          "chat-reactions";
+
+
+        Object.entries(reactions)
+          .forEach(
+            ([emoji, count]) => {
+
+              const el =
+                document.createElement("span");
+
+              el.className =
+                "chat-reaction";
+
+              el.textContent =
+                emoji +
+                " " +
+                count;
+
+              wrap.appendChild(el);
+
+            }
+          );
+
+
+        line.appendChild(wrap);
+
+      });
 
   }
 
 
-  /* =======================================================
-     ADD REACTION
-  ======================================================= */
-
   async function addReaction(
     messageId,
     reaction
-  ){
+  ) {
 
-    if(!chatCurrentUser)
+    if (!chatCurrentUser) {
       return;
+    }
 
 
-    const {
-      data:existing
-    } =
-      await chatSB
+    try {
+
+      const {
+        data: existing
+      } = await chatSB
         .from("message_reactions")
         .select(
           "id,reaction"
@@ -3222,76 +2704,68 @@ body.dark-mode #chatPage .chat-message-menu button,
         .maybeSingle();
 
 
-    if(
-      existing &&
-      existing.reaction === reaction
-    ){
-
-      await chatSB
-        .from("message_reactions")
-        .delete()
-        .eq(
-          "id",
-          existing.id
-        );
-
-    }
-
-    else if(existing){
-
-      await chatSB
-        .from("message_reactions")
-        .update({
+      if (
+        existing &&
+        existing.reaction ===
           reaction
-        })
-        .eq(
-          "id",
-          existing.id
-        );
+      ) {
 
-    }
-
-    else{
-
-      const {
-        error
-      } =
         await chatSB
           .from("message_reactions")
-          .insert({
-
-            message_id:
-              String(messageId),
-
-            user_id:
-              chatCurrentUser.id,
-
-            reaction
-
-          });
-
-
-      if(error){
-
-        console.error(
-          "Reaction error:",
-          error
-        );
-
-        toast(
-          "Reaction failed."
-        );
-
-        return;
+          .delete()
+          .eq(
+            "id",
+            existing.id
+          );
 
       }
 
+      else if (existing) {
+
+        await chatSB
+          .from("message_reactions")
+          .update({
+            reaction
+          })
+          .eq(
+            "id",
+            existing.id
+          );
+
+      }
+
+      else {
+
+        await chatSB
+          .from("message_reactions")
+          .insert({
+            message_id:
+              String(messageId),
+            user_id:
+              chatCurrentUser.id,
+            reaction
+          });
+
+      }
+
+
+      hideReactionMenu();
+      hideActionSheet();
+
+      await loadConversation();
+
+    } catch (error) {
+
+      console.error(
+        "Reaction error:",
+        error
+      );
+
+      showToast(
+        "Reactions table/RLS check karo."
+      );
+
     }
-
-
-    hideReactionMenu();
-
-    await loadConversation();
 
   }
 
@@ -3304,7 +2778,7 @@ body.dark-mode #chatPage .chat-message-menu button,
     message,
     x,
     y
-  ){
+  ) {
 
     chatReactionMessage =
       message;
@@ -3314,48 +2788,53 @@ body.dark-mode #chatPage .chat-message-menu button,
       $("reactionMenu");
 
 
-    menu.classList.add(
-      "show"
-    );
+    menu.classList.add("show");
 
 
     const width =
-      menu.offsetWidth ||
-      250;
+      menu.offsetWidth || 230;
+
+    const height =
+      menu.offsetHeight || 50;
 
 
-    const maxX =
-      window.innerWidth -
-      width -
-      8;
-
-
-    menu.style.left =
+    const left =
       Math.max(
         8,
         Math.min(
           x,
-          maxX
+          window.innerWidth -
+            width -
+            8
         )
-      ) + "px";
+      );
 
 
-    menu.style.top =
+    const top =
       Math.max(
         8,
-        y - 55
-      ) + "px";
+        Math.min(
+          y - height - 8,
+          window.innerHeight -
+            height -
+            8
+        )
+      );
+
+
+    menu.style.left =
+      left + "px";
+
+    menu.style.top =
+      top + "px";
 
   }
 
 
-  function hideReactionMenu(){
+  function hideReactionMenu() {
 
     $("reactionMenu")
-      .classList.remove(
-        "show"
-      );
-
+      .classList.remove("show");
 
     chatReactionMessage =
       null;
@@ -3364,193 +2843,50 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
   /* =======================================================
-     MESSAGE ACTIONS
+     ACTION SHEET
   ======================================================= */
 
-  function showMessageActions(
-    message,
-    x,
-    y
-  ){
+  function showActionSheet(
+    message
+  ) {
 
-    document
-      .querySelectorAll(
-        ".chat-message-menu"
-      )
-      .forEach(
-        el => el.remove()
+    chatActionMessage =
+      message;
+
+
+    const deleteButton =
+      document.querySelector(
+        '[data-chat-action="delete"]'
       );
 
 
-    const menu =
-      document.createElement(
-        "div"
-      );
+    if (deleteButton) {
 
-
-    menu.className =
-      "chat-message-menu";
-
-
-    menu.innerHTML = `
-
-      <button
-        data-action="reply"
-      >
-        ↩ Reply
-      </button>
-
-      <button
-        data-action="react"
-      >
-        ❤️ React
-      </button>
-
-      ${
+      deleteButton.style.display =
         message.sender_id ===
         chatCurrentUser.id
-          ? `
-            <button
-              class="danger"
-              data-action="delete"
-            >
-              🗑 Delete
-            </button>
-          `
-          : ""
-      }
+          ? "block"
+          : "none";
 
-    `;
+    }
 
 
-    document.body.appendChild(
-      menu
-    );
+    hideReactionMenu();
 
 
-    const rect =
-      menu.getBoundingClientRect();
+    $("chatActionOverlay")
+      .classList.add("show");
+
+  }
 
 
-    const left =
-      Math.min(
-        Math.max(
-          8,
-          x - rect.width / 2
-        ),
-        window.innerWidth -
-          rect.width -
-          8
-      );
+  function hideActionSheet() {
 
+    $("chatActionOverlay")
+      .classList.remove("show");
 
-    const top =
-      Math.min(
-        Math.max(
-          8,
-          y - rect.height - 10
-        ),
-        window.innerHeight -
-          rect.height -
-          8
-      );
-
-
-    menu.style.left =
-      left + "px";
-
-
-    menu.style.top =
-      top + "px";
-
-
-    menu
-      .querySelectorAll("button")
-      .forEach(button => {
-
-        button.addEventListener(
-          "click",
-          async event => {
-
-            event.stopPropagation();
-
-
-            const action =
-              button.dataset.action;
-
-
-            menu.remove();
-
-
-            if(action === "reply"){
-
-              startReply(
-                message
-              );
-
-            }
-
-
-            else if(
-              action === "react"
-            ){
-
-              showReactionMenu(
-                message,
-                x,
-                y
-              );
-
-            }
-
-
-            else if(
-              action === "delete"
-            ){
-
-              await deleteMessage(
-                message
-              );
-
-            }
-
-          }
-        );
-
-      });
-
-
-    setTimeout(
-      () => {
-
-        function closeMenu(event){
-
-          if(
-            !menu.contains(
-              event.target
-            )
-          ){
-
-            menu.remove();
-
-            document.removeEventListener(
-              "click",
-              closeMenu
-            );
-
-          }
-
-        }
-
-
-        document.addEventListener(
-          "click",
-          closeMenu
-        );
-
-      },
-      30
-    );
+    chatActionMessage =
+      null;
 
   }
 
@@ -3559,101 +2895,102 @@ body.dark-mode #chatPage .chat-message-menu button,
      SEND TEXT
   ======================================================= */
 
-  async function sendMessage(){
+  async function sendMessage() {
 
-    if(
+    if (
       !chatCurrentUser ||
       !chatTargetUser
-    )
+    ) {
       return;
+    }
 
 
     const input =
       $("chatInput");
 
-
     const text =
       input.value.trim();
 
 
-    if(!text)
+    if (!text) {
       return;
+    }
 
 
     const button =
       $("sendMessageBtn");
 
-
     button.disabled =
       true;
 
 
-    const payload = {
+    try {
 
-      sender_id:
-        chatCurrentUser.id,
+      const payload = {
 
-      receiver_id:
-        chatTargetUser.id,
+        sender_id:
+          chatCurrentUser.id,
 
-      message:
-        text,
+        receiver_id:
+          chatTargetUser.id,
 
-      message_type:
-        "text",
+        message:
+          text,
 
-      reply_to:
-        chatReplyTo
-          ? String(
-              chatReplyTo.id
-            )
-          : null
+        message_type:
+          "text",
 
-    };
+        reply_to:
+          chatReplyTo
+            ? String(
+                chatReplyTo.id
+              )
+            : null
+
+      };
 
 
-    const {
-      error
-    } =
-      await chatSB
+      const {
+        error
+      } = await chatSB
         .from("messages")
-        .insert(
-          payload
-        );
+        .insert(payload);
 
 
-    button.disabled =
-      false;
+      if (error) {
+        throw error;
+      }
 
 
-    if(error){
+      input.value = "";
+
+      input.style.height =
+        "auto";
+
+      updateSendButton();
+
+      cancelReply();
+
+      await loadConversation();
+
+
+    } catch (error) {
 
       console.error(
         "Send message error:",
         error
       );
 
-
-      toast(
+      showToast(
         "Message send nahi hua."
       );
 
-      return;
+    } finally {
+
+      button.disabled =
+        !input.value.trim();
 
     }
-
-
-    input.value =
-      "";
-
-    input.style.height =
-      "auto";
-
-
-    cancelReply();
-
-
-    await loadConversation();
 
   }
 
@@ -3662,23 +2999,24 @@ body.dark-mode #chatPage .chat-message-menu button,
      SEND IMAGE
   ======================================================= */
 
-  async function sendImage(file){
+  async function sendImage(file) {
 
-    if(
+    if (
       !file ||
       !chatCurrentUser ||
       !chatTargetUser
-    )
+    ) {
       return;
+    }
 
 
-    if(
+    if (
       !file.type.startsWith(
         "image/"
       )
-    ){
+    ) {
 
-      toast(
+      showToast(
         "Only images are allowed."
       );
 
@@ -3687,18 +3025,23 @@ body.dark-mode #chatPage .chat-message-menu button,
     }
 
 
-    if(
+    if (
       file.size >
       8 * 1024 * 1024
-    ){
+    ) {
 
-      toast(
+      showToast(
         "Image must be smaller than 8 MB."
       );
 
       return;
 
     }
+
+
+    showToast(
+      "Uploading photo..."
+    );
 
 
     const safeName =
@@ -3710,13 +3053,11 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
     const randomId =
-      window.crypto?.randomUUID
+      typeof crypto !==
+        "undefined" &&
+      crypto.randomUUID
         ? crypto.randomUUID()
-        : Date.now() +
-          "-" +
-          Math.random()
-            .toString(36)
-            .slice(2);
+        : Date.now();
 
 
     const path =
@@ -3727,15 +3068,11 @@ body.dark-mode #chatPage .chat-message-menu button,
       safeName;
 
 
-    toast(
-      "Uploading photo..."
-    );
+    try {
 
-
-    const {
-      error:uploadError
-    } =
-      await chatSB.storage
+      const {
+        error: uploadError
+      } = await chatSB.storage
         .from("chat-media")
         .upload(
           path,
@@ -3743,33 +3080,20 @@ body.dark-mode #chatPage .chat-message-menu button,
           {
             contentType:
               file.type,
-
-            upsert:false
+            upsert:
+              false
           }
         );
 
 
-    if(uploadError){
-
-      console.error(
-        "Upload error:",
-        uploadError
-      );
+      if (uploadError) {
+        throw uploadError;
+      }
 
 
-      toast(
-        "Photo upload failed."
-      );
-
-      return;
-
-    }
-
-
-    const {
-      error
-    } =
-      await chatSB
+      const {
+        error
+      } = await chatSB
         .from("messages")
         .insert({
 
@@ -3798,26 +3122,28 @@ body.dark-mode #chatPage .chat-message-menu button,
         });
 
 
-    if(error){
+      if (error) {
+        throw error;
+      }
+
+
+      cancelReply();
+
+      await loadConversation();
+
+
+    } catch (error) {
 
       console.error(
-        "Image message error:",
+        "Image send error:",
         error
       );
 
-
-      toast(
-        "Photo message failed."
+      showToast(
+        "Photo upload failed."
       );
 
-      return;
-
     }
-
-
-    cancelReply();
-
-    await loadConversation();
 
   }
 
@@ -3826,13 +3152,14 @@ body.dark-mode #chatPage .chat-message-menu button,
      READ RECEIPTS
   ======================================================= */
 
-  async function markMessagesRead(){
+  async function markMessagesRead() {
 
-    if(
+    if (
       !chatCurrentUser ||
       !chatTargetUser
-    )
+    ) {
       return;
+    }
 
 
     const unread =
@@ -3840,16 +3167,15 @@ body.dark-mode #chatPage .chat-message-menu button,
         message =>
           message.receiver_id ===
             chatCurrentUser.id &&
-
           message.sender_id ===
             chatTargetUser.id &&
-
-          message.read === false
+          !message.read
       );
 
 
-    if(!unread.length)
+    if (!unread.length) {
       return;
+    }
 
 
     const ids =
@@ -3859,34 +3185,34 @@ body.dark-mode #chatPage .chat-message-menu button,
       );
 
 
-    const {
-      error
-    } =
+    const now =
+      new Date().toISOString();
+
+
+    try {
+
       await chatSB
         .from("messages")
         .update({
-
-          read:true,
-
-          read_at:
-            new Date()
-              .toISOString()
-
+          read: true,
+          read_at: now
         })
-        .in(
-          "id",
-          ids
-        )
+        .in("id", ids)
         .eq(
           "receiver_id",
           chatCurrentUser.id
         );
 
 
-    if(error){
+      unread.forEach(message => {
+        message.read = true;
+        message.read_at = now;
+      });
+
+    } catch (error) {
 
       console.warn(
-        "Read receipt error:",
+        "Read receipt failed:",
         error
       );
 
@@ -3899,7 +3225,9 @@ body.dark-mode #chatPage .chat-message-menu button,
      REPLY
   ======================================================= */
 
-  function startReply(message){
+  function startReply(
+    message
+  ) {
 
     chatReplyTo =
       message;
@@ -3910,10 +3238,10 @@ body.dark-mode #chatPage .chat-message-menu button,
       "Photo";
 
 
-    if(
+    if (
       message.message_type ===
       "image"
-    ){
+    ) {
 
       text =
         "📷 Photo";
@@ -3923,34 +3251,33 @@ body.dark-mode #chatPage .chat-message-menu button,
 
     $("chatReplyContent")
       .textContent =
-      text.length > 80
-        ? text.slice(0,80) +
+      text.length > 90
+        ? text.slice(0, 90) +
           "..."
         : text;
 
 
     $("chatReplyBar")
-      .classList.add(
-        "show"
-      );
+      .classList.add("show");
 
 
     $("chatInput")
       .focus();
 
+
+    hideActionSheet();
+
   }
 
 
-  function cancelReply(){
+  function cancelReply() {
 
     chatReplyTo =
       null;
 
 
     $("chatReplyBar")
-      .classList.remove(
-        "show"
-      );
+      .classList.remove("show");
 
 
     $("chatReplyContent")
@@ -3961,24 +3288,28 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
   /* =======================================================
-     DELETE MESSAGE
+     DELETE
   ======================================================= */
 
   async function deleteMessage(
     message
-  ){
+  ) {
 
-    if(!chatCurrentUser)
+    if (
+      !chatCurrentUser ||
+      !message
+    ) {
       return;
+    }
 
 
-    if(
+    if (
       message.sender_id !==
       chatCurrentUser.id
-    ){
+    ) {
 
-      toast(
-        "You can only delete your own message."
+      showToast(
+        "You can only delete your own messages."
       );
 
       return;
@@ -3986,25 +3317,28 @@ body.dark-mode #chatPage .chat-message-menu button,
     }
 
 
-    if(
-      !confirm(
+    hideActionSheet();
+
+
+    if (
+      !window.confirm(
         "Delete this message?"
       )
-    )
+    ) {
       return;
+    }
 
 
-    const {
-      error
-    } =
-      await chatSB
+    try {
+
+      const {
+        error
+      } = await chatSB
         .from("messages")
         .update({
-
           deleted_at:
             new Date()
               .toISOString()
-
         })
         .eq(
           "id",
@@ -4016,29 +3350,31 @@ body.dark-mode #chatPage .chat-message-menu button,
         );
 
 
-    if(error){
+      if (error) {
+        throw error;
+      }
+
+
+      showToast(
+        "Message deleted"
+      );
+
+
+      await loadConversation();
+
+
+    } catch (error) {
 
       console.error(
         "Delete error:",
         error
       );
 
-
-      toast(
+      showToast(
         "Message delete nahi hua."
       );
 
-      return;
-
     }
-
-
-    toast(
-      "Message deleted"
-    );
-
-
-    await loadConversation();
 
   }
 
@@ -4047,150 +3383,189 @@ body.dark-mode #chatPage .chat-message-menu button,
      REALTIME
   ======================================================= */
 
-  function subscribeConversation(){
+  function subscribeConversation() {
 
-    if(
+    if (
       !chatCurrentUser ||
       !chatTargetUser
-    )
+    ) {
       return;
-
-
-    if(chatChannel){
-
-      chatSB.removeChannel(
-        chatChannel
-      );
-
-      chatChannel =
-        null;
-
     }
 
 
+    destroyConversationChannel();
+
+
     const channelName =
-      "chat-" +
+      "poll-pulse-chat-" +
       chatCurrentUser.id +
       "-" +
       chatTargetUser.id;
 
 
     chatChannel =
-      chatSB
-        .channel(
-          channelName
-        )
+      chatSB.channel(
+        channelName
+      );
 
 
-        /* ================= MESSAGES ================= */
+    chatChannel
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "messages"
+        },
+        payload => {
 
-        .on(
-          "postgres_changes",
-          {
-            event:"*",
-            schema:"public",
-            table:"messages"
-          },
-          payload => {
-
-            const message =
-              payload.new ||
-              payload.old;
-
-
-            if(!message)
-              return;
+          const message =
+            payload.new ||
+            payload.old;
 
 
-            const relevant =
-              (
-                message.sender_id ===
-                  chatCurrentUser.id &&
-                message.receiver_id ===
-                  chatTargetUser.id
-              ) ||
-              (
-                message.sender_id ===
-                  chatTargetUser.id &&
-                message.receiver_id ===
-                  chatCurrentUser.id
-              );
+          if (!message) return;
 
 
-            if(!relevant)
-              return;
-
-
-            loadConversation();
-
-          }
-        )
-
-
-        /* ================= REACTIONS ================= */
-
-        .on(
-          "postgres_changes",
-          {
-            event:"*",
-            schema:"public",
-            table:"message_reactions"
-          },
-          () => {
-
-            loadConversation();
-
-          }
-        )
-
-
-        /* ================= TYPING ================= */
-
-        .on(
-          "broadcast",
-          {
-            event:"typing"
-          },
-          payload => {
-
-            if(
-              payload.payload
-                ?.user_id !==
-              chatTargetUser.id
-            )
-              return;
-
-
-            $("chatTyping")
-              .textContent =
-              displayName(
-                chatTargetUser
-              ) +
-              " is typing...";
-
-
-            clearTimeout(
-              typingClearTimer
+          const relevant =
+            (
+              message.sender_id ===
+                chatCurrentUser.id &&
+              message.receiver_id ===
+                chatTargetUser.id
+            ) ||
+            (
+              message.sender_id ===
+                chatTargetUser.id &&
+              message.receiver_id ===
+                chatCurrentUser.id
             );
 
 
-            typingClearTimer =
-              setTimeout(
-                () => {
-
-                  $("chatTyping")
-                    .textContent =
-                    "";
-
-                },
-                1800
-              );
-
+          if (!relevant) {
+            return;
           }
-        )
 
 
-        .subscribe();
+          loadConversation();
+
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "message_reactions"
+        },
+        () => {
+
+          loadConversation();
+
+        }
+      )
+      .on(
+        "broadcast",
+        {
+          event: "typing"
+        },
+        payload => {
+
+          if (
+            payload.payload?.user_id !==
+            chatTargetUser.id
+          ) {
+            return;
+          }
+
+
+          $("chatTyping").innerHTML = `
+            <span class="chat-typing-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+            &nbsp;
+            ${escapeHTML(
+              displayName(
+                chatTargetUser
+              )
+            )} is typing...
+          `;
+
+
+          clearTimeout(
+            typingTimeout
+          );
+
+
+          typingTimeout =
+            setTimeout(() => {
+
+              $("chatTyping")
+                .innerHTML =
+                "";
+
+            }, 1800);
+
+        }
+      )
+      .subscribe();
+
+  }
+
+
+  function destroyConversationChannel() {
+
+    if (chatChannel) {
+
+      chatSB.removeChannel(
+        chatChannel
+      );
+
+      chatChannel = null;
+
+    }
+
+  }
+
+
+  /* =======================================================
+     INBOX REALTIME
+  ======================================================= */
+
+  function subscribeInbox() {
+
+    if (
+      !chatCurrentUser ||
+      inboxChannel
+    ) {
+      return;
+    }
+
+
+    inboxChannel =
+      chatSB.channel(
+        "poll-pulse-inbox-" +
+        chatCurrentUser.id
+      );
+
+
+    inboxChannel
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "messages"
+        },
+        () => {
+
+          loadInbox();
+
+        }
+      )
+      .subscribe();
 
   }
 
@@ -4199,27 +3574,28 @@ body.dark-mode #chatPage .chat-message-menu button,
      TYPING
   ======================================================= */
 
-  function sendTyping(){
+  function sendTyping() {
 
-    if(
+    if (
       !chatChannel ||
       !chatCurrentUser ||
       !chatTargetUser
-    )
+    ) {
       return;
+    }
 
 
     chatChannel.send({
 
-      type:"broadcast",
+      type:
+        "broadcast",
 
-      event:"typing",
+      event:
+        "typing",
 
-      payload:{
-
+      payload: {
         user_id:
           chatCurrentUser.id
-
       }
 
     });
@@ -4231,15 +3607,15 @@ body.dark-mode #chatPage .chat-message-menu button,
      PRESENCE
   ======================================================= */
 
-  async function updatePresence(){
+  async function updatePresence() {
 
-    if(!chatCurrentUser)
+    if (!chatCurrentUser) {
       return;
+    }
 
 
-    const {
-      error
-    } =
+    try {
+
       await chatSB
         .from("user_presence")
         .upsert({
@@ -4247,7 +3623,8 @@ body.dark-mode #chatPage .chat-message-menu button,
           user_id:
             chatCurrentUser.id,
 
-          is_online:true,
+          is_online:
+            true,
 
           last_seen:
             new Date()
@@ -4255,30 +3632,31 @@ body.dark-mode #chatPage .chat-message-menu button,
 
         });
 
+    } catch (error) {
 
-    if(error){
-
-      console.warn(
-        "Presence error:",
-        error
-      );
+      /*
+        Presence is optional.
+        Chat continues even if
+        this table doesn't exist.
+      */
 
     }
 
   }
 
 
-  async function updateOnlineStatus(){
+  async function updateOnlineStatus() {
 
-    if(!chatTargetUser)
+    if (!chatTargetUser) {
       return;
+    }
 
 
-    const {
-      data,
-      error
-    } =
-      await chatSB
+    try {
+
+      const {
+        data
+      } = await chatSB
         .from("user_presence")
         .select(
           "is_online,last_seen"
@@ -4290,80 +3668,59 @@ body.dark-mode #chatPage .chat-message-menu button,
         .maybeSingle();
 
 
-    if(error){
+      const dot =
+        $("chatHeaderOnline");
 
-      $("chatHeaderStatus")
-        .textContent =
-        "Message";
-
-      return;
-
-    }
+      const status =
+        $("chatHeaderStatus");
 
 
-    const dot =
-      $("chatHeaderOnline");
+      if (
+        data?.is_online
+      ) {
 
-
-    const status =
-      $("chatHeaderStatus");
-
-
-    if(data?.is_online){
-
-      dot.style.display =
-        "block";
-
-      status.textContent =
-        "Active now";
-
-      return;
-
-    }
-
-
-    dot.style.display =
-      "none";
-
-
-    if(data?.last_seen){
-
-      const lastSeen =
-        new Date(
-          data.last_seen
-        );
-
-
-      const diff =
-        Date.now() -
-        lastSeen.getTime();
-
-
-      if(
-        diff <
-        86400000
-      ){
+        dot.style.display =
+          "block";
 
         status.textContent =
-          "Active " +
+          "Active now";
+
+        return;
+
+      }
+
+
+      dot.style.display =
+        "none";
+
+
+      if (
+        data?.last_seen
+      ) {
+
+        status.textContent =
+          "Last seen " +
           timeText(
             data.last_seen
           );
 
       }
 
-      else{
+      else {
 
         status.textContent =
-          "Active recently";
+          "Message";
 
       }
 
-    }
+    } catch (error) {
 
-    else{
+      $("chatHeaderOnline")
+        .style.display =
+        "none";
 
-      status.textContent =
+      $("chatHeaderStatus")
+        .textContent =
         "Message";
 
     }
@@ -4372,7 +3729,26 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
   /* =======================================================
-     EVENT LISTENERS
+     SEND BUTTON STATE
+  ======================================================= */
+
+  function updateSendButton() {
+
+    const input =
+      $("chatInput");
+
+    const button =
+      $("sendMessageBtn");
+
+
+    button.disabled =
+      !input.value.trim();
+
+  }
+
+
+  /* =======================================================
+     EVENTS
   ======================================================= */
 
   $("chatBackBtn")
@@ -4412,9 +3788,11 @@ body.dark-mode #chatPage .chat-message-menu button,
         input.style.height =
           Math.min(
             input.scrollHeight,
-            110
+            115
           ) + "px";
 
+
+        updateSendButton();
 
         sendTyping();
 
@@ -4427,10 +3805,11 @@ body.dark-mode #chatPage .chat-message-menu button,
       "keydown",
       event => {
 
-        if(
-          event.key === "Enter" &&
+        if (
+          event.key ===
+            "Enter" &&
           !event.shiftKey
-        ){
+        ) {
 
           event.preventDefault();
 
@@ -4451,7 +3830,7 @@ body.dark-mode #chatPage .chat-message-menu button,
           event.target.files?.[0];
 
 
-        if(file){
+        if (file) {
 
           await sendImage(
             file
@@ -4475,12 +3854,30 @@ body.dark-mode #chatPage .chat-message-menu button,
         searchText =
           event.target.value.trim();
 
-
-        loadInbox();
+        renderInbox(
+          inboxRows
+        );
 
       }
     );
 
+
+  $("chatRefreshBtn")
+    .addEventListener(
+      "click",
+      async () => {
+
+        showToast(
+          "Refreshing..."
+        );
+
+        await loadInbox();
+
+      }
+    );
+
+
+  /* ================= REACTION BUTTONS ================= */
 
   document
     .querySelectorAll(
@@ -4492,10 +3889,11 @@ body.dark-mode #chatPage .chat-message-menu button,
         "click",
         async () => {
 
-          if(
+          if (
             !chatReactionMessage
-          )
+          ) {
             return;
+          }
 
 
           await addReaction(
@@ -4509,15 +3907,97 @@ body.dark-mode #chatPage .chat-message-menu button,
     });
 
 
+  /* ================= ACTION SHEET ================= */
+
+  document
+    .querySelectorAll(
+      ".chat-action-btn"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        async () => {
+
+          const action =
+            button.dataset.chatAction;
+
+          const message =
+            chatActionMessage;
+
+
+          if (!message) {
+            return;
+          }
+
+
+          if (
+            action === "reply"
+          ) {
+
+            startReply(
+              message
+            );
+
+          }
+
+          else if (
+            action === "react"
+          ) {
+
+            hideActionSheet();
+
+            showReactionMenu(
+              message,
+              window.innerWidth / 2,
+              window.innerHeight / 2
+            );
+
+          }
+
+          else if (
+            action === "delete"
+          ) {
+
+            await deleteMessage(
+              message
+            );
+
+          }
+
+        }
+      );
+
+    });
+
+
+  $("chatActionOverlay")
+    .addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          $("chatActionOverlay")
+        ) {
+
+          hideActionSheet();
+
+        }
+
+      }
+    );
+
+
   document.addEventListener(
     "click",
     event => {
 
-      if(
+      if (
         !event.target.closest(
           "#reactionMenu"
         )
-      ){
+      ) {
 
         hideReactionMenu();
 
@@ -4528,39 +4008,26 @@ body.dark-mode #chatPage .chat-message-menu button,
 
 
   /* =======================================================
-     ONLINE / OFFLINE
+     PAGE VISIBILITY
   ======================================================= */
 
-  window.addEventListener(
-    "beforeunload",
+  document.addEventListener(
+    "visibilitychange",
     () => {
 
-      /*
-        Keep last_seen accurate.
-        We don't mark offline here because
-        mobile browsers may kill the page
-        before the request completes.
-      */
+      if (
+        !document.hidden
+      ) {
 
-      if(
-        chatCurrentUser
-      ){
+        updatePresence();
 
-        chatSB
-          .from("user_presence")
-          .update({
+        if (
+          chatTargetUser
+        ) {
 
-            is_online:false,
+          updateOnlineStatus();
 
-            last_seen:
-              new Date()
-                .toISOString()
-
-          })
-          .eq(
-            "user_id",
-            chatCurrentUser.id
-          );
+        }
 
       }
 
@@ -4575,43 +4042,54 @@ body.dark-mode #chatPage .chat-message-menu button,
   window.openChat =
     openChat;
 
-
   window.closeChat =
     closeChatPage;
 
-
   window.loadChatInbox =
     loadInbox;
-
-
-  window.closeChatConversation =
-    closeChatConversation;
-
-
-  window.ppChatToast =
-    toast;
 
 
   /* =======================================================
      INITIALIZE
   ======================================================= */
 
-  async function initChat(){
+  (async function initChat() {
 
     chatCurrentUser =
       await getCurrentUser();
 
 
-    if(!chatCurrentUser)
+    if (!chatCurrentUser) {
+
+      $("chatUsers").innerHTML = `
+        <div class="chat-empty">
+
+          <div class="chat-empty-icon">
+            🔐
+          </div>
+
+          <div class="chat-empty-title">
+            Login required
+          </div>
+
+          <div class="chat-empty-text">
+            Login to use messages.
+          </div>
+
+        </div>
+      `;
+
       return;
+
+    }
 
 
     await updatePresence();
 
     await loadInbox();
 
+    subscribeInbox();
 
-    /* Presence heartbeat */
 
     presenceTimer =
       setInterval(
@@ -4620,18 +4098,16 @@ body.dark-mode #chatPage .chat-message-menu button,
       );
 
 
-    /* Inbox refresh */
-
     inboxTimer =
       setInterval(
         () => {
 
-          if(
+          if (
             $("chatPage")
               .classList
               .contains("active") &&
             !chatTargetUser
-          ){
+          ) {
 
             loadInbox();
 
@@ -4641,10 +4117,7 @@ body.dark-mode #chatPage .chat-message-menu button,
         15000
       );
 
-  }
-
-
-  initChat();
+  })();
 
 
 })();
