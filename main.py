@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # =========================
-# SERVE EXISTING APP
+# SERVE POLLPULSE APP
 # =========================
 
 @app.route("/")
@@ -19,6 +19,10 @@ def index():
 def index_html():
     return send_from_directory(BASE_DIR, "index.html")
 
+
+# =========================
+# OPTIONAL OLD PAGE
+# =========================
 
 @app.route("/index2.html")
 def index2():
@@ -32,9 +36,10 @@ def index2():
 @app.route("/api/config")
 def config():
     return jsonify({
-        "app": "My App",
-        "version": "1.0.0",
-        "backend": "python"
+        "app": "PollPulse",
+        "version": "2.0.0",
+        "backend": "python",
+        "status": "online"
     })
 
 
@@ -46,7 +51,7 @@ def config():
 def health():
     return jsonify({
         "ok": True,
-        "message": "Backend connected"
+        "message": "PollPulse backend connected"
     })
 
 
