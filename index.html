@@ -473,6 +473,7 @@
       align-items:center;
       gap:9px;
       margin-bottom:12px;
+      cursor:pointer;
     }
 
     .suggestion-avatar{
@@ -1539,12 +1540,14 @@
       </div>
 
       <h1 class="auth-heading" id="authHeading">Welcome back</h1>
+
       <p class="auth-copy" id="authCopy">
         Sign in and see what everyone is voting on.
       </p>
 
       <div class="field hidden" id="usernameField">
         <label>Username</label>
+
         <input
           id="usernameInput"
           type="text"
@@ -1555,6 +1558,7 @@
 
       <div class="field">
         <label>Email</label>
+
         <input
           id="emailInput"
           type="email"
@@ -1565,6 +1569,7 @@
 
       <div class="field">
         <label>Password</label>
+
         <input
           id="passwordInput"
           type="password"
@@ -1578,11 +1583,17 @@
       </button>
 
       <div class="auth-switch">
-        <span id="authSwitchText">Don't have an account?</span>
-        <button id="authSwitchBtn">Create account</button>
+        <span id="authSwitchText">
+          Don't have an account?
+        </span>
+
+        <button id="authSwitchBtn">
+          Create account
+        </button>
       </div>
 
       <div class="auth-message" id="authMessage"></div>
+
     </div>
   </section>
 
@@ -1596,13 +1607,23 @@
     <div class="app-shell">
 
       <!-- HEADER -->
+
       <header class="top-header">
+
         <div class="top-header-inner">
 
           <div class="app-brand">
-            <div class="brand-icon">P</div>
-            <div class="app-brand-text">Poll Pulse</div>
+
+            <div class="brand-icon">
+              P
+            </div>
+
+            <div class="app-brand-text">
+              Poll Pulse
+            </div>
+
           </div>
+
 
           <div class="header-actions">
 
@@ -1613,11 +1634,13 @@
               aria-label="Notifications"
             >
               🔔
+
               <span
                 class="notification-dot hidden"
                 id="headerNotificationDot"
               ></span>
             </button>
+
 
             <button
               class="icon-btn"
@@ -1633,24 +1656,43 @@
             </button>
 
           </div>
+
         </div>
+
       </header>
 
 
       <!-- MAIN -->
+
       <main class="main-layout">
 
-        <!-- ================= HOME ================= -->
+        <!-- HOME -->
+
         <section id="homePage" class="page active">
 
           <div class="welcome">
-            <div class="welcome-small">Good to see you 👋</div>
-            <h1 id="homeGreeting">What's your opinion?</h1>
+
+            <div class="welcome-small">
+              Good to see you 👋
+            </div>
+
+            <h1 id="homeGreeting">
+              What's your opinion?
+            </h1>
+
           </div>
 
+
           <div class="hero-card">
-            <div class="hero-label">Poll Pulse</div>
-            <h2>Let your voice be counted.</h2>
+
+            <div class="hero-label">
+              Poll Pulse
+            </div>
+
+            <h2>
+              Let your voice be counted.
+            </h2>
+
             <p>
               Create a poll, discover people's opinions and join the conversation.
             </p>
@@ -1661,29 +1703,49 @@
             >
               + Create a poll
             </button>
+
           </div>
 
 
           <div class="section-title-row">
-            <div class="section-title">People to discover</div>
+
+            <div class="section-title">
+              People to discover
+            </div>
+
             <button
               class="section-link"
               onclick="showPage('searchPage')"
             >
               See all
             </button>
+
           </div>
 
-          <div id="suggestions" class="suggestions">
-            <div class="empty-state">Loading...</div>
+
+          <div
+            id="suggestions"
+            class="suggestions"
+          >
+            <div class="empty-state">
+              Loading...
+            </div>
           </div>
 
 
           <div class="section-title-row">
-            <div class="section-title">Latest polls</div>
+
+            <div class="section-title">
+              Latest polls
+            </div>
+
           </div>
 
-          <div id="pollFeed" class="poll-feed">
+
+          <div
+            id="pollFeed"
+            class="poll-feed"
+          >
             <div class="empty-state">
               <div class="spinner"></div>
               Loading polls...
@@ -1693,25 +1755,43 @@
         </section>
 
 
-        <!-- ================= SEARCH ================= -->
+        <!-- SEARCH -->
+
         <section id="searchPage" class="page">
 
           <div class="page-heading">
-            <h2>Discover</h2>
-            <p>Find people and explore their polls.</p>
+
+            <h2>
+              Discover
+            </h2>
+
+            <p>
+              Find people and explore their polls.
+            </p>
+
           </div>
 
+
           <div class="search-box">
-            <span>⌕</span>
+
+            <span>
+              ⌕
+            </span>
+
             <input
               id="searchInput"
               type="search"
               placeholder="Search username..."
               autocomplete="off"
             />
+
           </div>
 
-          <div id="searchResults" class="search-results">
+
+          <div
+            id="searchResults"
+            class="search-results"
+          >
             <div class="empty-state">
               Search for someone to get started.
             </div>
@@ -1720,53 +1800,84 @@
         </section>
 
 
-        <!-- ================= CREATE ================= -->
+        <!-- CREATE -->
+
         <section id="createPage" class="page">
 
           <div class="page-heading">
-            <h2>Create</h2>
-            <p>Ask something the community can vote on.</p>
+
+            <h2>
+              Create
+            </h2>
+
+            <p>
+              Ask something the community can vote on.
+            </p>
+
           </div>
+
 
           <div class="create-card">
 
-            <h3>New poll</h3>
+            <h3>
+              New poll
+            </h3>
+
             <p class="muted">
               Keep it simple, interesting and easy to answer.
             </p>
 
+
             <div class="field">
-              <label>Question</label>
+
+              <label>
+                Question
+              </label>
+
               <textarea
                 id="pollQuestion"
                 class="create-question"
                 placeholder="What do you want to ask?"
                 maxlength="300"
               ></textarea>
+
             </div>
 
+
             <div class="field">
-              <label>Options</label>
+
+              <label>
+                Options
+              </label>
+
 
               <div id="pollOptions">
+
                 <div class="option-input-row">
+
                   <input
                     class="poll-option-input"
                     type="text"
                     placeholder="Option 1"
                     maxlength="100"
                   />
+
                 </div>
 
+
                 <div class="option-input-row">
+
                   <input
                     class="poll-option-input"
                     type="text"
                     placeholder="Option 2"
                     maxlength="100"
                   />
+
                 </div>
+
               </div>
+
 
               <button
                 class="add-option-btn"
@@ -1774,7 +1885,9 @@
               >
                 + Add option
               </button>
+
             </div>
+
 
             <button
               class="create-submit"
@@ -1788,10 +1901,14 @@
         </section>
 
 
-        <!-- ================= CHAT ================= -->
+        <!-- CHAT -->
+
         <section id="chatPage" class="page">
 
-          <div class="chat-page-layout" id="chatPageLayout">
+          <div
+            class="chat-page-layout"
+            id="chatPageLayout"
+          >
 
             <aside class="chat-sidebar">
 
@@ -1811,7 +1928,11 @@
 
               </div>
 
-              <div id="chatUsers" class="chat-users">
+
+              <div
+                id="chatUsers"
+                class="chat-users"
+              >
                 <div class="empty-state">
                   Loading...
                 </div>
@@ -1822,11 +1943,18 @@
 
             <section class="chat-panel">
 
-              <div id="chatEmpty" class="chat-empty">
+              <div
+                id="chatEmpty"
+                class="chat-empty"
+              >
 
-                <div class="chat-empty-icon">💬</div>
+                <div class="chat-empty-icon">
+                  💬
+                </div>
 
-                <strong>Your messages</strong>
+                <strong>
+                  Your messages
+                </strong>
 
                 <span>
                   Select someone and start a conversation.
@@ -1835,7 +1963,10 @@
               </div>
 
 
-              <div id="chatArea" class="hidden">
+              <div
+                id="chatArea"
+                class="hidden"
+              >
 
                 <div class="chat-header">
 
@@ -1847,12 +1978,14 @@
                     ←
                   </button>
 
+
                   <img
                     id="chatProfileAvatar"
                     class="chat-header-avatar"
                     src=""
                     alt=""
                   />
+
 
                   <div class="chat-header-info">
 
@@ -1868,6 +2001,7 @@
                     </div>
 
                   </div>
+
 
                   <button
                     class="icon-btn"
@@ -1914,7 +2048,8 @@
         </section>
 
 
-        <!-- ================= PROFILE ================= -->
+        <!-- PROFILE -->
+
         <section id="profilePage" class="page">
 
           <div class="profile-card">
@@ -1932,29 +2067,33 @@
                   alt="Profile"
                 />
 
+
                 <button
                   id="avatarUploadBtn"
                   class="profile-edit-btn"
+                  type="button"
                 >
                   Change photo
                 </button>
 
+
                 <input
-  id="avatarInput"
-  type="file"
-  accept="image/*"
-  aria-label="Choose profile photo"
-  style="
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    overflow: hidden;
-    z-index: -1;
-  "
-/>
+                  id="avatarInput"
+                  type="file"
+                  accept="image/*"
+                  aria-label="Choose profile photo"
+                  style="
+                    position:absolute;
+                    width:1px;
+                    height:1px;
+                    opacity:0;
+                    overflow:hidden;
+                    z-index:-1;
+                  "
+                />
 
               </div>
+
 
               <div
                 id="profileName"
@@ -1963,12 +2102,14 @@
                 User
               </div>
 
+
               <div
                 id="profileUsername"
                 class="profile-handle"
               >
                 @username
               </div>
+
 
               <div
                 id="profileBio"
@@ -1981,23 +2122,42 @@
               <div class="profile-stats">
 
                 <div class="profile-stat">
-                  <strong id="profilePollCount">0</strong>
-                  <span>Polls</span>
+                  <strong id="profilePollCount">
+                    0
+                  </strong>
+                  <span>
+                    Polls
+                  </span>
                 </div>
 
-                <div class="profile-stat">
-                  <strong id="profileVoteCount">0</strong>
-                  <span>Votes</span>
-                </div>
 
                 <div class="profile-stat">
-                  <strong id="profileFollowers">0</strong>
-                  <span>Followers</span>
+                  <strong id="profileVoteCount">
+                    0
+                  </strong>
+                  <span>
+                    Votes
+                  </span>
                 </div>
 
+
                 <div class="profile-stat">
-                  <strong id="profileFollowing">0</strong>
-                  <span>Following</span>
+                  <strong id="profileFollowers">
+                    0
+                  </strong>
+                  <span>
+                    Followers
+                  </span>
+                </div>
+
+
+                <div class="profile-stat">
+                  <strong id="profileFollowing">
+                    0
+                  </strong>
+                  <span>
+                    Following
+                  </span>
                 </div>
 
               </div>
@@ -2016,6 +2176,7 @@
               Polls
             </button>
 
+
             <button
               class="profile-tab"
               data-profile-tab="votes"
@@ -2023,12 +2184,14 @@
               Votes
             </button>
 
+
             <button
               class="profile-tab"
               data-profile-tab="followers"
             >
               Followers
             </button>
+
 
             <button
               class="profile-tab"
@@ -2040,7 +2203,10 @@
           </div>
 
 
-          <div id="profileContent" class="profile-content">
+          <div
+            id="profileContent"
+            class="profile-content"
+          >
             <div class="empty-state">
               Loading profile...
             </div>
@@ -2049,13 +2215,19 @@
         </section>
 
 
-        <!-- ================= PUBLIC USER PROFILE ================= -->
-        <section id="userProfilePage" class="page">
+        <!-- PUBLIC PROFILE -->
+
+        <section
+          id="userProfilePage"
+          class="page"
+        >
 
           <div id="publicProfileContainer">
+
             <div class="empty-state">
               Loading profile...
             </div>
+
           </div>
 
         </section>
@@ -2063,7 +2235,7 @@
       </main>
 
 
-      <!-- ================= BOTTOM NAV ================= -->
+      <!-- BOTTOM NAV -->
 
       <nav class="bottom-nav">
 
@@ -2072,35 +2244,59 @@
           id="navHome"
           onclick="showPage('homePage')"
         >
-          <span class="nav-icon">⌂</span>
-          <span>Home</span>
+          <span class="nav-icon">
+            ⌂
+          </span>
+
+          <span>
+            Home
+          </span>
         </button>
+
 
         <button
           class="nav-btn"
           id="navSearch"
           onclick="showPage('searchPage')"
         >
-          <span class="nav-icon">⌕</span>
-          <span>Search</span>
+          <span class="nav-icon">
+            ⌕
+          </span>
+
+          <span>
+            Search
+          </span>
         </button>
+
 
         <button
           class="nav-btn nav-create"
           id="navCreate"
           onclick="showPage('createPage')"
         >
-          <span class="nav-icon">+</span>
-          <span>Create</span>
+          <span class="nav-icon">
+            +
+          </span>
+
+          <span>
+            Create
+          </span>
         </button>
+
 
         <button
           class="nav-btn"
           id="navChat"
           onclick="showPage('chatPage')"
         >
-          <span class="nav-icon">◌</span>
-          <span>Chat</span>
+          <span class="nav-icon">
+            ◌
+          </span>
+
+          <span>
+            Chat
+          </span>
+
           <span
             id="chatBadge"
             class="nav-badge hidden"
@@ -2109,13 +2305,20 @@
           </span>
         </button>
 
+
         <button
           class="nav-btn"
           id="navProfile"
           onclick="showPage('profilePage')"
         >
-          <span class="nav-icon">◯</span>
-          <span>Profile</span>
+          <span class="nav-icon">
+            ◯
+          </span>
+
+          <span>
+            Profile
+          </span>
+
           <span
             id="profileBadge"
             class="nav-badge hidden"
@@ -2127,13 +2330,18 @@
       </nav>
 
     </div>
+
   </section>
 
 
-  <div id="toast" class="toast"></div>
+  <div
+    id="toast"
+    class="toast"
+  ></div>
 
 
   <script>
+
     /* ============================================================
        SUPABASE
     ============================================================ */
@@ -2157,9 +2365,12 @@
        HELPERS
     ============================================================ */
 
-    const $ = (id) => document.getElementById(id);
+    const $ = (id) =>
+      document.getElementById(id);
+
 
     function escapeHtml(value){
+
       return String(value ?? "")
         .replace(/&/g,"&amp;")
         .replace(/</g,"&lt;")
@@ -2168,7 +2379,9 @@
         .replace(/'/g,"&#039;");
     }
 
+
     function avatarUrl(profile){
+
       return (
         profile?.avatar_url ||
         profile?.avatar ||
@@ -2182,49 +2395,81 @@
       );
     }
 
+
     function showToast(message){
+
       const toast = $("toast");
 
       if(!toast) return;
 
       toast.textContent = message;
+
       toast.classList.add("show");
 
       clearTimeout(window.__toastTimer);
 
-      window.__toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-      },2500);
+      window.__toastTimer =
+        setTimeout(() => {
+
+          toast.classList.remove("show");
+
+        },2500);
     }
+
 
     function timeAgo(date){
+
       if(!date) return "";
 
-      const seconds = Math.floor(
-        (Date.now() - new Date(date).getTime()) / 1000
-      );
+      const seconds =
+        Math.floor(
+          (Date.now() -
+            new Date(date).getTime()) /
+          1000
+        );
 
-      if(seconds < 60) return "just now";
+      if(seconds < 60){
+        return "just now";
+      }
 
-      const minutes = Math.floor(seconds / 60);
-      if(minutes < 60) return `${minutes}m`;
+      const minutes =
+        Math.floor(seconds / 60);
 
-      const hours = Math.floor(minutes / 60);
-      if(hours < 24) return `${hours}h`;
+      if(minutes < 60){
+        return `${minutes}m`;
+      }
 
-      const days = Math.floor(hours / 24);
-      if(days < 7) return `${days}d`;
+      const hours =
+        Math.floor(minutes / 60);
 
-      return new Date(date).toLocaleDateString();
+      if(hours < 24){
+        return `${hours}h`;
+      }
+
+      const days =
+        Math.floor(hours / 24);
+
+      if(days < 7){
+        return `${days}d`;
+      }
+
+      return new Date(date)
+        .toLocaleDateString();
     }
 
+
     function formatTime(date){
+
       if(!date) return "";
 
-      return new Date(date).toLocaleTimeString([],{
-        hour:"2-digit",
-        minute:"2-digit"
-      });
+      return new Date(date)
+        .toLocaleTimeString(
+          [],
+          {
+            hour:"2-digit",
+            minute:"2-digit"
+          }
+        );
     }
 
 
@@ -2235,20 +2480,29 @@
     function initSupabase(){
 
       if(!window.supabase){
-        console.error("Supabase library not loaded.");
+
+        console.error(
+          "Supabase library not loaded."
+        );
+
         return;
       }
 
-      sb = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY,
-        {
-          auth:{
-            persistSession:true,
-            autoRefreshToken:true,
-            detectSessionInUrl:true
+      sb =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+          {
+            auth:{
+              persistSession:true,
+              autoRefreshToken:true,
+              detectSessionInUrl:true
+            }
           }
-        }
+        );
+
+      console.log(
+        "Supabase initialized."
       );
     }
 
@@ -2261,23 +2515,30 @@
 
       authMode = mode;
 
-      const signup = mode === "signup";
+      const signup =
+        mode === "signup";
 
       $("authHeading").textContent =
-        signup ? "Create your account" : "Welcome back";
+        signup
+          ? "Create your account"
+          : "Welcome back";
 
       $("authCopy").textContent =
         signup
           ? "Join Poll Pulse and start sharing your opinions."
           : "Sign in and see what everyone is voting on.";
 
-      $("usernameField").classList.toggle(
-        "hidden",
-        !signup
-      );
+      $("usernameField")
+        .classList
+        .toggle(
+          "hidden",
+          !signup
+        );
 
       $("authButton").textContent =
-        signup ? "Create account" : "Sign In";
+        signup
+          ? "Create account"
+          : "Sign In";
 
       $("authSwitchText").textContent =
         signup
@@ -2293,65 +2554,89 @@
     }
 
 
-    $("authSwitchBtn").addEventListener(
-      "click",
-      () => {
-        setAuthMode(
-          authMode === "login"
-            ? "signup"
-            : "login"
-        );
-      }
-    );
+    $("authSwitchBtn")
+      .addEventListener(
+        "click",
+        () => {
 
+          setAuthMode(
+            authMode === "login"
+              ? "signup"
+              : "login"
+          );
 
-    $("authButton").addEventListener(
-      "click",
-      handleAuth
-    );
-
-
-    $("passwordInput").addEventListener(
-      "keydown",
-      e => {
-        if(e.key === "Enter"){
-          handleAuth();
         }
-      }
-    );
+      );
+
+
+    $("authButton")
+      .addEventListener(
+        "click",
+        handleAuth
+      );
+
+
+    $("passwordInput")
+      .addEventListener(
+        "keydown",
+        event => {
+
+          if(event.key === "Enter"){
+            handleAuth();
+          }
+
+        }
+      );
 
 
     async function handleAuth(){
 
       if(!sb){
-        showAuthError("Supabase is not ready.");
+
+        showAuthError(
+          "Supabase is not ready."
+        );
+
         return;
       }
 
       const email =
-        $("emailInput").value.trim();
+        $("emailInput")
+          .value
+          .trim();
 
       const password =
-        $("passwordInput").value;
+        $("passwordInput")
+          .value;
 
       const username =
-        $("usernameInput").value.trim();
+        $("usernameInput")
+          .value
+          .trim();
 
       if(!email || !password){
+
         showAuthError(
           "Please enter your email and password."
         );
+
         return;
       }
 
-      if(authMode === "signup" && !username){
+      if(
+        authMode === "signup" &&
+        !username
+      ){
+
         showAuthError(
           "Please choose a username."
         );
+
         return;
       }
 
       $("authButton").disabled = true;
+
       $("authButton").textContent =
         authMode === "signup"
           ? "Creating..."
@@ -2365,23 +2650,28 @@
 
           result =
             await sb.auth.signUp({
+
               email,
               password,
+
               options:{
                 data:{
                   username
                 }
               }
+
             });
 
         }else{
 
           result =
-            await sb.auth.signInWithPassword({
-              email,
-              password
-            });
+            await sb.auth
+              .signInWithPassword({
 
+                email,
+                password
+
+              });
         }
 
         if(result.error){
@@ -2392,11 +2682,16 @@
           authMode === "signup" &&
           !result.data.session
         ){
+
           showAuthError(
             "Account created. Check your email if confirmation is required."
           );
+
         }else{
-          $("authMessage").textContent = "";
+
+          $("authMessage").textContent =
+            "";
+
         }
 
       }catch(error){
@@ -2404,12 +2699,14 @@
         console.error(error);
 
         showAuthError(
-          error.message || "Something went wrong."
+          error.message ||
+          "Something went wrong."
         );
 
       }finally{
 
-        $("authButton").disabled = false;
+        $("authButton").disabled =
+          false;
 
         $("authButton").textContent =
           authMode === "signup"
@@ -2420,7 +2717,9 @@
 
 
     function showAuthError(message){
-      $("authMessage").textContent = message;
+
+      $("authMessage")
+        .textContent = message;
     }
 
 
@@ -2435,40 +2734,60 @@
       const {
         data,
         error
-      } = await sb.auth.getSession();
+      } =
+        await sb.auth.getSession();
 
       if(error){
+
         console.error(error);
+
         return;
       }
 
       if(data.session){
-        currentUser = data.session.user;
+
+        currentUser =
+          data.session.user;
+
         await enterApp();
+
       }else{
+
         showAuth();
       }
 
 
       sb.auth.onAuthStateChange(
-        async (event, session) => {
+        async (
+          event,
+          session
+        ) => {
 
-          if(event === "SIGNED_IN" && session){
+          if(
+            event === "SIGNED_IN" &&
+            session
+          ){
 
-            currentUser = session.user;
+            currentUser =
+              session.user;
+
             await enterApp();
-
           }
 
-          if(event === "SIGNED_OUT"){
+
+          if(
+            event === "SIGNED_OUT"
+          ){
 
             currentUser = null;
+
             currentProfile = null;
 
             cleanupRealtime();
 
             showAuth();
           }
+
         }
       );
     }
@@ -2476,15 +2795,25 @@
 
     function showAuth(){
 
-      $("authScreen").classList.remove("hidden");
-      $("app").classList.add("hidden");
+      $("authScreen")
+        .classList
+        .remove("hidden");
+
+      $("app")
+        .classList
+        .add("hidden");
     }
 
 
     async function enterApp(){
 
-      $("authScreen").classList.add("hidden");
-      $("app").classList.remove("hidden");
+      $("authScreen")
+        .classList
+        .add("hidden");
+
+      $("app")
+        .classList
+        .remove("hidden");
 
       await loadMyProfile();
 
@@ -2498,6 +2827,7 @@
       ]);
 
       setupRealtime();
+
       startMessageRefresh();
     }
 
@@ -2507,62 +2837,108 @@
     ============================================================ */
 
     const pageNavMap = {
+
       homePage:"navHome",
+
       searchPage:"navSearch",
+
       createPage:"navCreate",
+
       chatPage:"navChat",
+
       profilePage:"navProfile"
+
     };
 
 
     function showPage(pageId){
 
-      document.querySelectorAll(".page")
+      document
+        .querySelectorAll(".page")
         .forEach(page => {
-          page.classList.remove("active");
+
+          page.classList.remove(
+            "active"
+          );
+
         });
 
-      const page = $(pageId);
+
+      const page =
+        $(pageId);
 
       if(page){
-        page.classList.add("active");
+
+        page.classList.add(
+          "active"
+        );
       }
 
-      document.querySelectorAll(".nav-btn")
+
+      document
+        .querySelectorAll(".nav-btn")
         .forEach(btn => {
-          btn.classList.remove("active");
+
+          btn.classList.remove(
+            "active"
+          );
+
         });
+
 
       const navId =
         pageNavMap[pageId];
 
-      if(navId && $(navId)){
-        $(navId).classList.add("active");
+      if(
+        navId &&
+        $(navId)
+      ){
+
+        $(navId)
+          .classList
+          .add("active");
       }
 
+
       if(pageId === "homePage"){
+
         loadHome();
       }
 
+
       if(pageId === "searchPage"){
+
         setTimeout(() => {
-          $("searchInput")?.focus();
+
+          $("searchInput")
+            ?.focus();
+
         },100);
       }
 
+
       if(pageId === "chatPage"){
+
         loadChatUsers();
+
         updateChatBadge();
       }
 
+
       if(pageId === "profilePage"){
+
         loadProfile();
+
         loadNotifications();
       }
 
+
       window.scrollTo({
+
         top:0,
+
         behavior:"smooth"
+
       });
     }
 
@@ -2578,14 +2954,20 @@
       const {
         data,
         error
-      } = await sb
-        .from("profiles")
-        .select("*")
-        .eq("id",currentUser.id)
-        .maybeSingle();
+      } =
+        await sb
+          .from("profiles")
+          .select("*")
+          .eq("id",currentUser.id)
+          .maybeSingle();
 
       if(error){
-        console.error("Profile error:",error);
+
+        console.error(
+          "Profile error:",
+          error
+        );
+
         return;
       }
 
@@ -2594,10 +2976,13 @@
       if(!data){
 
         const username =
-          currentUser.user_metadata?.username ||
+          currentUser
+            .user_metadata
+            ?.username ||
           (
             currentUser.email
-              ? currentUser.email.split("@")[0]
+              ? currentUser.email
+                  .split("@")[0]
               : "user"
           );
 
@@ -2605,14 +2990,19 @@
           await sb
             .from("profiles")
             .insert({
+
               id:currentUser.id,
+
               username,
+
               display_name:username
+
             })
             .select()
             .single();
 
         if(!insertResult.error){
+
           currentProfile =
             insertResult.data;
         }
@@ -2625,14 +3015,17 @@
       if(!currentProfile) return;
 
       $("headerAvatar").src =
-        avatarUrl(currentProfile);
+        avatarUrl(
+          currentProfile
+        );
 
       const username =
         currentProfile.display_name ||
         currentProfile.username ||
         "there";
 
-      $("homeGreeting").textContent =
+      $("homeGreeting")
+        .textContent =
         `Hey ${username}, what's your opinion?`;
     }
 
@@ -2656,69 +3049,121 @@
         profile.username ||
         "User";
 
-      $("profileUsername").textContent =
+      $("profileUsername")
+        .textContent =
         profile.username
           ? `@${profile.username}`
           : "";
 
-      $("profileBio").textContent =
+      $("profileBio")
+        .textContent =
         profile.bio ||
         "Welcome to my Poll Pulse profile.";
+
 
       const [
         pollResult,
         voteResult,
         followersResult,
         followingResult
-      ] = await Promise.all([
+      ] =
+        await Promise.all([
 
-        sb
-          .from("polls")
-          .select("id",{count:"exact",head:true})
-          .eq("creator_id",currentUser.id),
+          sb
+            .from("polls")
+            .select(
+              "id",
+              {
+                count:"exact",
+                head:true
+              }
+            )
+            .eq(
+              "creator_id",
+              currentUser.id
+            ),
 
-        sb
-          .from("votes")
-          .select("id",{count:"exact",head:true})
-          .eq("user_id",currentUser.id),
+          sb
+            .from("votes")
+            .select(
+              "id",
+              {
+                count:"exact",
+                head:true
+              }
+            )
+            .eq(
+              "user_id",
+              currentUser.id
+            ),
 
-        sb
-          .from("follows")
-          .select("id",{count:"exact",head:true})
-          .eq("following_id",currentUser.id),
+          sb
+            .from("follows")
+            .select(
+              "id",
+              {
+                count:"exact",
+                head:true
+              }
+            )
+            .eq(
+              "following_id",
+              currentUser.id
+            ),
 
-        sb
-          .from("follows")
-          .select("id",{count:"exact",head:true})
-          .eq("follower_id",currentUser.id)
+          sb
+            .from("follows")
+            .select(
+              "id",
+              {
+                count:"exact",
+                head:true
+              }
+            )
+            .eq(
+              "follower_id",
+              currentUser.id
+            )
 
-      ]);
+        ]);
 
-      $("profilePollCount").textContent =
+
+      $("profilePollCount")
+        .textContent =
         pollResult.count || 0;
 
-      $("profileVoteCount").textContent =
+      $("profileVoteCount")
+        .textContent =
         voteResult.count || 0;
 
-      $("profileFollowers").textContent =
+      $("profileFollowers")
+        .textContent =
         followersResult.count || 0;
 
-      $("profileFollowing").textContent =
+      $("profileFollowing")
+        .textContent =
         followingResult.count || 0;
 
-      loadProfileTab("polls");
+      await loadProfileTab(
+        "polls"
+      );
     }
 
 
     async function loadProfileTab(tab){
 
-      document.querySelectorAll(".profile-tab")
+      document
+        .querySelectorAll(".profile-tab")
         .forEach(button => {
+
           button.classList.toggle(
             "active",
-            button.dataset.profileTab === tab
+            button.dataset.profileTab ===
+            tab
           );
+
         });
+
 
       const container =
         $("profileContent");
@@ -2729,25 +3174,40 @@
           Loading...
         </div>`;
 
+
       if(tab === "polls"){
-        await loadMyPolls(container);
+
+        await loadMyPolls(
+          container
+        );
+
         return;
       }
+
 
       if(tab === "votes"){
-        await loadMyVotes(container);
+
+        await loadMyVotes(
+          container
+        );
+
         return;
       }
 
+
       if(tab === "followers"){
+
         await loadFollowList(
           container,
           "followers"
         );
+
         return;
       }
 
+
       if(tab === "following"){
+
         await loadFollowList(
           container,
           "following"
@@ -2756,81 +3216,156 @@
     }
 
 
-    async function loadMyPolls(container){
+    async function loadMyPolls(
+      container
+    ){
 
       const {
         data,
         error
-      } = await sb
-        .from("polls")
-        .select("*")
-        .eq("creator_id",currentUser.id)
-        .order("created_at",{ascending:false});
+      } =
+        await sb
+          .from("polls")
+          .select("*")
+          .eq(
+            "creator_id",
+            currentUser.id
+          )
+          .order(
+            "created_at",
+            {
+              ascending:false
+            }
+          );
 
       if(error){
+
         container.innerHTML =
           `<div class="empty-state">
             Unable to load polls.
           </div>`;
+
         return;
       }
 
+
       if(!data?.length){
+
         container.innerHTML =
           `<div class="empty-state">
             You haven't created any polls yet.
           </div>`;
+
         return;
       }
 
+
+      const creator =
+        currentProfile || {};
+
+      data.forEach(
+        poll => {
+          poll.__creator =
+            creator;
+        }
+      );
+
+
       container.innerHTML =
-        data.map(renderPollCard).join("");
+        data
+          .map(renderPollCard)
+          .join("");
+
+
+      await hydratePollStats(
+        data
+      );
     }
 
 
-    async function loadMyVotes(container){
+    async function loadMyVotes(
+      container
+    ){
 
       const {
         data,
         error
-      } = await sb
-        .from("votes")
-        .select("*")
-        .eq("user_id",currentUser.id)
-        .order("created_at",{ascending:false});
+      } =
+        await sb
+          .from("votes")
+          .select("*")
+          .eq(
+            "user_id",
+            currentUser.id
+          )
+          .order(
+            "created_at",
+            {
+              ascending:false
+            }
+          );
 
       if(error){
+
         container.innerHTML =
           `<div class="empty-state">
             Unable to load votes.
           </div>`;
+
         return;
       }
 
+
       if(!data?.length){
+
         container.innerHTML =
           `<div class="empty-state">
             You haven't voted on any polls yet.
           </div>`;
+
         return;
       }
 
+
       container.innerHTML =
-        data.map(vote => `
-          <div class="notification-card">
-            <div class="notification-icon">✓</div>
-            <div class="notification-text">
-              You voted on a poll.
-              <div style="color:var(--muted);font-size:10px;margin-top:3px">
-                ${timeAgo(vote.created_at)}
+        data
+          .map(vote => `
+
+            <div class="notification-card">
+
+              <div class="notification-icon">
+                ✓
               </div>
+
+              <div class="notification-text">
+
+                You voted on a poll.
+
+                <div
+                  style="
+                    color:var(--muted);
+                    font-size:10px;
+                    margin-top:3px
+                  "
+                >
+                  ${timeAgo(
+                    vote.created_at
+                  )}
+                </div>
+
+              </div>
+
             </div>
-          </div>
-        `).join("");
+
+          `)
+          .join("");
     }
 
 
-    async function loadFollowList(container,type){
+    async function loadFollowList(
+      container,
+      type
+    ){
 
       const column =
         type === "followers"
@@ -2842,83 +3377,126 @@
           ? "follower_id"
           : "following_id";
 
+
       const {
         data,
         error
-      } = await sb
-        .from("follows")
-        .select(`*, profiles:${otherColumn}(id,username,display_name,avatar_url)`)
-        .eq(column,currentUser.id);
+      } =
+        await sb
+          .from("follows")
+          .select(
+            `*,
+             profiles:${otherColumn}(
+               id,
+               username,
+               display_name,
+               avatar_url
+             )`
+          )
+          .eq(
+            column,
+            currentUser.id
+          );
+
 
       if(error){
+
         container.innerHTML =
           `<div class="empty-state">
             Unable to load list.
           </div>`;
+
         return;
       }
 
+
       if(!data?.length){
+
         container.innerHTML =
           `<div class="empty-state">
             No ${type} yet.
           </div>`;
+
         return;
       }
 
+
       container.innerHTML =
-        data.map(item => {
+        data
+          .map(item => {
 
-          const p = item.profiles;
+            const p =
+              item.profiles;
 
-          if(!p) return "";
+            if(!p) return "";
 
-          return `
-            <div
-              class="search-user"
-              onclick="openUserProfile('${p.id}')"
-            >
-              <img
-                class="search-user-avatar"
-                src="${escapeHtml(avatarUrl(p))}"
-              />
+            return `
 
-              <div class="search-user-info">
-                <div class="search-user-name">
-                  ${escapeHtml(
-                    p.display_name ||
-                    p.username ||
-                    "User"
-                  )}
+              <div
+                class="search-user"
+                onclick="openUserProfile('${p.id}')"
+              >
+
+                <img
+                  class="search-user-avatar"
+                  src="${escapeHtml(
+                    avatarUrl(p)
+                  )}"
+                  alt=""
+                />
+
+                <div class="search-user-info">
+
+                  <div class="search-user-name">
+                    ${escapeHtml(
+                      p.display_name ||
+                      p.username ||
+                      "User"
+                    )}
+                  </div>
+
+                  <div class="search-user-handle">
+                    @${escapeHtml(
+                      p.username || ""
+                    )}
+                  </div>
+
                 </div>
 
-                <div class="search-user-handle">
-                  @${escapeHtml(p.username || "")}
-                </div>
+                <button
+                  class="search-user-btn"
+                  onclick="
+                    event.stopPropagation();
+                    openUserProfile('${p.id}')
+                  "
+                >
+                  View
+                </button>
+
               </div>
 
-              <button
-                class="search-user-btn"
-                onclick="event.stopPropagation();openUserProfile('${p.id}')"
-              >
-                View
-              </button>
-            </div>
-          `;
-        }).join("");
+            `;
+
+          })
+          .join("");
     }
 
 
-    document.querySelectorAll(".profile-tab")
+    document
+      .querySelectorAll(".profile-tab")
       .forEach(button => {
+
         button.addEventListener(
           "click",
           () => {
+
             loadProfileTab(
               button.dataset.profileTab
             );
+
           }
         );
+
       });
 
 
@@ -2926,51 +3504,84 @@
        AVATAR
     ============================================================ */
 
-    const avatarUploadBtn = $("avatarUploadBtn");
-const avatarInput = $("avatarInput");
+    const avatarUploadBtn =
+      $("avatarUploadBtn");
 
-if (avatarUploadBtn && avatarInput) {
+    const avatarInput =
+      $("avatarInput");
 
-  avatarUploadBtn.addEventListener("click", function(event) {
-    event.preventDefault();
-    event.stopPropagation();
 
-    if (!currentUser) {
-      showToast("Please sign in first.");
-      return;
+    if(
+      avatarUploadBtn &&
+      avatarInput
+    ){
+
+      avatarUploadBtn
+        .addEventListener(
+          "click",
+          event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            if(!currentUser){
+
+              showToast(
+                "Please sign in first."
+              );
+
+              return;
+            }
+
+            avatarInput.value = "";
+
+            avatarInput.click();
+          }
+        );
+
+
+      avatarInput
+        .addEventListener(
+          "change",
+          uploadAvatar
+        );
     }
 
-    avatarInput.value = "";
-    avatarInput.click();
-  });
 
-  avatarInput.addEventListener(
-    "change",
-    uploadAvatar
-  );
-}
- if (avatarInput) {
-  avatarInput.addEventListener("change", uploadAvatar);
-}     
-    );
-
-
-    async function uploadAvatar(event){
+    async function uploadAvatar(
+      event
+    ){
 
       const file =
-        event.target.files?.[0];
+        event.target
+          .files?.[0];
 
-      if(!file || !currentUser) return;
+      if(
+        !file ||
+        !currentUser
+      ){
+        return;
+      }
+
 
       try{
 
-        showToast("Uploading photo...");
+        showToast(
+          "Uploading photo..."
+        );
+
 
         const extension =
-          file.name.split(".").pop() || "jpg";
+          file.name
+            .split(".")
+            .pop() ||
+          "jpg";
+
 
         const path =
           `${currentUser.id}/${Date.now()}.${extension}`;
+
 
         const upload =
           await sb.storage
@@ -2984,31 +3595,48 @@ if (avatarUploadBtn && avatarInput) {
               }
             );
 
+
         if(upload.error){
           throw upload.error;
         }
+
 
         const {
           data
         } =
           sb.storage
             .from("avatars")
-            .getPublicUrl(path);
+            .getPublicUrl(
+              path
+            );
+
 
         const update =
           await sb
             .from("profiles")
             .update({
-              avatar_url:data.publicUrl
+              avatar_url:
+                data.publicUrl
             })
-            .eq("id",currentUser.id);
+            .eq(
+              "id",
+              currentUser.id
+            );
+
 
         if(update.error){
           throw update.error;
         }
 
+
+        if(!currentProfile){
+          currentProfile = {};
+        }
+
+
         currentProfile.avatar_url =
           data.publicUrl;
+
 
         $("profileAvatar").src =
           data.publicUrl;
@@ -3016,11 +3644,16 @@ if (avatarUploadBtn && avatarInput) {
         $("headerAvatar").src =
           data.publicUrl;
 
-        showToast("Profile photo updated!");
+
+        showToast(
+          "Profile photo updated!"
+        );
+
 
       }catch(error){
 
         console.error(error);
+
         showToast(
           error.message ||
           "Unable to upload photo."
@@ -3051,14 +3684,20 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       const {
         data,
         error
-      } = await sb
-        .from("profiles")
-        .select("*")
-        .neq("id",currentUser.id)
-        .limit(10);
+      } =
+        await sb
+          .from("profiles")
+          .select("*")
+          .neq(
+            "id",
+            currentUser.id
+          )
+          .limit(10);
+
 
       if(error){
 
@@ -3072,6 +3711,7 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       if(!data?.length){
 
         container.innerHTML =
@@ -3082,42 +3722,61 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       container.innerHTML =
-        data.map(p => `
-          <div class="suggestion-card">
+        data
+          .map(p => `
 
-            <div
-              class="suggestion-top"
-              onclick="openUserProfile('${p.id}')"
-            >
-              <img
-                class="suggestion-avatar"
-                src="${escapeHtml(avatarUrl(p))}"
-                alt=""
-              />
+            <div class="suggestion-card">
 
-              <div class="suggestion-name">
-                ${escapeHtml(
-                  p.display_name ||
-                  p.username ||
-                  "User"
-                )}
+              <div
+                class="suggestion-top"
+                onclick="openUserProfile('${p.id}')"
+              >
+
+                <img
+                  class="suggestion-avatar"
+                  src="${escapeHtml(
+                    avatarUrl(p)
+                  )}"
+                  alt=""
+                />
+
+                <div class="suggestion-name">
+                  ${escapeHtml(
+                    p.display_name ||
+                    p.username ||
+                    "User"
+                  )}
+                </div>
+
               </div>
+
+
+              <p>
+                @${escapeHtml(
+                  p.username ||
+                  "user"
+                )}
+              </p>
+
+
+              <button
+                class="follow-btn"
+                onclick="
+                  toggleFollow(
+                    '${p.id}',
+                    this
+                  )
+                "
+              >
+                Follow
+              </button>
+
             </div>
 
-            <p>
-              @${escapeHtml(p.username || "user")}
-            </p>
-
-            <button
-              class="follow-btn"
-              onclick="toggleFollow('${p.id}',this)"
-            >
-              Follow
-            </button>
-
-          </div>
-        `).join("");
+          `)
+          .join("");
     }
 
 
@@ -3132,14 +3791,22 @@ if (avatarUploadBtn && avatarInput) {
           Loading polls...
         </div>`;
 
+
       const {
         data,
         error
-      } = await sb
-        .from("polls")
-        .select("*")
-        .order("created_at",{ascending:false})
-        .limit(30);
+      } =
+        await sb
+          .from("polls")
+          .select("*")
+          .order(
+            "created_at",
+            {
+              ascending:false
+            }
+          )
+          .limit(30);
+
 
       if(error){
 
@@ -3153,29 +3820,44 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       if(!data?.length){
 
         feed.innerHTML =
           `<div class="empty-state">
-            <div style="font-size:30px;margin-bottom:8px">
+
+            <div
+              style="
+                font-size:30px;
+                margin-bottom:8px
+              "
+            >
               🗳️
             </div>
-            No polls yet.<br>
+
+            No polls yet.
+            <br>
             Be the first to create one!
+
           </div>`;
 
         return;
       }
 
+
       const creatorIds = [
         ...new Set(
           data
-            .map(p => p.creator_id)
+            .map(
+              p => p.creator_id
+            )
             .filter(Boolean)
         )
       ];
 
+
       let profiles = [];
+
 
       if(creatorIds.length){
 
@@ -3183,60 +3865,93 @@ if (avatarUploadBtn && avatarInput) {
           await sb
             .from("profiles")
             .select("*")
-            .in("id",creatorIds);
+            .in(
+              "id",
+              creatorIds
+            );
 
         profiles =
           result.data || [];
       }
 
+
       const profileMap =
         Object.fromEntries(
-          profiles.map(p => [p.id,p])
+          profiles.map(
+            p => [p.id,p]
+          )
         );
 
+
       feed.innerHTML =
-        data.map(p => {
+        data
+          .map(p => {
 
-          p.__creator =
-            profileMap[p.creator_id];
+            p.__creator =
+              profileMap[
+                p.creator_id
+              ];
 
-          return renderPollCard(p);
+            return renderPollCard(p);
 
-        }).join("");
+          })
+          .join("");
 
-      await hydratePollStats(data);
+
+      await hydratePollStats(
+        data
+      );
     }
 
 
     function parseOptions(poll){
 
-      if(Array.isArray(poll.options)){
+      if(Array.isArray(
+        poll.options
+      )){
+
         return poll.options;
       }
 
-      if(typeof poll.options === "string"){
+
+      if(
+        typeof poll.options ===
+        "string"
+      ){
 
         try{
-          const parsed =
-            JSON.parse(poll.options);
 
-          if(Array.isArray(parsed)){
+          const parsed =
+            JSON.parse(
+              poll.options
+            );
+
+          if(
+            Array.isArray(parsed)
+          ){
+
             return parsed;
           }
+
         }catch(e){
 
           return poll.options
             .split(",")
-            .map(x => x.trim())
+            .map(
+              x => x.trim()
+            )
             .filter(Boolean);
         }
       }
+
 
       return [];
     }
 
 
-    function renderPollCard(poll){
+    function renderPollCard(
+      poll
+    ){
 
       const creator =
         poll.__creator || {};
@@ -3249,7 +3964,9 @@ if (avatarUploadBtn && avatarInput) {
         poll.title ||
         "Untitled poll";
 
+
       return `
+
         <article
           class="poll-card"
           id="poll-${poll.id}"
@@ -3260,38 +3977,61 @@ if (avatarUploadBtn && avatarInput) {
 
             <div
               class="poll-author"
-              onclick="openUserProfile('${poll.creator_id}')"
+              onclick="
+                openUserProfile(
+                  '${poll.creator_id}'
+                )
+              "
             >
 
               <img
                 class="poll-avatar"
-                src="${escapeHtml(avatarUrl(creator))}"
+                src="${escapeHtml(
+                  avatarUrl(creator)
+                )}"
                 alt=""
               />
 
-              <div style="min-width:0">
+
+              <div
+                style="min-width:0"
+              >
 
                 <div class="poll-author-name">
+
                   ${escapeHtml(
                     creator.display_name ||
                     creator.username ||
                     "User"
                   )}
+
                 </div>
 
+
                 <div class="poll-time">
+
                   @${escapeHtml(
-                    creator.username || "user"
+                    creator.username ||
+                    "user"
                   )}
+
                   ·
-                  ${timeAgo(poll.created_at)}
+
+                  ${timeAgo(
+                    poll.created_at
+                  )}
+
                 </div>
 
               </div>
 
             </div>
 
-            <button class="poll-menu">
+
+            <button
+              class="poll-menu"
+              type="button"
+            >
               •••
             </button>
 
@@ -3299,43 +4039,60 @@ if (avatarUploadBtn && avatarInput) {
 
 
           <h3 class="poll-question">
-            ${escapeHtml(question)}
+            ${escapeHtml(
+              question
+            )}
           </h3>
 
 
           <div class="poll-options">
 
-            ${options.map((option,index) => `
+            ${options
+              .map(
+                (option,index) => `
 
-              <button
-                class="poll-option"
-                data-option-index="${index}"
-                onclick="voteOnPoll('${poll.id}',${index})"
-              >
-
-                <span
-                  class="poll-progress"
-                  data-progress
-                ></span>
-
-                <span class="poll-option-content">
-
-                  <span>
-                    ${escapeHtml(option)}
-                  </span>
-
-                  <span
-                    class="poll-percent"
-                    data-percent
+                  <button
+                    class="poll-option"
+                    data-option-index="${index}"
+                    onclick="
+                      voteOnPoll(
+                        '${poll.id}',
+                        ${index}
+                      )
+                    "
                   >
-                    0%
-                  </span>
 
-                </span>
+                    <span
+                      class="poll-progress"
+                      data-progress
+                    ></span>
 
-              </button>
 
-            `).join("")}
+                    <span
+                      class="poll-option-content"
+                    >
+
+                      <span>
+                        ${escapeHtml(
+                          option
+                        )}
+                      </span>
+
+
+                      <span
+                        class="poll-percent"
+                        data-percent
+                      >
+                        0%
+                      </span>
+
+                    </span>
+
+                  </button>
+
+                `
+              )
+              .join("")}
 
           </div>
 
@@ -3349,11 +4106,22 @@ if (avatarUploadBtn && avatarInput) {
               0 votes
             </span>
 
+
             <button
               class="like-btn"
-              onclick="toggleLike('${poll.id}',this)"
+              onclick="
+                toggleLike(
+                  '${poll.id}',
+                  this
+                )
+              "
             >
-              ♡ <span data-like-count>0</span>
+              ♡
+              <span
+                data-like-count
+              >
+                0
+              </span>
             </button>
 
           </div>
@@ -3363,42 +4131,79 @@ if (avatarUploadBtn && avatarInput) {
     }
 
 
-    async function hydratePollStats(polls){
+    async function hydratePollStats(
+      polls
+    ){
 
-      for(const poll of polls){
+      if(!currentUser) return;
+
+
+      for(
+        const poll of polls
+      ){
 
         const [
           votesResult,
           likesResult,
           myVoteResult,
           myLikeResult
-        ] = await Promise.all([
+        ] =
+          await Promise.all([
 
-          sb
-            .from("votes")
-            .select("option_index")
-            .eq("poll_id",poll.id),
+            sb
+              .from("votes")
+              .select(
+                "option_index"
+              )
+              .eq(
+                "poll_id",
+                poll.id
+              ),
 
-          sb
-            .from("likes")
-            .select("id",{count:"exact",head:true})
-            .eq("poll_id",poll.id),
+            sb
+              .from("likes")
+              .select(
+                "id",
+                {
+                  count:"exact",
+                  head:true
+                }
+              )
+              .eq(
+                "poll_id",
+                poll.id
+              ),
 
-          sb
-            .from("votes")
-            .select("option_index")
-            .eq("poll_id",poll.id)
-            .eq("user_id",currentUser.id)
-            .maybeSingle(),
+            sb
+              .from("votes")
+              .select(
+                "option_index"
+              )
+              .eq(
+                "poll_id",
+                poll.id
+              )
+              .eq(
+                "user_id",
+                currentUser.id
+              )
+              .maybeSingle(),
 
-          sb
-            .from("likes")
-            .select("id")
-            .eq("poll_id",poll.id)
-            .eq("user_id",currentUser.id)
-            .maybeSingle()
+            sb
+              .from("likes")
+              .select("id")
+              .eq(
+                "poll_id",
+                poll.id
+              )
+              .eq(
+                "user_id",
+                currentUser.id
+              )
+              .maybeSingle()
 
-        ]);
+          ]);
+
 
         const votes =
           votesResult.data || [];
@@ -3406,59 +4211,86 @@ if (avatarUploadBtn && avatarInput) {
         const total =
           votes.length;
 
+
         const card =
           document.querySelector(
             `[data-poll-id="${poll.id}"]`
           );
 
+
         if(!card) continue;
 
+
         card
-          .querySelectorAll(".poll-option")
-          .forEach((button,index) => {
+          .querySelectorAll(
+            ".poll-option"
+          )
+          .forEach(
+            (
+              button,
+              index
+            ) => {
 
-            const count =
-              votes.filter(
-                v =>
-                  Number(v.option_index) === index
-              ).length;
+              const count =
+                votes.filter(
+                  v =>
+                    Number(
+                      v.option_index
+                    ) === index
+                ).length;
 
-            const percent =
-              total
-                ? Math.round(
-                    count / total * 100
-                  )
-                : 0;
 
-            const progress =
-              button.querySelector(
-                "[data-progress]"
-              );
+              const percent =
+                total
+                  ? Math.round(
+                      count /
+                      total *
+                      100
+                    )
+                  : 0;
 
-            const percentEl =
-              button.querySelector(
-                "[data-percent]"
-              );
 
-            if(progress){
-              progress.style.width =
-                `${percent}%`;
+              const progress =
+                button.querySelector(
+                  "[data-progress]"
+                );
+
+
+              const percentEl =
+                button.querySelector(
+                  "[data-percent]"
+                );
+
+
+              if(progress){
+
+                progress.style.width =
+                  `${percent}%`;
+              }
+
+
+              if(percentEl){
+
+                percentEl.textContent =
+                  `${percent}%`;
+              }
+
+
+              if(
+                myVoteResult.data &&
+                Number(
+                  myVoteResult
+                    .data
+                    .option_index
+                ) === index
+              ){
+
+                button.classList
+                  .add("voted");
+              }
+
             }
-
-            if(percentEl){
-              percentEl.textContent =
-                `${percent}%`;
-            }
-
-            if(
-              myVoteResult.data &&
-              Number(
-                myVoteResult.data.option_index
-              ) === index
-            ){
-              button.classList.add("voted");
-            }
-          });
+          );
 
 
         const countEl =
@@ -3466,9 +4298,15 @@ if (avatarUploadBtn && avatarInput) {
             "[data-vote-count]"
           );
 
+
         if(countEl){
+
           countEl.textContent =
-            `${total} ${total === 1 ? "vote" : "votes"}`;
+            `${total} ${
+              total === 1
+                ? "vote"
+                : "votes"
+            }`;
         }
 
 
@@ -3477,21 +4315,31 @@ if (avatarUploadBtn && avatarInput) {
             "[data-like-count]"
           );
 
+
         if(likeCount){
+
           likeCount.textContent =
             likesResult.count || 0;
         }
 
 
         const likeBtn =
-          card.querySelector(".like-btn");
+          card.querySelector(
+            ".like-btn"
+          );
+
 
         if(
           likeBtn &&
           myLikeResult.data
         ){
-          likeBtn.classList.add("liked");
-          likeBtn.firstChild.textContent = "♥ ";
+
+          likeBtn.classList
+            .add("liked");
+
+          likeBtn.firstChild
+            .textContent =
+            "♥ ";
         }
       }
     }
@@ -3510,38 +4358,66 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       const existing =
         await sb
           .from("votes")
-          .select("id,option_index")
-          .eq("poll_id",pollId)
-          .eq("user_id",currentUser.id)
+          .select(
+            "id,option_index"
+          )
+          .eq(
+            "poll_id",
+            pollId
+          )
+          .eq(
+            "user_id",
+            currentUser.id
+          )
           .maybeSingle();
 
+
       if(existing.error){
-        console.error(existing.error);
+
+        console.error(
+          existing.error
+        );
+
         return;
       }
+
 
       try{
 
         if(existing.data){
 
           if(
-            Number(existing.data.option_index) ===
+            Number(
+              existing.data
+                .option_index
+            ) ===
             Number(optionIndex)
           ){
-            showToast("You already voted for this option.");
+
+            showToast(
+              "You already voted for this option."
+            );
+
             return;
           }
+
 
           const result =
             await sb
               .from("votes")
               .update({
-                option_index:optionIndex
+                option_index:
+                  optionIndex
               })
-              .eq("id",existing.data.id);
+              .eq(
+                "id",
+                existing.data.id
+              );
+
 
           if(result.error){
             throw result.error;
@@ -3553,33 +4429,54 @@ if (avatarUploadBtn && avatarInput) {
             await sb
               .from("votes")
               .insert({
-                poll_id:pollId,
-                user_id:currentUser.id,
-                option_index:optionIndex
+
+                poll_id:
+                  pollId,
+
+                user_id:
+                  currentUser.id,
+
+                option_index:
+                  optionIndex
+
               });
+
 
           if(result.error){
             throw result.error;
           }
         }
 
-        showToast("Vote recorded ✓");
+
+        showToast(
+          "Vote recorded ✓"
+        );
+
 
         const {
           data:poll
-        } = await sb
-          .from("polls")
-          .select("*")
-          .eq("id",pollId)
-          .single();
+        } =
+          await sb
+            .from("polls")
+            .select("*")
+            .eq(
+              "id",
+              pollId
+            )
+            .single();
+
 
         if(poll){
-          await hydratePollStats([poll]);
+
+          await hydratePollStats(
+            [poll]
+          );
         }
 
       }catch(error){
 
         console.error(error);
+
         showToast(
           error.message ||
           "Unable to vote."
@@ -3597,18 +4494,35 @@ if (avatarUploadBtn && avatarInput) {
       button
     ){
 
+      if(!currentUser){
+        return;
+      }
+
+
       const existing =
         await sb
           .from("likes")
           .select("id")
-          .eq("poll_id",pollId)
-          .eq("user_id",currentUser.id)
+          .eq(
+            "poll_id",
+            pollId
+          )
+          .eq(
+            "user_id",
+            currentUser.id
+          )
           .maybeSingle();
 
+
       if(existing.error){
-        console.error(existing.error);
+
+        console.error(
+          existing.error
+        );
+
         return;
       }
+
 
       try{
 
@@ -3618,13 +4532,19 @@ if (avatarUploadBtn && avatarInput) {
             await sb
               .from("likes")
               .delete()
-              .eq("id",existing.data.id);
+              .eq(
+                "id",
+                existing.data.id
+              );
+
 
           if(result.error){
             throw result.error;
           }
 
-          button.classList.remove("liked");
+
+          button.classList
+            .remove("liked");
 
         }else{
 
@@ -3632,35 +4552,60 @@ if (avatarUploadBtn && avatarInput) {
             await sb
               .from("likes")
               .insert({
-                poll_id:pollId,
-                user_id:currentUser.id
+
+                poll_id:
+                  pollId,
+
+                user_id:
+                  currentUser.id
+
               });
+
 
           if(result.error){
             throw result.error;
           }
 
-          button.classList.add("liked");
+
+          button.classList
+            .add("liked");
         }
+
 
         const count =
           await sb
             .from("likes")
-            .select("id",{count:"exact",head:true})
-            .eq("poll_id",pollId);
+            .select(
+              "id",
+              {
+                count:"exact",
+                head:true
+              }
+            )
+            .eq(
+              "poll_id",
+              pollId
+            );
+
 
         const countEl =
           button.querySelector(
             "[data-like-count]"
           );
 
+
         if(countEl){
+
           countEl.textContent =
             count.count || 0;
         }
 
-        button.firstChild.textContent =
-          button.classList.contains("liked")
+
+        button.firstChild
+          .textContent =
+          button.classList.contains(
+            "liked"
+          )
             ? "♥ "
             : "♡ ";
 
@@ -3680,90 +4625,135 @@ if (avatarUploadBtn && avatarInput) {
        CREATE POLL
     ============================================================ */
 
-    $("addOptionBtn").addEventListener(
-      "click",
-      () => {
+    $("addOptionBtn")
+      .addEventListener(
+        "click",
+        () => {
 
-        const container =
-          $("pollOptions");
+          const container =
+            $("pollOptions");
 
-        const count =
-          container.querySelectorAll(
-            ".poll-option-input"
-          ).length;
+          const count =
+            container
+              .querySelectorAll(
+                ".poll-option-input"
+              )
+              .length;
 
-        if(count >= 6){
-          showToast("Maximum 6 options.");
-          return;
+
+          if(count >= 6){
+
+            showToast(
+              "Maximum 6 options."
+            );
+
+            return;
+          }
+
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+          row.className =
+            "option-input-row";
+
+
+          row.innerHTML = `
+
+            <input
+              class="poll-option-input"
+              type="text"
+              placeholder="Option ${count + 1}"
+              maxlength="100"
+            />
+
+
+            <button
+              class="remove-option"
+              type="button"
+              onclick="
+                this.parentElement.remove()
+              "
+            >
+              ×
+            </button>
+
+          `;
+
+
+          container.appendChild(row);
         }
-
-        const row =
-          document.createElement("div");
-
-        row.className =
-          "option-input-row";
-
-        row.innerHTML = `
-          <input
-            class="poll-option-input"
-            type="text"
-            placeholder="Option ${count + 1}"
-            maxlength="100"
-          />
-
-          <button
-            class="remove-option"
-            type="button"
-            onclick="this.parentElement.remove()"
-          >
-            ×
-          </button>
-        `;
-
-        container.appendChild(row);
-      }
-    );
+      );
 
 
-    $("createPollBtn").addEventListener(
-      "click",
-      createPoll
-    );
+    $("createPollBtn")
+      .addEventListener(
+        "click",
+        createPoll
+      );
 
 
     async function createPoll(){
 
       const question =
-        $("pollQuestion").value.trim();
+        $("pollQuestion")
+          .value
+          .trim();
+
 
       const options =
-        [...document.querySelectorAll(
-          ".poll-option-input"
-        )]
-        .map(input => input.value.trim())
-        .filter(Boolean);
+        [
+          ...document.querySelectorAll(
+            ".poll-option-input"
+          )
+        ]
+          .map(
+            input =>
+              input.value.trim()
+          )
+          .filter(Boolean);
+
 
       if(!question){
-        showToast("Write a question first.");
+
+        showToast(
+          "Write a question first."
+        );
+
         return;
       }
+
 
       if(options.length < 2){
-        showToast("Add at least 2 options.");
+
+        showToast(
+          "Add at least 2 options."
+        );
+
         return;
       }
 
+
       if(options.length > 6){
-        showToast("Maximum 6 options.");
+
+        showToast(
+          "Maximum 6 options."
+        );
+
         return;
       }
+
 
       const button =
         $("createPollBtn");
 
       button.disabled = true;
+
       button.textContent =
         "Publishing...";
+
 
       try{
 
@@ -3771,42 +4761,64 @@ if (avatarUploadBtn && avatarInput) {
           await sb
             .from("polls")
             .insert({
-              creator_id:currentUser.id,
+
+              creator_id:
+                currentUser.id,
+
               question,
+
               options
+
             });
+
 
         if(result.error){
           throw result.error;
         }
 
-        $("pollQuestion").value = "";
 
-        document.querySelector(
-          "#pollOptions"
-        ).innerHTML = `
-          <div class="option-input-row">
-            <input
-              class="poll-option-input"
-              type="text"
-              placeholder="Option 1"
-              maxlength="100"
-            />
-          </div>
+        $("pollQuestion")
+          .value = "";
 
-          <div class="option-input-row">
-            <input
-              class="poll-option-input"
-              type="text"
-              placeholder="Option 2"
-              maxlength="100"
-            />
-          </div>
-        `;
 
-        showToast("Poll published! 🎉");
+        $("pollOptions")
+          .innerHTML = `
 
-        showPage("homePage");
+            <div class="option-input-row">
+
+              <input
+                class="poll-option-input"
+                type="text"
+                placeholder="Option 1"
+                maxlength="100"
+              />
+
+            </div>
+
+
+            <div class="option-input-row">
+
+              <input
+                class="poll-option-input"
+                type="text"
+                placeholder="Option 2"
+                maxlength="100"
+              />
+
+            </div>
+
+          `;
+
+
+        showToast(
+          "Poll published! 🎉"
+        );
+
+
+        showPage(
+          "homePage"
+        );
+
 
         await loadHome();
 
@@ -3821,7 +4833,9 @@ if (avatarUploadBtn && avatarInput) {
 
       }finally{
 
-        button.disabled = false;
+        button.disabled =
+          false;
+
         button.textContent =
           "Publish poll";
       }
@@ -3834,28 +4848,37 @@ if (avatarUploadBtn && avatarInput) {
 
     let searchTimer = null;
 
-    $("searchInput").addEventListener(
-      "input",
-      () => {
 
-        clearTimeout(searchTimer);
+    $("searchInput")
+      .addEventListener(
+        "input",
+        () => {
 
-        searchTimer =
-          setTimeout(
-            runUserSearch,
-            300
+          clearTimeout(
+            searchTimer
           );
-      }
-    );
+
+          searchTimer =
+            setTimeout(
+              runUserSearch,
+              300
+            );
+
+        }
+      );
 
 
     async function runUserSearch(){
 
       const query =
-        $("searchInput").value.trim();
+        $("searchInput")
+          .value
+          .trim();
+
 
       const container =
         $("searchResults");
+
 
       if(!query){
 
@@ -3867,23 +4890,30 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       container.innerHTML =
         `<div class="empty-state">
           <div class="spinner"></div>
           Searching...
         </div>`;
 
+
       const {
         data,
         error
-      } = await sb
-        .from("profiles")
-        .select("*")
-        .or(
-          `username.ilike.%${query}%,display_name.ilike.%${query}%`
-        )
-        .neq("id",currentUser.id)
-        .limit(20);
+      } =
+        await sb
+          .from("profiles")
+          .select("*")
+          .or(
+            `username.ilike.%${query}%,display_name.ilike.%${query}%`
+          )
+          .neq(
+            "id",
+            currentUser.id
+          )
+          .limit(20);
+
 
       if(error){
 
@@ -3897,6 +4927,7 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       if(!data?.length){
 
         container.innerHTML =
@@ -3907,46 +4938,66 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       container.innerHTML =
-        data.map(p => `
-          <div
-            class="search-user"
-            onclick="openUserProfile('${p.id}')"
-          >
+        data
+          .map(p => `
 
-            <img
-              class="search-user-avatar"
-              src="${escapeHtml(avatarUrl(p))}"
-              alt=""
-            />
+            <div
+              class="search-user"
+              onclick="
+                openUserProfile(
+                  '${p.id}'
+                )
+              "
+            >
 
-            <div class="search-user-info">
+              <img
+                class="search-user-avatar"
+                src="${escapeHtml(
+                  avatarUrl(p)
+                )}"
+                alt=""
+              />
 
-              <div class="search-user-name">
-                ${escapeHtml(
-                  p.display_name ||
-                  p.username ||
-                  "User"
-                )}
+
+              <div
+                class="search-user-info"
+              >
+
+                <div class="search-user-name">
+                  ${escapeHtml(
+                    p.display_name ||
+                    p.username ||
+                    "User"
+                  )}
+                </div>
+
+
+                <div class="search-user-handle">
+                  @${escapeHtml(
+                    p.username ||
+                    "user"
+                  )}
+                </div>
+
               </div>
 
-              <div class="search-user-handle">
-                @${escapeHtml(
-                  p.username || "user"
-                )}
-              </div>
+
+              <button
+                class="search-user-btn"
+                onclick="
+                  event.stopPropagation();
+                  openUserProfile('${p.id}')
+                "
+              >
+                View
+              </button>
 
             </div>
 
-            <button
-              class="search-user-btn"
-              onclick="event.stopPropagation();openUserProfile('${p.id}')"
-            >
-              View
-            </button>
-
-          </div>
-        `).join("");
+          `)
+          .join("");
     }
 
 
@@ -3959,22 +5010,39 @@ if (avatarUploadBtn && avatarInput) {
       button
     ){
 
-      if(targetId === currentUser.id){
+      if(
+        !currentUser ||
+        targetId === currentUser.id
+      ){
+
         return;
       }
+
 
       const existing =
         await sb
           .from("follows")
           .select("id")
-          .eq("follower_id",currentUser.id)
-          .eq("following_id",targetId)
+          .eq(
+            "follower_id",
+            currentUser.id
+          )
+          .eq(
+            "following_id",
+            targetId
+          )
           .maybeSingle();
 
+
       if(existing.error){
-        console.error(existing.error);
+
+        console.error(
+          existing.error
+        );
+
         return;
       }
+
 
       try{
 
@@ -3984,13 +5052,19 @@ if (avatarUploadBtn && avatarInput) {
             await sb
               .from("follows")
               .delete()
-              .eq("id",existing.data.id);
+              .eq(
+                "id",
+                existing.data.id
+              );
+
 
           if(result.error){
             throw result.error;
           }
 
-          button.textContent = "Follow";
+
+          button.textContent =
+            "Follow";
 
         }else{
 
@@ -3998,15 +5072,23 @@ if (avatarUploadBtn && avatarInput) {
             await sb
               .from("follows")
               .insert({
-                follower_id:currentUser.id,
-                following_id:targetId
+
+                follower_id:
+                  currentUser.id,
+
+                following_id:
+                  targetId
+
               });
+
 
           if(result.error){
             throw result.error;
           }
 
-          button.textContent = "Following";
+
+          button.textContent =
+            "Following";
         }
 
       }catch(error){
@@ -4025,14 +5107,21 @@ if (avatarUploadBtn && avatarInput) {
        PUBLIC PROFILE
     ============================================================ */
 
-    async function openUserProfile(userId){
+    async function openUserProfile(
+      userId
+    ){
 
       if(!userId) return;
 
-      showPage("userProfilePage");
+
+      showPage(
+        "userProfilePage"
+      );
+
 
       const container =
         $("publicProfileContainer");
+
 
       container.innerHTML =
         `<div class="empty-state">
@@ -4040,16 +5129,25 @@ if (avatarUploadBtn && avatarInput) {
           Loading profile...
         </div>`;
 
+
       const {
         data:profile,
         error
-      } = await sb
-        .from("profiles")
-        .select("*")
-        .eq("id",userId)
-        .single();
+      } =
+        await sb
+          .from("profiles")
+          .select("*")
+          .eq(
+            "id",
+            userId
+          )
+          .single();
 
-      if(error || !profile){
+
+      if(
+        error ||
+        !profile
+      ){
 
         container.innerHTML =
           `<div class="empty-state">
@@ -4059,39 +5157,76 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       const [
         polls,
         followers,
         following,
         followState
-      ] = await Promise.all([
+      ] =
+        await Promise.all([
 
-        sb
-          .from("polls")
-          .select("*")
-          .eq("creator_id",userId)
-          .order("created_at",{ascending:false}),
+          sb
+            .from("polls")
+            .select("*")
+            .eq(
+              "creator_id",
+              userId
+            )
+            .order(
+              "created_at",
+              {
+                ascending:false
+              }
+            ),
 
-        sb
-          .from("follows")
-          .select("id",{count:"exact",head:true})
-          .eq("following_id",userId),
+          sb
+            .from("follows")
+            .select(
+              "id",
+              {
+                count:"exact",
+                head:true
+              }
+            )
+            .eq(
+              "following_id",
+              userId
+            ),
 
-        sb
-          .from("follows")
-          .select("id",{count:"exact",head:true})
-          .eq("follower_id",userId),
+          sb
+            .from("follows")
+            .select(
+              "id",
+              {
+                count:"exact",
+                head:true
+              }
+            )
+            .eq(
+              "follower_id",
+              userId
+            ),
 
-        sb
-          .from("follows")
-          .select("id")
-          .eq("follower_id",currentUser.id)
-          .eq("following_id",userId)
-          .maybeSingle()
-      ]);
+          sb
+            .from("follows")
+            .select("id")
+            .eq(
+              "follower_id",
+              currentUser.id
+            )
+            .eq(
+              "following_id",
+              userId
+            )
+            .maybeSingle()
+
+        ]);
+
 
       const isFollowing =
         !!followState.data;
+
 
       container.innerHTML = `
 
@@ -4113,84 +5248,132 @@ if (avatarUploadBtn && avatarInput) {
 
             </div>
 
+
             <div class="profile-name">
+
               ${escapeHtml(
                 profile.display_name ||
                 profile.username ||
                 "User"
               )}
+
             </div>
+
 
             <div class="profile-handle">
+
               @${escapeHtml(
-                profile.username || "user"
+                profile.username ||
+                "user"
               )}
+
             </div>
 
+
             <div class="profile-bio">
+
               ${escapeHtml(
                 profile.bio ||
                 "No bio yet."
               )}
+
             </div>
+
 
             <div class="profile-stats">
 
               <div class="profile-stat">
+
                 <strong>
                   ${polls.data?.length || 0}
                 </strong>
-                <span>Polls</span>
+
+                <span>
+                  Polls
+                </span>
+
               </div>
 
-              <div class="profile-stat">
-                <strong>—</strong>
-                <span>Votes</span>
-              </div>
 
               <div class="profile-stat">
+
+                <strong>
+                  —
+                </strong>
+
+                <span>
+                  Votes
+                </span>
+
+              </div>
+
+
+              <div class="profile-stat">
+
                 <strong>
                   ${followers.count || 0}
                 </strong>
-                <span>Followers</span>
+
+                <span>
+                  Followers
+                </span>
+
               </div>
 
+
               <div class="profile-stat">
+
                 <strong>
                   ${following.count || 0}
                 </strong>
-                <span>Following</span>
+
+                <span>
+                  Following
+                </span>
+
               </div>
 
             </div>
 
+
             ${
               userId !== currentUser.id
-              ? `
-                <div class="public-actions">
+                ? `
 
-                  <button
-                    class="follow-main"
-                    id="publicFollowBtn"
-                    onclick="togglePublicFollow('${userId}')"
-                  >
-                    ${
-                      isFollowing
-                        ? "Following"
-                        : "Follow"
-                    }
-                  </button>
+                  <div class="public-actions">
 
-                  <button
-                    class="message-main"
-                    onclick="messageUser('${userId}')"
-                  >
-                    Message
-                  </button>
+                    <button
+                      class="follow-main"
+                      id="publicFollowBtn"
+                      onclick="
+                        togglePublicFollow(
+                          '${userId}'
+                        )
+                      "
+                    >
+                      ${
+                        isFollowing
+                          ? "Following"
+                          : "Follow"
+                      }
+                    </button>
 
-                </div>
-              `
-              : ""
+
+                    <button
+                      class="message-main"
+                      onclick="
+                        messageUser(
+                          '${userId}'
+                        )
+                      "
+                    >
+                      Message
+                    </button>
+
+                  </div>
+
+                `
+                : ""
             }
 
           </div>
@@ -4199,10 +5382,13 @@ if (avatarUploadBtn && avatarInput) {
 
 
         <div class="section-title-row">
+
           <div class="section-title">
             Polls
           </div>
+
         </div>
+
 
         <div
           id="publicPolls"
@@ -4211,23 +5397,37 @@ if (avatarUploadBtn && avatarInput) {
 
           ${
             polls.data?.length
-              ? polls.data.map(
-                  p => {
-                    p.__creator = profile;
-                    return renderPollCard(p);
-                  }
-                ).join("")
+
+              ? polls.data
+                  .map(
+                    p => {
+
+                      p.__creator =
+                        profile;
+
+                      return renderPollCard(
+                        p
+                      );
+
+                    }
+                  )
+                  .join("")
+
               : `
+
                 <div class="empty-state">
                   No polls yet.
                 </div>
+
               `
           }
 
         </div>
       `;
 
+
       if(polls.data?.length){
+
         await hydratePollStats(
           polls.data
         );
@@ -4251,28 +5451,51 @@ if (avatarUploadBtn && avatarInput) {
     }
 
 
-    async function messageUser(userId){
+    async function messageUser(
+      userId
+    ){
 
       const {
         data,
         error
-      } = await sb
-        .from("profiles")
-        .select("*")
-        .eq("id",userId)
-        .single();
+      } =
+        await sb
+          .from("profiles")
+          .select("*")
+          .eq(
+            "id",
+            userId
+          )
+          .single();
 
-      if(error || !data){
-        showToast("Unable to open chat.");
+
+      if(
+        error ||
+        !data
+      ){
+
+        showToast(
+          "Unable to open chat."
+        );
+
         return;
       }
 
-      currentChatUser = data;
 
-      showPage("chatPage");
+      currentChatUser =
+        data;
+
+
+      showPage(
+        "chatPage"
+      );
+
 
       await loadChatUsers();
-      await openChat(userId);
+
+      await openChat(
+        userId
+      );
     }
 
 
@@ -4284,8 +5507,10 @@ if (avatarUploadBtn && avatarInput) {
 
       if(!currentUser) return;
 
+
       const container =
         $("chatUsers");
+
 
       container.innerHTML =
         `<div class="empty-state">
@@ -4293,39 +5518,57 @@ if (avatarUploadBtn && avatarInput) {
           Loading...
         </div>`;
 
+
       const [
         sent,
         received
-      ] = await Promise.all([
+      ] =
+        await Promise.all([
 
-        sb
-          .from("messages")
-          .select("receiver_id")
-          .eq("sender_id",currentUser.id),
+          sb
+            .from("messages")
+            .select("receiver_id")
+            .eq(
+              "sender_id",
+              currentUser.id
+            ),
 
-        sb
-          .from("messages")
-          .select("sender_id")
-          .eq("receiver_id",currentUser.id)
+          sb
+            .from("messages")
+            .select("sender_id")
+            .eq(
+              "receiver_id",
+              currentUser.id
+            )
 
-      ]);
+        ]);
+
 
       const ids = [
-        ...(sent.data || []).map(
-          x => x.receiver_id
-        ),
-        ...(received.data || []).map(
-          x => x.sender_id
-        )
+
+        ...(sent.data || [])
+          .map(
+            x => x.receiver_id
+          ),
+
+        ...(received.data || [])
+          .map(
+            x => x.sender_id
+          )
+
       ];
+
 
       const uniqueIds = [
         ...new Set(
           ids.filter(
-            id => id && id !== currentUser.id
+            id =>
+              id &&
+              id !== currentUser.id
           )
         )
       ];
+
 
       if(!uniqueIds.length){
 
@@ -4337,12 +5580,18 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       const {
         data:profiles
-      } = await sb
-        .from("profiles")
-        .select("*")
-        .in("id",uniqueIds);
+      } =
+        await sb
+          .from("profiles")
+          .select("*")
+          .in(
+            "id",
+            uniqueIds
+          );
+
 
       if(!profiles?.length){
 
@@ -4354,42 +5603,62 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       container.innerHTML =
-        profiles.map(p => `
-          <div
-            class="chat-user-row"
-            data-user-id="${p.id}"
-            onclick="openChat('${p.id}')"
-          >
+        profiles
+          .map(p => `
 
-            <img
-              class="chat-user-avatar"
-              src="${escapeHtml(
-                avatarUrl(p)
-              )}"
-              alt=""
-            />
+            <div
+              class="chat-user-row"
+              data-user-id="${p.id}"
+              onclick="
+                openChat(
+                  '${p.id}'
+                )
+              "
+            >
 
-            <div class="chat-user-info">
+              <img
+                class="chat-user-avatar"
+                src="${escapeHtml(
+                  avatarUrl(p)
+                )}"
+                alt=""
+              />
 
-              <div class="chat-user-name">
-                ${escapeHtml(
-                  p.display_name ||
-                  p.username ||
-                  "User"
-                )}
-              </div>
 
-              <div class="chat-user-preview">
-                @${escapeHtml(
-                  p.username || "user"
-                )}
+              <div
+                class="chat-user-info"
+              >
+
+                <div class="chat-user-name">
+
+                  ${escapeHtml(
+                    p.display_name ||
+                    p.username ||
+                    "User"
+                  )}
+
+                </div>
+
+
+                <div
+                  class="chat-user-preview"
+                >
+
+                  @${escapeHtml(
+                    p.username ||
+                    "user"
+                  )}
+
+                </div>
+
               </div>
 
             </div>
 
-          </div>
-        `).join("");
+          `)
+          .join("");
     }
 
 
@@ -4400,155 +5669,241 @@ if (avatarUploadBtn && avatarInput) {
           .value
           .trim();
 
+
       if(!query){
+
         await loadChatUsers();
+
         return;
       }
+
 
       const {
         data,
         error
-      } = await sb
-        .from("profiles")
-        .select("*")
-        .neq("id",currentUser.id)
-        .or(
-          `username.ilike.%${query}%,display_name.ilike.%${query}%`
-        )
-        .limit(20);
+      } =
+        await sb
+          .from("profiles")
+          .select("*")
+          .neq(
+            "id",
+            currentUser.id
+          )
+          .or(
+            `username.ilike.%${query}%,display_name.ilike.%${query}%`
+          )
+          .limit(20);
+
 
       if(error){
+
         console.error(error);
+
         return;
       }
 
-      $("chatUsers").innerHTML =
-        (data || []).map(p => `
-          <div
-            class="chat-user-row"
-            onclick="openChat('${p.id}')"
-          >
 
-            <img
-              class="chat-user-avatar"
-              src="${escapeHtml(
-                avatarUrl(p)
-              )}"
-              alt=""
-            />
+      $("chatUsers")
+        .innerHTML =
+        (data || [])
+          .map(p => `
 
-            <div class="chat-user-info">
+            <div
+              class="chat-user-row"
+              onclick="
+                openChat(
+                  '${p.id}'
+                )
+              "
+            >
 
-              <div class="chat-user-name">
-                ${escapeHtml(
-                  p.display_name ||
-                  p.username ||
-                  "User"
-                )}
-              </div>
+              <img
+                class="chat-user-avatar"
+                src="${escapeHtml(
+                  avatarUrl(p)
+                )}"
+                alt=""
+              />
 
-              <div class="chat-user-preview">
-                @${escapeHtml(
-                  p.username || "user"
-                )}
+
+              <div
+                class="chat-user-info"
+              >
+
+                <div class="chat-user-name">
+
+                  ${escapeHtml(
+                    p.display_name ||
+                    p.username ||
+                    "User"
+                  )}
+
+                </div>
+
+
+                <div
+                  class="chat-user-preview"
+                >
+
+                  @${escapeHtml(
+                    p.username ||
+                    "user"
+                  )}
+
+                </div>
+
               </div>
 
             </div>
 
-          </div>
-        `).join("");
+          `)
+          .join("");
     }
 
 
-    $("chatSearchInput").addEventListener(
-      "input",
-      () => {
-        clearTimeout(
-          window.__chatSearchTimer
-        );
+    $("chatSearchInput")
+      .addEventListener(
+        "input",
+        () => {
 
-        window.__chatSearchTimer =
-          setTimeout(
-            searchChatUsers,
-            250
+          clearTimeout(
+            window.__chatSearchTimer
           );
-      }
-    );
+
+          window.__chatSearchTimer =
+            setTimeout(
+              searchChatUsers,
+              250
+            );
+
+        }
+      );
 
 
-    async function openChat(userId){
+    async function openChat(
+      userId
+    ){
 
-      let user = currentChatUser;
+      let user =
+        currentChatUser;
 
-      if(!user || user.id !== userId){
+
+      if(
+        !user ||
+        user.id !== userId
+      ){
 
         const result =
           await sb
             .from("profiles")
             .select("*")
-            .eq("id",userId)
+            .eq(
+              "id",
+              userId
+            )
             .single();
 
+
         if(result.error){
-          console.error(result.error);
+
+          console.error(
+            result.error
+          );
+
           return;
         }
 
-        user = result.data;
+
+        user =
+          result.data;
       }
 
-      currentChatUser = user;
+
+      currentChatUser =
+        user;
+
 
       document
-        .querySelectorAll(".chat-user-row")
+        .querySelectorAll(
+          ".chat-user-row"
+        )
         .forEach(row => {
+
           row.classList.toggle(
             "active",
-            row.dataset.userId === userId
+            row.dataset.userId ===
+            userId
           );
+
         });
 
+
       $("chatEmpty")
-        .classList.add("hidden");
+        .classList
+        .add("hidden");
+
 
       $("chatArea")
-        .classList.remove("hidden");
+        .classList
+        .remove("hidden");
 
-      $("chatProfileAvatar").src =
+
+      $("chatProfileAvatar")
+        .src =
         avatarUrl(user);
 
-      $("chatProfileName").textContent =
+
+      $("chatProfileName")
+        .textContent =
         user.display_name ||
         user.username ||
         "User";
 
-      $("chatProfileOpen").onclick =
-        () => openUserProfile(user.id);
+
+      $("chatProfileOpen")
+        .onclick =
+        () =>
+          openUserProfile(
+            user.id
+          );
+
 
       $("chatPageLayout")
-        .classList.add("chat-open");
+        .classList
+        .add("chat-open");
+
 
       await loadMessages();
 
       await markMessagesRead();
+
       await updateChatBadge();
     }
 
 
     function closeChat(){
 
-      currentChatUser = null;
+      currentChatUser =
+        null;
+
 
       $("chatPageLayout")
-        .classList.remove("chat-open");
+        .classList
+        .remove("chat-open");
+
 
       $("chatArea")
-        .classList.add("hidden");
+        .classList
+        .add("hidden");
+
 
       $("chatEmpty")
-        .classList.remove("hidden");
+        .classList
+        .remove("hidden");
 
-      $("messages").innerHTML = "";
+
+      $("messages")
+        .innerHTML = "";
     }
 
 
@@ -4558,29 +5913,37 @@ if (avatarUploadBtn && avatarInput) {
         !currentUser ||
         !currentChatUser
       ){
+
         return;
       }
+
 
       const {
         data,
         error
-      } = await sb
-        .from("messages")
-        .select(
-          "id,sender_id,receiver_id,message,read,created_at"
-        )
-        .or(
-          `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
-        )
-        .order("created_at",{
-          ascending:true
-        });
+      } =
+        await sb
+          .from("messages")
+          .select(
+            "id,sender_id,receiver_id,message,read,created_at"
+          )
+          .or(
+            `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
+          )
+          .order(
+            "created_at",
+            {
+              ascending:true
+            }
+          );
+
 
       if(error){
 
         console.error(error);
 
-        $("messages").innerHTML =
+        $("messages")
+          .innerHTML =
           `<div class="empty-state">
             Unable to load messages.
           </div>`;
@@ -4588,8 +5951,10 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       const container =
         $("messages");
+
 
       if(!data?.length){
 
@@ -4601,55 +5966,67 @@ if (avatarUploadBtn && avatarInput) {
         return;
       }
 
+
       container.innerHTML =
-        data.map(message => {
+        data
+          .map(message => {
 
-          const mine =
-            message.sender_id ===
-            currentUser.id;
+            const mine =
+              message.sender_id ===
+              currentUser.id;
 
-          return `
-            <div
-              class="message-row ${
-                mine ? "mine" : ""
-              }"
-            >
 
-              <div class="message-bubble">
+            return `
 
-                ${escapeHtml(
-                  message.message
-                )}
+              <div
+                class="message-row ${
+                  mine ? "mine" : ""
+                }"
+              >
 
-                <div class="message-meta">
+                <div class="message-bubble">
 
-                  ${formatTime(
-                    message.created_at
+                  ${escapeHtml(
+                    message.message
                   )}
 
-                  ${
-                    mine
-                      ? (
-                          message.read
-                            ? " ✓✓"
-                            : " ✓"
-                        )
-                      : ""
-                  }
+
+                  <div class="message-meta">
+
+                    ${formatTime(
+                      message.created_at
+                    )}
+
+                    ${
+                      mine
+                        ? (
+                            message.read
+                              ? " ✓✓"
+                              : " ✓"
+                          )
+                        : ""
+                    }
+
+                  </div>
 
                 </div>
 
               </div>
 
-            </div>
-          `;
+            `;
 
-        }).join("");
+          })
+          .join("");
 
-      requestAnimationFrame(() => {
-        container.scrollTop =
-          container.scrollHeight;
-      });
+
+      requestAnimationFrame(
+        () => {
+
+          container.scrollTop =
+            container.scrollHeight;
+
+        }
+      );
     }
 
 
@@ -4659,8 +6036,10 @@ if (avatarUploadBtn && avatarInput) {
         !currentUser ||
         !currentChatUser
       ){
+
         return;
       }
+
 
       const result =
         await sb
@@ -4668,12 +6047,25 @@ if (avatarUploadBtn && avatarInput) {
           .update({
             read:true
           })
-          .eq("sender_id",currentChatUser.id)
-          .eq("receiver_id",currentUser.id)
-          .eq("read",false);
+          .eq(
+            "sender_id",
+            currentChatUser.id
+          )
+          .eq(
+            "receiver_id",
+            currentUser.id
+          )
+          .eq(
+            "read",
+            false
+          );
+
 
       if(result.error){
-        console.error(result.error);
+
+        console.error(
+          result.error
+        );
       }
     }
 
@@ -4683,18 +6075,23 @@ if (avatarUploadBtn && avatarInput) {
       const input =
         $("chatInput");
 
+
       const text =
         input.value.trim();
+
 
       if(
         !text ||
         !currentUser ||
         !currentChatUser
       ){
+
         return;
       }
 
+
       input.disabled = true;
+
 
       try{
 
@@ -4702,15 +6099,25 @@ if (avatarUploadBtn && avatarInput) {
           await sb
             .from("messages")
             .insert({
-              sender_id:currentUser.id,
-              receiver_id:currentChatUser.id,
-              message:text,
+
+              sender_id:
+                currentUser.id,
+
+              receiver_id:
+                currentChatUser.id,
+
+              message:
+                text,
+
               read:false
+
             });
+
 
         if(result.error){
           throw result.error;
         }
+
 
         input.value = "";
 
@@ -4727,31 +6134,38 @@ if (avatarUploadBtn && avatarInput) {
 
       }finally{
 
-        input.disabled = false;
+        input.disabled =
+          false;
+
         input.focus();
       }
     }
 
 
-    $("sendMessageBtn").addEventListener(
-      "click",
-      sendMessage
-    );
+    $("sendMessageBtn")
+      .addEventListener(
+        "click",
+        sendMessage
+      );
 
 
-    $("chatInput").addEventListener(
-      "keydown",
-      e => {
+    $("chatInput")
+      .addEventListener(
+        "keydown",
+        event => {
 
-        if(
-          e.key === "Enter" &&
-          !e.shiftKey
-        ){
-          e.preventDefault();
-          sendMessage();
+          if(
+            event.key === "Enter" &&
+            !event.shiftKey
+          ){
+
+            event.preventDefault();
+
+            sendMessage();
+          }
+
         }
-      }
-    );
+      );
 
 
     /* ============================================================
@@ -4762,43 +6176,59 @@ if (avatarUploadBtn && avatarInput) {
 
       if(!currentUser) return;
 
+
       const {
         count,
         error
-      } = await sb
-        .from("messages")
-        .select(
-          "id",
-          {
-            count:"exact",
-            head:true
-          }
-        )
-        .eq("receiver_id",currentUser.id)
-        .eq("read",false);
+      } =
+        await sb
+          .from("messages")
+          .select(
+            "id",
+            {
+              count:"exact",
+              head:true
+            }
+          )
+          .eq(
+            "receiver_id",
+            currentUser.id
+          )
+          .eq(
+            "read",
+            false
+          );
+
 
       if(error){
+
         console.error(error);
+
         return;
       }
+
 
       const badge =
         $("chatBadge");
 
-      if(count && count > 0){
+
+      if(
+        count &&
+        count > 0
+      ){
 
         badge.textContent =
-          count > 99 ? "99+" : count;
+          count > 99
+            ? "99+"
+            : count;
 
-        badge.classList.remove(
-          "hidden"
-        );
+        badge.classList
+          .remove("hidden");
 
       }else{
 
-        badge.classList.add(
-          "hidden"
-        );
+        badge.classList
+          .add("hidden");
       }
     }
 
@@ -4811,27 +6241,42 @@ if (avatarUploadBtn && avatarInput) {
 
       if(!currentUser) return;
 
+
       const {
         data,
         error
-      } = await sb
-        .from("notifications")
-        .select("*")
-        .eq("user_id",currentUser.id)
-        .order("created_at",{
-          ascending:false
-        })
-        .limit(30);
+      } =
+        await sb
+          .from("notifications")
+          .select("*")
+          .eq(
+            "user_id",
+            currentUser.id
+          )
+          .order(
+            "created_at",
+            {
+              ascending:false
+            }
+          )
+          .limit(30);
+
 
       if(error){
+
         console.error(error);
+
         return;
       }
 
+
       const unread =
-        (data || []).filter(
-          n => !n.read
-        ).length;
+        (data || [])
+          .filter(
+            n => !n.read
+          )
+          .length;
+
 
       const badge =
         $("profileBadge");
@@ -4839,19 +6284,29 @@ if (avatarUploadBtn && avatarInput) {
       const dot =
         $("headerNotificationDot");
 
+
       if(unread > 0){
 
         badge.textContent =
-          unread > 99 ? "99+" : unread;
+          unread > 99
+            ? "99+"
+            : unread;
 
-        badge.classList.remove("hidden");
-        dot.classList.remove("hidden");
+        badge.classList
+          .remove("hidden");
+
+        dot.classList
+          .remove("hidden");
 
       }else{
 
-        badge.classList.add("hidden");
-        dot.classList.add("hidden");
+        badge.classList
+          .add("hidden");
+
+        dot.classList
+          .add("hidden");
       }
+
 
       renderNotifications(
         data || []
@@ -4866,23 +6321,34 @@ if (avatarUploadBtn && avatarInput) {
       if(
         !$("profileContent") ||
         !document
-          .getElementById("profilePage")
-          .classList.contains("active")
+          .getElementById(
+            "profilePage"
+          )
+          .classList
+          .contains("active")
       ){
+
         return;
       }
+
 
       const activeTab =
         document.querySelector(
           ".profile-tab.active"
         );
 
+
       if(
-        activeTab?.dataset.profileTab !==
+        activeTab?.dataset
+          .profileTab !==
         "polls"
       ){
+
         return;
       }
+
+      // Notification rendering
+      // can be added here later.
     }
 
 
@@ -4894,11 +6360,18 @@ if (avatarUploadBtn && avatarInput) {
 
       realtimeChannels.forEach(
         channel => {
+
           try{
-            sb.removeChannel(channel);
+
+            sb.removeChannel(
+              channel
+            );
+
           }catch(e){}
+
         }
       );
+
 
       realtimeChannels = [];
     }
@@ -4908,7 +6381,10 @@ if (avatarUploadBtn && avatarInput) {
 
       cleanupRealtime();
 
-      if(!currentUser) return;
+
+      if(!currentUser){
+        return;
+      }
 
 
       const notificationChannel =
@@ -4926,7 +6402,9 @@ if (avatarUploadBtn && avatarInput) {
                 `user_id=eq.${currentUser.id}`
             },
             () => {
+
               loadNotifications();
+
             }
           )
           .subscribe();
@@ -4950,14 +6428,18 @@ if (avatarUploadBtn && avatarInput) {
 
               await updateChatBadge();
 
+
               if(
                 currentChatUser &&
                 payload.new.sender_id ===
                 currentChatUser.id
               ){
+
                 await loadMessages();
+
                 await markMessagesRead();
               }
+
             }
           )
           .subscribe();
@@ -4976,6 +6458,7 @@ if (avatarUploadBtn && avatarInput) {
         messageRefreshTimer
       );
 
+
       messageRefreshTimer =
         setInterval(
           async () => {
@@ -4983,11 +6466,16 @@ if (avatarUploadBtn && avatarInput) {
             if(
               currentChatUser &&
               document
-                .getElementById("chatPage")
-                .classList.contains("active")
+                .getElementById(
+                  "chatPage"
+                )
+                .classList
+                .contains("active")
             ){
+
               await loadMessages();
             }
+
 
             await updateChatBadge();
 
@@ -5005,7 +6493,9 @@ if (avatarUploadBtn && avatarInput) {
 
       initSupabase();
 
-      setAuthMode("login");
+      setAuthMode(
+        "login"
+      );
 
       await initAuth();
     }
