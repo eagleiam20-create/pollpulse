@@ -1940,11 +1940,19 @@
                 </button>
 
                 <input
-                  id="avatarInput"
-                  type="file"
-                  accept="image/*"
-                  class="hidden"
-                />
+  id="avatarInput"
+  type="file"
+  accept="image/*"
+  aria-label="Choose profile photo"
+  style="
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+  "
+/>
 
               </div>
 
@@ -2918,15 +2926,32 @@
        AVATAR
     ============================================================ */
 
-    $("avatarUploadBtn").addEventListener(
-      "click",
-      () => $("avatarInput").click()
-    );
+    const avatarUploadBtn = $("avatarUploadBtn");
+const avatarInput = $("avatarInput");
+
+if (avatarUploadBtn && avatarInput) {
+  avatarUploadBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!currentUser) {
+      showToast("Please sign in first.");
+      return;
+    }
+
+    avatarInput.value = "";
+    avatarInput.click();
+  });
+}
 
 
     $("avatarInput").addEventListener(
       "change",
       uploadAvatar
+      );
+ if (avatarInput) {
+  avatarInput.addEventListener("change", uploadAvatar);
+}     
     );
 
 
