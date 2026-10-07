@@ -2,203 +2,181 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#6d5dfc">
-<meta name="description" content="Poll Pulse - Polls, people and conversations.">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090d">
+<meta name="description" content="Poll Pulse - Premium polls, people and conversations.">
 <title>Poll Pulse</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
-  --primary:#6d5dfc;
-  --primary-dark:#5848e8;
-  --primary-soft:#eeeaff;
-  --bg:#f5f6fb;
-  --card:#ffffff;
-  --text:#171827;
-  --muted:#73758a;
-  --border:#e8e8f0;
-  --danger:#ef4444;
-  --success:#16a34a;
-  --shadow:0 12px 35px rgba(34,31,72,.08);
-  --radius:22px;
+  --bg:#07080c;
+  --bg2:#0d0f15;
+  --panel:#11131a;
+  --panel2:#171922;
+  --panel3:#1c1f29;
+  --text:#f7f7fb;
+  --muted:#969baa;
+  --muted2:#6f7380;
+  --line:rgba(255,255,255,.075);
+  --line2:rgba(255,255,255,.12);
+  --purple:#8b7cff;
+  --purple2:#6657ff;
+  --purple-soft:rgba(139,124,255,.13);
+  --pink:#d66cff;
+  --green:#42d392;
+  --red:#ff5c72;
+  --gold:#f4c76a;
+  --shadow:0 25px 70px rgba(0,0,0,.38);
+  --radius:24px;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html{
   scroll-behavior:smooth;
+  background:#05060a;
 }
 
 body{
   margin:0;
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  min-height:100vh;
   color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:
-    radial-gradient(circle at top left,#ece9ff 0,#f5f6fb 30%,#f5f6fb 100%);
-  min-height:100vh;
+    radial-gradient(circle at 10% -10%,rgba(118,91,255,.20),transparent 30%),
+    radial-gradient(circle at 100% 0%,rgba(214,108,255,.10),transparent 26%),
+    #05060a;
 }
 
-button,
-input,
-textarea{
-  font:inherit;
-}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.55}
+.hidden{display:none!important}
+.grow{flex:1;min-width:0}
 
-button{
-  cursor:pointer;
-}
+.screen{min-height:100vh}
 
-button:disabled{
-  cursor:not-allowed;
-  opacity:.65;
-}
-
-.hidden{
-  display:none !important;
-}
-
-/* =====================================================
-   GLOBAL
-===================================================== */
-
-.screen{
-  min-height:100vh;
-}
+/* ================= APP ================= */
 
 .app{
-  width:min(1180px,100%);
+  width:min(560px,100%);
   min-height:100vh;
-  margin:0 auto;
-  padding:0 20px 100px;
+  margin:auto;
+  padding-bottom:100px;
 }
 
 .app-shell{
-  min-height:calc(100vh - 32px);
-  margin:16px auto;
-  background:rgba(255,255,255,.62);
-  border:1px solid rgba(255,255,255,.9);
-  border-radius:30px;
-  box-shadow:0 20px 70px rgba(36,32,75,.08);
+  min-height:100vh;
+  position:relative;
   overflow:hidden;
-  backdrop-filter:blur(18px);
+  background:
+    radial-gradient(circle at 90% 0%,rgba(120,100,255,.08),transparent 25%),
+    linear-gradient(180deg,#0a0b10 0%,#090a0f 100%);
+  border-left:1px solid rgba(255,255,255,.04);
+  border-right:1px solid rgba(255,255,255,.04);
+  box-shadow:0 0 100px rgba(0,0,0,.55);
 }
 
-.container{
-  width:min(900px,100%);
-  margin:0 auto;
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:20px;
-  margin-bottom:16px;
-  box-shadow:var(--shadow);
-}
-
-.card.compact{
-  padding:16px;
+.main-layout{
+  padding:18px 15px 0;
 }
 
 .page{
-  animation:pageIn .2s ease;
+  animation:pageIn .28s ease;
 }
 
 @keyframes pageIn{
-  from{
-    opacity:0;
-    transform:translateY(6px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
 }
 
-h1,h2,h3,p{
-  margin-top:0;
+@keyframes pop{
+  0%{transform:scale(.94);opacity:0}
+  100%{transform:scale(1);opacity:1}
 }
 
-h2{
-  margin-bottom:6px;
+@keyframes glow{
+  0%,100%{box-shadow:0 0 0 rgba(139,124,255,0)}
+  50%{box-shadow:0 0 35px rgba(139,124,255,.16)}
 }
+
+h1,h2,h3,p{margin-top:0}
 
 .small{
   color:var(--muted);
-  font-size:13px;
+  font-size:12px;
   line-height:1.45;
 }
 
-.empty,
-.loading{
+.empty,.loading{
   text-align:center;
   color:var(--muted);
-  padding:35px 15px;
+  padding:40px 15px;
 }
 
 .notice{
-  padding:13px 15px;
-  border-radius:15px;
-  background:#f6f5ff;
-  border:1px solid #e9e6ff;
+  padding:14px;
+  border-radius:17px;
+  background:var(--panel2);
+  border:1px solid var(--line);
   margin-bottom:10px;
 }
 
-.grow{
-  flex:1;
-  min-width:0;
+.card{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 14px 45px rgba(0,0,0,.20);
+  backdrop-filter:blur(20px);
 }
 
-/* =====================================================
-   AUTH
-===================================================== */
+.card.compact{padding:14px}
+
+/* ================= AUTH ================= */
 
 #authScreen{
+  min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  min-height:100vh;
-  padding:24px;
+  padding:20px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(126,105,255,.22),transparent 38%),
+    #05060a;
 }
 
-.auth-wrap{
-  width:min(430px,100%);
-}
+.auth-wrap{width:min(430px,100%)}
 
 .brand{
   text-align:center;
-  margin-bottom:24px;
+  margin-bottom:22px;
 }
 
 .brand-logo{
-  width:72px;
-  height:72px;
-  margin:0 auto 14px;
+  width:82px;
+  height:82px;
+  margin:0 auto 16px;
+  border-radius:27px;
   display:grid;
   place-items:center;
-  border-radius:23px;
-  background:linear-gradient(135deg,#6d5dfc,#9b8cff);
-  color:#fff;
-  font-size:34px;
-  box-shadow:0 18px 40px rgba(109,93,252,.28);
+  font-size:37px;
+  background:
+    linear-gradient(145deg,#a091ff,#604fff);
+  box-shadow:
+    0 20px 55px rgba(101,83,255,.35),
+    inset 0 1px 0 rgba(255,255,255,.35);
+  animation:glow 3s infinite;
 }
 
 .brand h1{
   margin:0;
-  font-size:31px;
-  letter-spacing:-1px;
+  font-size:33px;
+  letter-spacing:-1.5px;
 }
 
 .brand p{
@@ -207,60 +185,56 @@ h2{
 }
 
 .auth-card{
-  background:#fff;
-  border:1px solid var(--border);
+  background:rgba(17,19,26,.90);
+  border:1px solid var(--line2);
   border-radius:28px;
-  padding:25px;
+  padding:23px;
   box-shadow:var(--shadow);
+  backdrop-filter:blur(30px);
 }
 
-.auth-card h2{
-  font-size:22px;
-  margin-bottom:5px;
-}
+.auth-card h2{margin:0 0 5px}
+.auth-card>.small{margin-bottom:20px}
 
-.auth-card .small{
-  margin-bottom:20px;
-}
-
-.field{
-  margin-bottom:14px;
-}
+.field{margin-bottom:14px}
 
 .field label{
   display:block;
-  font-size:13px;
-  font-weight:700;
+  color:#c9cad2;
+  font-size:12px;
+  font-weight:800;
   margin:0 0 7px 3px;
 }
 
-.input,
-.textarea{
+.input,.textarea{
   width:100%;
-  border:1px solid var(--border);
+  border:1px solid var(--line2);
   outline:none;
-  border-radius:15px;
+  border-radius:16px;
   padding:13px 14px;
-  background:#fafaff;
   color:var(--text);
-  transition:.18s;
+  background:#0c0e14;
+  transition:.2s;
 }
 
-.input:focus,
-.textarea:focus{
-  border-color:var(--primary);
-  background:#fff;
-  box-shadow:0 0 0 4px rgba(109,93,252,.1);
+.input::placeholder,.textarea::placeholder{
+  color:#626673;
+}
+
+.input:focus,.textarea:focus{
+  border-color:rgba(139,124,255,.75);
+  background:#10121a;
+  box-shadow:0 0 0 4px rgba(139,124,255,.10);
 }
 
 .textarea{
-  min-height:100px;
+  min-height:120px;
   resize:vertical;
 }
 
 .auth-actions{
   display:grid;
-  gap:10px;
+  gap:9px;
   margin-top:18px;
 }
 
@@ -272,76 +246,68 @@ h2{
 .link-btn{
   border:0;
   background:none;
-  color:var(--primary);
+  color:var(--purple);
   font-weight:800;
   padding:4px;
 }
 
 .auth-message{
-  margin-top:12px;
-  padding:10px 12px;
-  border-radius:12px;
-  font-size:13px;
   display:none;
+  margin-top:12px;
+  padding:11px 13px;
+  border-radius:13px;
+  background:rgba(255,92,114,.10);
+  border:1px solid rgba(255,92,114,.18);
+  color:#ff9baa;
+  font-size:12px;
 }
 
-.auth-message.show{
-  display:block;
-  background:#fff7ed;
-  color:#9a3412;
-}
+.auth-message.show{display:block}
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* ================= TOPBAR ================= */
 
 .topbar{
   position:sticky;
   top:0;
-  z-index:30;
-  background:rgba(255,255,255,.88);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(232,232,240,.9);
+  z-index:40;
+  background:rgba(7,8,12,.84);
+  backdrop-filter:blur(25px);
+  border-bottom:1px solid var(--line);
 }
 
 .topbar-inner{
-  width:min(1100px,100%);
-  min-height:74px;
-  margin:auto;
-  padding:0 22px;
+  min-height:68px;
+  padding:0 15px;
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:12px;
 }
 
 .logo-small{
   display:flex;
   align-items:center;
-  gap:10px;
-  font-weight:900;
-  font-size:19px;
-  letter-spacing:-.4px;
+  gap:9px;
+  font-weight:950;
+  letter-spacing:-.5px;
 }
 
 .logo-icon{
-  width:39px;
-  height:39px;
+  width:38px;
+  height:38px;
   border-radius:13px;
   display:grid;
   place-items:center;
-  color:#fff;
-  background:linear-gradient(135deg,#6d5dfc,#9b8cff);
+  background:linear-gradient(145deg,#9182ff,#6253ef);
+  box-shadow:0 8px 22px rgba(100,82,255,.25);
 }
 
-.topbar-spacer{
-  flex:1;
-}
+.topbar-spacer{flex:1}
 
 .header-user{
   display:flex;
   align-items:center;
   gap:8px;
-  min-width:0;
+  cursor:pointer;
 }
 
 .header-avatar{
@@ -349,8 +315,8 @@ h2{
   height:38px;
   border-radius:50%;
   overflow:hidden;
-  flex-shrink:0;
-  background:var(--primary-soft);
+  border:1px solid rgba(255,255,255,.14);
+  background:var(--panel2);
 }
 
 .header-avatar img,
@@ -363,121 +329,92 @@ h2{
   object-fit:cover;
 }
 
-.header-avatar .avatar-fallback,
-.avatar .avatar-fallback,
-.creator-avatar .avatar-fallback,
-.profile-avatar .avatar-fallback,
-.chat-avatar .avatar-fallback{
+.avatar-fallback{
   width:100%;
   height:100%;
   display:grid;
   place-items:center;
-  background:linear-gradient(135deg,#ddd8ff,#eeeaff);
-  color:#5447c7;
+  color:#fff;
   font-weight:900;
+  background:linear-gradient(145deg,#6f61e8,#bd75e9);
 }
 
-/* =====================================================
-   MAIN LAYOUT
-===================================================== */
-
-.main-layout{
-  width:min(1100px,100%);
-  margin:auto;
-  padding:25px 22px 0;
-}
+/* ================= TITLES ================= */
 
 .page-title{
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content:space-between;
-  gap:15px;
-  margin-bottom:18px;
+  gap:12px;
+  margin:4px 2px 17px;
 }
 
 .page-title h2{
   margin:0;
-  font-size:27px;
-  letter-spacing:-.8px;
+  font-size:25px;
+  letter-spacing:-1px;
 }
 
 .page-title p{
-  margin:5px 0 0;
+  margin:4px 0 0;
   color:var(--muted);
+  font-size:12px;
 }
 
-/* =====================================================
-   BUTTONS
-===================================================== */
+/* ================= BUTTONS ================= */
 
 .btn{
   border:0;
-  border-radius:14px;
+  border-radius:15px;
   padding:11px 15px;
-  font-weight:800;
+  color:#fff;
+  font-weight:850;
   transition:.18s;
 }
 
-.btn:hover{
-  transform:translateY(-1px);
-}
+.btn:active{transform:scale(.96)}
 
 .btn-primary{
-  background:var(--primary);
-  color:#fff;
-  box-shadow:0 8px 20px rgba(109,93,252,.2);
-}
-
-.btn-primary:hover{
-  background:var(--primary-dark);
+  background:linear-gradient(135deg,#9385ff,#6656f5);
+  box-shadow:0 10px 25px rgba(101,83,255,.24);
 }
 
 .btn-secondary{
-  background:#f2f1fa;
-  color:var(--text);
+  color:#e9e9f1;
+  background:#1a1c25;
+  border:1px solid var(--line2);
 }
 
 .btn-danger{
-  background:#fee2e2;
-  color:#b91c1c;
+  color:#ff9baa;
+  background:rgba(255,92,114,.10);
+  border:1px solid rgba(255,92,114,.17);
 }
 
 .btn.follow{
-  background:var(--primary);
-  color:#fff;
-  padding:8px 13px;
-  min-width:84px;
+  min-width:86px;
+  padding:8px 12px;
+  background:linear-gradient(135deg,#8f81ff,#6556f5);
 }
 
 .btn.follow.following{
-  background:#eeeef5;
-  color:var(--text);
+  background:#22242d;
+  color:#dddde5;
+  border:1px solid var(--line2);
 }
 
 .action-btn{
-  border:1px solid var(--border);
-  background:#fff;
-  color:var(--text);
+  border:1px solid var(--line);
+  background:#171921;
+  color:#d8d9e1;
+  border-radius:13px;
   padding:8px 12px;
-  border-radius:12px;
-  font-weight:700;
+  font-weight:750;
 }
 
-.action-btn:hover{
-  background:#f7f6ff;
-}
+.action-btn:hover{background:#20222c}
 
-/* =====================================================
-   HOME / POLLS
-===================================================== */
-
-.poll-title{
-  font-size:20px;
-  line-height:1.35;
-  font-weight:850;
-  margin:15px 0;
-  letter-spacing:-.3px;
-}
+/* ================= POLLS ================= */
 
 .creator{
   display:flex;
@@ -492,107 +429,97 @@ h2{
   border-radius:50%;
   overflow:hidden;
   flex-shrink:0;
+  border:1px solid var(--line2);
+}
+
+.poll-title{
+  font-size:20px;
+  line-height:1.35;
+  font-weight:900;
+  letter-spacing:-.4px;
+  margin:15px 0;
 }
 
 .option{
   width:100%;
   text-align:left;
-  border:1px solid var(--border);
-  background:#fafaff;
-  color:var(--text);
-  border-radius:14px;
+  color:#ededf4;
+  background:#11131a;
+  border:1px solid var(--line2);
+  border-radius:15px;
   padding:13px 14px;
   margin-bottom:7px;
-  font-weight:700;
-  transition:.18s;
+  font-weight:750;
+  transition:.2s;
 }
 
 .option:hover{
-  border-color:#c9c4ff;
-  background:#f5f3ff;
+  background:#191b26;
+  border-color:rgba(139,124,255,.5);
+}
+
+.option:active{
+  transform:scale(.985);
 }
 
 .resultbar{
-  height:5px;
-  background:#ececf3;
+  height:4px;
+  margin:-2px 2px 9px;
   border-radius:99px;
+  background:#22242d;
   overflow:hidden;
-  margin:-3px 0 10px;
 }
 
 .resultbar i{
   display:block;
   height:100%;
-  background:linear-gradient(90deg,#6d5dfc,#9a8dff);
   border-radius:99px;
-  transition:width .3s;
+  background:linear-gradient(90deg,#6b5bff,#c070ef);
+  transition:width .35s ease;
 }
 
 .poll-actions{
   display:flex;
-  align-items:center;
   gap:8px;
-  margin-top:13px;
   padding-top:12px;
-  border-top:1px solid var(--border);
+  margin-top:11px;
+  border-top:1px solid var(--line);
 }
 
 .suggestion{
-  background:linear-gradient(135deg,#f1efff,#fff);
-  border:1px solid #e4e0ff;
-  border-radius:20px;
   padding:16px;
-  margin-bottom:16px;
+  margin-bottom:14px;
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 100% 0,rgba(139,124,255,.14),transparent 45%),
+    #11131a;
+  border:1px solid var(--line2);
 }
 
-.suggestion h3{
-  margin:0 0 2px;
-}
+.suggestion h3{margin:0 0 3px}
 
 .row{
   display:flex;
   align-items:center;
-  gap:12px;
-  padding:12px 0;
+  gap:11px;
+  padding:11px 0;
 }
 
 .row.user{
-  cursor:pointer;
-  border-bottom:1px solid var(--border);
-}
-
-.row.user:last-child{
-  border-bottom:0;
-}
-
-/* =====================================================
-   AVATARS
-===================================================== */
-
-.avatar{
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  overflow:hidden;
-  flex-shrink:0;
-}
-
-.profile-clickable{
+  border-bottom:1px solid var(--line);
   cursor:pointer;
 }
 
-/* =====================================================
-   SEARCH
-===================================================== */
+.row.user:last-child{border-bottom:0}
+
+/* ================= SEARCH ================= */
 
 .search-box{
   position:relative;
-  margin-bottom:15px;
+  margin-bottom:14px;
 }
 
-.search-box .input{
-  padding-left:43px;
-}
+.search-box .input{padding-left:43px}
 
 .search-icon{
   position:absolute;
@@ -602,165 +529,179 @@ h2{
   color:var(--muted);
 }
 
-/* =====================================================
-   CREATE
-===================================================== */
+/* ================= AVATARS ================= */
 
-.option-grid{
-  display:grid;
-  gap:10px;
+.avatar{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  overflow:hidden;
+  flex-shrink:0;
+  border:1px solid var(--line2);
 }
+
+.profile-clickable{cursor:pointer}
+
+/* ================= CREATE ================= */
+
+.option-grid{display:grid;gap:2px}
 
 .create-actions{
   display:flex;
   justify-content:flex-end;
-  margin-top:16px;
+  margin-top:17px;
 }
 
-/* =====================================================
-   PROFILE
-===================================================== */
+#createPage .card{
+  padding:19px;
+}
+
+#createPage .card:before{
+  content:"✦  PREMIUM POLL";
+  display:block;
+  color:#9d91ff;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.6px;
+  margin-bottom:18px;
+}
+
+/* ================= PROFILE ================= */
 
 .profile-hero{
   text-align:center;
-  padding:25px;
+  padding:24px 18px;
+  background:
+    radial-gradient(circle at 50% -20%,rgba(139,124,255,.16),transparent 45%),
+    var(--panel);
 }
 
 .profile-avatar{
-  width:100px;
-  height:100px;
+  width:105px;
+  height:105px;
+  margin:0 auto 14px;
   border-radius:50%;
   overflow:hidden;
-  margin:0 auto 14px;
-  border:5px solid #f0eeff;
-  box-shadow:0 10px 30px rgba(50,40,130,.1);
+  border:4px solid rgba(139,124,255,.45);
+  box-shadow:
+    0 0 0 5px rgba(139,124,255,.06),
+    0 15px 45px rgba(0,0,0,.35);
 }
 
 .profile-name{
   font-size:23px;
-  font-weight:900;
-  margin-bottom:3px;
+  font-weight:950;
+  letter-spacing:-.7px;
 }
 
-.profile-username{
-  color:var(--muted);
-}
+.profile-username{color:var(--muted)}
 
 .profile-stats{
   display:flex;
   justify-content:center;
-  gap:35px;
-  margin:20px 0;
+  gap:28px;
+  margin:21px 0;
 }
 
-.stat{
-  text-align:center;
-}
+.stat{text-align:center}
 
 .stat strong{
   display:block;
-  font-size:20px;
+  font-size:19px;
 }
 
 .stat span{
   color:var(--muted);
-  font-size:12px;
+  font-size:11px;
 }
 
 .profile-actions{
   display:flex;
   justify-content:center;
-  gap:9px;
+  gap:8px;
   flex-wrap:wrap;
 }
 
 .tabs{
   display:flex;
-  gap:5px;
+  gap:4px;
   overflow:auto;
-  padding:5px;
-  background:#f3f2f8;
+  padding:4px;
+  background:#0b0d12;
+  border:1px solid var(--line);
   border-radius:16px;
-  margin-bottom:15px;
+  margin-bottom:14px;
 }
 
 .tabs button{
   flex:1;
-  min-width:100px;
+  min-width:88px;
   border:0;
-  background:transparent;
-  padding:11px 13px;
-  border-radius:12px;
-  font-weight:750;
   color:var(--muted);
+  background:transparent;
+  padding:10px 8px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:850;
 }
 
 .tabs button.active{
-  background:#fff;
-  color:var(--primary);
-  box-shadow:0 3px 12px rgba(0,0,0,.06);
+  color:#fff;
+  background:#1c1e28;
+  box-shadow:0 4px 15px rgba(0,0,0,.25);
 }
 
-.notification-item{
-  cursor:pointer;
-}
+.notification-item{cursor:pointer}
 
 .notification-item.unread{
-  background:#f3f1ff;
-  border-color:#ddd8ff;
+  background:rgba(139,124,255,.10);
+  border-color:rgba(139,124,255,.22);
 }
 
 .notification-top{
   display:flex;
-  align-items:flex-start;
   gap:10px;
 }
 
 .notification-dot{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:var(--primary);
+  width:8px;
+  height:8px;
   margin-top:5px;
+  border-radius:50%;
+  background:var(--purple);
   flex-shrink:0;
 }
 
-.notification-item:not(.unread) .notification-dot{
-  opacity:.2;
-}
+.notification-item:not(.unread) .notification-dot{opacity:.18}
 
 .notification-time{
-  color:var(--muted);
-  font-size:11px;
   margin-top:7px;
-  padding-left:19px;
+  padding-left:18px;
+  color:var(--muted2);
+  font-size:10px;
 }
 
-/* =====================================================
-   PUBLIC PROFILE
-===================================================== */
+/* ================= PUBLIC PROFILE ================= */
 
 .public-profile-head{
   display:flex;
   align-items:center;
   gap:13px;
-  margin-bottom:18px;
+  margin-bottom:17px;
 }
 
 .public-profile-head .profile-avatar{
-  width:75px;
-  height:75px;
+  width:78px;
+  height:78px;
   margin:0;
   border-width:3px;
 }
 
-.public-profile-info{
-  flex:1;
-}
+.public-profile-info{flex:1}
 
 .public-profile-info h2{
   margin:0;
-  font-size:22px;
+  font-size:21px;
 }
 
 .public-profile-actions{
@@ -769,55 +710,77 @@ h2{
   flex-wrap:wrap;
 }
 
-/* =====================================================
-   CHAT
-===================================================== */
+/* ================= CHAT ================= */
 
 .chat-page-layout{
-  display:grid;
-  grid-template-columns:300px minmax(0,1fr);
-  gap:16px;
-  height:min(700px,calc(100vh - 170px));
-  min-height:560px;
+  position:relative;
+  height:calc(100vh - 160px);
+  min-height:510px;
+  overflow:hidden;
+}
+
+.chat-sidebar,
+.chat-panel{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border-radius:24px;
+  background:#0e1016;
+  border:1px solid var(--line2);
+  overflow:hidden;
+  box-shadow:0 18px 55px rgba(0,0,0,.25);
 }
 
 .chat-sidebar{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:22px;
-  overflow:hidden;
+  transform:translateX(0);
+  transition:transform .32s cubic-bezier(.22,.8,.25,1);
+  z-index:2;
+}
+
+.chat-panel{
+  transform:translateX(105%);
+  transition:transform .34s cubic-bezier(.22,.8,.25,1);
   display:flex;
   flex-direction:column;
-  min-width:0;
+  z-index:3;
+}
+
+.chat-page-layout.chat-open .chat-sidebar{
+  transform:translateX(-105%);
+}
+
+.chat-page-layout.chat-open .chat-panel{
+  transform:translateX(0);
 }
 
 .chat-sidebar-header{
   padding:17px;
-  border-bottom:1px solid var(--border);
+  border-bottom:1px solid var(--line);
+  background:rgba(16,18,25,.96);
 }
 
 .chat-sidebar-header h3{
   margin:0 0 12px;
+  font-size:20px;
 }
 
 .chat-users{
   overflow-y:auto;
+  height:calc(100% - 104px);
   padding:5px 14px;
-  flex:1;
 }
 
 .chat-user{
-  padding:12px 4px;
+  border-radius:15px;
+  padding:12px 5px;
 }
 
-.chat-user:hover{
-  background:#faf9ff;
-  border-radius:14px;
-}
+.chat-user:hover{background:#151720}
 
 .chat-preview{
   color:var(--muted);
-  font-size:12px;
+  font-size:11px;
   margin-top:3px;
   white-space:nowrap;
   overflow:hidden;
@@ -825,14 +788,7 @@ h2{
 }
 
 .chat-panel{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:22px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
   min-width:0;
-  min-height:0;
 }
 
 .chat-empty{
@@ -841,18 +797,19 @@ h2{
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:30px;
   color:var(--muted);
+  padding:30px;
 }
 
 .chat-header{
-  min-height:72px;
-  padding:12px 16px;
-  border-bottom:1px solid var(--border);
+  min-height:69px;
+  padding:10px 11px;
   display:flex;
   align-items:center;
-  gap:11px;
+  gap:9px;
   flex-shrink:0;
+  border-bottom:1px solid var(--line);
+  background:rgba(14,16,22,.96);
 }
 
 .chat-avatar{
@@ -861,327 +818,256 @@ h2{
   border-radius:50%;
   overflow:hidden;
   cursor:pointer;
+  border:1px solid var(--line2);
   flex-shrink:0;
 }
 
-.chat-user-name{
-  font-weight:850;
-}
+.chat-user-name{font-weight:900}
 
 .chat-status{
   color:var(--muted);
-  font-size:12px;
+  font-size:11px;
   margin-top:2px;
 }
 
 .chat-header-actions{
   margin-left:auto;
   display:flex;
-  gap:7px;
+  gap:6px;
 }
 
 .icon-btn{
-  width:38px;
-  height:38px;
-  border:1px solid var(--border);
-  background:#fff;
+  width:37px;
+  height:37px;
+  border:1px solid var(--line2);
+  background:#181a23;
+  color:#eee;
   border-radius:12px;
   display:grid;
   place-items:center;
-  font-size:17px;
 }
 
 .messages{
   flex:1;
   min-height:0;
   overflow-y:auto;
-  padding:18px;
+  padding:17px 13px;
   background:
-    radial-gradient(circle at top right,#f0edff 0,transparent 28%),
-    #fafaff;
+    radial-gradient(circle at 100% 0,rgba(115,96,255,.08),transparent 35%),
+    #090b10;
 }
 
 .bubble{
   width:fit-content;
-  max-width:min(72%,480px);
-  padding:11px 14px;
+  max-width:78%;
+  padding:10px 13px;
+  margin-bottom:7px;
   border-radius:18px 18px 18px 5px;
-  background:#fff;
-  border:1px solid var(--border);
-  margin-bottom:8px;
+  background:#171a22;
+  border:1px solid var(--line);
+  color:#e9e9ef;
   line-height:1.4;
   word-break:break-word;
-  box-shadow:0 4px 12px rgba(20,20,50,.04);
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+  animation:pop .18s ease;
 }
 
 .bubble.mine{
   margin-left:auto;
   border-radius:18px 18px 5px 18px;
-  background:var(--primary);
   color:#fff;
-  border-color:var(--primary);
+  background:linear-gradient(135deg,#796aff,#604ff1);
+  border-color:transparent;
 }
 
 .chat-composer{
-  padding:12px;
-  border-top:1px solid var(--border);
-  background:#fff;
+  padding:9px;
   display:flex;
-  gap:8px;
-  flex-shrink:0;
+  gap:7px;
+  border-top:1px solid var(--line);
+  background:#0e1016;
 }
 
-.chat-composer .input{
-  flex:1;
-  min-width:0;
-}
+.chat-composer .input{flex:1;min-width:0}
 
 .chat-send{
-  min-width:75px;
+  min-width:66px;
+  padding:10px 12px;
 }
 
-/* =====================================================
-   BOTTOM NAV
-===================================================== */
+/* ================= BOTTOM NAV ================= */
 
 .bottom{
   position:fixed;
   left:50%;
-  bottom:14px;
+  bottom:10px;
   transform:translateX(-50%);
-  width:min(720px,calc(100% - 28px));
-  z-index:50;
-  background:rgba(255,255,255,.94);
-  border:1px solid var(--border);
-  box-shadow:0 12px 40px rgba(30,25,70,.14);
-  backdrop-filter:blur(20px);
-  border-radius:22px;
+  width:min(530px,calc(100% - 16px));
+  z-index:60;
   padding:7px;
+  border-radius:22px;
+  background:rgba(17,19,26,.91);
+  border:1px solid rgba(255,255,255,.11);
+  box-shadow:0 20px 55px rgba(0,0,0,.48);
+  backdrop-filter:blur(25px);
 }
 
 .bottom-inner{
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:4px;
+  gap:3px;
 }
 
 .nav{
   position:relative;
+  min-height:54px;
   border:0;
-  background:transparent;
   border-radius:16px;
-  padding:9px 5px;
-  color:var(--muted);
+  background:transparent;
+  color:#777b89;
   display:flex;
   flex-direction:column;
   align-items:center;
+  justify-content:center;
   gap:3px;
   font-size:18px;
+  transition:.2s;
 }
 
 .nav b{
-  font-size:10px;
-  font-weight:800;
+  font-size:9px;
+  font-weight:850;
 }
 
 .nav.active{
-  color:var(--primary);
-  background:var(--primary-soft);
+  color:#fff;
+  background:linear-gradient(145deg,rgba(139,124,255,.25),rgba(139,124,255,.08));
+  box-shadow:inset 0 0 0 1px rgba(139,124,255,.15);
 }
+
+.nav.active:first-letter{color:var(--purple)}
 
 .badge{
   position:absolute;
   top:3px;
-  right:25%;
+  right:24%;
   min-width:17px;
   height:17px;
   padding:0 4px;
-  border-radius:99px;
-  background:#ef4444;
-  color:#fff;
-  font-size:9px;
   display:grid;
   place-items:center;
-  font-weight:900;
+  border-radius:99px;
+  color:#fff;
+  background:#ff526b;
+  font-size:9px;
+  font-weight:950;
+  border:2px solid #11131a;
 }
 
-/* =====================================================
-   TOAST
-===================================================== */
+/* ================= TOAST ================= */
 
 #toast{
   position:fixed;
   left:50%;
-  bottom:95px;
-  transform:translateX(-50%) translateY(15px);
+  bottom:88px;
+  transform:translate(-50%,15px);
   z-index:100;
-  max-width:min(420px,calc(100% - 30px));
-  background:#181827;
-  color:#fff;
-  padding:12px 16px;
+  width:max-content;
+  max-width:calc(100% - 30px);
+  padding:11px 15px;
   border-radius:14px;
-  box-shadow:0 15px 40px rgba(0,0,0,.2);
+  background:#f6f6fa;
+  color:#11121a;
+  box-shadow:0 15px 45px rgba(0,0,0,.4);
+  font-size:12px;
+  font-weight:750;
+  text-align:center;
   opacity:0;
   pointer-events:none;
-  transition:.22s;
-  font-size:13px;
-  text-align:center;
+  transition:.23s;
 }
 
 #toast.show{
   opacity:1;
-  transform:translateX(-50%) translateY(0);
+  transform:translate(-50%,0);
 }
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+/* ================= DESKTOP ================= */
 
-@media(max-width:800px){
-
+@media(min-width:700px){
   body{
-    background:var(--bg);
+    padding:18px 0;
   }
 
   .app{
-    padding:0 0 92px;
+    min-height:calc(100vh - 36px);
+    padding-bottom:90px;
   }
 
   .app-shell{
-    margin:0;
-    min-height:100vh;
-    border-radius:0;
-    border:0;
-    box-shadow:none;
-    background:transparent;
-  }
-
-  .main-layout{
-    padding:20px 14px 0;
-  }
-
-  .topbar-inner{
-    padding:0 14px;
-  }
-
-  .chat-page-layout{
-    grid-template-columns:1fr;
-    height:auto;
-    min-height:0;
-  }
-
-  .chat-sidebar{
-    min-height:300px;
-    max-height:360px;
-  }
-
-  .chat-panel{
-    height:calc(100vh - 240px);
-    min-height:470px;
-  }
-
-  .chat-sidebar:has(+ .chat-panel){
-    display:flex;
+    min-height:calc(100vh - 36px);
+    border-radius:30px;
   }
 
   .bottom{
-    bottom:8px;
-    width:calc(100% - 16px);
+    bottom:16px;
   }
 }
 
-@media(max-width:560px){
+/* ================= MOBILE ================= */
 
-  .topbar{
-    position:sticky;
+@media(max-width:699px){
+  body{background:#05060a}
+
+  .app-shell{
+    border-left:0;
+    border-right:0;
   }
 
-  .logo-small span{
-    display:none;
-  }
+  .logo-small span{display:none}
 
-  .header-user .small{
-    display:none;
+  .header-user .small{display:none}
+
+  .main-layout{
+    padding-left:11px;
+    padding-right:11px;
   }
 
   .card{
-    padding:16px;
-    border-radius:18px;
+    border-radius:20px;
+    padding:15px;
   }
 
-  .page-title h2{
-    font-size:23px;
-  }
-
-  .profile-stats{
-    gap:25px;
-  }
-
-  .public-profile-head{
-    align-items:flex-start;
-  }
-
-  .public-profile-actions{
-    margin-top:8px;
-  }
+  .page-title h2{font-size:23px}
 
   .chat-page-layout{
-    gap:10px;
+    height:calc(100dvh - 155px);
+    min-height:500px;
   }
 
-  .chat-sidebar{
-    max-height:300px;
-  }
-
-  .chat-panel{
-    height:calc(100vh - 170px);
-    min-height:440px;
-  }
-
-  .bubble{
-    max-width:82%;
+  .bottom{
+    bottom:7px;
   }
 }
 
-/* On small devices show chat panel normally without browser-sized fixed overlay */
-@media(max-width:430px){
+@media(max-width:390px){
+  .profile-stats{gap:19px}
 
-  .main-layout{
-    padding-left:10px;
-    padding-right:10px;
+  .profile-stats .stat strong{
+    font-size:17px;
   }
 
-  .topbar-inner{
-    min-height:64px;
-  }
+  .bubble{max-width:84%}
 
-  .chat-header{
-    padding:10px;
-  }
-
-  .messages{
-    padding:12px;
-  }
-
-  .chat-composer{
-    padding:8px;
-  }
-
-  .chat-send{
-    min-width:58px;
-  }
+  .nav{min-height:51px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     AUTH SCREEN
-===================================================== -->
-
+<!-- AUTH -->
 <section id="authScreen" class="screen">
-
   <div class="auth-wrap">
 
     <div class="brand">
@@ -1193,108 +1079,83 @@ h2{
     <div class="auth-card">
 
       <h2 id="authTitle">Welcome back</h2>
-      <div class="small" id="authSubtitle">
+
+      <div id="authSubtitle" class="small">
         Login to continue to Poll Pulse.
       </div>
 
-      <div class="field hidden" id="usernameField">
-        <label for="username">Username</label>
-        <input
-          id="username"
-          class="input"
+      <div id="usernameField" class="field hidden">
+        <label>Username</label>
+        <input id="username" class="input"
           type="text"
           placeholder="your_username"
           autocomplete="username"
-          maxlength="30"
-        >
+          maxlength="30">
       </div>
 
       <div class="field">
-        <label for="email">Email</label>
-        <input
-          id="email"
-          class="input"
+        <label>Email</label>
+        <input id="email" class="input"
           type="email"
           placeholder="you@example.com"
-          autocomplete="email"
-        >
+          autocomplete="email">
       </div>
 
       <div class="field">
-        <label for="password">Password</label>
-        <input
-          id="password"
-          class="input"
+        <label>Password</label>
+        <input id="password" class="input"
           type="password"
           placeholder="••••••••"
-          autocomplete="current-password"
-        >
+          autocomplete="current-password">
       </div>
 
       <div class="auth-actions">
 
-        <button
-          id="loginBtn"
+        <button id="loginBtn"
           class="btn btn-primary"
-          type="button"
-        >
+          type="button">
           Login
         </button>
 
-        <button
-          id="signupBtn"
+        <button id="signupBtn"
           class="btn btn-primary hidden"
-          type="button"
-        >
+          type="button">
           Create account
         </button>
 
-        <button
-          id="resetBtn"
+        <button id="resetBtn"
           class="link-btn"
-          type="button"
-        >
+          type="button">
           Forgot password?
         </button>
 
       </div>
 
-      <div
-        id="authMessage"
-        class="auth-message"
-      ></div>
+      <div id="authMessage" class="auth-message"></div>
 
       <div class="auth-switch">
         <span id="authSwitchText" class="small">
           Don't have an account?
         </span>
-
-        <button
-          id="authToggleBtn"
+        <button id="authToggleBtn"
           class="link-btn"
-          type="button"
-        >
+          type="button">
           Sign up
         </button>
       </div>
 
     </div>
   </div>
-
 </section>
 
 
-<!-- =====================================================
-     MAIN APP
-===================================================== -->
-
+<!-- APP -->
 <section id="homeScreen" class="screen hidden">
 
   <div class="app-shell">
 
-    <!-- HEADER -->
+    <!-- TOP BAR -->
     <header class="topbar">
-
       <div class="topbar-inner">
 
         <div class="logo-small">
@@ -1304,55 +1165,36 @@ h2{
 
         <div class="topbar-spacer"></div>
 
-        <div
-          id="headerUser"
-          class="header-user"
-        >
-          <div
-            id="headerAvatar"
-            class="header-avatar"
-          ></div>
+        <div id="headerUser" class="header-user">
+          <div id="headerAvatar" class="header-avatar"></div>
 
           <div>
-            <div
-              id="headerUsername"
-              style="font-weight:800"
-            >
+            <div id="headerUsername"
+              style="font-weight:850;font-size:12px">
               @user
             </div>
-
-            <div
-              id="headerDisplayName"
-              class="small"
-            ></div>
+            <div id="headerDisplayName" class="small"></div>
           </div>
         </div>
 
       </div>
-
     </header>
 
 
-    <!-- MAIN -->
     <main class="main-layout">
 
       <!-- HOME -->
-      <section
-        id="homePage"
-        class="page"
-      >
+      <section id="homePage" class="page">
 
         <div class="page-title">
           <div>
-            <h2>Discover polls</h2>
-            <p>See what everyone is voting on.</p>
+            <h2>Discover</h2>
+            <p>What's everyone talking about?</p>
           </div>
 
-          <button
-            id="homeCreateBtn"
+          <button id="homeCreateBtn"
             class="btn btn-primary"
-            type="button"
-          >
+            type="button">
             + Poll
           </button>
         </div>
@@ -1363,10 +1205,7 @@ h2{
 
 
       <!-- SEARCH -->
-      <section
-        id="searchPage"
-        class="page hidden"
-      >
+      <section id="searchPage" class="page hidden">
 
         <div class="page-title">
           <div>
@@ -1378,15 +1217,12 @@ h2{
         <div class="card">
 
           <div class="search-box">
-            <span class="search-icon">🔎</span>
-
-            <input
-              id="searchInput"
+            <span class="search-icon">⌕</span>
+            <input id="searchInput"
               class="input"
               type="search"
               placeholder="Search username or poll..."
-              autocomplete="off"
-            >
+              autocomplete="off">
           </div>
 
           <div id="searchResults">
@@ -1396,250 +1232,180 @@ h2{
           </div>
 
         </div>
-
       </section>
 
 
       <!-- CREATE -->
-      <section
-        id="createPage"
-        class="page hidden"
-      >
+      <section id="createPage" class="page hidden">
 
         <div class="page-title">
           <div>
-            <h2>Create poll</h2>
-            <p>Ask the community a question.</p>
+            <h2>Create</h2>
+            <p>Turn your thought into a poll.</p>
           </div>
         </div>
 
         <div class="card">
 
           <div class="field">
-            <label for="question">Question</label>
-
-            <textarea
-              id="question"
+            <label>QUESTION</label>
+            <textarea id="question"
               class="textarea"
               maxlength="300"
-              placeholder="What do you think about..."
-            ></textarea>
+              placeholder="What do you think about..."></textarea>
           </div>
 
           <div class="option-grid">
 
             <div class="field">
-              <label for="option1">Option 1</label>
-              <input
-                id="option1"
+              <label>OPTION 01</label>
+              <input id="option1"
                 class="input"
-                type="text"
                 maxlength="100"
-                placeholder="First option"
-              >
+                placeholder="First option">
             </div>
 
             <div class="field">
-              <label for="option2">Option 2</label>
-              <input
-                id="option2"
+              <label>OPTION 02</label>
+              <input id="option2"
                 class="input"
-                type="text"
                 maxlength="100"
-                placeholder="Second option"
-              >
+                placeholder="Second option">
             </div>
 
             <div class="field">
-              <label for="option3">Option 3</label>
-              <input
-                id="option3"
+              <label>OPTION 03</label>
+              <input id="option3"
                 class="input"
-                type="text"
                 maxlength="100"
-                placeholder="Third option (optional)"
-              >
+                placeholder="Third option · optional">
             </div>
 
             <div class="field">
-              <label for="option4">Option 4</label>
-              <input
-                id="option4"
+              <label>OPTION 04</label>
+              <input id="option4"
                 class="input"
-                type="text"
                 maxlength="100"
-                placeholder="Fourth option (optional)"
-              >
+                placeholder="Fourth option · optional">
             </div>
 
           </div>
 
           <div class="create-actions">
-
-            <button
-              id="publishPollBtn"
+            <button id="publishPollBtn"
               class="btn btn-primary"
-              type="button"
-            >
+              type="button">
               Publish poll
             </button>
-
           </div>
 
         </div>
-
       </section>
 
 
       <!-- CHAT -->
-      <section
-        id="chatPage"
-        class="page hidden"
-      >
+      <section id="chatPage" class="page hidden">
 
         <div class="page-title">
           <div>
             <h2>Messages</h2>
-            <p>Chat with Poll Pulse users.</p>
+            <p>Private conversations.</p>
           </div>
         </div>
 
-        <div class="chat-page-layout">
+        <div id="chatLayout" class="chat-page-layout">
 
-          <!-- CHAT USERS -->
+          <!-- CHAT LIST -->
           <aside class="chat-sidebar">
 
             <div class="chat-sidebar-header">
-
               <h3>Chats</h3>
 
-              <input
-                id="chatSearch"
+              <input id="chatSearch"
                 class="input"
                 type="search"
                 placeholder="Search username..."
-                autocomplete="off"
-              >
-
+                autocomplete="off">
             </div>
 
             <div id="chatUsers" class="chat-users">
-
               <div class="empty">
                 Search a username to start chatting.
               </div>
-
             </div>
 
           </aside>
 
 
-          <!-- CHAT PANEL -->
+          <!-- CHAT WINDOW -->
           <section class="chat-panel">
 
-            <div
-              id="chatEmpty"
-              class="chat-empty"
-            >
+            <div id="chatEmpty" class="chat-empty">
               <div>
-                <div style="font-size:45px;margin-bottom:10px">
+                <div style="font-size:45px;margin-bottom:12px">
                   💬
                 </div>
-
-                <strong style="display:block;color:var(--text);font-size:18px">
-                  Select a chat
+                <strong style="display:block;color:#fff;font-size:18px">
+                  Your conversations
                 </strong>
-
-                <div style="margin-top:5px">
-                  Search for someone and start a conversation.
+                <div style="margin-top:6px">
+                  Search someone and start a conversation.
                 </div>
               </div>
             </div>
 
 
-            <div
-              id="chatArea"
+            <div id="chatArea"
               class="hidden"
-              style="
-                display:flex;
-                flex-direction:column;
-                min-height:0;
-                height:100%;
-              "
-            >
+              style="display:flex;flex-direction:column;height:100%;min-height:0">
 
               <div class="chat-header">
 
-                <div
-                  id="chatAvatar"
-                  class="chat-avatar"
-                ></div>
+                <button id="closeChatBtn"
+                  class="icon-btn"
+                  type="button"
+                  title="Back">
+                  ←
+                </button>
+
+                <div id="chatAvatar" class="chat-avatar"></div>
 
                 <div class="grow">
-
-                  <div
-                    id="chatTitle"
-                    class="chat-user-name"
-                  >
+                  <div id="chatTitle" class="chat-user-name">
                     @user
                   </div>
-
-                  <div
-                    id="chatStatus"
-                    class="chat-status"
-                  >
+                  <div id="chatStatus" class="chat-status">
                     Poll Pulse user
                   </div>
-
                 </div>
 
                 <div class="chat-header-actions">
 
-                  <button
-                    id="chatProfileOpen"
+                  <button id="chatProfileOpen"
                     class="icon-btn"
                     type="button"
-                    title="Open profile"
-                  >
+                    title="Open profile">
                     👤
-                  </button>
-
-                  <button
-                    id="closeChatBtn"
-                    class="icon-btn"
-                    type="button"
-                    title="Close chat"
-                  >
-                    ×
                   </button>
 
                 </div>
 
               </div>
 
-
-              <div
-                id="messages"
-                class="messages"
-              ></div>
-
+              <div id="messages" class="messages"></div>
 
               <div class="chat-composer">
 
-                <input
-                  id="chatInput"
+                <input id="chatInput"
                   class="input"
                   type="text"
-                  placeholder="Write a message..."
                   maxlength="2000"
-                  autocomplete="off"
-                >
+                  placeholder="Write a message..."
+                  autocomplete="off">
 
-                <button
-                  id="sendMessageBtn"
+                <button id="sendMessageBtn"
                   class="btn btn-primary chat-send"
-                  type="button"
-                >
+                  type="button">
                   Send
                 </button>
 
@@ -1650,27 +1416,21 @@ h2{
           </section>
 
         </div>
-
       </section>
 
 
       <!-- PROFILE -->
-      <section
-        id="profilePage"
-        class="page hidden"
-      >
+      <section id="profilePage" class="page hidden">
 
         <div class="page-title">
           <div>
             <h2>My profile</h2>
-            <p>Your Poll Pulse activity.</p>
+            <p>Your Poll Pulse identity.</p>
           </div>
 
-          <button
-            id="logoutBtn"
+          <button id="logoutBtn"
             class="btn btn-danger"
-            type="button"
-          >
+            type="button">
             Logout
           </button>
         </div>
@@ -1678,46 +1438,33 @@ h2{
 
         <div class="card profile-hero">
 
-          <div
-            id="avatar"
-            class="profile-avatar"
-          ></div>
+          <div id="avatar" class="profile-avatar"></div>
 
-          <input
-            id="avatarFile"
+          <input id="avatarFile"
             type="file"
             accept="image/*"
-            hidden
-          >
+            hidden>
 
-          <button
-            id="photoBtn"
+          <button id="photoBtn"
             class="btn btn-secondary"
-            type="button"
-          >
+            type="button">
             📷 Change photo
           </button>
 
-          <div
-            id="profileName"
+          <div id="profileName"
             class="profile-name"
-            style="margin-top:15px"
-          >
+            style="margin-top:15px">
             User
           </div>
 
-          <div
-            id="profileUsername"
-            class="profile-username"
-          >
+          <div id="profileUsername"
+            class="profile-username">
             @user
           </div>
 
-          <div
-            id="profileBio"
+          <div id="profileBio"
             class="small"
-            style="margin-top:8px"
-          ></div>
+            style="margin-top:8px"></div>
 
           <div class="profile-stats">
 
@@ -1746,35 +1493,25 @@ h2{
         </div>
 
 
-        <!-- Notifications -->
+        <!-- NOTIFICATIONS -->
         <div class="card">
 
-          <div
-            style="
-              display:flex;
-              align-items:center;
-              justify-content:space-between;
-              gap:10px;
-              margin-bottom:13px;
-            "
-          >
+          <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:10px;
+            margin-bottom:12px">
 
             <div>
-              <h3 style="margin:0">
-                🔔 Notifications
-              </h3>
-
-              <div class="small">
-                Recent activity
-              </div>
+              <h3 style="margin:0">🔔 Activity</h3>
+              <div class="small">Recent notifications</div>
             </div>
 
-            <button
-              id="markAllNotificationsBtn"
+            <button id="markAllNotificationsBtn"
               class="btn btn-secondary"
-              type="button"
-            >
-              Mark all read
+              type="button">
+              Mark read
             </button>
 
           </div>
@@ -1784,37 +1521,29 @@ h2{
         </div>
 
 
-        <!-- Profile tabs -->
+        <!-- PROFILE TABS -->
         <div class="card">
 
           <div class="tabs">
 
-            <button
-              type="button"
+            <button type="button"
               data-tab="polls"
-              class="active"
-            >
+              class="active">
               Polls
             </button>
 
-            <button
-              type="button"
-              data-tab="votes"
-            >
+            <button type="button"
+              data-tab="votes">
               Votes
             </button>
 
-            <button
-              type="button"
-              data-tab="followers"
-            >
+            <button type="button"
+              data-tab="followers">
               Followers
             </button>
 
-            <button
-              type="button"
-              data-tab="following"
-            >
+            <button type="button"
+              data-tab="following">
               Following
             </button>
 
@@ -1827,56 +1556,40 @@ h2{
       </section>
 
 
-      <!-- PUBLIC USER PROFILE -->
-      <section
-        id="userProfilePage"
-        class="page hidden"
-      >
+      <!-- PUBLIC PROFILE -->
+      <section id="userProfilePage" class="page hidden">
 
         <div class="page-title">
-
-          <button
-            id="publicProfileBackBtn"
+          <button id="publicProfileBackBtn"
             class="btn btn-secondary"
-            type="button"
-          >
+            type="button">
             ← Back
           </button>
-
         </div>
 
         <div class="card">
 
           <div class="public-profile-head">
 
-            <div
-              id="publicProfileAvatar"
-              class="profile-avatar"
-            ></div>
+            <div id="publicProfileAvatar"
+              class="profile-avatar"></div>
 
             <div class="public-profile-info">
 
-              <h2 id="publicProfileName">
-                User
-              </h2>
+              <h2 id="publicProfileName">User</h2>
 
-              <div
-                id="publicProfileUsername"
-                class="small"
-              >
+              <div id="publicProfileUsername"
+                class="small">
                 @user
               </div>
 
-              <div
-                id="publicProfileBio"
+              <div id="publicProfileBio"
                 class="small"
-                style="margin-top:4px"
-              ></div>
+                style="margin-top:4px"></div>
 
             </div>
 
           </div>
-
 
           <div class="profile-stats">
 
@@ -1897,29 +1610,23 @@ h2{
 
           </div>
 
-
           <div class="public-profile-actions">
 
-            <button
-              id="publicFollowBtn"
+            <button id="publicFollowBtn"
               class="btn follow"
-              type="button"
-            >
+              type="button">
               Follow
             </button>
 
-            <button
-              id="publicMessageBtn"
+            <button id="publicMessageBtn"
               class="btn btn-secondary"
-              type="button"
-            >
+              type="button">
               💬 Message
             </button>
 
           </div>
 
         </div>
-
 
         <div class="card">
 
@@ -1941,78 +1648,57 @@ h2{
 
     <div class="bottom-inner">
 
-      <button
-        id="navHome"
+      <button id="navHome"
         class="nav active"
-        type="button"
-      >
+        type="button">
         🏠
         <b>Home</b>
       </button>
 
-      <button
-        id="navSearch"
+      <button id="navSearch"
         class="nav"
-        type="button"
-      >
+        type="button">
         🔎
         <b>Search</b>
       </button>
 
-      <button
-        id="navCreate"
+      <button id="navCreate"
         class="nav"
-        type="button"
-      >
-        ➕
+        type="button">
+        ＋
         <b>Create</b>
       </button>
 
-      <button
-        id="navChat"
+      <button id="navChat"
         class="nav"
-        type="button"
-      >
+        type="button">
         💬
         <b>Chat</b>
-        <span
-          id="chatBadge"
-          class="badge hidden"
-        >
-          0
-        </span>
+        <span id="chatBadge"
+          class="badge hidden">0</span>
       </button>
 
-      <button
-        id="navProfile"
+      <button id="navProfile"
         class="nav"
-        type="button"
-      >
+        type="button">
         👤
         <b>Profile</b>
-
-        <span
-          id="notificationBadge"
-          class="badge hidden"
-        >
-          0
-        </span>
+        <span id="notificationBadge"
+          class="badge hidden">0</span>
       </button>
 
     </div>
-
   </nav>
 
 </section>
-
 
 <div id="toast"></div>
 
 
 <script>
-/* =====================================================
+/* =========================================================
    SUPABASE
-===================================================== */
+========================================================= */
 
 const SUPABASE_URL =
   "https://dbpbkvfaxgifjeveijqf.supabase.co";
@@ -2020,29 +1706,28 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
 
-let sb = null;
+let sb=null;
+let currentUser=null;
+let currentProfile=null;
+let currentChatUser=null;
+let currentPublicProfile=null;
 
-let currentUser = null;
-let currentProfile = null;
-let currentChatUser = null;
-let currentPublicProfile = null;
-
-let searchTimer = null;
-let chatTimer = null;
-let messageTimer = null;
+let searchTimer=null;
+let chatTimer=null;
+let messageTimer=null;
+let signupMode=false;
 
 
-/* =====================================================
+/* =========================================================
    HELPERS
-===================================================== */
+========================================================= */
 
 function $(id){
   return document.getElementById(id);
 }
 
-
 function esc(value){
-  return String(value ?? "")
+  return String(value??"")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
@@ -2050,94 +1735,61 @@ function esc(value){
     .replace(/'/g,"&#039;");
 }
 
-
 function toast(message){
+  const box=$("toast");
+  if(!box)return;
 
-  const box = $("toast");
-
-  if(!box) return;
-
-  box.textContent = message;
+  box.textContent=message;
   box.classList.add("show");
 
   clearTimeout(window.__toastTimer);
 
-  window.__toastTimer =
-    setTimeout(()=>{
-      box.classList.remove("show");
-    },2800);
+  window.__toastTimer=setTimeout(()=>{
+    box.classList.remove("show");
+  },2800);
 }
 
-
 function setLoading(button,loading,text){
-
-  if(!button) return;
+  if(!button)return;
 
   if(loading){
-
-    button.dataset.oldText =
-      button.textContent;
-
-    button.disabled = true;
-
-    if(text){
-      button.textContent = text;
-    }
-
+    button.dataset.oldText=button.textContent;
+    button.disabled=true;
+    if(text)button.textContent=text;
   }else{
-
-    button.disabled = false;
-
+    button.disabled=false;
     if(button.dataset.oldText){
-      button.textContent =
-        button.dataset.oldText;
-
+      button.textContent=button.dataset.oldText;
       delete button.dataset.oldText;
     }
   }
 }
 
-
 function getInitial(user){
-
-  const name =
-    user?.display_name ||
-    user?.username ||
-    user?.email ||
+  const name=
+    user?.display_name||
+    user?.username||
+    user?.email||
     "U";
 
-  return name
-    .trim()
-    .charAt(0)
-    .toUpperCase();
+  return name.trim().charAt(0).toUpperCase();
 }
 
-
-/* =====================================================
-   AVATAR
-===================================================== */
-
 function setAvatarElement(element,user){
+  if(!element)return;
 
-  if(!element) return;
+  element.innerHTML="";
 
-  element.innerHTML = "";
+  if(user?.avatar_url){
 
-  const url =
-    user?.avatar_url;
+    const img=document.createElement("img");
+    img.src=user.avatar_url;
+    img.alt="";
 
-  if(url){
-
-    const img =
-      document.createElement("img");
-
-    img.src = url;
-    img.alt = "";
-
-    img.onerror = ()=>{
-      element.innerHTML =
-        "<div class='avatar-fallback'>" +
-        esc(getInitial(user)) +
+    img.onerror=()=>{
+      element.innerHTML=
+        "<div class='avatar-fallback'>"+
+        esc(getInitial(user))+
         "</div>";
     };
 
@@ -2145,321 +1797,220 @@ function setAvatarElement(element,user){
 
   }else{
 
-    const fallback =
-      document.createElement("div");
-
-    fallback.className =
-      "avatar-fallback";
-
-    fallback.textContent =
-      getInitial(user);
+    const fallback=document.createElement("div");
+    fallback.className="avatar-fallback";
+    fallback.textContent=getInitial(user);
 
     element.appendChild(fallback);
   }
 }
 
 
-/* =====================================================
-   SUPABASE INIT
-===================================================== */
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 function initSupabase(){
 
   if(!window.supabase){
-
-    authMessage(
-      "Supabase library load nahi hui."
-    );
-
+    authMessage("Supabase library load nahi hui.");
     return false;
   }
 
-  sb =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY,
-      {
-        auth:{
-          persistSession:true,
-          autoRefreshToken:true,
-          detectSessionInUrl:true
-        }
+  sb=window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
       }
-    );
+    }
+  );
 
   return true;
 }
 
 
-/* =====================================================
-   AUTH UI
-===================================================== */
-
-let signupMode = false;
-
+/* =========================================================
+   AUTH
+========================================================= */
 
 function authMessage(message){
 
-  const box =
-    $("authMessage");
-
-  if(!box) return;
+  const box=$("authMessage");
+  if(!box)return;
 
   if(!message){
-
-    box.textContent = "";
+    box.textContent="";
     box.classList.remove("show");
     return;
   }
 
-  box.textContent = message;
+  box.textContent=message;
   box.classList.add("show");
 }
 
-
 function toggleAuth(){
 
-  signupMode =
-    !signupMode;
-
+  signupMode=!signupMode;
   authMessage("");
 
-  $("usernameField")
-    .classList.toggle(
-      "hidden",
-      !signupMode
-    );
+  $("usernameField").classList.toggle(
+    "hidden",
+    !signupMode
+  );
 
-  $("loginBtn")
-    .classList.toggle(
-      "hidden",
-      signupMode
-    );
-
-  $("signupBtn")
-    .classList.toggle(
-      "hidden",
-      !signupMode
-    );
-
-  $("resetBtn")
-    .classList.toggle(
-      "hidden",
-      signupMode
-    );
-
-  $("authTitle").textContent =
+  $("loginBtn").classList.toggle(
+    "hidden",
     signupMode
-      ? "Create your account"
-      : "Welcome back";
+  );
 
-  $("authSubtitle").textContent =
-    signupMode
-      ? "Join Poll Pulse and start voting."
-      : "Login to continue to Poll Pulse.";
+  $("signupBtn").classList.toggle(
+    "hidden",
+    !signupMode
+  );
 
-  $("authSwitchText").textContent =
+  $("resetBtn").classList.toggle(
+    "hidden",
     signupMode
-      ? "Already have an account?"
-      : "Don't have an account?";
+  );
 
-  $("authToggleBtn").textContent =
+  $("authTitle").textContent=
     signupMode
-      ? "Login"
-      : "Sign up";
+      ?"Create your account"
+      :"Welcome back";
+
+  $("authSubtitle").textContent=
+    signupMode
+      ?"Join Poll Pulse and start voting."
+      :"Login to continue to Poll Pulse.";
+
+  $("authSwitchText").textContent=
+    signupMode
+      ?"Already have an account?"
+      :"Don't have an account?";
+
+  $("authToggleBtn").textContent=
+    signupMode
+      ?"Login"
+      :"Sign up";
 }
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
 
 async function login(){
 
-  const email =
-    $("email").value.trim();
+  const email=$("email").value.trim();
+  const password=$("password").value;
 
-  const password =
-    $("password").value;
-
-  if(!email || !password){
-
-    authMessage(
-      "Email aur password enter karo."
-    );
-
+  if(!email||!password){
+    authMessage("Email aur password enter karo.");
     return;
   }
 
-  const btn =
-    $("loginBtn");
+  const btn=$("loginBtn");
 
-  setLoading(
-    btn,
-    true,
-    "Logging in..."
-  );
-
+  setLoading(btn,true,"Logging in...");
   authMessage("");
 
   try{
 
-    const {data,error} =
+    const {data,error}=
       await sb.auth.signInWithPassword({
         email,
         password
       });
 
-    if(error) throw error;
+    if(error)throw error;
 
     if(data?.user){
-
-      await openApp(
-        data.user
-      );
+      await openApp(data.user);
     }
 
   }catch(error){
 
-    console.error(
-      "LOGIN:",
-      error
-    );
+    console.error("LOGIN:",error);
 
     authMessage(
-      error.message ||
-      "Login failed."
+      error.message||"Login failed."
     );
 
   }finally{
-
-    setLoading(
-      btn,
-      false
-    );
+    setLoading(btn,false);
   }
 }
 
-
-/* =====================================================
-   SIGNUP
-===================================================== */
-
 async function signup(){
 
-  const username =
-    $("username")
-    .value
-    .trim()
-    .toLowerCase();
+  const username=
+    $("username").value.trim().toLowerCase();
 
-  const email =
-    $("email")
-    .value
-    .trim();
+  const email=
+    $("email").value.trim();
 
-  const password =
+  const password=
     $("password").value;
 
   if(!username){
-
-    authMessage(
-      "Username enter karo."
-    );
-
+    authMessage("Username enter karo.");
     return;
   }
 
   if(!/^[a-z0-9_]{3,30}$/.test(username)){
-
     authMessage(
       "Username 3-30 characters ka ho aur sirf letters, numbers ya _ use karo."
     );
-
     return;
   }
 
-  if(!email || !password){
-
-    authMessage(
-      "Email aur password enter karo."
-    );
-
+  if(!email||!password){
+    authMessage("Email aur password enter karo.");
     return;
   }
 
-  if(password.length < 6){
-
+  if(password.length<6){
     authMessage(
       "Password kam se kam 6 characters ka hona chahiye."
     );
-
     return;
   }
 
-  const btn =
-    $("signupBtn");
+  const btn=$("signupBtn");
 
-  setLoading(
-    btn,
-    true,
-    "Creating..."
-  );
-
+  setLoading(btn,true,"Creating...");
   authMessage("");
 
   try{
 
-    const existing =
-      await sb
+    const existing=await sb
       .from("profiles")
       .select("id")
-      .eq(
-        "username",
-        username
-      )
+      .eq("username",username)
       .limit(1);
 
-    if(existing.error)
-      throw existing.error;
+    if(existing.error)throw existing.error;
 
     if(existing.data?.length){
-
-      throw new Error(
-        "Ye username already taken hai."
-      );
+      throw new Error("Ye username already taken hai.");
     }
 
-    const {data,error} =
+    const {data,error}=
       await sb.auth.signUp({
         email,
         password,
         options:{
-          data:{
-            username
-          }
+          data:{username}
         }
       });
 
-    if(error) throw error;
+    if(error)throw error;
 
     if(data?.user){
 
-      /*
-        If email confirmation is disabled,
-        session will already exist.
-      */
-
       if(data.session){
 
-        await ensureProfile(
-          data.user,
-          username
-        );
-
-        await openApp(
-          data.user
-        );
+        await ensureProfile(data.user,username);
+        await openApp(data.user);
 
       }else{
 
@@ -2471,68 +2022,43 @@ async function signup(){
 
   }catch(error){
 
-    console.error(
-      "SIGNUP:",
-      error
-    );
+    console.error("SIGNUP:",error);
 
     authMessage(
-      error.message ||
-      "Signup failed."
+      error.message||"Signup failed."
     );
 
   }finally{
-
-    setLoading(
-      btn,
-      false
-    );
+    setLoading(btn,false);
   }
 }
 
-
-/* =====================================================
-   RESET PASSWORD
-===================================================== */
-
 async function resetPassword(){
 
-  const email =
-    $("email").value.trim();
+  const email=$("email").value.trim();
 
   if(!email){
-
-    authMessage(
-      "Pehle email enter karo."
-    );
-
+    authMessage("Pehle email enter karo.");
     return;
   }
 
-  const btn =
-    $("resetBtn");
+  const btn=$("resetBtn");
 
-  setLoading(
-    btn,
-    true,
-    "Sending..."
-  );
+  setLoading(btn,true,"Sending...");
 
   try{
 
-    const redirect =
-      window.location.origin +
+    const redirect=
+      window.location.origin+
       window.location.pathname;
 
-    const {error} =
+    const {error}=
       await sb.auth.resetPasswordForEmail(
         email,
-        {
-          redirectTo:redirect
-        }
+        {redirectTo:redirect}
       );
 
-    if(error) throw error;
+    if(error)throw error;
 
     authMessage(
       "Password reset email bhej di gayi hai."
@@ -2540,73 +2066,69 @@ async function resetPassword(){
 
   }catch(error){
 
-    console.error(
-      "RESET:",
-      error
-    );
+    console.error("RESET:",error);
 
     authMessage(
-      error.message ||
-      "Reset failed."
+      error.message||"Reset failed."
     );
 
   }finally{
-
-    setLoading(
-      btn,
-      false
-    );
+    setLoading(btn,false);
   }
 }
 
 
-/* =====================================================
-   PROFILE
-===================================================== */
+/* =========================================================
+   PROFILES
+========================================================= */
 
-async function ensureProfile(
-  user,
-  usernameHint=""
-){
+async function getProfile(userId){
 
-  if(!user || !sb)
+  if(!userId||!sb)return null;
+
+  const {data,error}=await sb
+    .from("profiles")
+    .select("*")
+    .eq("id",userId)
+    .maybeSingle();
+
+  if(error){
+    console.error("GET PROFILE:",error);
     return null;
+  }
 
-  let profile =
-    await getProfile(
-      user.id
-    );
+  return data;
+}
 
-  if(profile)
-    return profile;
+async function ensureProfile(user,usernameHint=""){
 
-  let username =
-    usernameHint ||
-    user.user_metadata?.username ||
+  if(!user||!sb)return null;
+
+  let profile=await getProfile(user.id);
+
+  if(profile)return profile;
+
+  let username=
+    usernameHint||
+    user.user_metadata?.username||
     (
       user.email
-        ? user.email
+        ?user.email
           .split("@")[0]
           .replace(/[^a-zA-Z0-9_]/g,"")
-        : "user"
+        :"user"
     );
 
-  username =
-    username
-    .toLowerCase()
-    .slice(0,30);
+  username=
+    username.toLowerCase().slice(0,30)||"user";
 
-  if(!username)
-    username = "user";
-
-  const {data,error} =
-    await sb
+  const {data,error}=await sb
     .from("profiles")
     .insert({
       id:user.id,
       username,
       display_name:
-        user.user_metadata?.display_name ||
+        user.user_metadata?.display_name||
         username
     })
     .select()
@@ -2614,19 +2136,9 @@ async function ensureProfile(
 
   if(error){
 
-    /*
-      Profile may already exist due to
-      trigger or concurrent creation.
-    */
-    console.error(
-      "ENSURE PROFILE:",
-      error
-    );
+    console.error("ENSURE PROFILE:",error);
 
-    profile =
-      await getProfile(
-        user.id
-      );
+    profile=await getProfile(user.id);
 
     return profile;
   }
@@ -2635,57 +2147,21 @@ async function ensureProfile(
 }
 
 
-async function getProfile(userId){
-
-  if(!userId || !sb)
-    return null;
-
-  const {data,error} =
-    await sb
-    .from("profiles")
-    .select("*")
-    .eq(
-      "id",
-      userId
-    )
-    .maybeSingle();
-
-  if(error){
-
-    console.error(
-      "GET PROFILE:",
-      error
-    );
-
-    return null;
-  }
-
-  return data;
-}
-
-
-/* =====================================================
+/* =========================================================
    OPEN APP
-===================================================== */
+========================================================= */
 
 async function openApp(user){
 
-  if(!user || !sb)
-    return;
+  if(!user||!sb)return;
 
-  currentUser =
-    user;
+  currentUser=user;
 
-  currentProfile =
-    await ensureProfile(
-      user
-    );
+  currentProfile=
+    await ensureProfile(user);
 
-  $("authScreen")
-    .classList.add("hidden");
-
-  $("homeScreen")
-    .classList.remove("hidden");
+  $("authScreen").classList.add("hidden");
+  $("homeScreen").classList.remove("hidden");
 
   updateHeader();
 
@@ -2694,42 +2170,118 @@ async function openApp(user){
   await loadNotifications();
 
   showPage("home");
-
   startBackgroundRefresh();
 }
 
-
 function updateHeader(){
 
-  if(!currentProfile)
-    return;
+  if(!currentProfile)return;
 
   setAvatarElement(
     $("headerAvatar"),
     currentProfile
   );
 
-  $("headerUsername").textContent =
-    "@" +
-    (
-      currentProfile.username ||
-      "user"
-    );
+  $("headerUsername").textContent=
+    "@"+(currentProfile.username||"user");
 
-  $("headerDisplayName").textContent =
-    currentProfile.display_name ||
-    "";
+  $("headerDisplayName").textContent=
+    currentProfile.display_name||"";
 }
 
 
-/* =====================================================
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showPage(page){
+
+  [
+    "homePage",
+    "searchPage",
+    "createPage",
+    "chatPage",
+    "profilePage",
+    "userProfilePage"
+  ].forEach(id=>{
+    $(id).classList.add("hidden");
+  });
+
+  [
+    "navHome",
+    "navSearch",
+    "navCreate",
+    "navChat",
+    "navProfile"
+  ].forEach(id=>{
+    $(id).classList.remove("active");
+  });
+
+  if(page!=="chat"){
+    $("chatLayout").classList.remove("chat-open");
+    currentChatUser=null;
+    clearInterval(messageTimer);
+  }
+
+  if(page==="home"){
+
+    $("homePage").classList.remove("hidden");
+    $("navHome").classList.add("active");
+
+    loadPolls();
+  }
+
+  if(page==="search"){
+
+    $("searchPage").classList.remove("hidden");
+    $("navSearch").classList.add("active");
+
+    setTimeout(()=>{
+      $("searchInput").focus();
+    },50);
+  }
+
+  if(page==="create"){
+
+    $("createPage").classList.remove("hidden");
+    $("navCreate").classList.add("active");
+  }
+
+  if(page==="chat"){
+
+    $("chatPage").classList.remove("hidden");
+    $("navChat").classList.add("active");
+
+    updateChatBadge();
+  }
+
+  if(page==="profile"){
+
+    $("profilePage").classList.remove("hidden");
+    $("navProfile").classList.add("active");
+
+    updateProfileStats();
+    loadNotifications();
+
+    const first=
+      document.querySelector(".tabs button");
+
+    profileTab("polls",first);
+  }
+
+  if(page==="userProfile"){
+    $("userProfilePage").classList.remove("hidden");
+  }
+}
+
+
+/* =========================================================
    PROFILE STATS
-===================================================== */
+========================================================= */
 
 async function updateProfileStats(){
 
-  if(!currentUser || !sb)
-    return;
+  if(!currentUser||!sb)return;
 
   try{
 
@@ -2738,78 +2290,37 @@ async function updateProfileStats(){
       votesResult,
       followersResult,
       followingResult
-    ] =
-    await Promise.all([
+    ]=await Promise.all([
 
-      sb
-      .from("polls")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      ),
+      sb.from("polls")
+        .select("id",{count:"exact",head:true})
+        .eq("user_id",currentUser.id),
 
-      sb
-      .from("votes")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      ),
+      sb.from("votes")
+        .select("id",{count:"exact",head:true})
+        .eq("user_id",currentUser.id),
 
-      sb
-      .from("follows")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "following_id",
-        currentUser.id
-      ),
+      sb.from("follows")
+        .select("id",{count:"exact",head:true})
+        .eq("following_id",currentUser.id),
 
-      sb
-      .from("follows")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "follower_id",
-        currentUser.id
-      )
+      sb.from("follows")
+        .select("id",{count:"exact",head:true})
+        .eq("follower_id",currentUser.id)
 
     ]);
 
-    $("profilePollCount").textContent =
-      pollsResult.count || 0;
+    $("profilePollCount").textContent=
+      pollsResult.count||0;
 
-    $("profileVoteCount").textContent =
-      votesResult.count || 0;
+    $("profileVoteCount").textContent=
+      votesResult.count||0;
 
-    $("profileFollowersCount").textContent =
-      followersResult.count || 0;
+    $("profileFollowersCount").textContent=
+      followersResult.count||0;
 
-    $("profileFollowingCount").textContent =
-      followingResult.count || 0;
+    $("profileFollowingCount").textContent=
+      followingResult.count||0;
 
     if(currentProfile){
 
@@ -2818,537 +2329,110 @@ async function updateProfileStats(){
         currentProfile
       );
 
-      $("profileName").textContent =
-        currentProfile.display_name ||
-        currentProfile.username ||
+      $("profileName").textContent=
+        currentProfile.display_name||
+        currentProfile.username||
         "User";
 
-      $("profileUsername").textContent =
-        "@" +
-        (
-          currentProfile.username ||
-          "user"
-        );
+      $("profileUsername").textContent=
+        "@"+(currentProfile.username||"user");
 
-      $("profileBio").textContent =
-        currentProfile.bio ||
-        "";
+      $("profileBio").textContent=
+        currentProfile.bio||"";
     }
 
   }catch(error){
-
-    console.error(
-      "PROFILE STATS:",
-      error
-    );
+    console.error("PROFILE STATS:",error);
   }
 }
 
 
-/* =====================================================
-   PUBLIC PROFILE
-===================================================== */
-
-async function openUserProfile(userId){
-
-  if(!userId)
-    return;
-
-  const profile =
-    await getProfile(
-      userId
-    );
-
-  if(!profile){
-
-    toast(
-      "Profile nahi mila."
-    );
-
-    return;
-  }
-
-  currentPublicProfile =
-    profile;
-
-  setAvatarElement(
-    $("publicProfileAvatar"),
-    profile
-  );
-
-  $("publicProfileName").textContent =
-    profile.display_name ||
-    profile.username ||
-    "User";
-
-  $("publicProfileUsername").textContent =
-    "@" +
-    (
-      profile.username ||
-      "user"
-    );
-
-  $("publicProfileBio").textContent =
-    profile.bio ||
-    "";
-
-  await loadPublicProfileStats(
-    userId
-  );
-
-  await loadPublicProfilePolls(
-    userId
-  );
-
-  showPage("userProfile");
-}
-
-
-async function loadPublicProfileStats(userId){
-
-  try{
-
-    const [
-      pollsResult,
-      followersResult,
-      followingResult
-    ] =
-    await Promise.all([
-
-      sb
-      .from("polls")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "user_id",
-        userId
-      ),
-
-      sb
-      .from("follows")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "following_id",
-        userId
-      ),
-
-      sb
-      .from("follows")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "follower_id",
-        userId
-      )
-
-    ]);
-
-    $("publicPollCount").textContent =
-      pollsResult.count || 0;
-
-    $("publicFollowersCount").textContent =
-      followersResult.count || 0;
-
-    $("publicFollowingCount").textContent =
-      followingResult.count || 0;
-
-    const following =
-      await isFollowing(
-        userId
-      );
-
-    const button =
-      $("publicFollowBtn");
-
-    if(userId === currentUser?.id){
-
-      button.textContent = "You";
-      button.disabled = true;
-      button.classList.remove("following");
-
-    }else{
-
-      button.disabled = false;
-      button.textContent =
-        following
-          ? "Following"
-          : "Follow";
-
-      button.classList.toggle(
-        "following",
-        following
-      );
-    }
-
-  }catch(error){
-
-    console.error(
-      "PUBLIC PROFILE STATS:",
-      error
-    );
-  }
-}
-
-
-async function loadPublicProfilePolls(userId){
-
-  const box =
-    $("publicProfilePolls");
-
-  try{
-
-    const {data,error} =
-      await sb
-      .from("polls")
-      .select(
-        "id,question,created_at"
-      )
-      .eq(
-        "user_id",
-        userId
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(50);
-
-    if(error) throw error;
-
-    box.innerHTML = "";
-
-    if(!data?.length){
-
-      box.innerHTML =
-        "<div class='empty'>No polls yet.</div>";
-
-      return;
-    }
-
-    data.forEach(poll=>{
-
-      const div =
-        document.createElement("div");
-
-      div.className =
-        "notice";
-
-      div.innerHTML =
-        "<b>" +
-        esc(
-          poll.question ||
-          "Untitled poll"
-        ) +
-        "</b>" +
-        (
-          poll.created_at
-            ? "<div class='small' style='margin-top:5px'>" +
-              new Date(
-                poll.created_at
-              ).toLocaleString() +
-              "</div>"
-            : ""
-        );
-
-      box.appendChild(div);
-    });
-
-  }catch(error){
-
-    console.error(
-      "PUBLIC PROFILE POLLS:",
-      error
-    );
-
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
-      "</div>";
-  }
-}
-
-
-function closeUserProfile(){
-
-  currentPublicProfile =
-    null;
-
-  showPage("home");
-}
-
-
-/* =====================================================
-   NAVIGATION
-===================================================== */
-
-function showPage(page){
-
-  const pages = [
-    "homePage",
-    "searchPage",
-    "createPage",
-    "chatPage",
-    "profilePage",
-    "userProfilePage"
-  ];
-
-  pages.forEach(id=>{
-    $(id).classList.add("hidden");
-  });
-
-  [
-    "navHome",
-    "navSearch",
-    "navChat",
-    "navProfile"
-  ].forEach(id=>{
-    $(id).classList.remove("active");
-  });
-
-  if(page === "home"){
-
-    $("homePage")
-      .classList.remove("hidden");
-
-    $("navHome")
-      .classList.add("active");
-
-    loadPolls();
-  }
-
-  if(page === "search"){
-
-    $("searchPage")
-      .classList.remove("hidden");
-
-    $("navSearch")
-      .classList.add("active");
-
-    setTimeout(()=>{
-      $("searchInput").focus();
-    },50);
-  }
-
-  if(page === "create"){
-
-    $("createPage")
-      .classList.remove("hidden");
-
-    $("navCreate")
-      .classList.add("active");
-  }
-
-  if(page === "chat"){
-
-    $("chatPage")
-      .classList.remove("hidden");
-
-    $("navChat")
-      .classList.add("active");
-
-    updateChatBadge();
-  }
-
-  if(page === "profile"){
-
-    $("profilePage")
-      .classList.remove("hidden");
-
-    $("navProfile")
-      .classList.add("active");
-
-    updateProfileStats();
-    loadNotifications();
-
-    const first =
-      document.querySelector(
-        ".tabs button"
-      );
-
-    profileTab(
-      "polls",
-      first
-    );
-  }
-
-  if(page === "userProfile"){
-
-    $("userProfilePage")
-      .classList.remove("hidden");
-  }
-}
-
-
-/* =====================================================
+/* =========================================================
    FOLLOW
-===================================================== */
+========================================================= */
 
 async function isFollowing(userId){
 
-  if(!currentUser || !sb)
-    return false;
+  if(!currentUser||!sb)return false;
 
-  const {data,error} =
-    await sb
+  const {data,error}=await sb
     .from("follows")
     .select("id")
-    .eq(
-      "follower_id",
-      currentUser.id
-    )
-    .eq(
-      "following_id",
-      userId
-    )
+    .eq("follower_id",currentUser.id)
+    .eq("following_id",userId)
     .limit(1);
 
   if(error){
-
-    console.error(
-      "FOLLOW CHECK:",
-      error
-    );
-
+    console.error("FOLLOW CHECK:",error);
     return false;
   }
 
   return !!data?.length;
 }
 
-
 async function getFollowingIds(){
 
-  if(!currentUser || !sb)
-    return [];
+  if(!currentUser||!sb)return [];
 
-  const {data,error} =
-    await sb
+  const {data,error}=await sb
     .from("follows")
     .select("following_id")
-    .eq(
-      "follower_id",
-      currentUser.id
-    );
+    .eq("follower_id",currentUser.id);
 
-  if(error){
+  if(error)return [];
 
-    console.error(error);
-
-    return [];
-  }
-
-  return (data || [])
-    .map(x=>x.following_id);
+  return(data||[]).map(x=>x.following_id);
 }
-
 
 async function followUser(userId,button){
 
   if(!currentUser){
-
-    toast(
-      "Please login first."
-    );
-
+    toast("Please login first.");
     return;
   }
 
-  if(
-    !userId ||
-    userId === currentUser.id
-  ){
-
-    toast(
-      "Invalid user."
-    );
-
+  if(!userId||userId===currentUser.id){
+    toast("Invalid user.");
     return;
   }
 
-  setLoading(
-    button,
-    true,
-    "..."
-  );
+  setLoading(button,true,"...");
 
   try{
 
-    const following =
-      await isFollowing(
-        userId
-      );
+    const following=await isFollowing(userId);
 
     if(following){
 
-      const {error} =
-        await sb
+      const {error}=await sb
         .from("follows")
         .delete()
-        .eq(
-          "follower_id",
-          currentUser.id
-        )
-        .eq(
-          "following_id",
-          userId
-        );
+        .eq("follower_id",currentUser.id)
+        .eq("following_id",userId);
 
-      if(error) throw error;
+      if(error)throw error;
 
       if(button){
-
-        button.textContent =
-          "Follow";
-
-        button.classList.remove(
-          "following"
-        );
+        button.textContent="Follow";
+        button.classList.remove("following");
       }
 
-      toast(
-        "Unfollowed"
-      );
+      toast("Unfollowed");
 
     }else{
 
-      const {error} =
-        await sb
+      const {error}=await sb
         .from("follows")
         .insert({
-          follower_id:
-            currentUser.id,
-          following_id:
-            userId
+          follower_id:currentUser.id,
+          following_id:userId
         });
 
-      if(error) throw error;
+      if(error)throw error;
 
       if(button){
-
-        button.textContent =
-          "Following";
-
-        button.classList.add(
-          "following"
-        );
+        button.textContent="Following";
+        button.classList.add("following");
       }
 
       await createNotification(
@@ -3356,56 +2440,42 @@ async function followUser(userId,button){
         "started following you"
       );
 
-      toast(
-        "✅ Following!"
-      );
+      toast("✓ Following!");
     }
 
     await updateProfileStats();
 
     if(
       currentPublicProfile &&
-      currentPublicProfile.id === userId
+      currentPublicProfile.id===userId
     ){
-
-      await loadPublicProfileStats(
-        userId
-      );
+      await loadPublicProfileStats(userId);
     }
 
     await loadPolls();
 
   }catch(error){
 
-    console.error(
-      "FOLLOW:",
-      error
-    );
+    console.error("FOLLOW:",error);
 
     toast(
-      "Follow error: " +
-      (error.message || "Unknown error")
+      "Follow error: "+
+      (error.message||"Unknown error")
     );
 
   }finally{
 
     if(button){
 
-      button.disabled = false;
+      button.disabled=false;
 
-      if(
-        button.textContent === "..."
-      ){
+      if(button.textContent==="..."){
 
-        const following =
-          await isFollowing(
-            userId
-          );
+        const following=
+          await isFollowing(userId);
 
-        button.textContent =
-          following
-            ? "Following"
-            : "Follow";
+        button.textContent=
+          following?"Following":"Follow";
 
         button.classList.toggle(
           "following",
@@ -3417,144 +2487,71 @@ async function followUser(userId,button){
 }
 
 
-/* =====================================================
+/* =========================================================
    SUGGESTIONS
-===================================================== */
+========================================================= */
 
 async function loadSuggestions(){
 
-  if(!currentUser || !sb)
-    return null;
+  if(!currentUser||!sb)return null;
 
-  const {data:users,error} =
-    await sb
+  const {data:users,error}=await sb
     .from("profiles")
-    .select(
-      "id,username,display_name,avatar_url"
-    )
-    .neq(
-      "id",
-      currentUser.id
-    )
-    .order(
-      "created_at",
-      {
-        ascending:false
-      }
-    )
+    .select("id,username,display_name,avatar_url")
+    .neq("id",currentUser.id)
+    .order("created_at",{ascending:false})
     .limit(30);
 
-  if(error){
+  if(error)return null;
 
-    console.error(
-      "SUGGESTIONS:",
-      error
-    );
+  const followingIds=await getFollowingIds();
 
-    return null;
-  }
-
-  const followingIds =
-    await getFollowingIds();
-
-  const candidates =
-    (users || [])
-    .filter(
-      u =>
-        !followingIds.includes(u.id)
-    )
+  const candidates=(users||[])
+    .filter(u=>!followingIds.includes(u.id))
     .slice(0,5);
 
-  if(!candidates.length)
-    return null;
+  if(!candidates.length)return null;
 
-  const box =
-    document.createElement("div");
+  const box=document.createElement("div");
+  box.className="suggestion";
 
-  box.className =
-    "suggestion";
-
-  box.innerHTML =
-    "<h3>👥 Follow Suggestions</h3>" +
+  box.innerHTML=
+    "<h3>👥 Discover people</h3>"+
     "<div class='small'>People you may want to follow</div>";
 
   candidates.forEach(user=>{
 
-    const row =
-      document.createElement("div");
+    const row=document.createElement("div");
+    row.className="row user";
 
-    row.className =
-      "row user";
+    const av=document.createElement("div");
+    av.className="avatar";
+    setAvatarElement(av,user);
 
-    const av =
-      document.createElement("div");
-
-    av.className =
-      "avatar";
-
-    setAvatarElement(
-      av,
-      user
-    );
-
-    const info =
-      document.createElement("div");
-
-    info.className =
-      "grow";
-
-    info.innerHTML =
-      "<b>@" +
-      esc(user.username) +
-      "</b>" +
-      "<div class='small'>" +
-      esc(user.display_name || "") +
+    const info=document.createElement("div");
+    info.className="grow";
+    info.innerHTML=
+      "<b>@"+esc(user.username)+"</b>"+
+      "<div class='small'>"+
+      esc(user.display_name||"")+
       "</div>";
 
-    const btn =
-      document.createElement("button");
+    const btn=document.createElement("button");
+    btn.className="btn follow";
+    btn.textContent="Follow";
+    btn.type="button";
 
-    btn.className =
-      "btn follow";
+    btn.addEventListener("click",e=>{
+      e.stopPropagation();
+      followUser(user.id,btn);
+    });
 
-    btn.textContent =
-      "Follow";
+    row.addEventListener("click",e=>{
+      if(e.target.closest("button"))return;
+      openUserProfile(user.id);
+    });
 
-    btn.type =
-      "button";
-
-    btn.addEventListener(
-      "click",
-      event=>{
-        event.stopPropagation();
-
-        followUser(
-          user.id,
-          btn
-        );
-      }
-    );
-
-    row.addEventListener(
-      "click",
-      event=>{
-
-        if(
-          event.target.closest("button")
-        ){
-          return;
-        }
-
-        openUserProfile(
-          user.id
-        );
-      }
-    );
-
-    row.appendChild(av);
-    row.appendChild(info);
-    row.appendChild(btn);
-
+    row.append(av,info,btn);
     box.appendChild(row);
   });
 
@@ -3562,84 +2559,60 @@ async function loadSuggestions(){
 }
 
 
-/* =====================================================
-   LOAD POLLS
-===================================================== */
+/* =========================================================
+   POLLS
+========================================================= */
 
 async function loadPolls(){
 
-  if(!currentUser || !sb)
-    return;
+  if(!currentUser||!sb)return;
 
-  const box =
-    $("polls");
+  const box=$("polls");
 
-  box.innerHTML =
-    "<div class='loading'>Loading polls...</div>";
+  box.innerHTML=
+    "<div class='loading'>Loading your feed...</div>";
 
   try{
 
-    const suggestion =
-      await loadSuggestions();
+    const suggestion=await loadSuggestions();
 
-    box.innerHTML = "";
+    box.innerHTML="";
 
-    if(suggestion){
-      box.appendChild(
-        suggestion
-      );
-    }
+    if(suggestion)box.appendChild(suggestion);
 
-    const {data:polls,error} =
-      await sb
+    const {data:polls,error}=await sb
       .from("polls")
       .select("*")
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
+      .order("created_at",{ascending:false})
       .limit(50);
 
-    if(error) throw error;
+    if(error)throw error;
 
     if(!polls?.length){
 
-      box.innerHTML +=
-        "<div class='empty'>" +
-        "No polls yet. Create the first poll! 🎉" +
+      box.innerHTML+=
+        "<div class='empty'>"+
+        "No polls yet. Create the first one ✦"+
         "</div>";
 
       return;
     }
 
-    const ids =
-      polls.map(p=>p.id);
-
-    let votes = [];
+    const ids=polls.map(p=>p.id);
+    let votes=[];
 
     if(ids.length){
 
-      const result =
-        await sb
+      const result=await sb
         .from("votes")
-        .select(
-          "poll_id,user_id,option"
-        )
-        .in(
-          "poll_id",
-          ids
-        );
+        .select("poll_id,user_id,option")
+        .in("poll_id",ids);
 
-      if(!result.error){
-
-        votes =
-          result.data || [];
-      }
+      if(!result.error)
+        votes=result.data||[];
     }
 
-    const profileCache = {};
+    const profileCache={};
 
     for(const poll of polls){
 
@@ -3647,358 +2620,193 @@ async function loadPolls(){
         poll.user_id &&
         !profileCache[poll.user_id]
       ){
-
-        profileCache[poll.user_id] =
-          await getProfile(
-            poll.user_id
-          );
+        profileCache[poll.user_id]=
+          await getProfile(poll.user_id);
       }
     }
 
     for(const poll of polls){
 
-      const profile =
-        profileCache[poll.user_id];
+      const profile=profileCache[poll.user_id];
 
-      let options =
-        poll.options;
+      let options=poll.options;
 
-      if(typeof options === "string"){
-
+      if(typeof options==="string"){
         try{
-
-          options =
-            JSON.parse(options);
-
+          options=JSON.parse(options);
         }catch{
-
-          options = [];
+          options=[];
         }
       }
 
-      if(!Array.isArray(options)){
-        options = [];
-      }
+      if(!Array.isArray(options))
+        options=[];
 
-      const pollVotes =
-        votes.filter(
-          v =>
-            String(v.poll_id) ===
-            String(poll.id)
-        );
+      const pollVotes=votes.filter(
+        v=>String(v.poll_id)===String(poll.id)
+      );
 
-      const myVote =
-        pollVotes.find(
-          v =>
-            v.user_id ===
-            currentUser.id
-        );
+      const myVote=pollVotes.find(
+        v=>v.user_id===currentUser.id
+      );
 
-      const counts = {};
+      const counts={};
 
-      options.forEach(option=>{
-        counts[option] = 0;
-      });
+      options.forEach(o=>counts[o]=0);
 
       pollVotes.forEach(v=>{
-
-        if(
-          Object.prototype
-          .hasOwnProperty
-          .call(
-            counts,
-            v.option
-          )
-        ){
-
+        if(Object.prototype.hasOwnProperty.call(counts,v.option))
           counts[v.option]++;
-        }
       });
 
-      const total =
-        pollVotes.length;
+      const total=pollVotes.length;
 
-      const card =
-        document.createElement("div");
+      const card=document.createElement("div");
+      card.className="card";
 
-      card.className =
-        "card";
+      const creator=document.createElement("div");
+      creator.className="creator";
 
-      const creator =
-        document.createElement("div");
+      const ca=document.createElement("div");
+      ca.className="creator-avatar";
+      setAvatarElement(ca,profile);
 
-      creator.className =
-        "creator";
-
-      const ca =
-        document.createElement("div");
-
-      ca.className =
-        "creator-avatar";
-
-      setAvatarElement(
-        ca,
-        profile
-      );
-
-      const ci =
-        document.createElement("div");
-
-      ci.innerHTML =
-        "<b>@" +
-        esc(
-          profile?.username ||
-          "user"
-        ) +
-        "</b>" +
-        "<div class='small'>" +
-        esc(
-          profile?.display_name ||
-          ""
-        ) +
+      const ci=document.createElement("div");
+      ci.innerHTML=
+        "<b>@"+
+        esc(profile?.username||"user")+
+        "</b>"+
+        "<div class='small'>"+
+        esc(profile?.display_name||"")+
         "</div>";
 
-      creator.appendChild(ca);
-      creator.appendChild(ci);
+      creator.append(ca,ci);
 
-      creator.addEventListener(
-        "click",
-        ()=>{
-          if(poll.user_id){
-            openUserProfile(
-              poll.user_id
-            );
-          }
-        }
-      );
+      creator.addEventListener("click",()=>{
+        if(poll.user_id)
+          openUserProfile(poll.user_id);
+      });
 
-      card.appendChild(
-        creator
-      );
+      card.appendChild(creator);
 
-      const title =
-        document.createElement("div");
+      const title=document.createElement("div");
+      title.className="poll-title";
+      title.textContent=
+        poll.question||"Untitled poll";
 
-      title.className =
-        "poll-title";
-
-      title.textContent =
-        poll.question ||
-        "Untitled poll";
-
-      card.appendChild(
-        title
-      );
+      card.appendChild(title);
 
       options.forEach(option=>{
 
-        const button =
-          document.createElement("button");
+        const button=document.createElement("button");
 
-        button.type =
-          "button";
+        button.type="button";
+        button.className="option";
 
-        button.className =
-          "option";
+        button.textContent=
+          (myVote?.option===option?"✓ ":"")+
+          option+
+          " · "+
+          (counts[option]||0);
 
-        button.textContent =
-          (
-            myVote?.option === option
-              ? "✓ "
-              : ""
-          ) +
-          option +
-          " — " +
-          (
-            counts[option] || 0
-          );
+        button.addEventListener("click",async()=>{
 
-        button.addEventListener(
-          "click",
-          async()=>{
+          button.disabled=true;
 
-            button.disabled =
-              true;
+          await vote(poll.id,option);
 
-            await vote(
-              poll.id,
-              option
-            );
+          button.disabled=false;
+        });
 
-            button.disabled =
-              false;
-          }
-        );
+        card.appendChild(button);
 
-        card.appendChild(
-          button
-        );
+        const bar=document.createElement("div");
+        bar.className="resultbar";
 
-        const bar =
-          document.createElement("div");
+        const fill=document.createElement("i");
 
-        bar.className =
-          "resultbar";
+        fill.style.width=
+          (total
+            ?counts[option]/total*100
+            :0)+"%";
 
-        const fill =
-          document.createElement("i");
-
-        fill.style.width =
-          (
-            total
-              ? (
-                counts[option] /
-                total *
-                100
-              )
-              : 0
-          ) +
-          "%";
-
-        bar.appendChild(
-          fill
-        );
-
-        card.appendChild(
-          bar
-        );
+        bar.appendChild(fill);
+        card.appendChild(bar);
       });
 
-      const info =
-        document.createElement("div");
+      const info=document.createElement("div");
+      info.className="small";
+      info.textContent=
+        total+
+        " votes"+
+        (myVote?" • You voted":"");
 
-      info.className =
-        "small";
+      card.appendChild(info);
 
-      info.textContent =
-        total +
-        " votes" +
-        (
-          myVote
-            ? " • You voted"
-            : ""
-        );
+      const actions=document.createElement("div");
+      actions.className="poll-actions";
 
-      card.appendChild(
-        info
-      );
+      const like=document.createElement("button");
+      like.type="button";
+      like.className="action-btn";
+      like.textContent="♡ Like";
 
-      const actions =
-        document.createElement("div");
+      like.addEventListener("click",()=>{
+        likePoll(poll.id,like);
+      });
 
-      actions.className =
-        "poll-actions";
+      actions.appendChild(like);
+      card.appendChild(actions);
 
-      const like =
-        document.createElement("button");
-
-      like.type =
-        "button";
-
-      like.className =
-        "action-btn";
-
-      like.textContent =
-        "❤️ Like";
-
-      like.addEventListener(
-        "click",
-        ()=>{
-          likePoll(
-            poll.id,
-            like
-          );
-        }
-      );
-
-      actions.appendChild(
-        like
-      );
-
-      card.appendChild(
-        actions
-      );
-
-      box.appendChild(
-        card
-      );
+      box.appendChild(card);
     }
 
   }catch(error){
 
-    console.error(
-      "LOAD POLLS:",
-      error
-    );
+    console.error("LOAD POLLS:",error);
 
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
+    box.innerHTML=
+      "<div class='notice'>"+
+      esc(error.message)+
       "</div>";
   }
 }
 
 
-/* =====================================================
+/* =========================================================
    VOTE
-===================================================== */
+========================================================= */
 
-async function vote(
-  pollId,
-  option
-){
+async function vote(pollId,option){
 
   if(!currentUser){
-
-    toast(
-      "Please login first."
-    );
-
+    toast("Please login first.");
     return;
   }
 
   try{
 
-    const {
-      data:old,
-      error:oldError
-    } =
-      await sb
+    const {data:old,error:oldError}=await sb
       .from("votes")
       .select("id")
-      .eq(
-        "poll_id",
-        pollId
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      )
+      .eq("poll_id",pollId)
+      .eq("user_id",currentUser.id)
       .limit(1);
 
-    if(oldError)
-      throw oldError;
+    if(oldError)throw oldError;
 
     if(old?.length){
 
-      const {error} =
-        await sb
+      const {error}=await sb
         .from("votes")
-        .update({
-          option
-        })
-        .eq(
-          "id",
-          old[0].id
-        );
+        .update({option})
+        .eq("id",old[0].id);
 
-      if(error)
-        throw error;
+      if(error)throw error;
 
     }else{
 
-      const {error} =
-        await sb
+      const {error}=await sb
         .from("votes")
         .insert({
           poll_id:pollId,
@@ -4006,113 +2814,73 @@ async function vote(
           option
         });
 
-      if(error)
-        throw error;
+      if(error)throw error;
     }
 
-    toast(
-      "✅ Vote saved!"
-    );
+    toast("✓ Vote saved!");
 
+    await updateProfileStats();
     await loadPolls();
 
   }catch(error){
 
-    console.error(
-      "VOTE:",
-      error
-    );
+    console.error("VOTE:",error);
 
-    toast(
-      "Vote error: " +
-      error.message
-    );
+    toast("Vote error: "+error.message);
   }
 }
 
 
-/* =====================================================
+/* =========================================================
    CREATE POLL
-===================================================== */
+========================================================= */
 
 async function createPoll(){
 
   if(!currentUser){
-
-    toast(
-      "Please login first."
-    );
-
+    toast("Please login first.");
     return;
   }
 
-  const question =
-    $("question")
-    .value
-    .trim();
+  const question=$("question").value.trim();
 
-  const options =
-    [
-      $("option1").value.trim(),
-      $("option2").value.trim(),
-      $("option3").value.trim(),
-      $("option4").value.trim()
-    ]
-    .filter(Boolean);
+  const options=[
+    $("option1").value.trim(),
+    $("option2").value.trim(),
+    $("option3").value.trim(),
+    $("option4").value.trim()
+  ].filter(Boolean);
 
   if(!question){
-
-    toast(
-      "Question enter karo."
-    );
-
+    toast("Question enter karo.");
     return;
   }
 
-  if(options.length < 2){
-
-    toast(
-      "At least 2 options chahiye."
-    );
-
+  if(options.length<2){
+    toast("At least 2 options chahiye.");
     return;
   }
 
-  if(
-    options.length !==
-    new Set(options).size
-  ){
-
-    toast(
-      "Options same nahi hone chahiye."
-    );
-
+  if(options.length!==new Set(options).size){
+    toast("Options same nahi hone chahiye.");
     return;
   }
 
-  const btn =
-    $("publishPollBtn");
+  const btn=$("publishPollBtn");
 
-  setLoading(
-    btn,
-    true,
-    "Publishing..."
-  );
+  setLoading(btn,true,"Publishing...");
 
   try{
 
-    const {error} =
-      await sb
+    const {error}=await sb
       .from("polls")
       .insert({
         question,
         options,
-        user_id:
-          currentUser.id
+        user_id:currentUser.id
       });
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
     [
       "question",
@@ -4120,13 +2888,9 @@ async function createPoll(){
       "option2",
       "option3",
       "option4"
-    ].forEach(id=>{
-      $(id).value = "";
-    });
+    ].forEach(id=>$(id).value="");
 
-    toast(
-      "🎉 Poll published!"
-    );
+    toast("✦ Poll published!");
 
     await updateProfileStats();
 
@@ -4134,68 +2898,43 @@ async function createPoll(){
 
   }catch(error){
 
-    console.error(
-      "CREATE POLL:",
-      error
-    );
+    console.error("CREATE POLL:",error);
 
-    toast(
-      "Poll error: " +
-      error.message
-    );
+    toast("Poll error: "+error.message);
 
   }finally{
-
-    setLoading(
-      btn,
-      false
-    );
+    setLoading(btn,false);
   }
 }
 
 
-/* =====================================================
+/* =========================================================
    SEARCH
-===================================================== */
+========================================================= */
 
 function searchAll(){
 
-  clearTimeout(
-    searchTimer
-  );
+  clearTimeout(searchTimer);
 
-  searchTimer =
-    setTimeout(
-      runSearch,
-      350
-    );
+  searchTimer=setTimeout(runSearch,350);
 }
-
 
 async function runSearch(){
 
-  if(!currentUser || !sb)
-    return;
+  if(!currentUser||!sb)return;
 
-  const q =
-    $("searchInput")
-    .value
-    .trim();
-
-  const box =
-    $("searchResults");
+  const q=$("searchInput").value.trim();
+  const box=$("searchResults");
 
   if(!q){
 
-    box.innerHTML =
-      "<div class='empty'>" +
-      "Search users or polls." +
-      "</div>";
+    box.innerHTML=
+      "<div class='empty'>Search users or polls.</div>";
 
     return;
   }
 
-  box.innerHTML =
+  box.innerHTML=
     "<div class='loading'>Searching...</div>";
 
   try{
@@ -4203,462 +2942,414 @@ async function runSearch(){
     const [
       usersResult,
       pollsResult
-    ] =
-    await Promise.all([
+    ]=await Promise.all([
 
-      sb
-      .from("profiles")
-      .select(
-        "id,username,display_name,avatar_url"
-      )
-      .ilike(
-        "username",
-        "%" + q + "%"
-      )
-      .limit(20),
+      sb.from("profiles")
+        .select("id,username,display_name,avatar_url")
+        .ilike("username","%"+q+"%")
+        .limit(20),
 
-      sb
-      .from("polls")
-      .select(
-        "id,question,user_id"
-      )
-      .ilike(
-        "question",
-        "%" + q + "%"
-      )
-      .limit(20)
+      sb.from("polls")
+        .select("id,question,user_id")
+        .ilike("question","%"+q+"%")
+        .limit(20)
 
     ]);
 
-    box.innerHTML = "";
+    box.innerHTML="";
 
-    const users =
-      usersResult.data || [];
+    const users=usersResult.data||[];
+    const polls=pollsResult.data||[];
 
-    const polls =
-      pollsResult.data || [];
-
-    const userTitle =
-      document.createElement("h3");
-
-    userTitle.textContent =
-      "👤 Users";
-
-    box.appendChild(
-      userTitle
-    );
+    const userTitle=document.createElement("h3");
+    userTitle.textContent="👤 People";
+    box.appendChild(userTitle);
 
     if(!users.length){
 
-      const empty =
-        document.createElement("div");
-
-      empty.className =
-        "small";
-
-      empty.textContent =
-        "No users found.";
-
-      box.appendChild(
-        empty
-      );
+      const empty=document.createElement("div");
+      empty.className="small";
+      empty.textContent="No users found.";
+      box.appendChild(empty);
 
     }else{
 
       for(const user of users){
 
-        const row =
-          document.createElement("div");
+        const row=document.createElement("div");
+        row.className="row user";
 
-        row.className =
-          "row user";
+        const av=document.createElement("div");
+        av.className="avatar";
+        setAvatarElement(av,user);
 
-        const av =
-          document.createElement("div");
-
-        av.className =
-          "avatar";
-
-        setAvatarElement(
-          av,
-          user
-        );
-
-        const info =
-          document.createElement("div");
-
-        info.className =
-          "grow";
-
-        info.innerHTML =
-          "<b>@" +
-          esc(user.username) +
-          "</b>" +
-          "<div class='small'>" +
-          esc(
-            user.display_name ||
-            ""
-          ) +
+        const info=document.createElement("div");
+        info.className="grow";
+        info.innerHTML=
+          "<b>@"+esc(user.username)+"</b>"+
+          "<div class='small'>"+
+          esc(user.display_name||"")+
           "</div>";
 
-        const btn =
-          document.createElement("button");
+        const btn=document.createElement("button");
+        btn.type="button";
+        btn.className="btn follow";
 
-        btn.type =
-          "button";
+        if(user.id===currentUser.id){
 
-        btn.className =
-          "btn follow";
-
-        if(
-          user.id ===
-          currentUser.id
-        ){
-
-          btn.textContent =
-            "You";
-
-          btn.disabled =
-            true;
+          btn.textContent="You";
+          btn.disabled=true;
 
         }else{
 
-          const following =
-            await isFollowing(
-              user.id
-            );
+          const following=await isFollowing(user.id);
 
-          btn.textContent =
+          btn.textContent=
+            following?"Following":"Follow";
+
+          btn.classList.toggle(
+            "following",
             following
-              ? "Following"
-              : "Follow";
-
-          if(following){
-
-            btn.classList.add(
-              "following"
-            );
-          }
-
-          btn.addEventListener(
-            "click",
-            event=>{
-
-              event.stopPropagation();
-
-              followUser(
-                user.id,
-                btn
-              );
-            }
           );
+
+          btn.addEventListener("click",e=>{
+            e.stopPropagation();
+            followUser(user.id,btn);
+          });
         }
 
-        row.appendChild(
-          av
-        );
+        row.append(av,info,btn);
 
-        row.appendChild(
-          info
-        );
+        row.addEventListener("click",e=>{
+          if(e.target.closest("button"))return;
+          openUserProfile(user.id);
+        });
 
-        row.appendChild(
-          btn
-        );
-
-        row.addEventListener(
-          "click",
-          event=>{
-
-            if(
-              event.target.closest("button")
-            ){
-              return;
-            }
-
-            openUserProfile(
-              user.id
-            );
-          }
-        );
-
-        box.appendChild(
-          row
-        );
+        box.appendChild(row);
       }
     }
 
-    const pollTitle =
-      document.createElement("h3");
-
-    pollTitle.textContent =
-      "🗳️ Polls";
-
-    pollTitle.style.marginTop =
-      "24px";
-
-    box.appendChild(
-      pollTitle
-    );
+    const pollTitle=document.createElement("h3");
+    pollTitle.textContent="🗳️ Polls";
+    pollTitle.style.marginTop="23px";
+    box.appendChild(pollTitle);
 
     if(!polls.length){
 
-      const empty =
-        document.createElement("div");
-
-      empty.className =
-        "small";
-
-      empty.textContent =
-        "No polls found.";
-
-      box.appendChild(
-        empty
-      );
+      const empty=document.createElement("div");
+      empty.className="small";
+      empty.textContent="No polls found.";
+      box.appendChild(empty);
 
     }else{
 
       polls.forEach(poll=>{
 
-        const div =
-          document.createElement("div");
+        const div=document.createElement("div");
+        div.className="notice";
+        div.textContent=poll.question;
 
-        div.className =
-          "notice";
-
-        div.textContent =
-          poll.question;
-
-        box.appendChild(
-          div
-        );
+        box.appendChild(div);
       });
     }
 
   }catch(error){
 
-    console.error(
-      "SEARCH:",
-      error
-    );
+    console.error("SEARCH:",error);
 
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
+    box.innerHTML=
+      "<div class='notice'>"+
+      esc(error.message)+
       "</div>";
   }
 }
 
 
-/* =====================================================
-   PROFILE TABS
-===================================================== */
+/* =========================================================
+   PUBLIC PROFILE
+========================================================= */
 
-async function profileTab(
-  tab,
-  button
-){
+async function openUserProfile(userId){
 
-  document
-  .querySelectorAll(
-    ".tabs button"
-  )
-  .forEach(
-    b =>
-      b.classList.remove(
-        "active"
-      )
-  );
+  if(!userId)return;
 
-  if(button){
+  const profile=await getProfile(userId);
 
-    button.classList.add(
-      "active"
-    );
+  if(!profile){
+    toast("Profile nahi mila.");
+    return;
   }
 
-  const box =
-    $("profileContent");
+  currentPublicProfile=profile;
 
-  box.innerHTML =
+  setAvatarElement(
+    $("publicProfileAvatar"),
+    profile
+  );
+
+  $("publicProfileName").textContent=
+    profile.display_name||
+    profile.username||
+    "User";
+
+  $("publicProfileUsername").textContent=
+    "@"+(profile.username||"user");
+
+  $("publicProfileBio").textContent=
+    profile.bio||"";
+
+  await loadPublicProfileStats(userId);
+  await loadPublicProfilePolls(userId);
+
+  showPage("userProfile");
+}
+
+async function loadPublicProfileStats(userId){
+
+  try{
+
+    const [
+      pollsResult,
+      followersResult,
+      followingResult
+    ]=await Promise.all([
+
+      sb.from("polls")
+        .select("id",{count:"exact",head:true})
+        .eq("user_id",userId),
+
+      sb.from("follows")
+        .select("id",{count:"exact",head:true})
+        .eq("following_id",userId),
+
+      sb.from("follows")
+        .select("id",{count:"exact",head:true})
+        .eq("follower_id",userId)
+
+    ]);
+
+    $("publicPollCount").textContent=
+      pollsResult.count||0;
+
+    $("publicFollowersCount").textContent=
+      followersResult.count||0;
+
+    $("publicFollowingCount").textContent=
+      followingResult.count||0;
+
+    const following=await isFollowing(userId);
+    const button=$("publicFollowBtn");
+
+    if(userId===currentUser?.id){
+
+      button.textContent="You";
+      button.disabled=true;
+      button.classList.remove("following");
+
+    }else{
+
+      button.disabled=false;
+      button.textContent=
+        following?"Following":"Follow";
+
+      button.classList.toggle(
+        "following",
+        following
+      );
+    }
+
+  }catch(error){
+    console.error("PUBLIC PROFILE STATS:",error);
+  }
+}
+
+async function loadPublicProfilePolls(userId){
+
+  const box=$("publicProfilePolls");
+
+  try{
+
+    const {data,error}=await sb
+      .from("polls")
+      .select("id,question,created_at")
+      .eq("user_id",userId)
+      .order("created_at",{ascending:false})
+      .limit(50);
+
+    if(error)throw error;
+
+    box.innerHTML="";
+
+    if(!data?.length){
+
+      box.innerHTML=
+        "<div class='empty'>No polls yet.</div>";
+
+      return;
+    }
+
+    data.forEach(poll=>{
+
+      const div=document.createElement("div");
+      div.className="notice";
+
+      div.innerHTML=
+        "<b>"+esc(poll.question||"Untitled poll")+"</b>"+
+        (
+          poll.created_at
+            ?"<div class='small' style='margin-top:5px'>"+
+              new Date(poll.created_at).toLocaleString()+
+              "</div>"
+            :""
+        );
+
+      box.appendChild(div);
+    });
+
+  }catch(error){
+
+    console.error("PUBLIC PROFILE POLLS:",error);
+
+    box.innerHTML=
+      "<div class='notice'>"+
+      esc(error.message)+
+      "</div>";
+  }
+}
+
+function closeUserProfile(){
+  currentPublicProfile=null;
+  showPage("home");
+}
+
+
+/* =========================================================
+   PROFILE TABS
+========================================================= */
+
+async function profileTab(tab,button){
+
+  document.querySelectorAll(".tabs button")
+    .forEach(b=>b.classList.remove("active"));
+
+  if(button)button.classList.add("active");
+
+  const box=$("profileContent");
+
+  box.innerHTML=
     "<div class='loading'>Loading...</div>";
 
   try{
 
-    if(tab === "polls"){
+    if(tab==="polls"){
 
-      const {
-        data,
-        error
-      } =
-        await sb
+      const {data,error}=await sb
         .from("polls")
-        .select(
-          "id,question,created_at"
-        )
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .order(
-          "created_at",
-          {
-            ascending:false
-          }
-        );
+        .select("id,question,created_at")
+        .eq("user_id",currentUser.id)
+        .order("created_at",{ascending:false});
 
-      if(error)
-        throw error;
+      if(error)throw error;
 
-      box.innerHTML = "";
+      box.innerHTML="";
 
       if(!data?.length){
-
-        box.innerHTML =
+        box.innerHTML=
           "<div class='empty'>No polls yet.</div>";
-
         return;
       }
 
       data.forEach(poll=>{
 
-        const div =
-          document.createElement("div");
+        const div=document.createElement("div");
+        div.className="notice";
 
-        div.className =
-          "notice";
-
-        div.innerHTML =
-          "<b>" +
-          esc(poll.question) +
-          "</b>" +
+        div.innerHTML=
+          "<b>"+esc(poll.question)+"</b>"+
           (
             poll.created_at
-              ? "<div class='small' style='margin-top:5px'>" +
-                new Date(
-                  poll.created_at
-                ).toLocaleString() +
+              ?"<div class='small' style='margin-top:5px'>"+
+                new Date(poll.created_at).toLocaleString()+
                 "</div>"
-              : ""
+              :""
           );
 
-        box.appendChild(
-          div
-        );
+        box.appendChild(div);
       });
 
       return;
     }
 
+    if(tab==="votes"){
 
-    if(tab === "votes"){
-
-      const {
-        data,
-        error
-      } =
-        await sb
+      const {data,error}=await sb
         .from("votes")
-        .select(
-          "option,poll_id"
-        )
-        .eq(
-          "user_id",
-          currentUser.id
-        );
+        .select("option,poll_id")
+        .eq("user_id",currentUser.id);
 
-      if(error)
-        throw error;
+      if(error)throw error;
 
-      box.innerHTML = "";
+      box.innerHTML="";
 
       if(!data?.length){
-
-        box.innerHTML =
+        box.innerHTML=
           "<div class='empty'>No votes yet.</div>";
-
         return;
       }
 
       for(const voteRow of data){
 
-        const {data:poll} =
-          await sb
+        const {data:poll}=await sb
           .from("polls")
           .select("question")
-          .eq(
-            "id",
-            voteRow.poll_id
-          )
+          .eq("id",voteRow.poll_id)
           .maybeSingle();
 
-        const div =
-          document.createElement("div");
+        const div=document.createElement("div");
+        div.className="notice";
 
-        div.className =
-          "notice";
+        div.innerHTML=
+          "<b>"+
+          esc(poll?.question||"Poll")+
+          "</b><br>✓ "+
+          esc(voteRow.option);
 
-        div.innerHTML =
-          "<b>" +
-          esc(
-            poll?.question ||
-            "Poll"
-          ) +
-          "</b><br>✓ " +
-          esc(
-            voteRow.option
-          );
-
-        box.appendChild(
-          div
-        );
+        box.appendChild(div);
       }
 
       return;
     }
 
+    if(tab==="followers"||tab==="following"){
 
-    if(
-      tab === "followers" ||
-      tab === "following"
-    ){
+      const column=
+        tab==="followers"
+          ?"follower_id"
+          :"following_id";
 
-      const column =
-        tab === "followers"
-          ? "follower_id"
-          : "following_id";
+      const filterColumn=
+        tab==="followers"
+          ?"following_id"
+          :"follower_id";
 
-      const filterColumn =
-        tab === "followers"
-          ? "following_id"
-          : "follower_id";
-
-      const {
-        data,
-        error
-      } =
-        await sb
+      const {data,error}=await sb
         .from("follows")
         .select(column)
-        .eq(
-          filterColumn,
-          currentUser.id
-        );
+        .eq(filterColumn,currentUser.id);
 
-      if(error)
-        throw error;
+      if(error)throw error;
 
-      box.innerHTML = "";
+      box.innerHTML="";
 
       if(!data?.length){
 
-        box.innerHTML =
-          "<div class='empty'>" +
+        box.innerHTML=
+          "<div class='empty'>"+
           (
-            tab === "followers"
-              ? "No followers yet."
-              : "Not following anyone yet."
-          ) +
+            tab==="followers"
+              ?"No followers yet."
+              :"Not following anyone yet."
+          )+
           "</div>";
 
         return;
@@ -4666,646 +3357,351 @@ async function profileTab(
 
       for(const item of data){
 
-        const id =
-          item[column];
+        const id=item[column];
+        const user=await getProfile(id);
 
-        const user =
-          await getProfile(
-            id
-          );
+        if(!user)continue;
 
-        if(!user)
-          continue;
+        const row=document.createElement("div");
+        row.className="row user";
 
-        const row =
-          document.createElement("div");
+        const av=document.createElement("div");
+        av.className="avatar";
+        setAvatarElement(av,user);
 
-        row.className =
-          "row user";
-
-        const av =
-          document.createElement("div");
-
-        av.className =
-          "avatar";
-
-        setAvatarElement(
-          av,
-          user
-        );
-
-        const info =
-          document.createElement("div");
-
-        info.className =
-          "grow";
-
-        info.innerHTML =
-          "<b>@" +
-          esc(user.username) +
-          "</b>" +
-          "<div class='small'>" +
-          esc(
-            user.display_name ||
-            ""
-          ) +
+        const info=document.createElement("div");
+        info.className="grow";
+        info.innerHTML=
+          "<b>@"+esc(user.username)+"</b>"+
+          "<div class='small'>"+
+          esc(user.display_name||"")+
           "</div>";
 
-        const btn =
-          document.createElement("button");
+        const btn=document.createElement("button");
+        btn.type="button";
+        btn.className="btn follow";
 
-        btn.type =
-          "button";
+        if(id===currentUser.id){
 
-        btn.className =
-          "btn follow";
-
-        if(
-          id ===
-          currentUser.id
-        ){
-
-          btn.textContent =
-            "You";
-
-          btn.disabled =
-            true;
+          btn.textContent="You";
+          btn.disabled=true;
 
         }else{
 
-          const following =
-            await isFollowing(
-              id
-            );
+          const following=await isFollowing(id);
 
-          btn.textContent =
+          btn.textContent=
+            following?"Following":"Follow";
+
+          btn.classList.toggle(
+            "following",
             following
-              ? "Following"
-              : "Follow";
-
-          if(following){
-
-            btn.classList.add(
-              "following"
-            );
-          }
-
-          btn.addEventListener(
-            "click",
-            event=>{
-
-              event.stopPropagation();
-
-              followUser(
-                id,
-                btn
-              );
-            }
           );
+
+          btn.addEventListener("click",e=>{
+            e.stopPropagation();
+            followUser(id,btn);
+          });
         }
 
-        row.appendChild(
-          av
-        );
+        row.append(av,info,btn);
 
-        row.appendChild(
-          info
-        );
+        row.addEventListener("click",e=>{
+          if(e.target.closest("button"))return;
+          openUserProfile(id);
+        });
 
-        row.appendChild(
-          btn
-        );
-
-        row.addEventListener(
-          "click",
-          event=>{
-
-            if(
-              event.target.closest("button")
-            ){
-              return;
-            }
-
-            openUserProfile(
-              id
-            );
-          }
-        );
-
-        box.appendChild(
-          row
-        );
+        box.appendChild(row);
       }
     }
 
   }catch(error){
 
-    console.error(
-      "PROFILE TAB:",
-      error
-    );
+    console.error("PROFILE TAB:",error);
 
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
+    box.innerHTML=
+      "<div class='notice'>"+
+      esc(error.message)+
       "</div>";
   }
 }
 
 
-/* =====================================================
+/* =========================================================
    NOTIFICATIONS
-===================================================== */
+========================================================= */
 
-async function createNotification(
-  userId,
-  message
-){
+async function createNotification(userId,message){
 
   if(
-    !currentUser ||
-    !userId ||
-    userId === currentUser.id
-  ){
-    return;
-  }
+    !currentUser||
+    !userId||
+    userId===currentUser.id
+  )return;
 
   try{
 
     await sb
-    .from("notifications")
-    .insert({
-      user_id:userId,
-      actor_id:
-        currentUser.id,
-      type:"activity",
-      message,
-      read:false
-    });
+      .from("notifications")
+      .insert({
+        user_id:userId,
+        actor_id:currentUser.id,
+        type:"activity",
+        message,
+        read:false
+      });
 
   }catch(error){
-
-    console.error(
-      "NOTIFICATION:",
-      error
-    );
+    console.error("NOTIFICATION:",error);
   }
 }
-
 
 async function markNotificationRead(id){
 
-  if(
-    !currentUser ||
-    !sb ||
-    !id
-  ){
-    return;
-  }
+  if(!currentUser||!sb||!id)return;
 
   try{
 
-    const {error} =
-      await sb
+    const {error}=await sb
       .from("notifications")
-      .update({
-        read:true
-      })
-      .eq(
-        "id",
-        id
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      );
+      .update({read:true})
+      .eq("id",id)
+      .eq("user_id",currentUser.id);
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
     await loadNotifications();
 
   }catch(error){
-
-    console.error(
-      "MARK NOTIFICATION:",
-      error
-    );
+    console.error("MARK NOTIFICATION:",error);
   }
 }
-
 
 async function markAllNotificationsRead(){
 
-  if(!currentUser || !sb)
-    return;
+  if(!currentUser||!sb)return;
 
-  const btn =
-    $("markAllNotificationsBtn");
+  const btn=$("markAllNotificationsBtn");
 
-  setLoading(
-    btn,
-    true,
-    "..."
-  );
+  setLoading(btn,true,"...");
 
   try{
 
-    const {error} =
-      await sb
+    const {error}=await sb
       .from("notifications")
-      .update({
-        read:true
-      })
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .eq(
-        "read",
-        false
-      );
+      .update({read:true})
+      .eq("user_id",currentUser.id)
+      .eq("read",false);
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
     await loadNotifications();
 
-    toast(
-      "✅ All notifications read"
-    );
+    toast("✓ All notifications read");
 
   }catch(error){
 
-    console.error(
-      "MARK ALL NOTIFICATIONS:",
-      error
-    );
-
-    toast(
-      "Notification error: " +
-      error.message
-    );
+    toast("Notification error: "+error.message);
 
   }finally{
-
-    setLoading(
-      btn,
-      false
-    );
+    setLoading(btn,false);
   }
 }
 
-
 async function loadNotifications(){
 
-  if(!currentUser || !sb)
-    return;
+  if(!currentUser||!sb)return;
 
-  const box =
-    $("notifications");
-
-  if(!box)
-    return;
+  const box=$("notifications");
+  if(!box)return;
 
   try{
 
-    const {
-      data,
-      error
-    } =
-      await sb
+    const {data,error}=await sb
       .from("notifications")
       .select("*")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
+      .eq("user_id",currentUser.id)
+      .order("created_at",{ascending:false})
       .limit(50);
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
-    box.innerHTML = "";
+    box.innerHTML="";
 
     if(!data?.length){
 
-      box.innerHTML =
+      box.innerHTML=
         "<div class='empty'>No notifications yet.</div>";
 
     }else{
 
       data.forEach(n=>{
 
-        const div =
-          document.createElement("div");
+        const div=document.createElement("div");
 
-        div.className =
-          "notice notification-item " +
+        div.className=
+          "notice notification-item "+
+          (!n.read?"unread":"");
+
+        div.innerHTML=
+          "<div class='notification-top'>"+
+          "<span class='notification-dot'></span>"+
+          "<div class='grow'><b>"+
+          esc(n.message||"Activity")+
+          "</b></div>"+
+          "</div>"+
           (
-            !n.read
-              ? "unread"
-              : ""
+            n.created_at
+              ?"<div class='notification-time'>"+
+                new Date(n.created_at).toLocaleString()+
+                "</div>"
+              :""
           );
 
-        const top =
-          document.createElement("div");
+        div.addEventListener("click",async()=>{
 
-        top.className =
-          "notification-top";
+          if(!n.read)
+            await markNotificationRead(n.id);
 
-        const dot =
-          document.createElement("span");
+          if(n.actor_id)
+            openUserProfile(n.actor_id);
+        });
 
-        dot.className =
-          "notification-dot";
-
-        const text =
-          document.createElement("div");
-
-        text.className =
-          "grow";
-
-        text.innerHTML =
-          "<b>" +
-          esc(
-            n.message ||
-            "Activity"
-          ) +
-          "</b>";
-
-        top.appendChild(
-          dot
-        );
-
-        top.appendChild(
-          text
-        );
-
-        div.appendChild(
-          top
-        );
-
-        if(n.created_at){
-
-          const time =
-            document.createElement("div");
-
-          time.className =
-            "notification-time";
-
-          time.textContent =
-            new Date(
-              n.created_at
-            ).toLocaleString();
-
-          div.appendChild(
-            time
-          );
-        }
-
-        div.addEventListener(
-          "click",
-          async()=>{
-
-            if(!n.read){
-
-              await markNotificationRead(
-                n.id
-              );
-            }
-
-            if(n.actor_id){
-
-              openUserProfile(
-                n.actor_id
-              );
-            }
-          }
-        );
-
-        box.appendChild(
-          div
-        );
+        box.appendChild(div);
       });
     }
 
-    const unread =
-      (data || [])
-      .filter(
-        n => !n.read
-      ).length;
+    const unread=(data||[])
+      .filter(n=>!n.read).length;
 
-    const badge =
-      $("notificationBadge");
+    const badge=$("notificationBadge");
 
-    badge.textContent =
-      unread;
-
+    badge.textContent=unread;
     badge.classList.toggle(
       "hidden",
-      unread === 0
+      unread===0
     );
 
   }catch(error){
 
-    console.error(
-      "NOTIFICATIONS:",
-      error
-    );
+    console.error("NOTIFICATIONS:",error);
 
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
+    box.innerHTML=
+      "<div class='notice'>"+
+      esc(error.message)+
       "</div>";
   }
 }
 
 
-/* =====================================================
+/* =========================================================
    LIKE
-===================================================== */
+========================================================= */
 
-async function likePoll(
-  pollId,
-  button
-){
+async function likePoll(pollId,button){
 
   if(!currentUser){
-
-    toast(
-      "Please login first."
-    );
-
+    toast("Please login first.");
     return;
   }
 
   try{
 
-    const {
-      data,
-      error
-    } =
-      await sb
+    const {data,error}=await sb
       .from("likes")
       .select("id")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .eq(
-        "poll_id",
-        pollId
-      )
+      .eq("user_id",currentUser.id)
+      .eq("poll_id",pollId)
       .limit(1);
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
     if(data?.length){
 
-      const result =
-        await sb
+      const result=await sb
         .from("likes")
         .delete()
-        .eq(
-          "id",
-          data[0].id
-        );
+        .eq("id",data[0].id);
 
-      if(result.error)
-        throw result.error;
+      if(result.error)throw result.error;
 
-      if(button){
-
-        button.textContent =
-          "🤍 Like";
-      }
-
-      toast(
-        "Like removed"
-      );
+      button.textContent="♡ Like";
+      toast("Like removed");
 
     }else{
 
-      const result =
-        await sb
+      const result=await sb
         .from("likes")
         .insert({
-          user_id:
-            currentUser.id,
-          poll_id:
-            pollId
+          user_id:currentUser.id,
+          poll_id:pollId
         });
 
-      if(result.error)
-        throw result.error;
+      if(result.error)throw result.error;
 
-      if(button){
-
-        button.textContent =
-          "❤️ Liked";
-      }
-
-      toast(
-        "❤️ Liked"
-      );
+      button.textContent="♥ Liked";
+      toast("♥ Liked");
     }
 
   }catch(error){
 
-    console.error(
-      "LIKE:",
-      error
-    );
+    console.error("LIKE:",error);
 
-    toast(
-      "Like error: " +
-      error.message
-    );
+    toast("Like error: "+error.message);
   }
 }
 
 
-/* =====================================================
+/* =========================================================
    CHAT SEARCH
-===================================================== */
+========================================================= */
 
 function searchChatUsers(){
 
-  clearTimeout(
-    chatTimer
+  clearTimeout(chatTimer);
+
+  chatTimer=setTimeout(
+    runChatSearch,
+    300
   );
-
-  chatTimer =
-    setTimeout(
-      runChatSearch,
-      300
-    );
 }
-
 
 async function runChatSearch(){
 
-  if(!currentUser || !sb)
-    return;
+  if(!currentUser||!sb)return;
 
-  const q =
-    $("chatSearch")
-    .value
-    .trim();
-
-  const box =
-    $("chatUsers");
+  const q=$("chatSearch").value.trim();
+  const box=$("chatUsers");
 
   if(!q){
 
-    box.innerHTML =
-      "<div class='empty'>" +
-      "Search a username to start chatting." +
+    box.innerHTML=
+      "<div class='empty'>"+
+      "Search a username to start chatting."+
       "</div>";
 
     return;
   }
 
-  box.innerHTML =
+  box.innerHTML=
     "<div class='loading'>Searching...</div>";
 
   try{
 
-    const {
-      data,
-      error
-    } =
-      await sb
+    const {data,error}=await sb
       .from("profiles")
-      .select(
-        "id,username,display_name,avatar_url"
-      )
-      .ilike(
-        "username",
-        "%" + q + "%"
-      )
-      .neq(
-        "id",
-        currentUser.id
-      )
+      .select("id,username,display_name,avatar_url")
+      .ilike("username","%"+q+"%")
+      .neq("id",currentUser.id)
       .limit(15);
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
-    box.innerHTML = "";
+    box.innerHTML="";
 
     if(!data?.length){
 
-      box.innerHTML =
+      box.innerHTML=
         "<div class='empty'>No users found.</div>";
 
       return;
@@ -5313,142 +3709,67 @@ async function runChatSearch(){
 
     data.forEach(user=>{
 
-      const row =
-        document.createElement("div");
+      const row=document.createElement("div");
+      row.className="row chat-user";
 
-      row.className =
-        "row chat-user";
+      const av=document.createElement("div");
+      av.className="avatar";
+      setAvatarElement(av,user);
 
-      const av =
-        document.createElement("div");
-
-      av.className =
-        "avatar profile-clickable";
-
-      setAvatarElement(
-        av,
-        user
-      );
-
-      const info =
-        document.createElement("div");
-
-      info.className =
-        "grow profile-clickable";
-
-      info.innerHTML =
-        "<b>@" +
-        esc(user.username) +
-        "</b>" +
-        "<div class='chat-preview'>" +
-        esc(
-          user.display_name ||
-          "Start chatting"
-        ) +
+      const info=document.createElement("div");
+      info.className="grow";
+      info.innerHTML=
+        "<b>@"+esc(user.username)+"</b>"+
+        "<div class='chat-preview'>"+
+        esc(user.display_name||"Start chatting")+
         "</div>";
 
-      row.appendChild(
-        av
-      );
+      row.append(av,info);
 
-      row.appendChild(
-        info
-      );
+      row.addEventListener("click",()=>{
+        openChat(user);
+      });
 
-      row.addEventListener(
-        "click",
-        event=>{
+      av.addEventListener("click",e=>{
+        e.stopPropagation();
+        openUserProfile(user.id);
+      });
 
-          if(
-            event.target.closest(
-              ".profile-clickable"
-            )
-          ){
-
-            openUserProfile(
-              user.id
-            );
-
-            return;
-          }
-
-          openChat(user);
-        }
-      );
-
-      av.addEventListener(
-        "click",
-        event=>{
-
-          event.stopPropagation();
-
-          openUserProfile(
-            user.id
-          );
-        }
-      );
-
-      info.addEventListener(
-        "click",
-        event=>{
-
-          event.stopPropagation();
-
-          openUserProfile(
-            user.id
-          );
-        }
-      );
-
-      box.appendChild(
-        row
-      );
+      box.appendChild(row);
     });
 
   }catch(error){
 
-    console.error(
-      "CHAT SEARCH:",
-      error
-    );
+    console.error("CHAT SEARCH:",error);
 
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
+    box.innerHTML=
+      "<div class='notice'>"+
+      esc(error.message)+
       "</div>";
   }
 }
 
 
-/* =====================================================
+/* =========================================================
    OPEN CHAT
-===================================================== */
+========================================================= */
 
 async function openChat(user){
 
-  if(!user || !currentUser)
-    return;
+  if(!user||!currentUser)return;
 
-  currentChatUser =
-    user;
+  currentChatUser=user;
 
-  $("chatEmpty")
-    .classList.add("hidden");
+  $("chatLayout").classList.add("chat-open");
 
-  $("chatArea")
-    .classList.remove("hidden");
+  $("chatEmpty").classList.add("hidden");
+  $("chatArea").classList.remove("hidden");
 
-  $("chatTitle")
-    .textContent =
-    "@" +
-    (
-      user.username ||
-      "user"
-    );
+  $("chatTitle").textContent=
+    "@"+(user.username||"user");
 
-  $("chatStatus")
-    .textContent =
-    user.display_name ||
+  $("chatStatus").textContent=
+    user.display_name||
     "Poll Pulse user";
 
   setAvatarElement(
@@ -5458,206 +3779,150 @@ async function openChat(user){
 
   await loadMessages();
 
+  setTimeout(()=>{
+    $("chatInput").focus();
+  },350);
+
   startMessageRefresh();
 }
 
-
 function closeChat(){
 
-  currentChatUser =
-    null;
+  currentChatUser=null;
 
-  $("chatArea")
-    .classList.add("hidden");
+  $("chatLayout").classList.remove("chat-open");
 
-  $("chatEmpty")
-    .classList.remove("hidden");
+  $("chatArea").classList.add("hidden");
+  $("chatEmpty").classList.remove("hidden");
 
-  clearInterval(
-    messageTimer
-  );
+  clearInterval(messageTimer);
 }
 
 
-/* =====================================================
-   LOAD MESSAGES
-===================================================== */
+/* =========================================================
+   MESSAGES
+========================================================= */
 
 async function loadMessages(){
 
   if(
-    !currentUser ||
-    !currentChatUser ||
+    !currentUser||
+    !currentChatUser||
     !sb
-  ){
-    return;
-  }
+  )return;
 
-  const box =
-    $("messages");
+  const box=$("messages");
 
   try{
 
-    const {
-      data,
-      error
-    } =
-      await sb
+    const {data,error}=await sb
       .from("messages")
       .select(
         "id,sender_id,receiver_id,message,read,created_at"
       )
       .or(
-        "and(sender_id.eq." +
-        currentUser.id +
-        ",receiver_id.eq." +
-        currentChatUser.id +
-        "),and(sender_id.eq." +
-        currentChatUser.id +
-        ",receiver_id.eq." +
-        currentUser.id +
+        "and(sender_id.eq."+
+        currentUser.id+
+        ",receiver_id.eq."+
+        currentChatUser.id+
+        "),and(sender_id.eq."+
+        currentChatUser.id+
+        ",receiver_id.eq."+
+        currentUser.id+
         ")"
       )
-      .order(
-        "created_at",
-        {
-          ascending:true
-        }
-      );
+      .order("created_at",{ascending:true});
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
-    box.innerHTML = "";
+    box.innerHTML="";
 
     if(!data?.length){
 
-      box.innerHTML =
-        "<div class='empty'>No messages yet. Say hi 👋</div>";
+      box.innerHTML=
+        "<div class='empty'>"+
+        "No messages yet. Say hi 👋"+
+        "</div>";
 
     }else{
 
       data.forEach(message=>{
 
-        const div =
-          document.createElement("div");
+        const div=document.createElement("div");
 
-        div.className =
-          "bubble " +
+        div.className=
+          "bubble "+
           (
-            message.sender_id ===
-            currentUser.id
-              ? "mine"
-              : ""
+            message.sender_id===currentUser.id
+              ?"mine"
+              :""
           );
 
-        div.textContent =
-          message.message || "";
+        div.textContent=message.message||"";
 
-        box.appendChild(
-          div
-        );
+        box.appendChild(div);
       });
     }
 
-    box.scrollTop =
-      box.scrollHeight;
+    box.scrollTop=box.scrollHeight;
 
-    const unread =
-      (data || [])
-      .filter(
-        m =>
-          m.receiver_id ===
-          currentUser.id &&
-          !m.read
-      );
+    const unread=(data||[]).filter(
+      m=>
+        m.receiver_id===currentUser.id &&
+        !m.read
+    );
 
-    for(
-      const message of unread
-    ){
+    for(const message of unread){
 
       await sb
-      .from("messages")
-      .update({
-        read:true
-      })
-      .eq(
-        "id",
-        message.id
-      );
+        .from("messages")
+        .update({read:true})
+        .eq("id",message.id);
     }
 
     await updateChatBadge();
 
   }catch(error){
 
-    console.error(
-      "LOAD MESSAGES:",
-      error
-    );
+    console.error("LOAD MESSAGES:",error);
 
-    box.innerHTML =
-      "<div class='notice'>" +
-      esc(error.message) +
+    box.innerHTML=
+      "<div class='notice'>"+
+      esc(error.message)+
       "</div>";
   }
 }
 
-
-/* =====================================================
-   SEND MESSAGE
-===================================================== */
-
 async function sendMessage(){
 
-  if(
-    !currentUser ||
-    !currentChatUser
-  ){
-
-    toast(
-      "Chat open karo."
-    );
-
+  if(!currentUser||!currentChatUser){
+    toast("Chat open karo.");
     return;
   }
 
-  const input =
-    $("chatInput");
+  const input=$("chatInput");
+  const text=input.value.trim();
 
-  const text =
-    input.value.trim();
+  if(!text)return;
 
-  if(!text)
-    return;
+  const btn=$("sendMessageBtn");
 
-  const btn =
-    $("sendMessageBtn");
-
-  setLoading(
-    btn,
-    true,
-    "..."
-  );
+  setLoading(btn,true,"...");
 
   try{
 
-    const {error} =
-      await sb
+    const {error}=await sb
       .from("messages")
       .insert({
-        sender_id:
-          currentUser.id,
-        receiver_id:
-          currentChatUser.id,
+        sender_id:currentUser.id,
+        receiver_id:currentChatUser.id,
         message:text,
         read:false
       });
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
-    input.value = "";
+    input.value="";
 
     await createNotification(
       currentChatUser.id,
@@ -5668,147 +3933,83 @@ async function sendMessage(){
 
   }catch(error){
 
-    console.error(
-      "SEND MESSAGE:",
-      error
-    );
+    console.error("SEND MESSAGE:",error);
 
-    toast(
-      "Message error: " +
-      error.message
-    );
+    toast("Message error: "+error.message);
 
   }finally{
-
-    setLoading(
-      btn,
-      false
-    );
+    setLoading(btn,false);
   }
 }
-
-
-/* =====================================================
-   CHAT BADGE
-===================================================== */
 
 async function updateChatBadge(){
 
-  if(!currentUser || !sb)
-    return;
+  if(!currentUser||!sb)return;
 
   try{
 
-    const {
-      count,
-      error
-    } =
-      await sb
+    const {count,error}=await sb
       .from("messages")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "receiver_id",
-        currentUser.id
-      )
-      .eq(
-        "read",
-        false
-      );
+      .select("id",{count:"exact",head:true})
+      .eq("receiver_id",currentUser.id)
+      .eq("read",false);
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
-    const badge =
-      $("chatBadge");
+    const badge=$("chatBadge");
+    const total=count||0;
 
-    const total =
-      count || 0;
-
-    badge.textContent =
-      total;
+    badge.textContent=total;
 
     badge.classList.toggle(
       "hidden",
-      total === 0
+      total===0
     );
 
   }catch(error){
-
-    console.error(
-      "CHAT BADGE:",
-      error
-    );
+    console.error("CHAT BADGE:",error);
   }
 }
 
 
-/* =====================================================
-   PROFILE PHOTO
-===================================================== */
+/* =========================================================
+   AVATAR UPLOAD
+========================================================= */
 
 async function uploadAvatar(){
 
-  if(!currentUser || !sb){
-
-    toast(
-      "Please login first."
-    );
-
+  if(!currentUser||!sb){
+    toast("Please login first.");
     return;
   }
 
-  const file =
-    $("avatarFile")
-    .files[0];
+  const file=$("avatarFile").files[0];
 
-  if(!file)
-    return;
+  if(!file)return;
 
   if(!file.type.startsWith("image/")){
-
-    toast(
-      "Sirf image select karo."
-    );
-
+    toast("Sirf image select karo.");
     return;
   }
 
-  if(
-    file.size >
-    5 * 1024 * 1024
-  ){
-
-    toast(
-      "Image 5MB se chhoti honi chahiye."
-    );
-
+  if(file.size>5*1024*1024){
+    toast("Image 5MB se chhoti honi chahiye.");
     return;
   }
 
-  toast(
-    "Photo upload ho rahi hai..."
-  );
+  toast("Photo upload ho rahi hai...");
 
   try{
 
-    const extension =
-      file.name
-      .split(".")
-      .pop()
-      .toLowerCase();
+    const extension=
+      file.name.split(".").pop().toLowerCase();
 
-    const path =
-      currentUser.id +
-      "/avatar." +
+    const path=
+      currentUser.id+
+      "/avatar."+
       extension;
 
-    const upload =
+    const upload=
       await sb.storage
       .from("avatars")
       .upload(
@@ -5820,42 +4021,30 @@ async function uploadAvatar(){
         }
       );
 
-    if(upload.error)
-      throw upload.error;
+    if(upload.error)throw upload.error;
 
-    const publicUrl =
+    const publicUrl=
       sb.storage
       .from("avatars")
-      .getPublicUrl(
-        path
-      )
+      .getPublicUrl(path)
       .data
       .publicUrl;
 
-    const finalUrl =
-      publicUrl +
-      "?v=" +
-      Date.now();
+    const finalUrl=
+      publicUrl+
+      "?v="+Date.now();
 
-    const {error} =
-      await sb
+    const {error}=await sb
       .from("profiles")
       .update({
-        avatar_url:
-          finalUrl
+        avatar_url:finalUrl
       })
-      .eq(
-        "id",
-        currentUser.id
-      );
+      .eq("id",currentUser.id);
 
-    if(error)
-      throw error;
+    if(error)throw error;
 
-    currentProfile =
-      await getProfile(
-        currentUser.id
-      );
+    currentProfile=
+      await getProfile(currentUser.id);
 
     setAvatarElement(
       $("avatar"),
@@ -5864,408 +4053,238 @@ async function uploadAvatar(){
 
     updateHeader();
 
-    toast(
-      "✅ Profile photo updated!"
-    );
+    toast("✓ Profile photo updated!");
 
   }catch(error){
 
-    console.error(
-      "AVATAR:",
-      error
-    );
+    console.error("AVATAR:",error);
 
     toast(
-      "Photo error: " +
+      "Photo error: "+
       error.message
     );
   }
 }
 
 
-/* =====================================================
+/* =========================================================
    LOGOUT
-===================================================== */
+========================================================= */
 
 async function logout(){
 
   try{
-
-    if(sb){
-      await sb.auth.signOut();
-    }
-
+    if(sb)await sb.auth.signOut();
   }catch(error){
-
-    console.error(
-      error
-    );
+    console.error(error);
   }
 
-  currentUser = null;
-  currentProfile = null;
-  currentChatUser = null;
-  currentPublicProfile = null;
+  currentUser=null;
+  currentProfile=null;
+  currentChatUser=null;
+  currentPublicProfile=null;
 
-  clearInterval(
-    messageTimer
-  );
+  clearInterval(messageTimer);
+  clearInterval(window.__backgroundTimer);
 
-  clearInterval(
-    window.__backgroundTimer
-  );
+  $("homeScreen").classList.add("hidden");
+  $("authScreen").classList.remove("hidden");
 
-  $("homeScreen")
-    .classList.add("hidden");
+  $("password").value="";
 
-  $("authScreen")
-    .classList.remove("hidden");
-
-  $("password").value = "";
-
-  authMessage(
-    "Logged out."
-  );
+  authMessage("Logged out.");
 }
 
 
-/* =====================================================
-   SESSION
-===================================================== */
-
-async function initAuth(){
-
-  if(!sb)
-    return;
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await sb.auth.getSession();
-
-    if(error){
-
-      console.error(
-        "SESSION:",
-        error
-      );
-
-      return;
-    }
-
-    if(data?.session?.user){
-
-      await openApp(
-        data.session.user
-      );
-    }
-
-  }catch(error){
-
-    console.error(
-      "INIT AUTH:",
-      error
-    );
-  }
-}
-
-
-/* =====================================================
-   BACKGROUND REFRESH
-===================================================== */
+/* =========================================================
+   BACKGROUND
+========================================================= */
 
 function startBackgroundRefresh(){
 
-  clearInterval(
-    window.__backgroundTimer
-  );
+  clearInterval(window.__backgroundTimer);
 
-  window.__backgroundTimer =
-    setInterval(
-      async()=>{
+  window.__backgroundTimer=
+    setInterval(async()=>{
 
-        if(!currentUser)
-          return;
+      if(!currentUser)return;
 
-        await updateChatBadge();
-        await loadNotifications();
+      await updateChatBadge();
+      await loadNotifications();
 
-      },
-      5000
-    );
+    },5000);
 }
-
 
 function startMessageRefresh(){
 
-  clearInterval(
-    messageTimer
-  );
+  clearInterval(messageTimer);
 
-  messageTimer =
-    setInterval(
-      async()=>{
+  messageTimer=
+    setInterval(async()=>{
 
-        if(
-          currentUser &&
-          currentChatUser
-        ){
+      if(currentUser&&currentChatUser)
+        await loadMessages();
 
-          await loadMessages();
-        }
-
-      },
-      3000
-    );
+    },3000);
 }
 
 
-/* =====================================================
-   EVENT LISTENERS
-===================================================== */
+/* =========================================================
+   SESSION
+========================================================= */
+
+async function initAuth(){
+
+  if(!sb)return;
+
+  try{
+
+    const {data,error}=
+      await sb.auth.getSession();
+
+    if(error){
+      console.error("SESSION:",error);
+      return;
+    }
+
+    if(data?.session?.user)
+      await openApp(data.session.user);
+
+  }catch(error){
+    console.error("INIT AUTH:",error);
+  }
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
 
 function setupEvents(){
 
-  $("loginBtn")
-    .addEventListener(
-      "click",
-      login
-    );
+  $("loginBtn").addEventListener("click",login);
+  $("signupBtn").addEventListener("click",signup);
+  $("authToggleBtn").addEventListener("click",toggleAuth);
+  $("resetBtn").addEventListener("click",resetPassword);
 
-  $("signupBtn")
-    .addEventListener(
-      "click",
-      signup
-    );
+  $("navHome").addEventListener(
+    "click",()=>showPage("home")
+  );
 
-  $("authToggleBtn")
-    .addEventListener(
-      "click",
-      toggleAuth
-    );
+  $("navSearch").addEventListener(
+    "click",()=>showPage("search")
+  );
 
-  $("resetBtn")
-    .addEventListener(
-      "click",
-      resetPassword
-    );
+  $("navCreate").addEventListener(
+    "click",()=>showPage("create")
+  );
 
+  $("navChat").addEventListener(
+    "click",()=>showPage("chat")
+  );
 
-  $("navHome")
-    .addEventListener(
-      "click",
-      ()=>{
-        showPage("home");
+  $("navProfile").addEventListener(
+    "click",()=>showPage("profile")
+  );
+
+  $("headerUser").addEventListener(
+    "click",()=>showPage("profile")
+  );
+
+  $("homeCreateBtn").addEventListener(
+    "click",()=>showPage("create")
+  );
+
+  $("publishPollBtn").addEventListener(
+    "click",createPoll
+  );
+
+  $("searchInput").addEventListener(
+    "input",searchAll
+  );
+
+  $("chatSearch").addEventListener(
+    "input",searchChatUsers
+  );
+
+  $("closeChatBtn").addEventListener(
+    "click",closeChat
+  );
+
+  $("sendMessageBtn").addEventListener(
+    "click",sendMessage
+  );
+
+  $("chatInput").addEventListener(
+    "keydown",e=>{
+      if(e.key==="Enter"){
+        e.preventDefault();
+        sendMessage();
       }
-    );
+    }
+  );
 
+  $("photoBtn").addEventListener(
+    "click",()=>$("avatarFile").click()
+  );
 
-  $("navSearch")
-    .addEventListener(
-      "click",
-      ()=>{
-        showPage("search");
+  $("avatarFile").addEventListener(
+    "change",uploadAvatar
+  );
+
+  $("logoutBtn").addEventListener(
+    "click",logout
+  );
+
+  $("publicProfileBackBtn").addEventListener(
+    "click",closeUserProfile
+  );
+
+  $("publicFollowBtn").addEventListener(
+    "click",()=>{
+      if(currentPublicProfile){
+        followUser(
+          currentPublicProfile.id,
+          $("publicFollowBtn")
+        );
       }
-    );
+    }
+  );
 
+  $("publicMessageBtn").addEventListener(
+    "click",()=>{
 
-  $("navCreate")
-    .addEventListener(
-      "click",
-      ()=>{
-        showPage("create");
-      }
-    );
+      if(!currentPublicProfile)return;
 
+      showPage("chat");
+      openChat(currentPublicProfile);
+    }
+  );
 
-  $("navChat")
-    .addEventListener(
-      "click",
-      ()=>{
-        showPage("chat");
-      }
-    );
+  $("chatAvatar").addEventListener(
+    "click",()=>{
 
+      if(currentChatUser)
+        openUserProfile(currentChatUser.id);
 
-  $("navProfile")
-    .addEventListener(
-      "click",
-      ()=>{
-        showPage("profile");
-      }
-    );
+    }
+  );
 
+  $("chatProfileOpen").addEventListener(
+    "click",()=>{
 
-  $("homeCreateBtn")
-    .addEventListener(
-      "click",
-      ()=>{
-        showPage("create");
-      }
-    );
+      if(currentChatUser)
+        openUserProfile(currentChatUser.id);
 
+    }
+  );
 
-  $("publishPollBtn")
-    .addEventListener(
-      "click",
-      createPoll
-    );
+  $("markAllNotificationsBtn").addEventListener(
+    "click",
+    markAllNotificationsRead
+  );
 
-
-  $("searchInput")
-    .addEventListener(
-      "input",
-      searchAll
-    );
-
-
-  $("chatSearch")
-    .addEventListener(
-      "input",
-      searchChatUsers
-    );
-
-
-  $("closeChatBtn")
-    .addEventListener(
-      "click",
-      closeChat
-    );
-
-
-  $("sendMessageBtn")
-    .addEventListener(
-      "click",
-      sendMessage
-    );
-
-
-  $("chatInput")
-    .addEventListener(
-      "keydown",
-      event=>{
-
-        if(
-          event.key ===
-          "Enter"
-        ){
-
-          event.preventDefault();
-
-          sendMessage();
-        }
-      }
-    );
-
-
-  $("photoBtn")
-    .addEventListener(
-      "click",
-      ()=>{
-        $("avatarFile").click();
-      }
-    );
-
-
-  $("avatarFile")
-    .addEventListener(
-      "change",
-      uploadAvatar
-    );
-
-
-  $("logoutBtn")
-    .addEventListener(
-      "click",
-      logout
-    );
-
-
-  $("publicProfileBackBtn")
-    .addEventListener(
-      "click",
-      closeUserProfile
-    );
-
-
-  $("publicFollowBtn")
-    .addEventListener(
-      "click",
-      ()=>{
-
-        if(currentPublicProfile){
-
-          followUser(
-            currentPublicProfile.id,
-            $("publicFollowBtn")
-          );
-        }
-      }
-    );
-
-
-  $("publicMessageBtn")
-    .addEventListener(
-      "click",
-      ()=>{
-
-        if(!currentPublicProfile)
-          return;
-
-        const user =
-          currentPublicProfile;
-
-        showPage("chat");
-
-        openChat(user);
-      }
-    );
-
-
-  $("chatAvatar")
-    .addEventListener(
-      "click",
-      ()=>{
-
-        if(currentChatUser){
-
-          openUserProfile(
-            currentChatUser.id
-          );
-        }
-      }
-    );
-
-
-  $("chatProfileOpen")
-    .addEventListener(
-      "click",
-      ()=>{
-
-        if(currentChatUser){
-
-          openUserProfile(
-            currentChatUser.id
-          );
-        }
-      }
-    );
-
-
-  $("markAllNotificationsBtn")
-    .addEventListener(
-      "click",
-      markAllNotificationsRead
-    );
-
-
-  document
-    .querySelectorAll(
-      ".tabs button"
-    )
+  document.querySelectorAll(".tabs button")
     .forEach(button=>{
 
       button.addEventListener(
@@ -6282,165 +4301,129 @@ function setupEvents(){
 }
 
 
-/* =====================================================
+/* =========================================================
    REALTIME
-===================================================== */
+========================================================= */
 
 function setupRealtime(){
 
-  if(!sb || !currentUser)
-    return;
+  if(!sb||!currentUser)return;
 
   try{
 
     sb
-    .channel(
-      "pollpulse-notifications-" +
-      currentUser.id
-    )
-    .on(
-      "postgres_changes",
-      {
-        event:"*",
-        schema:"public",
-        table:"notifications",
-        filter:
-          "user_id=eq." +
-          currentUser.id
-      },
-      ()=>{
-        loadNotifications();
-      }
-    )
-    .subscribe();
-
+      .channel(
+        "pollpulse-notifications-"+currentUser.id
+      )
+      .on(
+        "postgres_changes",
+        {
+          event:"*",
+          schema:"public",
+          table:"notifications",
+          filter:
+            "user_id=eq."+currentUser.id
+        },
+        ()=>{
+          loadNotifications();
+        }
+      )
+      .subscribe();
 
     sb
-    .channel(
-      "pollpulse-messages-" +
-      currentUser.id
-    )
-    .on(
-      "postgres_changes",
-      {
-        event:"*",
-        schema:"public",
-        table:"messages",
-        filter:
-          "receiver_id=eq." +
-          currentUser.id
-      },
-      ()=>{
+      .channel(
+        "pollpulse-messages-"+currentUser.id
+      )
+      .on(
+        "postgres_changes",
+        {
+          event:"*",
+          schema:"public",
+          table:"messages",
+          filter:
+            "receiver_id=eq."+currentUser.id
+        },
+        ()=>{
 
-        updateChatBadge();
+          updateChatBadge();
 
-        if(currentChatUser){
-          loadMessages();
+          if(currentChatUser)
+            loadMessages();
+
         }
-      }
-    )
-    .subscribe();
+      )
+      .subscribe();
 
   }catch(error){
-
-    console.error(
-      "REALTIME:",
-      error
-    );
+    console.error("REALTIME:",error);
   }
 }
 
 
-/* =====================================================
+/* =========================================================
    START
-===================================================== */
+========================================================= */
 
 async function startApp(){
 
-  console.log(
-    "Poll Pulse starting..."
-  );
+  console.log("Poll Pulse starting...");
 
-  const ready =
-    initSupabase();
+  const ready=initSupabase();
 
-  if(!ready)
-    return;
+  if(!ready)return;
 
   setupEvents();
 
   sb.auth.onAuthStateChange(
     async(event,session)=>{
 
-      console.log(
-        "AUTH EVENT:",
-        event
-      );
+      console.log("AUTH EVENT:",event);
 
       if(
-        event === "SIGNED_IN" &&
+        event==="SIGNED_IN" &&
         session?.user
       ){
 
         if(
-          !currentUser ||
-          currentUser.id !==
-          session.user.id
+          !currentUser||
+          currentUser.id!==session.user.id
         ){
 
-          await openApp(
-            session.user
-          );
-
+          await openApp(session.user);
           setupRealtime();
         }
       }
 
+      if(event==="SIGNED_OUT"){
 
-      if(
-        event === "SIGNED_OUT"
-      ){
+        currentUser=null;
+        currentProfile=null;
+        currentChatUser=null;
+        currentPublicProfile=null;
 
-        currentUser = null;
-        currentProfile = null;
-        currentChatUser = null;
-        currentPublicProfile = null;
-
-        clearInterval(
-          messageTimer
-        );
-
-        clearInterval(
-          window.__backgroundTimer
-        );
+        clearInterval(messageTimer);
+        clearInterval(window.__backgroundTimer);
       }
-
     }
   );
 
   await initAuth();
 
-  if(currentUser){
+  if(currentUser)
     setupRealtime();
-  }
 }
 
 
-/* =====================================================
+/* =========================================================
    BOOT
-===================================================== */
+========================================================= */
 
-if(
-  document.readyState ===
-  "loading"
-){
+if(document.readyState==="loading"){
 
   document.addEventListener(
     "DOMContentLoaded",
     startApp,
-    {
-      once:true
-    }
+    {once:true}
   );
 
 }else{
