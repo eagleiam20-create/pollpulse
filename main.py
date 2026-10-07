@@ -3,11 +3,12 @@ import os
 
 app = Flask(__name__)
 
+# Folder jahan main.py aur index.html rakhe hain
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # ==========================================
-# POLLPULSE WEBSITE
+# MAIN POLLPULSE APP
 # ==========================================
 
 @app.route("/")
@@ -21,6 +22,20 @@ def index():
 
 
 # ==========================================
+# STATIC FILES
+# ==========================================
+
+@app.route("/<path:filename>")
+def static_files(filename):
+    file_path = os.path.join(BASE_DIR, filename)
+
+    if os.path.isfile(file_path):
+        return send_from_directory(BASE_DIR, filename)
+
+    return "File not found", 404
+
+
+# ==========================================
 # HEALTH CHECK
 # ==========================================
 
@@ -29,7 +44,7 @@ def health():
     return jsonify({
         "ok": True,
         "app": "PollPulse",
-        "message": "PollPulse is running"
+        "message": "PollPulse backend is running"
     })
 
 
@@ -41,7 +56,7 @@ def health():
 def config():
     return jsonify({
         "app": "PollPulse",
-        "version": "2.0.0",
+        "version": "1.0.0",
         "status": "online"
     })
 
@@ -51,10 +66,7 @@ def config():
 # ==========================================
 
 if __name__ == "__main__":
-
-    port = int(
-        os.environ.get("PORT", 5000)
-    )
+    port = int(os.environ.get("PORT", 5000))
 
     app.run(
         host="0.0.0.0",
