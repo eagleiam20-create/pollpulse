@@ -3226,7 +3226,7 @@
       } =
         await sb
           .from("polls")
-          .select("*")
+          .select("id,creator_id,question,options,created_at")
           .eq(
             "creator_id",
             currentUser.id
