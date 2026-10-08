@@ -4189,7 +4189,7 @@
 
         sb
           .from("votes")
-          .select("option_index")
+          .select("option")
           .eq("poll_id", poll.id),
 
         sb
@@ -4202,7 +4202,7 @@
 
         sb
           .from("votes")
-          .select("id,option_index")
+          .select("id,option")
           .eq("poll_id", poll.id)
           .eq("user_id", currentUser.id)
           .order("id", {ascending:true})
@@ -4246,6 +4246,9 @@
       const myLike =
         myLikeResult.data?.[0] || null;
 
+      const options =
+        parseOptions(poll);
+
       const card =
         document.querySelector(
           `[data-poll-id="${poll.id}"]`
@@ -4263,10 +4266,13 @@
       optionButtons.forEach(
         (button, index) => {
 
+          const optionText =
+            options[index];
+
           const count =
             votes.filter(
               vote =>
-                Number(vote.option_index) === index
+                vote.option === optionText
             ).length;
 
           const percent =
@@ -4296,14 +4302,13 @@
               `${percent}%`;
           }
 
-          // Clear old voted state first.
           button.classList.remove(
             "voted"
           );
 
           if(
             myVote &&
-            Number(myVote.option_index) === index
+            myVote.option === optionText
           ){
 
             button.classList.add(
@@ -4429,12 +4434,15 @@
       return;
     }
 
+    const selectedOption =
+      options[selectedIndex];
+
     const {
       data: existingVotes,
       error: existingError
     } = await sb
       .from("votes")
-      .select("id,option_index")
+      .select("id,option")
       .eq("poll_id", pollId)
       .eq("user_id", currentUser.id)
       .order("id", {ascending:true})
@@ -4449,10 +4457,7 @@
 
     if(existing){
 
-      if(
-        Number(existing.option_index) ===
-        selectedIndex
-      ){
+      if(existing.option === selectedOption){
 
         showToast(
           "You already voted for this option."
@@ -4466,7 +4471,7 @@
       } = await sb
         .from("votes")
         .update({
-          option_index: selectedIndex
+          option: selectedOption
         })
         .eq("id", existing.id);
 
@@ -4485,7 +4490,7 @@
         .insert({
           poll_id: pollId,
           user_id: currentUser.id,
-          option_index: selectedIndex
+          option: selectedOption
         });
 
       if(insertError){
