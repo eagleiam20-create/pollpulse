@@ -3782,172 +3782,209 @@
 
     async function loadPolls(){
 
-      const feed =
-        $("pollFeed");
+  const feed = $("pollFeed");
 
-      feed.innerHTML =
-        `<div class="empty-state">
-          <div class="spinner"></div>
-          Loading polls...
-        </div>`;
+  if(!feed){
+    return;
+  }
 
+  feed.innerHTML = `
+    <div class="empty-state">
+      <div class="spinner"></div>
+      Loading polls...
+    </div>
+  `;
+
+  try{
+
+    const {
+      data: polls,
+      error: pollsError
+    } = await sb
+      .from("polls")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      )
+      .limit(50);
+
+    if(pollsError){
+      throw pollsError;
+    }
+
+    if(!polls || polls.length === 0){
+
+      feed.innerHTML = `
+        <div class="empty-state">
+
+          <div
+            style="
+              font-size:30px;
+              margin-bottom:8px
+            "
+          >
+            🗳️
+          </div>
+
+          No polls yet.
+          <br>
+          Be the first to create one!
+
+        </div>
+      `;
+
+      return;
+    }
+
+    const creatorIds = [
+      ...new Set(
+        polls
+          .map(
+            poll => poll.creator_id
+          )
+          .filter(Boolean)
+      )
+    ];
+
+    let profiles = [];
+
+    if(creatorIds.length){
 
       const {
         data,
         error
-      } =
-        await sb
-          .from("polls")
-          .select("*")
-          .order(
-            "created_at",
-            {
-              ascending:false
-            }
-          )
-          .limit(30);
-
-
-      if(error){
-
-        console.error(error);
-
-        feed.innerHTML =
-          `<div class="empty-state">
-            Unable to load polls.
-          </div>`;
-
-        return;
-      }
-
-
-      if(!data?.length){
-
-        feed.innerHTML =
-          `<div class="empty-state">
-
-            <div
-              style="
-                font-size:30px;
-                margin-bottom:8px
-              "
-            >
-              🗳️
-            </div>
-
-            No polls yet.
-            <br>
-            Be the first to create one!
-
-          </div>`;
-
-        return;
-      }
-
-
-      const creatorIds = [
-        ...new Set(
-          data
-            .map(
-              p => p.creator_id
-            )
-            .filter(Boolean)
-        )
-      ];
-
-
-      let profiles = [];
-
-
-      if(creatorIds.length){
-
-        const result =
-          await sb
-            .from("profiles")
-            .select("*")
-            .in(
-              "id",
-              creatorIds
-            );
-
-        profiles =
-          result.data || [];
-      }
-
-
-      const profileMap =
-        Object.fromEntries(
-          profiles.map(
-            p => [p.id,p]
-          )
+      } = await sb
+        .from("profiles")
+        .select("*")
+        .in(
+          "id",
+          creatorIds
         );
 
+      if(error){
+        console.error(
+          "Profile loading error:",
+          error
+        );
+      }
 
-      feed.innerHTML =
-        data
-          .map(p => {
-
-            p.__creator =
-              profileMap[
-                p.creator_id
-              ];
-
-            return renderPollCard(p);
-
-          })
-          .join("");
-
-
-      await hydratePollStats(
-        data
-      );
+      profiles = data || [];
     }
 
+    const profileMap =
+      Object.fromEntries(
+        profiles.map(
+          profile => [
+            profile.id,
+            profile
+          ]
+        )
+      );
+
+    feed.innerHTML =
+      polls
+        .map(poll => {
+
+          const pollWithCreator = {
+            ...poll,
+            __creator:
+              profileMap[
+                poll.creator_id
+              ] || {}
+          };
+
+          return renderPollCard(
+            pollWithCreator
+          );
+
+        })
+        .join("");
+
+    await hydratePollStats(
+      polls
+    );
+
+  }catch(error){
+
+    console.error(
+      "loadPolls error:",
+      error
+    );
+
+    feed.innerHTML = `
+      <div class="empty-state">
+        Unable to load polls.
+        <br>
+        <small>
+          ${escapeHtml(
+            error?.message ||
+            "Please try again."
+          )}
+        </small>
+      </div>
+    `;
+  }
+}
 
     function parseOptions(poll){
 
-      if(Array.isArray(
-        poll.options
-      )){
+  if(!poll){
+    return [];
+  }
 
-        return poll.options;
-      }
+  const rawOptions =
+    poll.options;
 
+  if(Array.isArray(rawOptions)){
 
-      if(
-        typeof poll.options ===
-        "string"
-      ){
+    return rawOptions
+      .map(option =>
+        String(option).trim()
+      )
+      .filter(Boolean);
 
-        try{
+  }
 
-          const parsed =
-            JSON.parse(
-              poll.options
-            );
+  if(typeof rawOptions === "string"){
 
-          if(
-            Array.isArray(parsed)
-          ){
+    const value =
+      rawOptions.trim();
 
-            return parsed;
-          }
-
-        }catch(e){
-
-          return poll.options
-            .split(",")
-            .map(
-              x => x.trim()
-            )
-            .filter(Boolean);
-        }
-      }
-
-
+    if(!value){
       return [];
     }
 
+    try{
+
+      const parsed =
+        JSON.parse(value);
+
+      if(Array.isArray(parsed)){
+
+        return parsed
+          .map(option =>
+            String(option).trim()
+          )
+          .filter(Boolean);
+      }
+
+    }catch(error){
+      // Continue with comma-separated format.
+    }
+
+    return value
+      .split(",")
+      .map(option =>
+        option.trim()
+      )
+      .filter(Boolean);
+  }
+
+  return [];
+}
 
     function renderPollCard(
       poll
@@ -4131,494 +4168,473 @@
     }
 
 
-    async function hydratePollStats(
-      polls
-    ){
+  async function hydratePollStats(
+  polls
+){
 
-      if(!currentUser) return;
+  if(!currentUser || !Array.isArray(polls)){
+    return;
+  }
 
+  for(const poll of polls){
 
-      for(
-        const poll of polls
-      ){
+    try{
 
-        const [
-          votesResult,
-          likesResult,
-          myVoteResult,
-          myLikeResult
-        ] =
-          await Promise.all([
+      const [
+        votesResult,
+        likesResult,
+        myVoteResult,
+        myLikeResult
+      ] = await Promise.all([
 
-            sb
-              .from("votes")
-              .select(
-                "option_index"
-              )
-              .eq(
-                "poll_id",
-                poll.id
-              ),
+        sb
+          .from("votes")
+          .select("option_index")
+          .eq("poll_id", poll.id),
 
-            sb
-              .from("likes")
-              .select(
-                "id",
-                {
-                  count:"exact",
-                  head:true
-                }
-              )
-              .eq(
-                "poll_id",
-                poll.id
-              ),
+        sb
+          .from("likes")
+          .select("id", {
+            count: "exact",
+            head: true
+          })
+          .eq("poll_id", poll.id),
 
-            sb
-              .from("votes")
-              .select(
-                "option_index"
-              )
-              .eq(
-                "poll_id",
-                poll.id
-              )
-              .eq(
-                "user_id",
-                currentUser.id
-              )
-              .maybeSingle(),
+        sb
+          .from("votes")
+          .select("id,option_index")
+          .eq("poll_id", poll.id)
+          .eq("user_id", currentUser.id)
+          .order("id", {ascending:true})
+          .limit(1),
 
-            sb
-              .from("likes")
-              .select("id")
-              .eq(
-                "poll_id",
-                poll.id
-              )
-              .eq(
-                "user_id",
-                currentUser.id
-              )
-              .maybeSingle()
+        sb
+          .from("likes")
+          .select("id")
+          .eq("poll_id", poll.id)
+          .eq("user_id", currentUser.id)
+          .order("id", {ascending:true})
+          .limit(1)
 
-          ]);
+      ]);
 
+      if(votesResult.error){
+        throw votesResult.error;
+      }
 
-        const votes =
-          votesResult.data || [];
+      if(likesResult.error){
+        throw likesResult.error;
+      }
 
-        const total =
-          votes.length;
+      if(myVoteResult.error){
+        throw myVoteResult.error;
+      }
 
+      if(myLikeResult.error){
+        throw myLikeResult.error;
+      }
 
-        const card =
-          document.querySelector(
-            `[data-poll-id="${poll.id}"]`
+      const votes =
+        votesResult.data || [];
+
+      const total =
+        votes.length;
+
+      const myVote =
+        myVoteResult.data?.[0] || null;
+
+      const myLike =
+        myLikeResult.data?.[0] || null;
+
+      const card =
+        document.querySelector(
+          `[data-poll-id="${poll.id}"]`
+        );
+
+      if(!card){
+        continue;
+      }
+
+      const optionButtons =
+        card.querySelectorAll(
+          ".poll-option"
+        );
+
+      optionButtons.forEach(
+        (button, index) => {
+
+          const count =
+            votes.filter(
+              vote =>
+                Number(vote.option_index) === index
+            ).length;
+
+          const percent =
+            total > 0
+              ? Math.round(
+                  (count / total) * 100
+                )
+              : 0;
+
+          const progress =
+            button.querySelector(
+              "[data-progress]"
+            );
+
+          const percentEl =
+            button.querySelector(
+              "[data-percent]"
+            );
+
+          if(progress){
+            progress.style.width =
+              `${percent}%`;
+          }
+
+          if(percentEl){
+            percentEl.textContent =
+              `${percent}%`;
+          }
+
+          // Clear old voted state first.
+          button.classList.remove(
+            "voted"
           );
 
+          if(
+            myVote &&
+            Number(myVote.option_index) === index
+          ){
 
-        if(!card) continue;
+            button.classList.add(
+              "voted"
+            );
+          }
 
-
-        card
-          .querySelectorAll(
-            ".poll-option"
-          )
-          .forEach(
-            (
-              button,
-              index
-            ) => {
-
-              const count =
-                votes.filter(
-                  v =>
-                    Number(
-                      v.option_index
-                    ) === index
-                ).length;
-
-
-              const percent =
-                total
-                  ? Math.round(
-                      count /
-                      total *
-                      100
-                    )
-                  : 0;
-
-
-              const progress =
-                button.querySelector(
-                  "[data-progress]"
-                );
-
-
-              const percentEl =
-                button.querySelector(
-                  "[data-percent]"
-                );
-
-
-              if(progress){
-
-                progress.style.width =
-                  `${percent}%`;
-              }
-
-
-              if(percentEl){
-
-                percentEl.textContent =
-                  `${percent}%`;
-              }
-
-
-              if(
-                myVoteResult.data &&
-                Number(
-                  myVoteResult
-                    .data
-                    .option_index
-                ) === index
-              ){
-
-                button.classList
-                  .add("voted");
-              }
-
-            }
-          );
-
-
-        const countEl =
-          card.querySelector(
-            "[data-vote-count]"
-          );
-
-
-        if(countEl){
-
-          countEl.textContent =
-            `${total} ${
-              total === 1
-                ? "vote"
-                : "votes"
-            }`;
         }
+      );
 
+      const countEl =
+        card.querySelector(
+          "[data-vote-count]"
+        );
 
-        const likeCount =
-          card.querySelector(
-            "[data-like-count]"
-          );
+      if(countEl){
 
+        countEl.textContent =
+          `${total} ${
+            total === 1
+              ? "vote"
+              : "votes"
+          }`;
+      }
 
-        if(likeCount){
+      const likeCount =
+        card.querySelector(
+          "[data-like-count]"
+        );
 
-          likeCount.textContent =
-            likesResult.count || 0;
-        }
+      if(likeCount){
 
+        likeCount.textContent =
+          likesResult.count || 0;
+      }
 
-        const likeBtn =
-          card.querySelector(
-            ".like-btn"
-          );
+      const likeBtn =
+        card.querySelector(
+          ".like-btn"
+        );
 
+      if(likeBtn){
 
-        if(
-          likeBtn &&
-          myLikeResult.data
-        ){
+        likeBtn.classList.toggle(
+          "liked",
+          !!myLike
+        );
 
-          likeBtn.classList
-            .add("liked");
+        const heart =
+          [...likeBtn.childNodes]
+            .find(
+              node =>
+                node.nodeType ===
+                Node.TEXT_NODE
+            );
 
-          likeBtn.firstChild
-            .textContent =
-            "♥ ";
+        if(heart){
+
+          heart.textContent =
+            myLike
+              ? "♥ "
+              : "♡ ";
         }
       }
+
+    }catch(error){
+
+      console.error(
+        "hydratePollStats error:",
+        poll.id,
+        error
+      );
     }
+  }
+}
 
 
     /* ============================================================
        VOTING
     ============================================================ */
 
-    async function voteOnPoll(
-      pollId,
-      optionIndex
-    ){
+   async function voteOnPoll(
+  pollId,
+  optionIndex
+){
 
-      if(!currentUser){
-        return;
-      }
+  if(!currentUser){
+    showToast("Please log in first.");
+    return;
+  }
 
+  try{
 
-      const existing =
-        await sb
-          .from("votes")
-          .select(
-            "id,option_index"
-          )
-          .eq(
-            "poll_id",
-            pollId
-          )
-          .eq(
-            "user_id",
-            currentUser.id
-          )
-          .maybeSingle();
+    const {
+      data: poll,
+      error: pollError
+    } = await sb
+      .from("polls")
+      .select("id,options")
+      .eq("id", pollId)
+      .single();
 
-
-      if(existing.error){
-
-        console.error(
-          existing.error
-        );
-
-        return;
-      }
-
-
-      try{
-
-        if(existing.data){
-
-          if(
-            Number(
-              existing.data
-                .option_index
-            ) ===
-            Number(optionIndex)
-          ){
-
-            showToast(
-              "You already voted for this option."
-            );
-
-            return;
-          }
-
-
-          const result =
-            await sb
-              .from("votes")
-              .update({
-                option_index:
-                  optionIndex
-              })
-              .eq(
-                "id",
-                existing.data.id
-              );
-
-
-          if(result.error){
-            throw result.error;
-          }
-
-        }else{
-
-          const result =
-            await sb
-              .from("votes")
-              .insert({
-
-                poll_id:
-                  pollId,
-
-                user_id:
-                  currentUser.id,
-
-                option_index:
-                  optionIndex
-
-              });
-
-
-          if(result.error){
-            throw result.error;
-          }
-        }
-
-
-        showToast(
-          "Vote recorded ✓"
-        );
-
-
-        const {
-          data:poll
-        } =
-          await sb
-            .from("polls")
-            .select("*")
-            .eq(
-              "id",
-              pollId
-            )
-            .single();
-
-
-        if(poll){
-
-          await hydratePollStats(
-            [poll]
-          );
-        }
-
-      }catch(error){
-
-        console.error(error);
-
-        showToast(
-          error.message ||
-          "Unable to vote."
-        );
-      }
+    if(pollError){
+      throw pollError;
     }
 
+    if(!poll){
+      throw new Error("Poll not found.");
+    }
 
+    const options =
+      parseOptions(poll);
+
+    const selectedIndex =
+      Number(optionIndex);
+
+    if(
+      !Number.isInteger(selectedIndex) ||
+      selectedIndex < 0 ||
+      selectedIndex >= options.length
+    ){
+      showToast("Invalid poll option.");
+      return;
+    }
+
+    const {
+      data: existingVotes,
+      error: existingError
+    } = await sb
+      .from("votes")
+      .select("id,option_index")
+      .eq("poll_id", pollId)
+      .eq("user_id", currentUser.id)
+      .order("id", {ascending:true})
+      .limit(1);
+
+    if(existingError){
+      throw existingError;
+    }
+
+    const existing =
+      existingVotes?.[0] || null;
+
+    if(existing){
+
+      if(
+        Number(existing.option_index) ===
+        selectedIndex
+      ){
+
+        showToast(
+          "You already voted for this option."
+        );
+
+        return;
+      }
+
+      const {
+        error: updateError
+      } = await sb
+        .from("votes")
+        .update({
+          option_index: selectedIndex
+        })
+        .eq("id", existing.id);
+
+      if(updateError){
+        throw updateError;
+      }
+
+      showToast("Vote changed ✓");
+
+    }else{
+
+      const {
+        error: insertError
+      } = await sb
+        .from("votes")
+        .insert({
+          poll_id: pollId,
+          user_id: currentUser.id,
+          option_index: selectedIndex
+        });
+
+      if(insertError){
+        throw insertError;
+      }
+
+      showToast("Vote recorded ✓");
+    }
+
+    await hydratePollStats([poll]);
+
+  }catch(error){
+
+    console.error(
+      "voteOnPoll error:",
+      error
+    );
+
+    showToast(
+      error?.message ||
+      "Unable to vote."
+    );
+  }
+}
     /* ============================================================
        LIKES
     ============================================================ */
 
-    async function toggleLike(
-      pollId,
-      button
-    ){
+   async function toggleLike(
+  pollId,
+  button
+){
 
-      if(!currentUser){
-        return;
-      }
+  if(!currentUser){
+    showToast("Please log in first.");
+    return;
+  }
 
+  if(!button){
+    return;
+  }
 
-      const existing =
-        await sb
-          .from("likes")
-          .select("id")
-          .eq(
-            "poll_id",
-            pollId
-          )
-          .eq(
-            "user_id",
-            currentUser.id
-          )
-          .maybeSingle();
+  try{
 
+    // Find one existing like safely.
+    const {
+      data: existingLikes,
+      error: existingError
+    } = await sb
+      .from("likes")
+      .select("id")
+      .eq("poll_id", pollId)
+      .eq("user_id", currentUser.id)
+      .order("id", {ascending:true})
+      .limit(1);
 
-      if(existing.error){
-
-        console.error(
-          existing.error
-        );
-
-        return;
-      }
-
-
-      try{
-
-        if(existing.data){
-
-          const result =
-            await sb
-              .from("likes")
-              .delete()
-              .eq(
-                "id",
-                existing.data.id
-              );
-
-
-          if(result.error){
-            throw result.error;
-          }
-
-
-          button.classList
-            .remove("liked");
-
-        }else{
-
-          const result =
-            await sb
-              .from("likes")
-              .insert({
-
-                poll_id:
-                  pollId,
-
-                user_id:
-                  currentUser.id
-
-              });
-
-
-          if(result.error){
-            throw result.error;
-          }
-
-
-          button.classList
-            .add("liked");
-        }
-
-
-        const count =
-          await sb
-            .from("likes")
-            .select(
-              "id",
-              {
-                count:"exact",
-                head:true
-              }
-            )
-            .eq(
-              "poll_id",
-              pollId
-            );
-
-
-        const countEl =
-          button.querySelector(
-            "[data-like-count]"
-          );
-
-
-        if(countEl){
-
-          countEl.textContent =
-            count.count || 0;
-        }
-
-
-        button.firstChild
-          .textContent =
-          button.classList.contains(
-            "liked"
-          )
-            ? "♥ "
-            : "♡ ";
-
-      }catch(error){
-
-        console.error(error);
-
-        showToast(
-          error.message ||
-          "Unable to update like."
-        );
-      }
+    if(existingError){
+      throw existingError;
     }
+
+    const existing =
+      existingLikes?.[0] || null;
+
+    if(existing){
+
+      const {
+        error: deleteError
+      } = await sb
+        .from("likes")
+        .delete()
+        .eq("id", existing.id);
+
+      if(deleteError){
+        throw deleteError;
+      }
+
+      button.classList.remove("liked");
+
+    }else{
+
+      const {
+        error: insertError
+      } = await sb
+        .from("likes")
+        .insert({
+          poll_id: pollId,
+          user_id: currentUser.id
+        });
+
+      if(insertError){
+        throw insertError;
+      }
+
+      button.classList.add("liked");
+    }
+
+    // Refresh total like count.
+    const {
+      count,
+      error: countError
+    } = await sb
+      .from("likes")
+      .select("id", {
+        count: "exact",
+        head: true
+      })
+      .eq("poll_id", pollId);
+
+    if(countError){
+      throw countError;
+    }
+
+    const countEl =
+      button.querySelector(
+        "[data-like-count]"
+      );
+
+    if(countEl){
+      countEl.textContent =
+        count || 0;
+    }
+
+    // Update heart without destroying the count span.
+    const heart =
+      [...button.childNodes]
+        .find(node =>
+          node.nodeType === Node.TEXT_NODE
+        );
+
+    if(heart){
+      heart.textContent =
+        button.classList.contains("liked")
+          ? "♥ "
+          : "♡ ";
+    }
+
+  }catch(error){
+
+    console.error(
+      "toggleLike error:",
+      error
+    );
+
+    showToast(
+      error?.message ||
+      "Unable to update like."
+    );
+  }
+}
 
 
     /* ============================================================
@@ -4694,153 +4710,127 @@
         createPoll
       );
 
+async function createPoll(){
 
-    async function createPoll(){
+  if(!currentUser){
+    showToast("Please log in first.");
+    return;
+  }
 
-      const question =
-        $("pollQuestion")
-          .value
-          .trim();
+  const question =
+    $("pollQuestion")
+      .value
+      .trim();
 
+  const options =
+    [...document.querySelectorAll(".poll-option-input")]
+      .map(input => input.value.trim())
+      .filter(Boolean);
 
-      const options =
-        [
-          ...document.querySelectorAll(
-            ".poll-option-input"
-          )
-        ]
-          .map(
-            input =>
-              input.value.trim()
-          )
-          .filter(Boolean);
+  if(!question){
+    showToast("Write a question first.");
+    return;
+  }
 
+  if(question.length > 300){
+    showToast("Question is too long.");
+    return;
+  }
 
-      if(!question){
+  if(options.length < 2){
+    showToast("Add at least 2 options.");
+    return;
+  }
 
-        showToast(
-          "Write a question first."
-        );
+  if(options.length > 6){
+    showToast("Maximum 6 options.");
+    return;
+  }
 
-        return;
-      }
+  const cleanOptions = options.map(
+    option => option.slice(0, 100)
+  );
 
+  const uniqueOptions =
+    [...new Set(
+      cleanOptions.map(option => option.toLowerCase())
+    )];
 
-      if(options.length < 2){
+  if(uniqueOptions.length !== cleanOptions.length){
+    showToast("Each option must be different.");
+    return;
+  }
 
-        showToast(
-          "Add at least 2 options."
-        );
+  const button = $("createPollBtn");
 
-        return;
-      }
+  button.disabled = true;
+  button.textContent = "Publishing...";
 
+  try{
 
-      if(options.length > 6){
+    const { data, error } =
+      await sb
+        .from("polls")
+        .insert({
+          creator_id: currentUser.id,
+          question: question.slice(0, 300),
+          options: cleanOptions
+        })
+        .select("*")
+        .single();
 
-        showToast(
-          "Maximum 6 options."
-        );
-
-        return;
-      }
-
-
-      const button =
-        $("createPollBtn");
-
-      button.disabled = true;
-
-      button.textContent =
-        "Publishing...";
-
-
-      try{
-
-        const result =
-          await sb
-            .from("polls")
-            .insert({
-
-              creator_id:
-                currentUser.id,
-
-              question,
-
-              options
-
-            });
-
-
-        if(result.error){
-          throw result.error;
-        }
-
-
-        $("pollQuestion")
-          .value = "";
-
-
-        $("pollOptions")
-          .innerHTML = `
-
-            <div class="option-input-row">
-
-              <input
-                class="poll-option-input"
-                type="text"
-                placeholder="Option 1"
-                maxlength="100"
-              />
-
-            </div>
-
-
-            <div class="option-input-row">
-
-              <input
-                class="poll-option-input"
-                type="text"
-                placeholder="Option 2"
-                maxlength="100"
-              />
-
-            </div>
-
-          `;
-
-
-        showToast(
-          "Poll published! 🎉"
-        );
-
-
-        showPage(
-          "homePage"
-        );
-
-
-        await loadHome();
-
-      }catch(error){
-
-        console.error(error);
-
-        showToast(
-          error.message ||
-          "Unable to create poll."
-        );
-
-      }finally{
-
-        button.disabled =
-          false;
-
-        button.textContent =
-          "Publish poll";
-      }
+    if(error){
+      throw error;
     }
 
+    if(!data){
+      throw new Error("Poll was not created.");
+    }
+
+    $("pollQuestion").value = "";
+
+    $("pollOptions").innerHTML = `
+      <div class="option-input-row">
+        <input
+          class="poll-option-input"
+          type="text"
+          placeholder="Option 1"
+          maxlength="100"
+        />
+      </div>
+
+      <div class="option-input-row">
+        <input
+          class="poll-option-input"
+          type="text"
+          placeholder="Option 2"
+          maxlength="100"
+        />
+      </div>
+    `;
+
+    showToast("Poll published! 🎉");
+
+    showPage("homePage");
+
+    await loadHome();
+
+  }catch(error){
+
+    console.error("createPoll error:", error);
+
+    showToast(
+      error?.message ||
+      "Unable to create poll."
+    );
+
+  }finally{
+
+    button.disabled = false;
+    button.textContent = "Publish poll";
+
+  }
+}
 
     /* ============================================================
        SEARCH
