@@ -4923,7 +4923,7 @@ async function createPoll(){
       await sb
         .from("polls")
         .insert({
-          creator_id: currentUser.id,
+          user_id: currentUser.id,
           question: question.slice(0, 300),
           options: cleanOptions
         })
