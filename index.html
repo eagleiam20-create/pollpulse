@@ -4002,8 +4002,8 @@
     "Untitled poll";
 
   const isCreator =
-    currentUser &&
-    currentUser.id === poll.creator_id;
+  currentUser &&
+  String(currentUser.id) === String(poll.creator_id);
 
   return `
 
