@@ -3,9 +3,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#090912">
-  <meta name="description" content="Vex Agent - Your personal command assistant">
   <title>Vex Agent</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -14,117 +13,87 @@
     :root {
       color-scheme: dark;
       --bg: #090912;
-      --panel: #11111e;
-      --panel2: #19192a;
-      --accent: #9270ff;
-      --accent2: #c178ff;
-      --text: #f6f4ff;
-      --muted: #aaa6c2;
+      --panel: #131321;
+      --panel2: #1b1a2b;
+      --accent: #8d6cff;
+      --text: #f6f3ff;
+      --muted: #a9a4bf;
       --border: rgba(255,255,255,.09);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
       width: 100%;
-      min-height: 100%;
+      height: 100%;
       background: var(--bg);
       color: var(--text);
       font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     }
 
-    body {
-      min-height: 100dvh;
-      overflow: hidden;
-    }
+    body { overflow: hidden; }
 
-    button, input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-      touch-action: manipulation;
-    }
+    button, input { font: inherit; }
+    button { cursor: pointer; touch-action: manipulation; }
 
     .app {
       width: 100%;
       max-width: 760px;
+      height: 100vh;
       height: 100dvh;
-      height: 100svh;
-      margin: 0 auto;
+      margin: auto;
       display: flex;
       flex-direction: column;
-      background:
-        radial-gradient(ellipse at top, rgba(119,75,255,.12), transparent 48%),
-        var(--bg);
       overflow: hidden;
+      background:
+        radial-gradient(ellipse at top, #7955ff1c, transparent 45%),
+        var(--bg);
       padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
     }
 
     .topbar {
-      flex-shrink: 0;
-      min-height: 62px;
-      padding: 10px 16px;
+      min-height: 58px;
+      padding: 8px 13px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
+      flex-shrink: 0;
       border-bottom: 1px solid var(--border);
-      background: rgba(9,9,18,.88);
+      background: #090912f5;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 11px;
+      gap: 9px;
       min-width: 0;
     }
 
     .logo {
-      width: 39px;
-      height: 39px;
+      width: 38px;
+      height: 38px;
       flex-shrink: 0;
       display: grid;
       place-items: center;
-      border-radius: 13px;
-      font-weight: 900;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #775bff, #ce78ff);
       font-size: 21px;
-      background: linear-gradient(135deg, #8065ff, #d07bff);
-      color: white;
-      box-shadow: 0 4px 20px #8762ff35;
+      font-weight: 900;
     }
 
-    .brand-name {
-      font-size: 17px;
-      font-weight: 750;
-      letter-spacing: .2px;
-    }
-
-    .status {
-      color: #9ee7bb;
-      font-size: 11px;
-      margin-top: 2px;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
+    .brand-name { font-size: 16px; font-weight: 800; }
+    .status { margin-top: 2px; color: #91e5b1; font-size: 10px; }
 
     .small-btn {
-      min-height: 38px;
-      padding: 7px 11px;
+      min-height: 36px;
+      padding: 7px 10px;
       border: 1px solid var(--border);
-      border-radius: 11px;
+      border-radius: 10px;
       color: var(--text);
       background: var(--panel2);
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .main {
@@ -136,60 +105,60 @@
     }
 
     .welcome {
-      padding: 25px 18px 15px;
+      padding: 19px 12px 11px;
       text-align: center;
       flex-shrink: 0;
     }
 
     .orb {
-      width: 66px;
-      height: 66px;
-      margin: 0 auto 13px;
+      width: 50px;
+      height: 50px;
       display: grid;
       place-items: center;
-      border-radius: 23px;
-      font-size: 29px;
-      background: linear-gradient(145deg, #7657f7, #bd70ee);
-      box-shadow: 0 10px 36px #8058ff30;
+      margin: 0 auto 9px;
+      border-radius: 16px;
+      background: linear-gradient(145deg, #7658f6, #c471ee);
+      box-shadow: 0 8px 28px #8d6cff30;
+      font-size: 23px;
     }
 
     .welcome h1 {
       margin: 0;
-      font-size: clamp(21px, 5vw, 29px);
-      letter-spacing: -.7px;
+      font-size: clamp(21px, 5vw, 28px);
+      letter-spacing: -.5px;
     }
 
     .welcome p {
-      max-width: 340px;
-      margin: 7px auto 0;
+      max-width: 320px;
+      margin: 6px auto 0;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .suggestions {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      padding: 0 14px 12px;
+      gap: 7px;
+      padding: 0 11px 9px;
       flex-shrink: 0;
     }
 
     .suggestion {
-      min-height: 43px;
-      padding: 9px 10px;
+      min-width: 0;
+      min-height: 40px;
+      padding: 8px;
       border: 1px solid var(--border);
-      border-radius: 13px;
-      color: #e9e4ff;
-      background: rgba(255,255,255,.035);
-      font-size: 12px;
+      border-radius: 12px;
+      background: #ffffff08;
+      color: #eee8ff;
       text-align: left;
+      font-size: 12px;
       overflow-wrap: anywhere;
     }
 
     .suggestion:active, .small-btn:active {
-      background: #29213f;
-      transform: scale(.98);
+      background: #322749;
     }
 
     .messages {
@@ -197,20 +166,20 @@
       min-height: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
-      padding: 8px 14px 16px;
+      padding: 8px 12px 14px;
       display: flex;
       flex-direction: column;
-      gap: 13px;
+      gap: 12px;
       scroll-behavior: smooth;
     }
 
     .message {
-      max-width: 88%;
       width: fit-content;
-      padding: 11px 14px;
-      border-radius: 17px;
+      max-width: 90%;
+      padding: 10px 13px;
+      border-radius: 16px;
       font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.5;
       overflow-wrap: anywhere;
       white-space: pre-wrap;
     }
@@ -224,24 +193,24 @@
 
     .message.user {
       align-self: flex-end;
-      background: linear-gradient(135deg, #7154e8, #9455d8);
+      background: linear-gradient(135deg, #7052e8, #9858d9);
       border-bottom-right-radius: 5px;
     }
 
     .composer-wrap {
       flex-shrink: 0;
-      padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+      padding: 8px 10px calc(9px + env(safe-area-inset-bottom));
       border-top: 1px solid var(--border);
-      background: rgba(9,9,18,.97);
+      background: #090912;
     }
 
     .composer {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px;
+      gap: 7px;
+      padding: 5px;
       border: 1px solid #373047;
-      border-radius: 18px;
+      border-radius: 17px;
       background: #151421;
     }
 
@@ -249,38 +218,36 @@
       flex: 1;
       min-width: 0;
       height: 42px;
+      padding: 0 7px;
       border: none;
       outline: none;
+      color: white;
       background: transparent;
-      color: var(--text);
-      padding: 0 8px;
       font-size: 16px;
     }
 
-    .composer input::placeholder {
-      color: #88839e;
-    }
+    .composer input::placeholder { color: #88839e; }
 
     .icon-btn {
-      flex-shrink: 0;
       width: 42px;
       height: 42px;
+      flex-shrink: 0;
       display: grid;
       place-items: center;
       border: none;
-      border-radius: 13px;
+      border-radius: 12px;
       color: white;
       background: #29263b;
       font-size: 18px;
     }
 
     .send-btn {
-      background: linear-gradient(135deg, #8064ff, #ae63e9);
+      background: linear-gradient(135deg, #8064ff, #ad63e9);
     }
 
     .hint {
+      margin-top: 7px;
       text-align: center;
-      margin: 8px 0 0;
       color: #77728e;
       font-size: 10px;
     }
@@ -292,66 +259,54 @@
       display: none;
       align-items: center;
       justify-content: center;
+      overflow-y: auto;
       padding: 20px;
       background: var(--bg);
-      overflow-y: auto;
     }
 
     .auth-card {
       width: 100%;
       max-width: 360px;
-      padding: 24px 20px;
+      padding: 22px 19px;
       border: 1px solid var(--border);
-      border-radius: 22px;
+      border-radius: 21px;
       background: var(--panel);
     }
 
-    .auth-card h2 {
-      margin: 0 0 6px;
-      font-size: 25px;
-    }
-
-    .auth-card p {
-      color: var(--muted);
-      font-size: 13px;
-      margin: 0 0 18px;
-    }
+    .auth-card h2 { margin: 0 0 7px; font-size: 24px; }
+    .auth-card p { margin: 0 0 15px; color: var(--muted); font-size: 13px; }
 
     .auth-card input {
       width: 100%;
       height: 46px;
       margin: 6px 0;
-      padding: 0 13px;
+      padding: 0 12px;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 11px;
       outline: none;
-      background: #0c0c16;
       color: white;
+      background: #0c0c16;
       font-size: 16px;
     }
 
     .primary-btn {
       width: 100%;
-      min-height: 46px;
-      margin-top: 10px;
+      min-height: 45px;
+      margin-top: 9px;
       border: none;
-      border-radius: 12px;
+      border-radius: 11px;
       color: white;
+      background: linear-gradient(135deg, #8064ff, #ad63e9);
       font-weight: 700;
-      background: linear-gradient(135deg, #8064ff, #ae63e9);
     }
 
-    .auth-links {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-    }
+    .auth-links { display: flex; gap: 8px; margin-top: 11px; }
 
     .auth-links button {
       flex: 1;
-      min-height: 42px;
+      min-height: 41px;
       border: 1px solid var(--border);
-      border-radius: 11px;
+      border-radius: 10px;
       color: white;
       background: var(--panel2);
       font-size: 12px;
@@ -360,7 +315,6 @@
     #authStatus {
       margin-top: 12px;
       font-size: 12px;
-      color: #ffb8c1;
       overflow-wrap: anywhere;
     }
 
@@ -370,53 +324,18 @@
         border-right: 1px solid var(--border);
       }
 
-      .welcome {
-        padding-top: 34px;
-      }
-
-      .messages {
-        padding-left: 24px;
-        padding-right: 24px;
-      }
-
-      .suggestions {
-        padding-left: 24px;
-        padding-right: 24px;
-      }
-
-      .composer-wrap {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
+      .welcome { padding-top: 30px; }
+      .messages { padding-left: 22px; padding-right: 22px; }
+      .suggestions { padding-left: 22px; padding-right: 22px; }
+      .composer-wrap { padding-left: 18px; padding-right: 18px; }
     }
 
-    @media (max-height: 650px) {
-      .welcome {
-        padding-top: 12px;
-        padding-bottom: 8px;
-      }
-
-      .orb {
-        width: 46px;
-        height: 46px;
-        border-radius: 16px;
-        margin-bottom: 7px;
-        font-size: 22px;
-      }
-
-      .welcome p {
-        margin-top: 4px;
-      }
-
-      .suggestions {
-        gap: 6px;
-        padding-bottom: 6px;
-      }
-
-      .suggestion {
-        min-height: 36px;
-        padding: 6px 8px;
-      }
+    @media (max-height: 620px) {
+      .welcome { padding-top: 7px; padding-bottom: 6px; }
+      .orb { width: 38px; height: 38px; font-size: 19px; margin-bottom: 5px; }
+      .welcome p { margin-top: 3px; }
+      .suggestions { gap: 5px; padding-bottom: 5px; }
+      .suggestion { min-height: 34px; padding: 5px 7px; }
     }
   </style>
 </head>
@@ -424,16 +343,14 @@
 <body>
   <section class="auth-screen" id="authScreen">
     <div class="auth-card">
-      <div class="logo" style="margin-bottom:16px">V</div>
+      <div class="logo" style="margin-bottom:15px">V</div>
       <h2 id="authTitle">Welcome to Vex</h2>
       <p>Your personal command assistant.</p>
 
       <input id="email" type="email" placeholder="Email address" autocomplete="email">
       <input id="password" type="password" placeholder="Password" autocomplete="current-password">
 
-      <button class="primary-btn" id="authSubmit" onclick="authenticate()">
-        Login
-      </button>
+      <button class="primary-btn" id="authSubmit" onclick="authenticate()">Login</button>
 
       <div class="auth-links">
         <button onclick="setAuthMode('login')">Login</button>
@@ -454,7 +371,7 @@
         </div>
       </div>
 
-      <div class="top-actions">
+      <div style="display:flex;gap:6px">
         <button class="small-btn" onclick="clearChat()">New chat</button>
         <button class="small-btn" onclick="showAuth()">Account</button>
       </div>
@@ -478,17 +395,16 @@
 
       <section class="composer-wrap">
         <form class="composer" id="chatForm">
-          <button class="icon-btn" type="button" id="micBtn" aria-label="Speak" title="Voice input">🎙</button>
+          <button class="icon-btn" type="button" id="micBtn" aria-label="Voice input">🎙</button>
           <input id="messageInput" type="text" placeholder="Ask Vex or type a command..." autocomplete="off" enterkeyhint="send">
-          <button class="icon-btn send-btn" type="submit" aria-label="Send message">➤</button>
+          <button class="icon-btn send-btn" type="submit" aria-label="Send">➤</button>
         </form>
-        <div class="hint">Vex recognizes supported commands. Phone actions are not connected yet.</div>
+        <div class="hint">Rule-based commands • Android actions not connected</div>
       </section>
     </main>
   </div>
 
   <script>
-    // Supabase public client key. Never put a service_role secret in browser code.
     const SUPABASE_URL = "https://dbpbkvfaxgifjeveijqf.supabase.co";
     const SUPABASE_KEY = "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
 
@@ -515,51 +431,38 @@
 
       const commands = [
         {
-          patterns: [
-            "open settings", "settings kholo", "setting kholo",
-            "सेटिंग्स खोलो", "सेटिंग खोलो"
-          ],
+          patterns: ["open settings", "settings kholo", "setting kholo",
+            "सेटिंग्स खोलो", "सेटिंग खोलो"],
           action: "open_settings",
-          message: "Settings kholne ki request samajh gaya."
+          message: "Settings kholne ki request samajh gaya. Actual action abhi connect nahi hai."
         },
         {
-          patterns: [
-            "open camera", "camera kholo", "खोलो कैमरा",
-            "कैमरा खोलो", "camera open karo"
-          ],
+          patterns: ["open camera", "camera kholo", "कैमरा खोलो",
+            "camera open karo"],
           action: "open_camera",
-          message: "Camera kholne ki request samajh gaya."
+          message: "Camera kholne ki request samajh gaya. Actual action abhi connect nahi hai."
         },
         {
-          patterns: [
-            "open calculator", "calculator kholo",
-            "कैलकुलेटर खोलो", "calculator open karo"
-          ],
+          patterns: ["open calculator", "calculator kholo",
+            "कैलकुलेटर खोलो", "calculator open karo"],
           action: "open_calculator",
-          message: "Calculator kholne ki request samajh gaya."
+          message: "Calculator kholne ki request samajh gaya. Actual action abhi connect nahi hai."
         },
         {
-          patterns: [
-            "help", "madad karo", "what can you do",
-            "tum kya kar sakte ho", "मदद करो"
-          ],
+          patterns: ["help", "madad karo", "what can you do",
+            "tum kya kar sakte ho", "मदद करो"],
           action: "show_help",
-          message:
-            "Abhi main camera, settings aur calculator commands pehchan sakta hoon. " +
-            "Actual phone actions ke liye Android integration abhi connect nahi hai."
+          message: "Abhi main camera, settings aur calculator commands pehchan sakta hoon. Actual phone control ke liye Android integration chahiye."
         }
       ];
 
-      const match = commands.find(command =>
-        command.patterns.includes(text)
-      );
+      const match = commands.find(command => command.patterns.includes(text));
 
       if (!match) {
         return {
           success: false,
           action: "unknown",
-          message:
-            "Ye command abhi supported nahi hai. Supported commands dekhne ke liye 'help' likho."
+          message: "Ye command abhi supported nahi hai. Supported commands dekhne ke liye 'help' likho."
         };
       }
 
@@ -580,28 +483,23 @@
     }
 
     function runCommand(text) {
-      const input = document.getElementById("messageInput");
-      input.value = text;
+      document.getElementById("messageInput").value = text;
       sendMessage(text);
     }
 
     function sendMessage(forcedText) {
       const input = document.getElementById("messageInput");
       const text = (forcedText ?? input.value).trim();
-
       if (!text) return;
 
       addMessage(text, "user");
       input.value = "";
 
-      const result = understandCommand(text);
-
-      window.setTimeout(() => {
-        addMessage(result.message, "bot");
-      }, 120);
-
       document.getElementById("welcome").style.display = "none";
       document.getElementById("suggestions").style.display = "none";
+
+      const result = understandCommand(text);
+      window.setTimeout(() => addMessage(result.message, "bot"), 100);
     }
 
     document.getElementById("chatForm").addEventListener("submit", event => {
@@ -623,6 +521,7 @@
       document.getElementById("authSubmit").textContent =
         mode === "signup" ? "Create account" : "Login";
       document.getElementById("authStatus").textContent = "";
+      document.getElementById("authStatus").style.color = "#ffb8c1";
     }
 
     function showAuth() {
@@ -660,10 +559,9 @@
           status.textContent = "Account bana. Email verification check karo.";
         } else {
           document.getElementById("authScreen").style.display = "none";
-          addMessage("Welcome back! Vex Agent ready hai.", "bot");
+          addMessage("Welcome! Vex Agent ready hai.", "bot");
         }
       } catch (error) {
-        status.style.color = "#ffb8c1";
         status.textContent = error.message || "Authentication failed.";
       } finally {
         button.disabled = false;
@@ -675,10 +573,7 @@
       try {
         const { data, error } = await supabaseClient.auth.getSession();
         if (error) throw error;
-
-        if (!data.session) {
-          showAuth();
-        }
+        if (!data.session) showAuth();
       } catch (error) {
         console.error("Session check failed:", error);
         showAuth();
@@ -690,10 +585,7 @@
         window.SpeechRecognition || window.webkitSpeechRecognition;
 
       if (!SpeechRecognition) {
-        addMessage(
-          "Voice input is browser-supported nahi hai. Chrome mein try karo ya command type karo.",
-          "bot"
-        );
+        addMessage("Voice input is browser mein supported nahi hai. Command type karo.", "bot");
         return;
       }
 
@@ -713,12 +605,12 @@
       };
 
       recognition.onresult = event => {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById("messageInput").value = transcript;
+        document.getElementById("messageInput").value =
+          event.results[0][0].transcript;
       };
 
       recognition.onerror = () => {
-        addMessage("Voice input nahi chal paya. Command type karke try karo.", "bot");
+        addMessage("Voice input nahi chala. Command type karke try karo.", "bot");
       };
 
       recognition.onend = () => {
