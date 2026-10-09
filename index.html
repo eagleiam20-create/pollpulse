@@ -6,22 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#090912">
   <title>Vex Agent</title>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+    * { box-sizing: border-box; }
+
     :root {
       color-scheme: dark;
       --bg: #090912;
-      --panel: #131321;
-      --panel2: #1b1a2b;
-      --accent: #8d6cff;
-      --text: #f6f3ff;
-      --muted: #a9a4bf;
-      --border: rgba(255,255,255,.09);
+      --panel: #151421;
+      --panel2: #201d31;
+      --accent: #9270ff;
+      --text: #f7f4ff;
+      --muted: #aaa5bf;
+      --border: #ffffff16;
     }
-
-    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
@@ -33,7 +32,6 @@
     }
 
     body { overflow: hidden; }
-
     button, input { font: inherit; }
     button { cursor: pointer; touch-action: manipulation; }
 
@@ -46,154 +44,109 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      background:
-        radial-gradient(ellipse at top, #7955ff1c, transparent 45%),
-        var(--bg);
+      background: radial-gradient(ellipse at top, #7955ff20, transparent 45%), var(--bg);
       padding-top: env(safe-area-inset-top);
     }
 
     .topbar {
       min-height: 58px;
-      padding: 8px 13px;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      flex-shrink: 0;
       border-bottom: 1px solid var(--border);
-      background: #090912f5;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      min-width: 0;
-    }
-
-    .logo {
-      width: 38px;
-      height: 38px;
       flex-shrink: 0;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #775bff, #ce78ff);
-      font-size: 21px;
-      font-weight: 900;
+    }
+
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .logo {
+      width: 38px; height: 38px;
+      display: grid; place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #795cff, #d078ff);
+      font-size: 21px; font-weight: 900;
     }
 
     .brand-name { font-size: 16px; font-weight: 800; }
-    .status { margin-top: 2px; color: #91e5b1; font-size: 10px; }
+    .status { color: #9de6b8; font-size: 10px; margin-top: 2px; }
 
     .small-btn {
       min-height: 36px;
       padding: 7px 10px;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 11px;
       color: var(--text);
       background: var(--panel2);
       font-size: 11px;
     }
 
-    .main {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .welcome {
-      padding: 19px 12px 11px;
-      text-align: center;
-      flex-shrink: 0;
-    }
+    .main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    .welcome { text-align: center; padding: 20px 12px 12px; flex-shrink: 0; }
 
     .orb {
-      width: 50px;
-      height: 50px;
-      display: grid;
-      place-items: center;
-      margin: 0 auto 9px;
-      border-radius: 16px;
-      background: linear-gradient(145deg, #7658f6, #c471ee);
-      box-shadow: 0 8px 28px #8d6cff30;
+      width: 50px; height: 50px;
+      display: grid; place-items: center;
+      margin: 0 auto 10px;
+      border-radius: 17px;
+      background: linear-gradient(135deg, #795cff, #c875f3);
       font-size: 23px;
     }
 
-    .welcome h1 {
-      margin: 0;
-      font-size: clamp(21px, 5vw, 28px);
-      letter-spacing: -.5px;
-    }
-
-    .welcome p {
-      max-width: 320px;
-      margin: 6px auto 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
+    .welcome h1 { margin: 0; font-size: 24px; }
+    .welcome p { color: var(--muted); font-size: 12px; margin: 7px auto 0; }
 
     .suggestions {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 7px;
-      padding: 0 11px 9px;
+      padding: 0 11px 10px;
       flex-shrink: 0;
     }
 
     .suggestion {
-      min-width: 0;
-      min-height: 40px;
+      min-height: 41px;
       padding: 8px;
       border: 1px solid var(--border);
       border-radius: 12px;
       background: #ffffff08;
-      color: #eee8ff;
-      text-align: left;
+      color: var(--text);
       font-size: 12px;
-      overflow-wrap: anywhere;
-    }
-
-    .suggestion:active, .small-btn:active {
-      background: #322749;
+      text-align: left;
     }
 
     .messages {
       flex: 1;
       min-height: 0;
       overflow-y: auto;
-      overscroll-behavior: contain;
-      padding: 8px 12px 14px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      scroll-behavior: smooth;
+      gap: 11px;
+      overscroll-behavior: contain;
     }
 
     .message {
-      width: fit-content;
       max-width: 90%;
-      padding: 10px 13px;
+      width: fit-content;
+      padding: 11px 13px;
       border-radius: 16px;
       font-size: 14px;
       line-height: 1.5;
-      overflow-wrap: anywhere;
       white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
-    .message.bot {
+    .bot {
       align-self: flex-start;
       background: var(--panel2);
       border: 1px solid var(--border);
       border-bottom-left-radius: 5px;
     }
 
-    .message.user {
+    .user {
       align-self: flex-end;
-      background: linear-gradient(135deg, #7052e8, #9858d9);
+      background: linear-gradient(135deg, #7255e8, #9c59d9);
       border-bottom-right-radius: 5px;
     }
 
@@ -201,139 +154,156 @@
       flex-shrink: 0;
       padding: 8px 10px calc(9px + env(safe-area-inset-bottom));
       border-top: 1px solid var(--border);
-      background: #090912;
+      background: var(--bg);
     }
 
     .composer {
       display: flex;
-      align-items: center;
       gap: 7px;
+      align-items: center;
       padding: 5px;
-      border: 1px solid #373047;
+      border: 1px solid #393149;
       border-radius: 17px;
-      background: #151421;
+      background: var(--panel);
     }
 
     .composer input {
       flex: 1;
       min-width: 0;
       height: 42px;
-      padding: 0 7px;
-      border: none;
+      border: 0;
       outline: none;
-      color: white;
       background: transparent;
+      color: white;
+      padding: 0 7px;
       font-size: 16px;
     }
 
-    .composer input::placeholder { color: #88839e; }
-
     .icon-btn {
-      width: 42px;
-      height: 42px;
+      width: 42px; height: 42px;
       flex-shrink: 0;
-      display: grid;
-      place-items: center;
-      border: none;
+      border: 0;
       border-radius: 12px;
       color: white;
-      background: #29263b;
+      background: #302b43;
       font-size: 18px;
     }
 
-    .send-btn {
-      background: linear-gradient(135deg, #8064ff, #ad63e9);
-    }
+    .send-btn { background: linear-gradient(135deg, #8064ff, #b564e9); }
+    .hint { color: #827c98; font-size: 10px; text-align: center; margin-top: 7px; }
 
-    .hint {
-      margin-top: 7px;
-      text-align: center;
-      color: #77728e;
-      font-size: 10px;
-    }
-
-    .auth-screen {
+    /* Login screen */
+    .overlay {
       position: fixed;
       inset: 0;
-      z-index: 10;
+      z-index: 20;
       display: none;
       align-items: center;
       justify-content: center;
       overflow-y: auto;
-      padding: 20px;
-      background: var(--bg);
+      padding: 18px;
+      background: #090912f7;
     }
 
-    .auth-card {
+    .card {
       width: 100%;
-      max-width: 360px;
+      max-width: 390px;
       padding: 22px 19px;
-      border: 1px solid var(--border);
-      border-radius: 21px;
-      background: var(--panel);
+      border: 1px solid #ffffff19;
+      border-radius: 25px;
+      background: linear-gradient(155deg, #1c1930, #11111c 70%);
+      box-shadow: 0 20px 70px #0008;
     }
 
-    .auth-card h2 { margin: 0 0 7px; font-size: 24px; }
-    .auth-card p { margin: 0 0 15px; color: var(--muted); font-size: 13px; }
+    .card h2 { margin: 0 0 7px; font-size: 23px; }
+    .card p { color: var(--muted); font-size: 12px; line-height: 1.6; }
 
-    .auth-card input {
+    .field {
       width: 100%;
-      height: 46px;
+      height: 45px;
       margin: 6px 0;
       padding: 0 12px;
       border: 1px solid var(--border);
-      border-radius: 11px;
+      border-radius: 12px;
       outline: none;
       color: white;
-      background: #0c0c16;
+      background: #0b0b14;
       font-size: 16px;
     }
 
-    .primary-btn {
+    .primary {
       width: 100%;
       min-height: 45px;
-      margin-top: 9px;
-      border: none;
-      border-radius: 11px;
+      border: 0;
+      border-radius: 13px;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #8064ff, #b564e9);
       color: white;
-      background: linear-gradient(135deg, #8064ff, #ad63e9);
-      font-weight: 700;
+      font-weight: 750;
     }
 
-    .auth-links { display: flex; gap: 8px; margin-top: 11px; }
-
-    .auth-links button {
-      flex: 1;
-      min-height: 41px;
+    .secondary {
+      min-height: 40px;
+      padding: 8px 12px;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      color: white;
+      border-radius: 11px;
       background: var(--panel2);
-      font-size: 12px;
+      color: white;
     }
 
-    #authStatus {
-      margin-top: 12px;
-      font-size: 12px;
-      overflow-wrap: anywhere;
+    .auth-actions { display: flex; gap: 8px; margin-top: 9px; }
+    .auth-actions button { flex: 1; }
+
+    /* Curved setup card */
+    .permission-list { display: grid; gap: 9px; margin: 15px 0; }
+
+    .permission-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px;
+      min-height: 64px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: #ffffff06;
     }
+
+    .permission-item input {
+      width: 19px;
+      height: 19px;
+      flex-shrink: 0;
+      accent-color: var(--accent);
+    }
+
+    .permission-item .emoji { font-size: 22px; }
+    .permission-copy { flex: 1; min-width: 0; }
+    .permission-copy strong { display: block; font-size: 13px; }
+    .permission-copy span { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+
+    .privacy-note {
+      padding: 12px;
+      border: 1px solid #8b70ff40;
+      border-radius: 15px;
+      background: #8b70ff0d;
+      color: #d9d1ff;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .error { color: #ffb7c1; font-size: 12px; margin-top: 10px; }
+    .success { color: #9de6b8; font-size: 12px; margin-top: 10px; }
 
     @media (min-width: 600px) {
-      .app {
-        border-left: 1px solid var(--border);
-        border-right: 1px solid var(--border);
-      }
-
+      .app { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
       .welcome { padding-top: 30px; }
       .messages { padding-left: 22px; padding-right: 22px; }
       .suggestions { padding-left: 22px; padding-right: 22px; }
-      .composer-wrap { padding-left: 18px; padding-right: 18px; }
     }
 
-    @media (max-height: 620px) {
+    @media (max-height: 650px) {
       .welcome { padding-top: 7px; padding-bottom: 6px; }
-      .orb { width: 38px; height: 38px; font-size: 19px; margin-bottom: 5px; }
-      .welcome p { margin-top: 3px; }
+      .orb { width: 37px; height: 37px; font-size: 19px; margin-bottom: 5px; }
+      .welcome p { margin-top: 4px; }
       .suggestions { gap: 5px; padding-bottom: 5px; }
       .suggestion { min-height: 34px; padding: 5px 7px; }
     }
@@ -341,23 +311,68 @@
 </head>
 
 <body>
-  <section class="auth-screen" id="authScreen">
-    <div class="auth-card">
-      <div class="logo" style="margin-bottom:15px">V</div>
+
+  <!-- Login / signup -->
+  <section class="overlay" id="authScreen">
+    <div class="card">
+      <div class="logo" style="margin-bottom:14px">V</div>
       <h2 id="authTitle">Welcome to Vex</h2>
-      <p>Your personal command assistant.</p>
+      <p>Sign in to continue to your assistant.</p>
+      <input class="field" id="email" type="email" placeholder="Email address" autocomplete="email">
+      <input class="field" id="password" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="primary" id="authSubmit" onclick="authenticate()">Sign in</button>
+      <div class="auth-actions">
+        <button class="secondary" onclick="setAuthMode('login')">Sign in</button>
+        <button class="secondary" onclick="setAuthMode('signup')">Create account</button>
+      </div>
+      <div id="authStatus" class="error" role="status"></div>
+    </div>
+  </section>
 
-      <input id="email" type="email" placeholder="Email address" autocomplete="email">
-      <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+  <!-- Access preferences shown after sign-in -->
+  <section class="overlay" id="setupScreen">
+    <div class="card">
+      <div class="logo" style="margin-bottom:14px">V</div>
+      <h2>Set up your Vex</h2>
+      <p>Choose which features you want to enable. Start with only what you need.</p>
 
-      <button class="primary-btn" id="authSubmit" onclick="authenticate()">Login</button>
+      <div class="permission-list">
+        <label class="permission-item">
+          <span class="emoji">📷</span>
+          <span class="permission-copy">
+            <strong>Camera app</strong>
+            <span>Allow Vex to request opening the phone's Camera app.</span>
+          </span>
+          <input type="checkbox" id="accessCamera">
+        </label>
 
-      <div class="auth-links">
-        <button onclick="setAuthMode('login')">Login</button>
-        <button onclick="setAuthMode('signup')">Create account</button>
+        <label class="permission-item">
+          <span class="emoji">🎙️</span>
+          <span class="permission-copy">
+            <strong>Voice input</strong>
+            <span>Use the browser's speech-recognition feature when available.</span>
+          </span>
+          <input type="checkbox" id="accessMic">
+        </label>
+
+        <label class="permission-item">
+          <span class="emoji">🔔</span>
+          <span class="permission-copy">
+            <strong>Notifications</strong>
+            <span>Preference only; notifications are not implemented yet.</span>
+          </span>
+          <input type="checkbox" id="accessNotifications">
+        </label>
       </div>
 
-      <div id="authStatus" role="status"></div>
+      <div class="privacy-note">
+        <strong>Your choice matters.</strong><br>
+        Vex is designed to use only the features you select. This screen records your preferences; it does not itself grant Android permissions. Your browser or Android may ask for permission separately. Avoid sharing passwords or sensitive information. No app can honestly guarantee zero risk to data.
+      </div>
+
+      <button class="primary" onclick="saveSetup()">Save preferences & continue</button>
+      <button class="secondary" style="width:100%;margin-top:8px" onclick="skipSetup()">Not now</button>
+      <div id="setupStatus" class="error"></div>
     </div>
   </section>
 
@@ -367,13 +382,13 @@
         <div class="logo">V</div>
         <div>
           <div class="brand-name">Vex Agent</div>
-          <div class="status">● Command engine ready</div>
+          <div class="status">● Ready</div>
         </div>
       </div>
-
       <div style="display:flex;gap:6px">
         <button class="small-btn" onclick="clearChat()">New chat</button>
-        <button class="small-btn" onclick="showAuth()">Account</button>
+        <button class="small-btn" onclick="openSetup()">Access</button>
+        <button class="small-btn" onclick="signOut()">Sign out</button>
       </div>
     </header>
 
@@ -381,14 +396,14 @@
       <section class="welcome" id="welcome">
         <div class="orb">✦</div>
         <h1>What can I do for you?</h1>
-        <p>Type or speak a supported command to get started.</p>
+        <p>Your assistant, your choices.</p>
       </section>
 
       <section class="suggestions" id="suggestions">
         <button class="suggestion" onclick="runCommand('camera kholo')">📷 Open camera</button>
         <button class="suggestion" onclick="runCommand('settings kholo')">⚙️ Open settings</button>
         <button class="suggestion" onclick="runCommand('calculator kholo')">🧮 Open calculator</button>
-        <button class="suggestion" onclick="runCommand('help')">✦ What can you do?</button>
+        <button class="suggestion" onclick="runCommand('help')">✦ Help</button>
       </section>
 
       <section class="messages" id="messages" aria-live="polite"></section>
@@ -396,10 +411,10 @@
       <section class="composer-wrap">
         <form class="composer" id="chatForm">
           <button class="icon-btn" type="button" id="micBtn" aria-label="Voice input">🎙</button>
-          <input id="messageInput" type="text" placeholder="Ask Vex or type a command..." autocomplete="off" enterkeyhint="send">
+          <input id="messageInput" type="text" placeholder="Type a command..." autocomplete="off" enterkeyhint="send">
           <button class="icon-btn send-btn" type="submit" aria-label="Send">➤</button>
         </form>
-        <div class="hint">Rule-based commands • Android actions not connected</div>
+        <div class="hint">You control which features you enable.</div>
       </section>
     </main>
   </div>
@@ -424,6 +439,45 @@
     let recognition = null;
     let isListening = false;
 
+    function readPreferences() {
+      try {
+        return JSON.parse(localStorage.getItem("vexPreferences") || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function openSetup() {
+      const preferences = readPreferences();
+      document.getElementById("accessCamera").checked = !!preferences.camera;
+      document.getElementById("accessMic").checked = !!preferences.microphone;
+      document.getElementById("accessNotifications").checked = !!preferences.notifications;
+      document.getElementById("setupStatus").textContent = "";
+      document.getElementById("setupScreen").style.display = "flex";
+    }
+
+    function saveSetup() {
+      const preferences = {
+        camera: document.getElementById("accessCamera").checked,
+        microphone: document.getElementById("accessMic").checked,
+        notifications: document.getElementById("accessNotifications").checked
+      };
+
+      try {
+        localStorage.setItem("vexPreferences", JSON.stringify(preferences));
+        document.getElementById("setupScreen").style.display = "none";
+        addMessage("Your feature preferences have been saved on this device.", "bot");
+      } catch {
+        document.getElementById("setupStatus").textContent =
+          "Preferences save nahi ho sake. Browser storage check karo.";
+      }
+    }
+
+    function skipSetup() {
+      document.getElementById("setupScreen").style.display = "none";
+      addMessage("Setup skip kiya. Tum baad mein Access button se preferences choose kar sakte ho.", "bot");
+    }
+
     function understandCommand(input) {
       const text = input.toLowerCase().trim()
         .replace(/[.,!?।]/g, "")
@@ -431,53 +485,40 @@
 
       const commands = [
         {
-          patterns: ["open settings", "settings kholo", "setting kholo",
-            "सेटिंग्स खोलो", "सेटिंग खोलो"],
-          action: "open_settings",
-          message: "Settings kholne ki request samajh gaya. Actual action abhi connect nahi hai."
-        },
-        {
-          patterns: ["open camera", "camera kholo", "कैमरा खोलो",
-            "camera open karo"],
+          patterns: ["open camera", "camera kholo", "कैमरा खोलो", "camera open karo"],
           action: "open_camera",
-          message: "Camera kholne ki request samajh gaya. Actual action abhi connect nahi hai."
+          message: "Camera kholne ki request samajh gaya."
         },
         {
-          patterns: ["open calculator", "calculator kholo",
-            "कैलकुलेटर खोलो", "calculator open karo"],
+          patterns: ["open settings", "settings kholo", "setting kholo", "सेटिंग्स खोलो"],
+          action: "open_settings",
+          message: "Settings kholne ki request samajh gaya. Native action abhi available nahi hai."
+        },
+        {
+          patterns: ["open calculator", "calculator kholo", "कैलकुलेटर खोलो"],
           action: "open_calculator",
-          message: "Calculator kholne ki request samajh gaya. Actual action abhi connect nahi hai."
+          message: "Calculator kholne ki request samajh gaya. Native action abhi available nahi hai."
         },
         {
-          patterns: ["help", "madad karo", "what can you do",
-            "tum kya kar sakte ho", "मदद करो"],
+          patterns: ["help", "madad karo", "what can you do", "tum kya kar sakte ho"],
           action: "show_help",
-          message: "Abhi main camera, settings aur calculator commands pehchan sakta hoon. Actual phone control ke liye Android integration chahiye."
+          message: "Main abhi camera, settings aur calculator commands pehchan sakta hoon. Actual phone actions ke liye Android integration chahiye."
         }
       ];
 
       const match = commands.find(command => command.patterns.includes(text));
-
-      if (!match) {
-        return {
-          success: false,
-          action: "unknown",
-          message: "Ye command abhi supported nahi hai. Supported commands dekhne ke liye 'help' likho."
-        };
-      }
-
-      return {
-        success: true,
-        action: match.action,
-        message: match.message
+      return match || {
+        success: false,
+        action: "unknown",
+        message: "Ye command abhi supported nahi hai. 'help' likho."
       };
     }
 
     function addMessage(text, sender) {
-      const messages = document.getElementById("messages");
       const bubble = document.createElement("div");
       bubble.className = "message " + sender;
       bubble.textContent = text;
+      const messages = document.getElementById("messages");
       messages.appendChild(bubble);
       messages.scrollTop = messages.scrollHeight;
     }
@@ -494,12 +535,36 @@
 
       addMessage(text, "user");
       input.value = "";
-
       document.getElementById("welcome").style.display = "none";
       document.getElementById("suggestions").style.display = "none";
 
       const result = understandCommand(text);
-      window.setTimeout(() => addMessage(result.message, "bot"), 100);
+
+      if (result.action === "open_camera") {
+        const preferences = readPreferences();
+
+        if (!preferences.camera) {
+          addMessage("Camera feature enabled nahi hai. Access button se Camera app preference select karo.", "bot");
+          return;
+        }
+
+        if (window.Android && typeof window.Android.openCamera === "function") {
+          try {
+            window.Android.openCamera();
+            addMessage("Android ko Camera app open karne ki request bhej di.", "bot");
+          } catch {
+            addMessage("Camera launch nahi ho paya. Android app integration check karo.", "bot");
+          }
+        } else {
+          addMessage(
+            "Camera command pehchan li. Lekin tum website browser mein chala rahe ho, jahan native Android bridge available nahi hai. Actual Camera app kholne ke liye Vex APK integration chahiye.",
+            "bot"
+          );
+        }
+        return;
+      }
+
+      addMessage(result.message, "bot");
     }
 
     document.getElementById("chatForm").addEventListener("submit", event => {
@@ -511,7 +576,6 @@
       document.getElementById("messages").replaceChildren();
       document.getElementById("welcome").style.display = "";
       document.getElementById("suggestions").style.display = "";
-      document.getElementById("messageInput").focus();
     }
 
     function setAuthMode(mode) {
@@ -519,13 +583,8 @@
       document.getElementById("authTitle").textContent =
         mode === "signup" ? "Create your Vex account" : "Welcome to Vex";
       document.getElementById("authSubmit").textContent =
-        mode === "signup" ? "Create account" : "Login";
+        mode === "signup" ? "Create account" : "Sign in";
       document.getElementById("authStatus").textContent = "";
-      document.getElementById("authStatus").style.color = "#ffb8c1";
-    }
-
-    function showAuth() {
-      document.getElementById("authScreen").style.display = "flex";
     }
 
     async function authenticate() {
@@ -535,7 +594,7 @@
       const button = document.getElementById("authSubmit");
 
       if (!email || !password) {
-        status.textContent = "Email aur password dono enter karo.";
+        status.textContent = "Email aur password enter karo.";
         return;
       }
 
@@ -544,28 +603,40 @@
       status.textContent = "";
 
       try {
-        let result;
-
-        if (authMode === "signup") {
-          result = await supabaseClient.auth.signUp({ email, password });
-        } else {
-          result = await supabaseClient.auth.signInWithPassword({ email, password });
-        }
+        const result = authMode === "signup"
+          ? await supabaseClient.auth.signUp({ email, password })
+          : await supabaseClient.auth.signInWithPassword({ email, password });
 
         if (result.error) throw result.error;
 
         if (authMode === "signup" && !result.data.session) {
-          status.style.color = "#9ee7bb";
-          status.textContent = "Account bana. Email verification check karo.";
+          status.textContent = "Account bana. Email verification complete karke sign in karo.";
+          return;
+        }
+
+        document.getElementById("authScreen").style.display = "none";
+
+        if (!localStorage.getItem("vexPreferences")) {
+          openSetup();
         } else {
-          document.getElementById("authScreen").style.display = "none";
           addMessage("Welcome! Vex Agent ready hai.", "bot");
         }
       } catch (error) {
-        status.textContent = error.message || "Authentication failed.";
+        status.textContent = error.message || "Sign in failed.";
       } finally {
         button.disabled = false;
-        button.textContent = authMode === "signup" ? "Create account" : "Login";
+        button.textContent = authMode === "signup" ? "Create account" : "Sign in";
+      }
+    }
+
+    async function signOut() {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+        document.getElementById("authScreen").style.display = "flex";
+        setAuthMode("login");
+      } catch (error) {
+        addMessage("Sign out failed: " + error.message, "bot");
       }
     }
 
@@ -573,19 +644,27 @@
       try {
         const { data, error } = await supabaseClient.auth.getSession();
         if (error) throw error;
-        if (!data.session) showAuth();
-      } catch (error) {
-        console.error("Session check failed:", error);
-        showAuth();
+
+        if (!data.session) {
+          document.getElementById("authScreen").style.display = "flex";
+        } else if (!localStorage.getItem("vexPreferences")) {
+          openSetup();
+        }
+      } catch {
+        document.getElementById("authScreen").style.display = "flex";
       }
     }
 
     document.getElementById("micBtn").addEventListener("click", () => {
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!readPreferences().microphone) {
+        addMessage("Voice feature enabled nahi hai. Access button mein ise select karo.", "bot");
+        return;
+      }
 
       if (!SpeechRecognition) {
-        addMessage("Voice input is browser mein supported nahi hai. Command type karo.", "bot");
+        addMessage("Is browser mein speech recognition supported nahi hai. Command type karo.", "bot");
         return;
       }
 
@@ -597,7 +676,6 @@
       recognition = new SpeechRecognition();
       recognition.lang = "hi-IN";
       recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
 
       recognition.onstart = () => {
         isListening = true;
@@ -609,9 +687,7 @@
           event.results[0][0].transcript;
       };
 
-      recognition.onerror = () => {
-        addMessage("Voice input nahi chala. Command type karke try karo.", "bot");
-      };
+      recognition.onerror = () => addMessage("Voice input start nahi ho paya.", "bot");
 
       recognition.onend = () => {
         isListening = false;
@@ -620,8 +696,8 @@
 
       try {
         recognition.start();
-      } catch (error) {
-        addMessage("Mic start nahi hua. Dobara try karo.", "bot");
+      } catch {
+        addMessage("Mic dobara try karo.", "bot");
       }
     });
 
