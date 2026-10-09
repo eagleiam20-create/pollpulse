@@ -1,81 +1,455 @@
 
-/*
-  Vex Agent — Command Engine v1
-  No external AI API or local AI model.
-*/
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#09090f">
+<title>Vex Agent</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg:#09090f; --panel:#13131e; --border:#292938;
+  --text:#f5f5fb; --muted:#a2a2b5;
+  --accent:#8b5cf6; --accent2:#6366f1;
+}
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body {
+  margin:0; height:100dvh; overflow:hidden;
+  background:var(--bg); color:var(--text);
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+}
+button,input,textarea { font:inherit; }
+button { cursor:pointer; }
+.app { height:100%; display:flex; flex-direction:column; }
+header {
+  min-height:66px; display:flex; align-items:center;
+  justify-content:space-between; padding:0 17px;
+  border-bottom:1px solid var(--border);
+  background:#0d0d15;
+}
+.brand { display:flex; align-items:center; gap:11px; }
+.logo {
+  width:40px;height:40px;border-radius:13px;
+  display:grid;place-items:center;font-size:22px;font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+.brand strong { display:block; }
+.brand small { color:var(--muted); font-size:10px; letter-spacing:1px; }
+button {
+  color:var(--text); border:1px solid var(--border);
+  border-radius:12px; background:var(--panel); padding:11px;
+}
+main { flex:1; overflow-y:auto; padding:22px 15px 20px; }
+.auth-screen {
+  position:fixed;inset:0;z-index:10;display:flex;
+  align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(ellipse at top,#292044,var(--bg) 65%);
+}
+.auth-card {
+  width:min(420px,100%);padding:26px 21px;
+  border:1px solid var(--border);border-radius:24px;background:var(--panel);
+}
+.auth-card h1 { text-align:center;margin:12px 0 6px; }
+.subtitle { color:var(--muted);text-align:center;font-size:13px;margin-bottom:22px; }
+.tabs { display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:17px; }
+.tabs button.active { background:var(--accent);border-color:var(--accent); }
+.field { margin-bottom:13px; }
+.field label { display:block;font-size:13px;margin-bottom:7px;color:#d4d4e0; }
+.field input {
+  width:100%;padding:13px;border:1px solid var(--border);
+  border-radius:12px;background:#0b0b12;color:white;outline:none;
+}
+.primary {
+  width:100%;border:0;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  font-weight:700;padding:14px;
+}
+#error { color:#ff8585;font-size:13px;min-height:20px;margin-top:10px;text-align:center; }
+.welcome { text-align:center;padding:35px 0 25px; }
+.big-logo {
+  margin:0 auto 17px;width:70px;height:70px;border-radius:23px;
+  display:grid;place-items:center;font-size:35px;font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+.welcome h2 { margin:0;font-size:27px; }
+.welcome p { color:var(--muted);font-size:14px;line-height:1.6; }
+.suggestions {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;max-width:470px;margin:23px auto;
+}
+.suggestion { text-align:left;padding:14px;line-height:1.5; }
+.suggestion span { display:block;color:var(--muted);font-size:12px; }
+.message { display:flex;margin:12px 0; }
+.message.user { justify-content:flex-end; }
+.bubble {
+  max-width:88%;padding:12px 14px;border-radius:17px;
+  border:1px solid var(--border);background:var(--panel);
+  white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55;font-size:14px;
+}
+.message.user .bubble { background:#6242c5;border-color:#6242c5; }
+.composer-wrap { padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--border);background:#0c0c13; }
+.composer {
+  display:flex;gap:7px;align-items:flex-end;max-width:760px;margin:auto;
+  padding:7px;border:1px solid var(--border);border-radius:19px;background:var(--panel);
+}
+textarea {
+  flex:1;min-width:0;min-height:42px;max-height:120px;resize:none;
+  border:0;outline:none;background:transparent;color:white;padding:11px 6px;
+}
+textarea::placeholder { color:#858599; }
+.round { flex:0 0 42px;width:42px;height:42px;padding:0;font-size:18px; }
+.send { background:var(--accent);border-color:var(--accent); }
+#status { text-align:center;font-size:11px;color:var(--muted);padding-top:7px;min-height:21px; }
+footer { text-align:center;font-size:10px;color:#77778a;padding:0 10px 6px; }
+@media(min-width:700px) {
+  main { width:100%;max-width:900px;margin:auto; }
+}
+</style>
+</head>
+<body>
 
+<section id="authScreen" class="auth-screen">
+  <form id="authForm" class="auth-card">
+    <div class="big-logo">V</div>
+    <h1>Vex Agent</h1>
+    <div class="subtitle">Simple commands. Useful actions.</div>
+    <div class="tabs">
+      <button type="button" id="loginTab" class="active">Login</button>
+      <button type="button" id="signupTab">Sign Up</button>
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required>
+    </div>
+    <button id="authButton" class="primary" type="submit">Login</button>
+    <div id="error" role="status"></div>
+  </form>
+</section>
+
+<div id="app" class="app" style="display:none">
+  <header>
+    <div class="brand">
+      <div class="logo">V</div>
+      <div><strong>Vex Agent</strong><small>COMMAND ASSISTANT</small></div>
+    </div>
+    <button id="logoutButton" type="button">Logout</button>
+  </header>
+
+  <main id="chat">
+    <section id="welcome" class="welcome">
+      <div class="big-logo">V</div>
+      <h2>What should I do?</h2>
+      <p>Type or speak a supported command.</p>
+      <div class="suggestions">
+        <button class="suggestion" data-prompt="camera kholo">📷 Camera<span>Recognize command</span></button>
+        <button class="suggestion" data-prompt="settings kholo">⚙️ Settings<span>Recognize command</span></button>
+        <button class="suggestion" data-prompt="calculator kholo">🧮 Calculator<span>Recognize command</span></button>
+        <button class="suggestion" data-prompt="help">❔ Help<span>See supported commands</span></button>
+      </div>
+    </section>
+    <div id="messages"></div>
+  </main>
+
+  <div class="composer-wrap">
+    <div class="composer">
+      <button id="micButton" class="round" type="button" aria-label="Voice input">🎙️</button>
+      <textarea id="messageInput" rows="1" placeholder="Try: camera kholo"></textarea>
+      <button id="sendButton" class="round send" type="button" aria-label="Send">➤</button>
+    </div>
+    <div id="status">Vex is ready</div>
+    <footer>Vex only executes actions that are explicitly implemented and permitted.</footer>
+  </div>
+</div>
+
+<script>
+/* SUPABASE CONFIG — publishable key only */
+const SUPABASE_URL = "https://dbpbkvfaxgifjeveijqf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_G45cAQkTBfiS1E2a9zSe8g_ULSq4Ri7";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: false
+    }
+  }
+);
+
+let authMode = "login";
+let currentUser = null;
+let recognition = null;
+let isRecording = false;
+
+const $ = id => document.getElementById(id);
+const authScreen = $("authScreen");
+const authForm = $("authForm");
+const authButton = $("authButton");
+const authError = $("error");
+const app = $("app");
+const chat = $("chat");
+const welcome = $("welcome");
+const messages = $("messages");
+const messageInput = $("messageInput");
+const sendButton = $("sendButton");
+const micButton = $("micButton");
+const status = $("status");
+
+function setStatus(message) {
+  status.textContent = message;
+}
+
+$("loginTab").addEventListener("click", () => setAuthMode("login"));
+$("signupTab").addEventListener("click", () => setAuthMode("signup"));
+
+function setAuthMode(mode) {
+  authMode = mode;
+  $("loginTab").classList.toggle("active", mode === "login");
+  $("signupTab").classList.toggle("active", mode === "signup");
+  authButton.textContent = mode === "login" ? "Login" : "Create account";
+  authError.textContent = "";
+}
+
+function showApp(user) {
+  currentUser = user;
+  authScreen.style.display = "none";
+  app.style.display = "flex";
+  setStatus("Vex is ready");
+}
+
+function showAuth() {
+  currentUser = null;
+  app.style.display = "none";
+  authScreen.style.display = "flex";
+}
+
+authForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  authButton.disabled = true;
+  authError.textContent = "";
+
+  const email = $("email").value.trim();
+  const password = $("password").value;
+
+  try {
+    if (authMode === "login") {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      showApp(data.user);
+    } else {
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      if (error) throw error;
+
+      if (data.session && data.user) {
+        showApp(data.user);
+      } else {
+        authError.textContent = "Account created. Confirm your email, then log in.";
+      }
+    }
+  } catch (error) {
+    authError.textContent = error.message || "Login failed.";
+  } finally {
+    authButton.disabled = false;
+  }
+});
+
+function addMessage(role, content) {
+  welcome.style.display = "none";
+  const wrapper = document.createElement("div");
+  wrapper.className = "message " + role;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = content;
+  wrapper.appendChild(bubble);
+  messages.appendChild(wrapper);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function addTyping() {
+  welcome.style.display = "none";
+  const wrapper = document.createElement("div");
+  wrapper.id = "typingMessage";
+  wrapper.className = "message assistant";
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = "Vex is checking your command…";
+  wrapper.appendChild(bubble);
+  messages.appendChild(wrapper);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function removeTyping() {
+  $("typingMessage")?.remove();
+}
+
+/* RULE-BASED COMMAND ENGINE: no AI API or local model */
 function understandCommand(input) {
   const text = input
-    .toLowerCase()
+    .toLocaleLowerCase("en-IN")
     .trim()
     .replace(/[.,!?।]/g, "")
     .replace(/\s+/g, " ");
 
-  const commands = [
-    {
-      patterns: [
-        "open settings",
-        "settings kholo",
-        "setting kholo",
-        "सेटिंग्स खोलो"
-      ],
-      action: "open_settings",
-      message: "Settings kholne ki request samajh gaya."
-    },
-    {
-      patterns: [
-        "open camera",
-        "camera kholo",
-        "कैमरा खोलो"
-      ],
-      action: "open_camera",
-      message: "Camera kholne ki request samajh gaya."
-    },
-    {
-      patterns: [
-        "open calculator",
-        "calculator kholo",
-        "कैलकुलेटर खोलो"
-      ],
-      action: "open_calculator",
-      message: "Calculator kholne ki request samajh gaya."
-    },
-    {
-      patterns: [
-        "what can you do",
-        "tum kya kar sakte ho",
-        "help",
-        "madad karo"
-      ],
-      action: "show_help",
-      message:
-        "Main supported commands ko identify kar sakta hoon. " +
-        "Abhi actual phone actions connect nahi hue hain."
-    }
-  ];
+  const aliases = {
+    open_camera: [
+      "camera kholo", "kholo camera", "open camera", "कैमरा खोलो"
+    ],
+    open_settings: [
+      "settings kholo", "setting kholo", "open settings", "सेटिंग्स खोलो"
+    ],
+    open_calculator: [
+      "calculator kholo", "open calculator", "कैलकुलेटर खोलो"
+    ]
+  };
 
-  const match = commands.find(command =>
-    command.patterns.includes(text)
-  );
-
-  if (!match) {
+  if ([
+    "help", "madad karo", "मदद करो",
+    "tum kya kar sakte ho", "what can you do"
+  ].includes(text)) {
     return {
-      success: false,
-      action: "unknown",
-      message:
-        "Yeh command abhi supported nahi hai. " +
-        "Help likhkar supported commands dekho."
+      action: "show_help",
+      reply: "Abhi supported commands:\n• Camera kholo\n• Settings kholo\n• Calculator kholo\n\nYe version commands ko pehchanta hai. Actual phone control abhi connect nahi hua hai."
     };
   }
 
+  for (const [action, phrases] of Object.entries(aliases)) {
+    if (phrases.includes(text)) {
+      return {
+        action,
+        reply: "Command pehchan li: " + action.replaceAll("_", " ") +
+          ". Actual Android action abhi connect nahi hai."
+      };
+    }
+  }
+
   return {
-    success: true,
-    action: match.action,
-    message: match.message
+    action: "unknown",
+    reply: "Ye command abhi supported nahi hai. Supported commands dekhne ke liye 'help' likho."
   };
 }
 
-// Temporary test — actual phone action abhi execute nahi hota.
-console.log(understandCommand("camera kholo"));
-console.log(understandCommand("settings kholo"));
-console.log(understandCommand("help"));
+async function sendMessage() {
+  const text = messageInput.value.trim();
+  if (!text || sendButton.disabled) return;
+
+  messageInput.value = "";
+  resizeTextarea();
+  addMessage("user", text);
+  addTyping();
+  sendButton.disabled = true;
+  micButton.disabled = true;
+  setStatus("Checking command…");
+
+  try {
+    const result = understandCommand(text);
+    removeTyping();
+    addMessage("assistant", result.reply);
+    setStatus(result.action === "unknown" ? "Command not recognized" : "Command recognized");
+  } catch (error) {
+    removeTyping();
+    addMessage("assistant", "Command process nahi ho saka.");
+    setStatus("Error");
+  } finally {
+    sendButton.disabled = false;
+    micButton.disabled = false;
+    messageInput.focus();
+  }
+}
+
+sendButton.addEventListener("click", sendMessage);
+
+messageInput.addEventListener("keydown", event => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+function resizeTextarea() {
+  messageInput.style.height = "auto";
+  messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + "px";
+}
+messageInput.addEventListener("input", resizeTextarea);
+
+document.querySelectorAll(".suggestion").forEach(button => {
+  button.addEventListener("click", () => {
+    messageInput.value = button.dataset.prompt || "";
+    resizeTextarea();
+    sendMessage();
+  });
+});
+
+/* Voice input: browser-dependent */
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.lang = "hi-IN";
+  recognition.interimResults = false;
+  recognition.continuous = false;
+
+  recognition.onstart = () => {
+    isRecording = true;
+    micButton.textContent = "⏹️";
+    setStatus("Listening…");
+  };
+
+  recognition.onresult = event => {
+    messageInput.value = event.results[0][0].transcript;
+    resizeTextarea();
+    setStatus("Voice captured. Press send to run the command.");
+  };
+
+  recognition.onerror = () => setStatus("Voice input unavailable.");
+
+  recognition.onend = () => {
+    isRecording = false;
+    micButton.textContent = "🎙️";
+  };
+
+  micButton.addEventListener("click", () => {
+    if (isRecording) recognition.stop();
+    else {
+      try { recognition.start(); }
+      catch { setStatus("Microphone is busy. Try again."); }
+    }
+  });
+} else {
+  micButton.addEventListener("click", () => {
+    setStatus("Voice input is not supported in this browser.");
+  });
+}
+
+$("logoutButton").addEventListener("click", async () => {
+  const { error } = await supabaseClient.auth.signOut();
+  if (error) {
+    setStatus("Logout failed: " + error.message);
+    return;
+  }
+  messages.innerHTML = "";
+  welcome.style.display = "flex";
+  showAuth();
+});
+
+async function init() {
+  try {
+    const { data, error } = await supabaseClient.auth.getSession();
+    if (error) throw error;
+    if (data.session) showApp(data.session.user);
+    else showAuth();
+  } catch {
+    showAuth();
+    authError.textContent = "Could not check login session. Check your connection.";
+  }
+}
+
+init();
+</script>
+</body>
+</html>
